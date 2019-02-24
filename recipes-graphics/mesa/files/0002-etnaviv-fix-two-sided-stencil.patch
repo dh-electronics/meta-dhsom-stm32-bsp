@@ -1,0 +1,151 @@
+From ad169625c5b4297b10b36682790f038d1df7c497 Mon Sep 17 00:00:00 2001
+From: Jonathan Marek <jonathan@marek.ca>
+Date: Mon, 2 Sep 2019 14:44:51 -0400
+Subject: [PATCH 2/4] etnaviv: fix two sided stencil
+
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+---
+ src/gallium/drivers/etnaviv/etnaviv_emit.c  | 17 ++++---
+ src/gallium/drivers/etnaviv/etnaviv_state.c | 15 +++---
+ src/gallium/drivers/etnaviv/etnaviv_zsa.c   | 53 +++++++++++++--------
+ 3 files changed, 54 insertions(+), 31 deletions(-)
+
+diff --git a/src/gallium/drivers/etnaviv/etnaviv_emit.c b/src/gallium/drivers/etnaviv/etnaviv_emit.c
+index b92cf770cf4..8240e9b7db1 100644
+--- a/src/gallium/drivers/etnaviv/etnaviv_emit.c
++++ b/src/gallium/drivers/etnaviv/etnaviv_emit.c
+@@ -474,13 +474,15 @@ etna_emit_state(struct etna_context *ctx)
+       /*01414*/ EMIT_STATE(PE_DEPTH_STRIDE, ctx->framebuffer.PE_DEPTH_STRIDE);
+    }
+ 
++   unsigned s = ctx->zsa->stencil[1].enabled && ctx->rasterizer->front_ccw;
++
+    if (unlikely(dirty & (ETNA_DIRTY_ZSA | ETNA_DIRTY_RASTERIZER))) {
+-      uint32_t val = etna_zsa_state(ctx->zsa)->PE_STENCIL_OP[ccw];
++      uint32_t val = etna_zsa_state(ctx->zsa)->PE_STENCIL_OP[s];
+       /*01418*/ EMIT_STATE(PE_STENCIL_OP, val);
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_ZSA | ETNA_DIRTY_STENCIL_REF | ETNA_DIRTY_RASTERIZER))) {
+-      uint32_t val = etna_zsa_state(ctx->zsa)->PE_STENCIL_CONFIG[ccw];
+-      /*0141C*/ EMIT_STATE(PE_STENCIL_CONFIG, val | ctx->stencil_ref.PE_STENCIL_CONFIG[ccw]);
++      uint32_t val = etna_zsa_state(ctx->zsa)->PE_STENCIL_CONFIG[s];
++      /*0141C*/ EMIT_STATE(PE_STENCIL_CONFIG, val | ctx->stencil_ref.PE_STENCIL_CONFIG[s]);
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_ZSA))) {
+       uint32_t val = etna_zsa_state(ctx->zsa)->PE_ALPHA_OP;
+@@ -520,7 +522,7 @@ etna_emit_state(struct etna_context *ctx)
+       }
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_STENCIL_REF | ETNA_DIRTY_RASTERIZER))) {
+-      /*014A0*/ EMIT_STATE(PE_STENCIL_CONFIG_EXT, ctx->stencil_ref.PE_STENCIL_CONFIG_EXT[ccw]);
++      /*014A0*/ EMIT_STATE(PE_STENCIL_CONFIG_EXT, ctx->stencil_ref.PE_STENCIL_CONFIG_EXT[s]);
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_BLEND | ETNA_DIRTY_FRAMEBUFFER))) {
+       struct etna_blend_state *blend = etna_blend_state(ctx->blend);
+@@ -533,8 +535,11 @@ etna_emit_state(struct etna_context *ctx)
+       }
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_BLEND_COLOR))) {
+-         /*014B0*/ EMIT_STATE(PE_ALPHA_COLOR_EXT0, ctx->blend_color.PE_ALPHA_COLOR_EXT0);
+-         /*014B4*/ EMIT_STATE(PE_ALPHA_COLOR_EXT1, ctx->blend_color.PE_ALPHA_COLOR_EXT1);
++      /*014B0*/ EMIT_STATE(PE_ALPHA_COLOR_EXT0, ctx->blend_color.PE_ALPHA_COLOR_EXT0);
++      /*014B4*/ EMIT_STATE(PE_ALPHA_COLOR_EXT1, ctx->blend_color.PE_ALPHA_COLOR_EXT1);
++   }
++   if (unlikely(dirty & (ETNA_DIRTY_ZSA | ETNA_DIRTY_RASTERIZER))) {
++      /*014B8*/ EMIT_STATE(PE_STENCIL_CONFIG_EXT2, etna_zsa_state(ctx->zsa)->PE_STENCIL_CONFIG_EXT2[s]);
+    }
+    if (unlikely(dirty & (ETNA_DIRTY_ZSA | ETNA_DIRTY_RASTERIZER))) {
+       /*014B8*/ EMIT_STATE(PE_STENCIL_CONFIG_EXT2, etna_zsa_state(ctx->zsa)->PE_STENCIL_CONFIG_EXT2[ccw]);
+diff --git a/src/gallium/drivers/etnaviv/etnaviv_state.c b/src/gallium/drivers/etnaviv/etnaviv_state.c
+index 5de34a88717..1b1d7a2b4c5 100644
+--- a/src/gallium/drivers/etnaviv/etnaviv_state.c
++++ b/src/gallium/drivers/etnaviv/etnaviv_state.c
+@@ -52,12 +52,15 @@ etna_set_stencil_ref(struct pipe_context *pctx, const struct pipe_stencil_ref *s
+ 
+    ctx->stencil_ref_s = *sr;
+ 
+-   for (unsigned i = 0; i < 2; i++) {
+-      cs->PE_STENCIL_CONFIG[i] =
+-         VIVS_PE_STENCIL_CONFIG_REF_FRONT(sr->ref_value[i]);
+-      cs->PE_STENCIL_CONFIG_EXT[i] =
+-         VIVS_PE_STENCIL_CONFIG_EXT_REF_BACK(sr->ref_value[!i]);
+-   }
++   cs->PE_STENCIL_CONFIG[0] =
++      VIVS_PE_STENCIL_CONFIG_REF_FRONT(sr->ref_value[0]);
++   cs->PE_STENCIL_CONFIG_EXT[0] =
++      VIVS_PE_STENCIL_CONFIG_EXT_REF_BACK(sr->ref_value[1]);
++   cs->PE_STENCIL_CONFIG[1] =
++      VIVS_PE_STENCIL_CONFIG_REF_FRONT(sr->ref_value[1]);
++   cs->PE_STENCIL_CONFIG_EXT[1] =
++      VIVS_PE_STENCIL_CONFIG_EXT_REF_BACK(sr->ref_value[0]);
++
+    ctx->dirty |= ETNA_DIRTY_STENCIL_REF;
+ }
+ 
+diff --git a/src/gallium/drivers/etnaviv/etnaviv_zsa.c b/src/gallium/drivers/etnaviv/etnaviv_zsa.c
+index 8a4d12dc0bb..86d7c568ad3 100644
+--- a/src/gallium/drivers/etnaviv/etnaviv_zsa.c
++++ b/src/gallium/drivers/etnaviv/etnaviv_zsa.c
+@@ -105,25 +105,40 @@ etna_zsa_state_create(struct pipe_context *pctx,
+       VIVS_PE_ALPHA_OP_ALPHA_FUNC(so->alpha.func) |
+       VIVS_PE_ALPHA_OP_ALPHA_REF(etna_cfloat_to_uint8(so->alpha.ref_value));
+ 
+-   for (unsigned i = 0; i < 2; i++) {
+-      const struct pipe_stencil_state *stencil_front = so->stencil[1].enabled ? &so->stencil[i] : &so->stencil[0];
+-      const struct pipe_stencil_state *stencil_back = so->stencil[1].enabled ? &so->stencil[!i] : &so->stencil[0];
+-      cs->PE_STENCIL_OP[i] =
+-         VIVS_PE_STENCIL_OP_FUNC_FRONT(stencil_front->func) |
+-         VIVS_PE_STENCIL_OP_FUNC_BACK(stencil_back->func) |
+-         VIVS_PE_STENCIL_OP_FAIL_FRONT(translate_stencil_op(stencil_front->fail_op)) |
+-         VIVS_PE_STENCIL_OP_FAIL_BACK(translate_stencil_op(stencil_back->fail_op)) |
+-         VIVS_PE_STENCIL_OP_DEPTH_FAIL_FRONT(translate_stencil_op(stencil_front->zfail_op)) |
+-         VIVS_PE_STENCIL_OP_DEPTH_FAIL_BACK(translate_stencil_op(stencil_back->zfail_op)) |
+-         VIVS_PE_STENCIL_OP_PASS_FRONT(translate_stencil_op(stencil_front->zpass_op)) |
+-         VIVS_PE_STENCIL_OP_PASS_BACK(translate_stencil_op(stencil_back->zpass_op));
+-      cs->PE_STENCIL_CONFIG[i] =
+-         translate_stencil_mode(so->stencil[0].enabled, so->stencil[0].enabled) |
+-         VIVS_PE_STENCIL_CONFIG_MASK_FRONT(stencil_front->valuemask) |
+-         VIVS_PE_STENCIL_CONFIG_WRITE_MASK_FRONT(stencil_front->writemask);
+-      cs->PE_STENCIL_CONFIG_EXT2[i] =
+-         VIVS_PE_STENCIL_CONFIG_EXT2_MASK_BACK(stencil_back->valuemask) |
+-         VIVS_PE_STENCIL_CONFIG_EXT2_WRITE_MASK_BACK(stencil_back->writemask);
++   cs->PE_STENCIL_OP[0] =
++      VIVS_PE_STENCIL_OP_FUNC_FRONT(so->stencil[0].func) |
++      VIVS_PE_STENCIL_OP_FUNC_BACK(so->stencil[1].func) |
++      VIVS_PE_STENCIL_OP_FAIL_FRONT(translate_stencil_op(so->stencil[0].fail_op)) |
++      VIVS_PE_STENCIL_OP_FAIL_BACK(translate_stencil_op(so->stencil[1].fail_op)) |
++      VIVS_PE_STENCIL_OP_DEPTH_FAIL_FRONT(translate_stencil_op(so->stencil[0].zfail_op)) |
++      VIVS_PE_STENCIL_OP_DEPTH_FAIL_BACK(translate_stencil_op(so->stencil[1].zfail_op)) |
++      VIVS_PE_STENCIL_OP_PASS_FRONT(translate_stencil_op(so->stencil[0].zpass_op)) |
++      VIVS_PE_STENCIL_OP_PASS_BACK(translate_stencil_op(so->stencil[1].zpass_op));
++   cs->PE_STENCIL_CONFIG[0] =
++      translate_stencil_mode(so->stencil[0].enabled, so->stencil[1].enabled) |
++      VIVS_PE_STENCIL_CONFIG_MASK_FRONT(so->stencil[0].valuemask) |
++      VIVS_PE_STENCIL_CONFIG_WRITE_MASK_FRONT(so->stencil[0].writemask);
++   cs->PE_STENCIL_CONFIG_EXT2[0] =
++      VIVS_PE_STENCIL_CONFIG_EXT2_MASK_BACK(so->stencil[1].valuemask) |
++      VIVS_PE_STENCIL_CONFIG_EXT2_WRITE_MASK_BACK(so->stencil[1].writemask);
++
++   if (so->stencil[1].enabled) {
++   cs->PE_STENCIL_OP[1] =
++      VIVS_PE_STENCIL_OP_FUNC_FRONT(so->stencil[1].func) |
++      VIVS_PE_STENCIL_OP_FUNC_BACK(so->stencil[0].func) |
++      VIVS_PE_STENCIL_OP_FAIL_FRONT(translate_stencil_op(so->stencil[1].fail_op)) |
++      VIVS_PE_STENCIL_OP_FAIL_BACK(translate_stencil_op(so->stencil[0].fail_op)) |
++      VIVS_PE_STENCIL_OP_DEPTH_FAIL_FRONT(translate_stencil_op(so->stencil[1].zfail_op)) |
++      VIVS_PE_STENCIL_OP_DEPTH_FAIL_BACK(translate_stencil_op(so->stencil[0].zfail_op)) |
++      VIVS_PE_STENCIL_OP_PASS_FRONT(translate_stencil_op(so->stencil[1].zpass_op)) |
++      VIVS_PE_STENCIL_OP_PASS_BACK(translate_stencil_op(so->stencil[0].zpass_op));
++   cs->PE_STENCIL_CONFIG[1] =
++      VIVS_PE_STENCIL_CONFIG_MODE_TWO_SIDED |
++      VIVS_PE_STENCIL_CONFIG_MASK_FRONT(so->stencil[1].valuemask) |
++      VIVS_PE_STENCIL_CONFIG_WRITE_MASK_FRONT(so->stencil[1].writemask);
++   cs->PE_STENCIL_CONFIG_EXT2[1] =
++      VIVS_PE_STENCIL_CONFIG_EXT2_MASK_BACK(so->stencil[0].valuemask) |
++      VIVS_PE_STENCIL_CONFIG_EXT2_WRITE_MASK_BACK(so->stencil[0].writemask);
+    }
+ 
+    /* XXX does alpha/stencil test affect PE_COLOR_FORMAT_OVERWRITE? */
+-- 
+2.24.1
+

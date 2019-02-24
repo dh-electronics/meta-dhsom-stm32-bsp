@@ -1,0 +1,19 @@
+define KMACHINE mainlinestm32mp1
+define KTYPE standard
+define KARCH arm
+branch mainlinestm32mp1
+kconf hardware mainlinestm32mp1.cfg
+kconf non-hardware mainlinestm32mp1-non_hardware.cfg
+include common-patches.scc
+
+patch 0001-ASoC-sgtl5000-add-multi-endpoint-support.patch
+patch 0002-can-m_can-Fix-default-pinmux-glitch-at-init.patch
+patch 0003-drm-stm-repair-runtime-power-management.patch
+patch 0004-ARM-dts-stm32-update-slew-rate-properties-for-sdmmc1.patch
+patch 0005-ARM-dts-stm32-add-sdmmc2-3-nodes-for-STM32MP157-SoC.patch
+patch 0006-ARM-dts-stm32-enable-sdmmc2-node-for-stm32mp157c-ed1.patch
+patch 0007-ARM-dts-stm32-add-sdmmc3-node-for-STM32MP1-boards.patch
+patch 0008-ARM-dts-stm32-add-PWR-regulators-support-on-stm32mp1.patch
+patch 0009-ARM-dts-stm32-Add-DAC-pins-used-on-stm32mp157c-ed1.patch
+patch 0010-ARM-dts-stm32-Add-missing-ETHCK-clock-to-ethernet-no.patch
+patch 0011-ARM-dts-stm32-Add-DH-Electronics-DHCOM-SoM-and-PDK2-.patch

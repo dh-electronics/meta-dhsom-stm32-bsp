@@ -1,0 +1,42 @@
+From 64adca97735ccaf519a14a247e9b2daf2ebac302 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 2 Dec 2019 20:31:19 +0100
+Subject: [PATCH 4/7] ARM: stm32: Allow overriding setup_mac_address()
+
+Let board code override setup_mac_address(), which is useful e.g. if the
+board derives the MAC address from another source, like an I2C EEPROM.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/mach-stm32mp/cpu.c                    | 2 +-
+ arch/arm/mach-stm32mp/include/mach/sys_proto.h | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-stm32mp/cpu.c b/arch/arm/mach-stm32mp/cpu.c
+index ed7d9f61dc..856c7ced7a 100644
+--- a/arch/arm/mach-stm32mp/cpu.c
++++ b/arch/arm/mach-stm32mp/cpu.c
+@@ -449,7 +449,7 @@ static void setup_boot_mode(void)
+  * If there is no MAC address in the environment, then it will be initialized
+  * (silently) from the value in the OTP.
+  */
+-static int setup_mac_address(void)
++__weak int setup_mac_address(void)
+ {
+ #if defined(CONFIG_NET)
+ 	int ret;
+diff --git a/arch/arm/mach-stm32mp/include/mach/sys_proto.h b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+index 99eefabf6e..47e57922d1 100644
+--- a/arch/arm/mach-stm32mp/include/mach/sys_proto.h
++++ b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+@@ -30,3 +30,5 @@ u32 get_cpu_package(void);
+ 
+ /* return boot mode */
+ u32 get_bootmode(void);
++
++int setup_mac_address(void);
+-- 
+2.25.0
+

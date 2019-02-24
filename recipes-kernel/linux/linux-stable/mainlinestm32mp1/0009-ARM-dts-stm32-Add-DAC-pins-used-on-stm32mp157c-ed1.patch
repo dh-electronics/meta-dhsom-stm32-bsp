@@ -1,0 +1,41 @@
+From e9326a4280ccec9d32a45c78d5e78d74a2c1d2f9 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@st.com>
+Date: Wed, 9 Oct 2019 16:12:51 +0200
+Subject: [PATCH 09/11] ARM: dts: stm32: Add DAC pins used on stm32mp157c-ed1
+
+Define pins that can be used by digital-to-analog converter on
+stm32mp157c eval daughter board:
+- PA4 and PA5 pins are available respectively on JP11 and JP10
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index d31a4661f7b5..ee01934bdb44 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -167,6 +167,18 @@
+ 				};
+ 			};
+ 
++			dac_ch1_pins_a: dac-ch1 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 4, ANALOG)>;
++				};
++			};
++
++			dac_ch2_pins_a: dac-ch2 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 5, ANALOG)>;
++				};
++			};
++
+ 			dcmi_pins_a: dcmi-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('H', 8,  AF13)>,/* DCMI_HSYNC */
+-- 
+2.25.0
+

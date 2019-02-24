@@ -1,0 +1,31 @@
+From 5b8bd41f635874627d8b1f7dc833d09609fda967 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 4 Dec 2019 04:33:47 +0100
+Subject: [PATCH 5/7] ARM: stm32: Fill in missing loadaddr
+
+Since CONFIG_LOADADDR is not set, the default value of $loadaddr
+variable is not set in the environment either. Set the default
+load address to 256 MiB from the start of DRAM.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ include/configs/stm32mp1.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
+index dfc397c63c..59a86aee79 100644
+--- a/include/configs/stm32mp1.h
++++ b/include/configs/stm32mp1.h
+@@ -36,6 +36,7 @@
+  * Needed by "loadb"
+  */
+ #define CONFIG_SYS_LOAD_ADDR			STM32_DDR_BASE
++#define CONFIG_LOADADDR				0xd0000000
+ 
+ /* ATAGs */
+ #define CONFIG_CMDLINE_TAG
+-- 
+2.25.0
+

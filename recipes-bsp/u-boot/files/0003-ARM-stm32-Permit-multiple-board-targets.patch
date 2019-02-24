@@ -1,0 +1,45 @@
+From 4ccaa823b83e22a79da4c8fc0c48285004525a39 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 3 Dec 2019 18:22:22 +0100
+Subject: [PATCH 3/7] ARM: stm32: Permit multiple board targets
+
+Setting TARGET_STM32MP1 in Kconfig always forces SYS_BOARD, SYS_VENDOR
+and SYS_CONFIG_NAME to values set by the ST reference platforms. Allow
+changing that by pulling out the TARGET_STM32MP157C_DK2 and making the
+ST reference platform settings conditional on TARGET_STM32MP157C_DK2 .
+Other platforms can now define a different TARGET_ and thus override
+the SYS_ settings in their Kconfig.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ board/st/stm32mp1/Kconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/board/st/stm32mp1/Kconfig b/board/st/stm32mp1/Kconfig
+index 4fa2360b4f..c84aa41f06 100644
+--- a/board/st/stm32mp1/Kconfig
++++ b/board/st/stm32mp1/Kconfig
+@@ -1,4 +1,8 @@
+-if TARGET_STM32MP1
++config TARGET_STM32MP157C_DK2
++	bool "support of STMicroelectronics STM32MP157C-DK2 Discovery Board"
++	default y
++
++if TARGET_STM32MP157C_DK2
+ 
+ config SYS_BOARD
+ 	default "stm32mp1"
+@@ -22,8 +26,4 @@ config CMD_STBOARD
+ 	  This compile the stboard command to
+ 	  read and write the board in the OTP.
+ 
+-config TARGET_STM32MP157C_DK2
+-	bool "support of STMicroelectronics STM32MP157C-DK2 Discovery Board"
+-	default y
+-
+ endif
+-- 
+2.25.0
+

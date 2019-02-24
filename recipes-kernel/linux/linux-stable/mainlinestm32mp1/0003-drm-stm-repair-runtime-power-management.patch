@@ -1,0 +1,47 @@
+From 88c5b8ded6333e67bd5a9cab96422aedb30ccb75 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 29 Feb 2020 22:02:51 +0100
+Subject: [PATCH 03/11] drm/stm: repair runtime power management
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add missing pm_runtime_get_sync() into ltdc_crtc_atomic_enable() to
+match pm_runtime_put_sync() in ltdc_crtc_atomic_disable(), otherwise
+the LTDC might suspend via runtime PM, disable clock, and then fail
+to resume later on.
+
+The test which triggers it is roughly -- run qt5 application which
+uses eglfs platform and etnaviv, stop the application, sleep for 15
+minutes, run the application again. This leads to timeout waiting
+for vsync, because the LTDC has suspended, but did not resume.
+
+Fixes: 35ab6cfbf211 ("drm/stm: support runtime power management")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Yannick Fertré <yannick.fertre@st.com>
+Cc: Philippe Cornu <philippe.cornu@st.com>
+Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+---
+ drivers/gpu/drm/stm/ltdc.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 3ab4fbf8eb0d..51571f7246ab 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -424,9 +424,12 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+ 				    struct drm_crtc_state *old_state)
+ {
+ 	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
++	struct drm_device *ddev = crtc->dev;
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
++	pm_runtime_get_sync(ddev->dev);
++
+ 	/* Sets the background color value */
+ 	reg_write(ldev->regs, LTDC_BCCR, BCCR_BCBLACK);
+ 
+-- 
+2.25.0
+

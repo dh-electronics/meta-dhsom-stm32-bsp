@@ -1,0 +1,75 @@
+From 712549940591870b516b9eb3720fca023375d003 Mon Sep 17 00:00:00 2001
+From: Yann Gautier <yann.gautier@st.com>
+Date: Wed, 6 Nov 2019 11:09:36 +0100
+Subject: [PATCH 05/11] ARM: dts: stm32: add sdmmc2 & 3 nodes for STM32MP157
+ SoC
+
+The STM32MP157 SoC series includes 3 instances of the SDMMC peripheral.
+The sdmmc2 and sdmmc3 nodes are added in STM32MP157 SoC DT file.
+
+Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
+Signed-off-by: Yann Gautier <yann.gautier@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c.dtsi | 33 +++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
+index f98e0370c0bc..c9ea2f17462b 100644
+--- a/arch/arm/boot/dts/stm32mp157c.dtsi
++++ b/arch/arm/boot/dts/stm32mp157c.dtsi
+@@ -1030,6 +1030,21 @@
+ 			};
+ 		};
+ 
++		sdmmc3: sdmmc@48004000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x10153180>;
++			reg = <0x48004000 0x400>;
++			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cmd_irq";
++			clocks = <&rcc SDMMC3_K>;
++			clock-names = "apb_pclk";
++			resets = <&rcc SDMMC3_R>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <120000000>;
++			status = "disabled";
++		};
++
+ 		usbotg_hs: usb-otg@49000000 {
+ 			compatible = "snps,dwc2";
+ 			reg = <0x49000000 0x10000>;
+@@ -1295,13 +1310,29 @@
+ 			arm,primecell-periphid = <0x10153180>;
+ 			reg = <0x58005000 0x1000>;
+ 			interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names	= "cmd_irq";
++			interrupt-names = "cmd_irq";
+ 			clocks = <&rcc SDMMC1_K>;
+ 			clock-names = "apb_pclk";
+ 			resets = <&rcc SDMMC1_R>;
+ 			cap-sd-highspeed;
+ 			cap-mmc-highspeed;
+ 			max-frequency = <120000000>;
++			status = "disabled";
++		};
++
++		sdmmc2: sdmmc@58007000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x10153180>;
++			reg = <0x58007000 0x1000>;
++			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cmd_irq";
++			clocks = <&rcc SDMMC2_K>;
++			clock-names = "apb_pclk";
++			resets = <&rcc SDMMC2_R>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <120000000>;
++			status = "disabled";
+ 		};
+ 
+ 		crc1: crc@58009000 {
+-- 
+2.25.0
+

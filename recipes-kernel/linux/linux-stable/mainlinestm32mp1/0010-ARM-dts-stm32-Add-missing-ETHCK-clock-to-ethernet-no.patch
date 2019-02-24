@@ -1,0 +1,38 @@
+From a9dc859f1a2c3a0e14dc3c59c32a9f92e9d9223c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 3 Dec 2019 00:50:25 +0100
+Subject: [PATCH 10/11] ARM: dts: stm32: Add missing ETHCK clock to ethernet
+ node
+
+Add missing 'eth-ck' clock to the ethernet node. These clock are used to
+generate external clock signal for the PHY in case 'st,eth_ref_clk_sel'
+is specified.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
+index f20e0101b577..9e7e6328f97c 100644
+--- a/arch/arm/boot/dts/stm32mp157c.dtsi
++++ b/arch/arm/boot/dts/stm32mp157c.dtsi
+@@ -1380,11 +1380,13 @@
+ 			clock-names = "stmmaceth",
+ 				      "mac-clk-tx",
+ 				      "mac-clk-rx",
++				      "eth-ck",
+ 				      "ethstp",
+ 				      "syscfg-clk";
+ 			clocks = <&rcc ETHMAC>,
+ 				 <&rcc ETHTX>,
+ 				 <&rcc ETHRX>,
++				 <&rcc ETHCK_K>,
+ 				 <&rcc ETHSTP>,
+ 				 <&rcc SYSCFG>;
+ 			st,syscon = <&syscfg 0x4>;
+-- 
+2.25.0
+

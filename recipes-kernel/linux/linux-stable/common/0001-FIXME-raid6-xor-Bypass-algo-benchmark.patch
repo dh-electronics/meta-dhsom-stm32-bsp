@@ -1,0 +1,78 @@
+From 3a71bad054f9c9ca68c0d0f9ea326fee77dd2a24 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 8 Oct 2018 22:12:43 +0200
+Subject: [PATCH] FIXME: raid6: xor: Bypass algo benchmark
+
+The algorithm benchmark takes 1.5 seconds for raid6_pq and 500 mS for xor
+on 800MHz iMX53. The benchmark always ends up with the same results since
+we always use the same CPU. Hack this such that a fixed pre-selected algo
+is used and the benchmark is never performed. This saves two seconds from
+kernel boot time.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ crypto/xor.c      |  6 +++++-
+ lib/raid6/algos.c | 16 ++++++++++++++--
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/crypto/xor.c b/crypto/xor.c
+index bce9fe7af40a..f79da0639617 100644
+--- a/crypto/xor.c
++++ b/crypto/xor.c
+@@ -25,7 +25,11 @@
+ #include <asm/xor.h>
+ 
+ #ifndef XOR_SELECT_TEMPLATE
+-#define XOR_SELECT_TEMPLATE(x) (x)
++#if defined(CONFIG_KERNEL_MODE_NEON)
++#define XOR_SELECT_TEMPLATE(x) (&xor_block_neon)
++#else
++#define XOR_SELECT_TEMPLATE(x) (&xor_block_arm4regs)
++#endif
+ #endif
+ 
+ /* The xor routines to use.  */
+diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
+index 5065b1e7e327..b6f9936026ac 100644
+--- a/lib/raid6/algos.c
++++ b/lib/raid6/algos.c
+@@ -228,10 +228,10 @@ static inline const struct raid6_calls *raid6_choose_gen(
+ 
+ int __init raid6_select_algo(void)
+ {
+-	const int disks = (65536/PAGE_SIZE)+2;
+-
+ 	const struct raid6_calls *gen_best;
+ 	const struct raid6_recov_calls *rec_best;
++#if 0
++	const int disks = (65536/PAGE_SIZE)+2;
+ 	char *syndromes;
+ 	void *dptrs[(65536/PAGE_SIZE)+2];
+ 	int i;
+@@ -252,11 +252,23 @@ int __init raid6_select_algo(void)
+ 
+ 	/* select raid gen_syndrome function */
+ 	gen_best = raid6_choose_gen(&dptrs, disks);
++#elif defined(CONFIG_KERNEL_MODE_NEON)
++	gen_best = &raid6_neonx2;
++#else
++	gen_best = &raid6_intx4;
++#endif
++	raid6_call = *gen_best;
+ 
+ 	/* select raid recover functions */
++#if 0
+ 	rec_best = raid6_choose_recov();
+ 
+ 	free_pages((unsigned long)syndromes, 1);
++#elif defined(CONFIG_KERNEL_MODE_NEON)
++	rec_best = &raid6_recov_neon;
++#else
++	rec_best = &raid6_recov_intx1;
++#endif
+ 
+ 	return gen_best && rec_best ? 0 : -EINVAL;
+ }
+-- 
+2.19.2
+

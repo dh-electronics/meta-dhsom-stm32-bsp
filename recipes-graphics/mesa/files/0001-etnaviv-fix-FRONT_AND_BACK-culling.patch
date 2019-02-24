@@ -1,0 +1,50 @@
+From 953d1a72ca60f05daa4c7080b8aad6d27d543f81 Mon Sep 17 00:00:00 2001
+From: Jonathan Marek <jonathan@marek.ca>
+Date: Wed, 3 Jul 2019 14:10:00 -0400
+Subject: [PATCH 1/4] etnaviv: fix FRONT_AND_BACK culling
+
+HW has no value to cull both faces (setting both CW/CCW bits results in
+only CCW being culled). I think it is safe to just skip triangle draws
+in draw_vbo when FRONT_AND_BACK culling is enabled.
+
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+---
+ src/gallium/drivers/etnaviv/etnaviv_context.c   | 9 +++++++++
+ src/gallium/drivers/etnaviv/etnaviv_translate.h | 1 +
+ 2 files changed, 10 insertions(+)
+
+diff --git a/src/gallium/drivers/etnaviv/etnaviv_context.c b/src/gallium/drivers/etnaviv/etnaviv_context.c
+index df8c00c5556..f53cdd974c3 100644
+--- a/src/gallium/drivers/etnaviv/etnaviv_context.c
++++ b/src/gallium/drivers/etnaviv/etnaviv_context.c
+@@ -200,6 +200,15 @@ etna_draw_vbo(struct pipe_context *pctx, const struct pipe_draw_info *info)
+    if (ctx->vertex_elements == NULL || ctx->vertex_elements->num_elements == 0)
+       return; /* Nothing to do */
+ 
++   /* triangle with both faces culled */
++   uint32_t prim_tri =  1 << PIPE_PRIM_TRIANGLES |
++                        1 << PIPE_PRIM_TRIANGLE_STRIP |
++                        1 << PIPE_PRIM_TRIANGLE_FAN;
++
++   if (ctx->rasterizer->cull_face == PIPE_FACE_FRONT_AND_BACK &&
++       (1 << info->mode) & prim_tri)
++      return;
++
+    if (!(ctx->prim_hwsupport & (1 << info->mode))) {
+       struct primconvert_context *primconvert = ctx->primconvert;
+       util_primconvert_save_rasterizer_state(primconvert, ctx->rasterizer);
+diff --git a/src/gallium/drivers/etnaviv/etnaviv_translate.h b/src/gallium/drivers/etnaviv/etnaviv_translate.h
+index e0811545e74..30117d95222 100644
+--- a/src/gallium/drivers/etnaviv/etnaviv_translate.h
++++ b/src/gallium/drivers/etnaviv/etnaviv_translate.h
+@@ -47,6 +47,7 @@ translate_cull_face(unsigned cull_face, unsigned front_ccw)
+ {
+    switch (cull_face) {
+    case PIPE_FACE_NONE:
++   case PIPE_FACE_FRONT_AND_BACK: /* handled in draw_vbo */
+       return VIVS_PA_CONFIG_CULL_FACE_MODE_OFF;
+    case PIPE_FACE_BACK:
+       return front_ccw ? VIVS_PA_CONFIG_CULL_FACE_MODE_CW
+-- 
+2.24.1
+

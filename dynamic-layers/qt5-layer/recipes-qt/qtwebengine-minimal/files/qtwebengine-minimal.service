@@ -1,0 +1,17 @@
+[Unit]
+Description=Qt5 WebEngine minimal fullscreen example
+Requires=network.target
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=qtwebengine
+Group=qtwebengine
+Environment="QT_QPA_PLATFORM=eglfs"
+Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
+Environment="QT_QPA_EGLFS_KMS_CONFIG=/etc/default/qt5-eglfs-kms.json"
+ExecStart=qtwebengine-minimal --no-sandbox
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
