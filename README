@@ -45,6 +45,8 @@ be referenced in bblayers.conf in this order:
   BBLAYERS ?= " \
     /path/to/OE/poky/meta \
     /path/to/OE/meta-openembedded/meta-oe \
+    /path/to/OE/meta-openembedded/meta-python \
+    /path/to/OE/meta-openembedded/meta-webserver \
     /path/to/OE/meta-qt5 \
     /path/to/OE/meta-mainline-common \
     /path/to/OE/meta-mainline-graphics \
@@ -118,6 +120,7 @@ BBLAYERS ?= " \
 	/path/to/OE/poky/meta \
 	/path/to/OE/meta-openembedded/meta-oe \
 	/path/to/OE/meta-openembedded/meta-python \
+	/path/to/OE/meta-openembedded/meta-webserver \
 	/path/to/OE/meta-qt5 \
 	/path/to/OE/meta-mainline-common \
 	/path/to/OE/meta-mainline-graphics \

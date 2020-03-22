@@ -22,7 +22,7 @@ IMAGE_INSTALL += "\
 	gstreamer1.0-plugins-good gstreamer1.0-plugins-bad \
 	\
 	qtwebengine-minimal qtwebengine-examples qtbase-examples \
-	qtmultimedia-examples kmscube nginx \
+	qtmultimedia-examples kmscube \
 	\
 	weston weston-init weston-examples qtwayland \
 	piglit glmark2 vk-gl-cts iperf3 stress-ng \
