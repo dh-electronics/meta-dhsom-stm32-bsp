@@ -1,0 +1,52 @@
+From b6bb6f5931a37a03a1f45ec2348ab2809abf6d0e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 23 Mar 2020 02:09:55 +0100
+Subject: [PATCH 12/13] net: dwc_eth_qos: Invalidate RX packet DMA buffer
+
+This patch prevents an issue where the RX packet might have been
+accessed by the CPU, which now has cached data from the packet in
+the caches and possibly various write buffers, and these data may
+be evicted from the caches into the DRAM while the buffer is also
+written by the DMA.
+
+By invalidating the buffer after the CPU accessed it and before the
+DMA populates the buffer, it is assured that the buffer will not be
+corrupted.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Stephen Warren <swarren@nvidia.com>
+---
+ drivers/net/dwc_eth_qos.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index dd100129a9..96a56983a7 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -1429,6 +1429,9 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
+ 	}
+ 
+ 	rx_desc = &(eqos->rx_descs[eqos->rx_desc_idx]);
++
++	eqos->config->ops->eqos_inval_buffer(packet, length);
++
+ 	rx_desc->des0 = (u32)(ulong)packet;
+ 	rx_desc->des1 = 0;
+ 	rx_desc->des2 = 0;
+@@ -1491,6 +1494,9 @@ static int eqos_probe_resources_core(struct udevice *dev)
+ 	}
+ 	debug("%s: rx_pkt=%p\n", __func__, eqos->rx_pkt);
+ 
++	eqos->config->ops->eqos_inval_buffer(eqos->rx_dma_buf,
++			EQOS_MAX_PACKET_SIZE * EQOS_DESCRIPTORS_RX);
++
+ 	debug("%s: OK\n", __func__);
+ 	return 0;
+ 
+-- 
+2.25.1
+

@@ -30,4 +30,10 @@ SRC_URI_append_mainlinestm32mp1 = " \
 	file://0005-ARM-stm32-Fill-in-missing-loadaddr.patch \
 	file://0006-ARM-dts-stm32-Add-missing-ETHCK-clock-to-ethernet-no.patch \
 	file://0007-ARM-dts-stm32-Add-DH-Electronics-DHCOM-SoM-and-PDK2-.patch \
+	file://0008-net-dwc_eth_qos-Fully-rewrite-RX-descriptor-field-3.patch \
+	file://0009-net-dwc_eth_qos-Correctly-wrap-around-TX-descriptor-.patch \
+	file://0010-net-dwc_eth_qos-Flush-the-RX-descriptors-on-init.patch \
+	file://0011-net-dwc_eth_qos-Invalidate-RX-descriptor-before-read.patch \
+	file://0012-net-dwc_eth_qos-Invalidate-RX-packet-DMA-buffer.patch \
+	file://0013-net-dwc_eth_qos-Prevent-DMA-from-writing-updated-RX-.patch \
 	"

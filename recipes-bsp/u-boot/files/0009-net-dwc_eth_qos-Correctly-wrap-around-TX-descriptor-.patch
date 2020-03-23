@@ -1,0 +1,42 @@
+From 7810607ad685170432f4fb0f78fc9fc15ce52e78 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 23 Mar 2020 02:03:50 +0100
+Subject: [PATCH 09/13] net: dwc_eth_qos: Correctly wrap around TX descriptor
+ tail pointer
+
+This code programs the next descriptor in the TX descriptor ring into
+the hardware as the last valid TX descriptor. The problem is that if
+the currenty descriptor is the last one in the array, the code will
+not wrap around correctly and use TX descriptor 0 again, but instead
+will use TX descriptor at address right past the TX descriptor ring,
+which is the first descriptor in the RX ring.
+
+Fix this by adding the necessary wrap-around.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Stephen Warren <swarren@nvidia.com>
+---
+ drivers/net/dwc_eth_qos.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index c82e683813..44fa25e657 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -1372,7 +1372,8 @@ static int eqos_send(struct udevice *dev, void *packet, int length)
+ 	tx_desc->des3 = EQOS_DESC3_OWN | EQOS_DESC3_FD | EQOS_DESC3_LD | length;
+ 	eqos->config->ops->eqos_flush_desc(tx_desc);
+ 
+-	writel((ulong)(tx_desc + 1), &eqos->dma_regs->ch0_txdesc_tail_pointer);
++	writel((ulong)(&(eqos->tx_descs[eqos->tx_desc_idx])),
++		&eqos->dma_regs->ch0_txdesc_tail_pointer);
+ 
+ 	for (i = 0; i < 1000000; i++) {
+ 		eqos->config->ops->eqos_inval_desc(tx_desc);
+-- 
+2.25.1
+
