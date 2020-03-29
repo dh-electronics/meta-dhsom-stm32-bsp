@@ -1,1 +1,1 @@
-IMAGE_INSTALL += " v4l-utils yavta libgpiod libiio "
+IMAGE_INSTALL_append_mainlinestm32mp1 = " v4l-utils yavta libgpiod libiio "

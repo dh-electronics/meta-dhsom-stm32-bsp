@@ -1,1 +1,1 @@
-IMAGE_INSTALL += " vk-gl-cts "
+IMAGE_INSTALL_append_mainlinestm32mp1 = " vk-gl-cts "

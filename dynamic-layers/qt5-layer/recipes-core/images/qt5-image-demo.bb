@@ -4,7 +4,7 @@ LICENSE = "MIT"
 
 inherit core-image
 
-IMAGE_INSTALL += "\
+IMAGE_INSTALL_append_mainlinestm32mp1 = "\
 	kernel-modules dropbear iw \
 	ca-certificates dropbear iproute2 init-ifupdown \
 	i2c-tools canutils \
@@ -30,4 +30,4 @@ IMAGE_INSTALL += "\
 	nano \
 	"
 
-IMAGE_FEATURES += "dev-pkgs tools-sdk tools-debug tools-profile debug-tweaks"
+IMAGE_FEATURES_append_mainlinestm32mp1 = "dev-pkgs tools-sdk tools-debug tools-profile debug-tweaks"
