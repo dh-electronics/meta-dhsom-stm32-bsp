@@ -56,7 +56,7 @@ be referenced in bblayers.conf in this order:
 The following specifics should be placed into local.conf:
 
   MACHINE = "dh-stm32mp1-dhcom-pdk2"
-  DISTRO = "mainlinestm32mp1"
+  DISTRO = "dhlinux"
 
 Note that MACHINE must be "dh-stm32mp1-dhcom-pdk2". Adapt the suffixes
 of all the files and names of directories further in this documentation
@@ -86,7 +86,7 @@ Example local.conf
 ==================
 MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DL_DIR = "/path/to/OE/downloads"
-DISTRO ?= "mainlinestm32mp1"
+DISTRO ?= "dhlinux"
 PACKAGE_CLASSES ?= "package_rpm"
 EXTRA_IMAGE_FEATURES = "debug-tweaks"
 USER_CLASSES ?= "buildstats image-mklibs image-prelink"
