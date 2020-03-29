@@ -1,0 +1,69 @@
+From 542dde07fc66fae91e1c21d961407eba0cacf600 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 27 Mar 2020 02:31:02 +0100
+Subject: [PATCH 18/25] ARM: dts: stm32: Enable Bluetooth on AV96
+
+The WiFi/Bluetooth chip is attached to USART2 on AV96 as well, describe
+it in DT to make it available. Remove BT LED and turn it into a shutdown
+GPIO, because the GPIO line controls the BT_REG_ON signal. The LED is just
+an indicator connected to the same line, but not the primary function.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 23 ++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 5dca640122da..4d12d5e886a6 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -20,6 +20,7 @@
+ 		mmc0 = &sdmmc1;
+ 		serial0 = &uart4;
+ 		serial1 = &uart7;
++		serial2 = &usart2;
+ 		spi0 = &qspi;
+ 	};
+ 
+@@ -62,13 +63,6 @@
+ 			default-state = "off";
+ 			panic-indicator;
+ 		};
+-
+-		led5 {
+-			label = "blue:bt";
+-			gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+-			linux,default-trigger = "bluetooth-power";
+-			default-state = "off";
+-		};
+ 	};
+ 
+ 	sd_switch: regulator-sd_switch {
+@@ -424,3 +418,18 @@
+ 	pinctrl-0 = <&uart7_pins_a>;
+ 	status = "okay";
+ };
++
++/* Bluetooth */
++&usart2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&usart2_pins_a>;
++	pinctrl-1 = <&usart2_sleep_pins_a>;
++	st,hw-flow-ctrl;
++	status = "okay";
++
++	bluetooth {
++		compatible = "brcm,bcm43438-bt";
++		max-speed = <3000000>;
++		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
++	};
++};
+-- 
+2.25.1
+

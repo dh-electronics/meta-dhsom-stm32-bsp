@@ -58,8 +58,9 @@ The following specifics should be placed into local.conf:
   MACHINE = "dh-stm32mp1-dhcom-pdk2"
   DISTRO = "dhlinux"
 
-Note that MACHINE must be "dh-stm32mp1-dhcom-pdk2". Adapt the suffixes
-of all the files and names of directories further in this documentation
+Note that MACHINE must be either "dh-stm32mp1-dhcom-pdk2" or
+"dh-stm32mp1-dhcor-avenger96". Adapt the suffixes of all the
+files and names of directories further in this documentation
 according to MACHINE.
 
 Both local.conf and bblayers.conf are included verbatim in full at the end

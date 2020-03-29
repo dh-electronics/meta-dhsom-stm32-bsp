@@ -1,0 +1,86 @@
+From 5e1c8ed5300896614359cdf5c7e650e6ed3c8e77 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 27 Mar 2020 02:28:09 +0100
+Subject: [PATCH 22/25] ARM: dts: stm32: Add bindings for audio on AV96
+
+Fill in the bindings for HDMI audio on AV96, this permits audio playback
+via attached HDMI device if such device supports it.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 39 +++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index f6e6aa9102a1..133364215ebd 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -97,6 +97,13 @@
+ 			 <2900000 0x0>;
+ 	};
+ 
++	sound {
++		compatible = "audio-graph-card";
++		label = "STM32MP1-AV96-HDMI";
++		dais = <&sai2a_port>;
++		status = "okay";
++	};
++
+ 	/* Enpirion EP3A8LQI U2 on the DHCOR */
+ 	vdd_io: regulator-buck-io {
+ 		compatible = "regulator-fixed";
+@@ -366,6 +373,13 @@
+ 					remote-endpoint = <&hdmi_con>;
+ 				};
+ 			};
++
++			port@2 {
++				reg = <2>;
++				adv7513_i2s0: endpoint {
++					remote-endpoint = <&sai2a_endpoint>;
++				};
++			};
+ 		};
+ 	};
+ 
+@@ -430,6 +444,31 @@
+ 	status = "okay";
+ };
+ 
++&sai2 {
++	clocks = <&rcc SAI2>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&sai2a_pins_c>;
++	pinctrl-1 = <&sai2a_sleep_pins_c>;
++	clock-names = "pclk", "x8k", "x11k";
++	status = "okay";
++
++	sai2a: audio-controller@4400b004 {
++		#clock-cells = <0>;
++		dma-names = "tx";
++		clocks = <&rcc SAI2_K>;
++		clock-names = "sai_ck";
++		status = "okay";
++
++		sai2a_port: port {
++			sai2a_endpoint: endpoint {
++				remote-endpoint = <&adv7513_i2s0>;
++				format = "i2s";
++				mclk-fs = <256>;
++			};
++		};
++	};
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_b>;
+-- 
+2.25.1
+

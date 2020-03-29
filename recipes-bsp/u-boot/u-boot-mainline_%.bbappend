@@ -7,6 +7,13 @@ do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
+DEPENDS_append_dh-stm32mp1-dhcor-avenger96 = "u-boot-mkimage-native"
+SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " file://boot.cmd "
+do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
+	uboot-mkimage -A arm -T script -C none \
+		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
+}
+
 PATCHES_COMMON = " \
 	file://0001-arm-stm32mp1-activate-data-cache-in-SPL-and-before-r.patch \
 	file://0002-ARM-stm32-Increase-USB-power-good-delay.patch \
@@ -32,8 +39,16 @@ PATCHES_COMMON = " \
 	file://0022-ARM-dts-stm32-Define-FMC2-base-address.patch \
 	file://0023-ARM-dts-stm32-Add-KS8851-16MLL-ethernet-on-FMC2.patch \
 	file://0024-ARM-stm32-Enable-bootd-iminfo-imxtract-on-DHCOM.patch \
+	file://0025-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch \
+	file://0026-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96.patch \
+	file://0027-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch \
+	file://0028-ARM-stm32-Add-default-config-for-AV96.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
+	${PATCHES_COMMON} \
+	"
+
+SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " \
 	${PATCHES_COMMON} \
 	"

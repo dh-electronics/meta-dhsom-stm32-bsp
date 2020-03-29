@@ -1,0 +1,54 @@
+From 0087845cfb5c18427988c3039cf640bb1d073300 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 26 Mar 2020 21:56:49 +0100
+Subject: [PATCH 10/25] ARM: dts: stm32: Add alternate pinmux for SDMMC2 pins
+ 4-7
+
+Add another mux option for SDMMC2 pins 4..7, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index 2e77e4353ec6..914dcd5d668f 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -1013,6 +1013,27 @@
+ 				};
+ 			};
+ 
++			sdmmc2_d47_pins_b: sdmmc2-d47-1 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
++						 <STM32_PINMUX('A', 15, AF9)>, /* SDMMC2_D5 */
++						 <STM32_PINMUX('C', 6, AF10)>, /* SDMMC2_D6 */
++						 <STM32_PINMUX('C', 7, AF10)>; /* SDMMC2_D7 */
++					slew-rate = <1>;
++					drive-push-pull;
++					bias-pull-up;
++				};
++			};
++
++			sdmmc2_d47_sleep_pins_b: sdmmc2-d47-sleep-1 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 8, ANALOG)>, /* SDMMC2_D4 */
++						 <STM32_PINMUX('A', 15, ANALOG)>, /* SDMMC2_D5 */
++						 <STM32_PINMUX('C', 6, ANALOG)>, /* SDMMC2_D6 */
++						 <STM32_PINMUX('C', 7, ANALOG)>; /* SDMMC2_D7 */
++				};
++			};
++
+ 			sdmmc3_b4_pins_a: sdmmc3-b4-0 {
+ 				pins1 {
+ 					pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+-- 
+2.25.1
+

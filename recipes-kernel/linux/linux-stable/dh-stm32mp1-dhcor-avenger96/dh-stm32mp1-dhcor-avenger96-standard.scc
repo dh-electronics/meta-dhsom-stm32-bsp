@@ -1,0 +1,33 @@
+define KMACHINE dh-stm32mp1-dhcor-avenger96
+define KTYPE standard
+define KARCH arm
+branch dh-stm32mp1-dhcor-avenger96
+kconf hardware dh-stm32mp1-dhcor-avenger96.cfg
+kconf non-hardware dh-stm32mp1-dhcor-avenger96-non_hardware.cfg
+
+include dh-stm32mp1-common-patches.scc
+patch 0001-ARM-dts-stm32-remove-useless-properties-in-stm32mp15.patch
+patch 0002-ARM-dts-stm32-Add-alternate-pinmux-for-ethernet-RGMI.patch
+patch 0003-ARM-dts-stm32-Repair-ethernet-operation-on-AV96.patch
+patch 0004-ARM-dts-stm32-Add-missing-ethernet-PHY-reset-on-AV96.patch
+patch 0005-ARM-dts-stm32-Add-missing-ethernet-PHY-skews-on-AV96.patch
+patch 0006-ARM-dts-stm32-Add-alternate-pinmux-for-SDMMC1-direct.patch
+patch 0007-ARM-dts-stm32-Repair-SDMMC1-operation-on-AV96.patch
+patch 0008-ARM-dts-stm32-Repair-PMIC-configuration-on-AV96.patch
+patch 0009-ARM-dts-stm32-Repair-PMIC-interrupt-on-AV96.patch
+patch 0010-ARM-dts-stm32-Add-alternate-pinmux-for-SDMMC2-pins-4.patch
+patch 0011-ARM-dts-stm32-Add-eMMC-attached-to-SDMMC2-on-AV96.patch
+patch 0012-ARM-dts-stm32-Add-QSPI-NOR-on-AV96.patch
+patch 0013-ARM-dts-stm32-Add-configuration-EEPROM-on-AV96.patch
+patch 0014-ARM-dts-stm32-Enable-GPU-on-AV96.patch
+patch 0015-ARM-dts-stm32-Add-alternate-pinmux-for-SDMMC3-pins.patch
+patch 0016-ARM-dts-stm32-Enable-WiFi-on-AV96.patch
+patch 0017-ARM-dts-stm32-Add-alternate-pinmux-for-USART2-pins.patch
+patch 0018-ARM-dts-stm32-Enable-Bluetooth-on-AV96.patch
+patch 0019-ARM-dts-stm32-Add-alternate-pinmux-for-LTDC-pins.patch
+patch 0020-ARM-dts-stm32-Add-bindings-for-HDMI-video-on-AV96.patch
+patch 0021-ARM-dts-stm32-Add-alternate-pinmux-for-SAI2-pins.patch
+patch 0022-ARM-dts-stm32-Add-bindings-for-audio-on-AV96.patch
+patch 0023-ARM-dts-stm32-add-USB-OTG-pinctrl-to-stm32mp15.patch
+patch 0024-ARM-dts-stm32-Add-bindings-for-USB-on-AV96.patch
+patch 0025-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch

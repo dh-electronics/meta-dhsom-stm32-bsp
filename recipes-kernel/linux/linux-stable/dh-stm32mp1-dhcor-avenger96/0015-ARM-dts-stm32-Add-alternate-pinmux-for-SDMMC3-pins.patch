@@ -1,0 +1,87 @@
+From b6819b8b92f3f6f641940dd8a030bcc7bff48cc7 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 27 Mar 2020 02:09:24 +0100
+Subject: [PATCH 15/25] ARM: dts: stm32: Add alternate pinmux for SDMMC3 pins
+
+Add another mux option for SDMMC3 pins, in particular PD5_SDMMC3_D2 and
+PD0_SDMMC3_CMD, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 54 +++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index 914dcd5d668f..2a03312a8ad8 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -1088,6 +1088,60 @@
+ 				};
+ 			};
+ 
++			sdmmc3_b4_pins_b: sdmmc3-b4-1 {
++				pins1 {
++					pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
++						 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
++						 <STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
++						 <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
++						 <STM32_PINMUX('D', 0, AF10)>; /* SDMMC3_CMD */
++					slew-rate = <1>;
++					drive-push-pull;
++					bias-pull-up;
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
++					slew-rate = <2>;
++					drive-push-pull;
++					bias-pull-up;
++				};
++			};
++
++			sdmmc3_b4_od_pins_b: sdmmc3-b4-od-1 {
++				pins1 {
++					pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
++						 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
++						 <STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
++						 <STM32_PINMUX('D', 7, AF10)>; /* SDMMC3_D3 */
++					slew-rate = <1>;
++					drive-push-pull;
++					bias-pull-up;
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
++					slew-rate = <2>;
++					drive-push-pull;
++					bias-pull-up;
++				};
++				pins3 {
++					pinmux = <STM32_PINMUX('D', 0, AF10)>; /* SDMMC2_CMD */
++					slew-rate = <1>;
++					drive-open-drain;
++					bias-pull-up;
++				};
++			};
++
++			sdmmc3_b4_sleep_pins_b: sdmmc3-b4-sleep-1 {
++				pins {
++					pinmux = <STM32_PINMUX('F', 0, ANALOG)>, /* SDMMC3_D0 */
++						 <STM32_PINMUX('F', 4, ANALOG)>, /* SDMMC3_D1 */
++						 <STM32_PINMUX('D', 5, ANALOG)>, /* SDMMC3_D2 */
++						 <STM32_PINMUX('D', 7, ANALOG)>, /* SDMMC3_D3 */
++						 <STM32_PINMUX('G', 15, ANALOG)>, /* SDMMC3_CK */
++						 <STM32_PINMUX('D', 0, ANALOG)>; /* SDMMC3_CMD */
++				};
++			};
++
+ 			spdifrx_pins_a: spdifrx-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('G', 12, AF8)>; /* SPDIF_IN1 */
+-- 
+2.25.1
+
