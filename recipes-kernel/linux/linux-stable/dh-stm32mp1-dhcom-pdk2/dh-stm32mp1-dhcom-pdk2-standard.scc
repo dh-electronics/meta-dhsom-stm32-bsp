@@ -8,3 +8,12 @@ kconf non-hardware dh-stm32mp1-dhcom-pdk2-non_hardware.cfg
 include dh-stm32mp1-common-patches.scc
 patch 0001-ASoC-sgtl5000-add-multi-endpoint-support.patch
 patch 0002-ARM-dts-stm32-Add-DH-Electronics-DHCOM-SoM-and-PDK2-.patch
+patch 0003-net-ks8851-ml-Fix-IO-operations-again.patch
+patch 0004-irqchip-stm32-Add-irq-retrigger-support.patch
+patch 0005-pinctrl-stm32-Add-level-interrupt-support-to-gpio-ir.patch
+patch 0006-irqchip-stm32-Retrigger-both-in-eoi-and-unmask-callb.patch
+patch 0007-dt-bindings-mfd-stm32-fmc2-add-STM32-FMC2-controller.patch
+patch 0008-mfd-stm32-fmc2-add-STM32-FMC2-controller-driver.patch
+patch 0009-bus-stm32-fmc2-ebi-add-STM32-FMC2-EBI-controller-dri.patch
+patch 0010-ARM-dts-stm32-Add-KS8851-on-FMC2-to-STM32MP1-DHCOM.patch
+patch 0011-ARM-dts-stm32-Add-SRAM-on-FMC2-to-STM32MP1-DHCOM.patch
