@@ -4,7 +4,6 @@ define KARCH arm
 branch mainlinestm32mp1
 kconf hardware mainlinestm32mp1.cfg
 kconf non-hardware mainlinestm32mp1-non_hardware.cfg
-include common-patches.scc
 
 patch 0001-ASoC-sgtl5000-add-multi-endpoint-support.patch
 patch 0002-can-m_can-Fix-default-pinmux-glitch-at-init.patch
