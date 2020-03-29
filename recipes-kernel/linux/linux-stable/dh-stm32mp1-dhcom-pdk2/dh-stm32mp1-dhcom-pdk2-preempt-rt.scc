@@ -1,10 +1,10 @@
-define KMACHINE mainlinestm32mp1
+define KMACHINE dh-stm32mp1-dhcom-pdk2
 define KTYPE preempt-rt
 define KARCH arm
 
 # no new branch required, re-use the ktypes/preempt-rt/preempt-rt.scc branch
 include ktypes/preempt-rt/preempt-rt.scc
-include mainlinestm32mp1.scc
+include dh-stm32mp1-dhcom-pdk2.scc
 
 # default policy for preempt-rt kernels
 include features/latencytop/latencytop.scc

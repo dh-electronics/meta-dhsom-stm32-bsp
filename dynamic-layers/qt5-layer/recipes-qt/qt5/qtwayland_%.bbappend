@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI_append = " \
 	file://0001-Fix-compilation-of-linuxdmabuf-compositor-plugin.patch \
 	"
-PACKAGECONFIG_mainlinestm32mp1 = " \
+PACKAGECONFIG_dh-stm32mp1-dhcom-pdk2 = " \
     wayland-client \
     wayland-server \
     wayland-egl \

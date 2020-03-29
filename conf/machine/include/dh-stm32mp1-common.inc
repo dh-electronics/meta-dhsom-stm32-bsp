@@ -1,8 +1,3 @@
-#@TYPE: Machine
-#@NAME: Mainline STM32MP1
-#@SOC:  ST STM32MP1
-#@DESCRIPTION: Machine configuration for Mainline STM32MP1
-
 DEFAULTTUNE ?= "cortexa7thf-neon-vfpv4"
 SOC_FAMILY ?= "stm32mp1"
 
@@ -17,7 +12,6 @@ SERIAL_CONSOLE = "115200 ttySTM0"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0xc4000000"
-UBOOT_MACHINE = "stm32mp15_dhcom_basic_defconfig"
 UBOOT_BINARY := "u-boot.img"
 UBOOT_SUFFIX ?= "img"
 SPL_BINARY := "u-boot-spl.stm32"
@@ -37,7 +31,6 @@ PREFERRED_VERSION_u-boot-fw-utils-native = "2020.04%"
 # Linux kernel
 KERNEL_IMAGETYPE = "fitImage"
 KERNEL_CLASSES += " kernel-fitimage "
-KERNEL_DEVICETREE = "stm32mp157c-dhcom-pdk2.dtb"
 KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 PREFERRED_PROVIDER_virtual/kernel = "linux-stable"
@@ -54,14 +47,14 @@ PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
 PREFERRED_PROVIDER_nativesdk-mesa ?= "nativesdk-mesa-mainline"
 
 # Ship kernel modules
-MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "kernel-modules kernel-devicetree linux-firmware-rs9116"
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree "
 
 # List of images to be built
 IMAGE_FSTYPES ?= "tar.xz wic.xz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
 EXTRA_IMAGEDEPENDS += "virtual/bootloader"
-WKS_FILE = "sdimage-mainlinestm32mp1.wks"
+WKS_FILE = "sdimage-stm32mp1.wks"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
 IMAGE_INSTALL_append = " kernel-devicetree kernel-image-fitimage u-boot-mainline "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot virtual/bootloader:do_deploy"

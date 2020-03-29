@@ -1,1 +1,1 @@
-IMAGE_INSTALL_append_mainlinestm32mp1 = " nginx "
+IMAGE_INSTALL_append_dh-stm32mp1-dhcom-pdk2 = " nginx "

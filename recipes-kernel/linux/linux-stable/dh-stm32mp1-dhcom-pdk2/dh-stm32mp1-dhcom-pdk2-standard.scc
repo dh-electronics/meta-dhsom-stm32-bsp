@@ -1,9 +1,9 @@
-define KMACHINE mainlinestm32mp1
+define KMACHINE dh-stm32mp1-dhcom-pdk2
 define KTYPE standard
 define KARCH arm
-branch mainlinestm32mp1
-kconf hardware mainlinestm32mp1.cfg
-kconf non-hardware mainlinestm32mp1-non_hardware.cfg
+branch dh-stm32mp1-dhcom-pdk2
+kconf hardware dh-stm32mp1-dhcom-pdk2.cfg
+kconf non-hardware dh-stm32mp1-dhcom-pdk2-non_hardware.cfg
 
 patch 0001-ASoC-sgtl5000-add-multi-endpoint-support.patch
 patch 0002-can-m_can-Fix-default-pinmux-glitch-at-init.patch

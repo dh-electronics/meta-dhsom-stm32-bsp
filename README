@@ -55,11 +55,12 @@ be referenced in bblayers.conf in this order:
 
 The following specifics should be placed into local.conf:
 
-  MACHINE = "mainlinestm32mp1"
+  MACHINE = "dh-stm32mp1-dhcom-pdk2"
   DISTRO = "mainlinestm32mp1"
 
-Note that MACHINE must be "mainlinestm32mp1". Adapt the suffixes of all the files
-and names of directories further in this documentation according to MACHINE.
+Note that MACHINE must be "dh-stm32mp1-dhcom-pdk2". Adapt the suffixes
+of all the files and names of directories further in this documentation
+according to MACHINE.
 
 Both local.conf and bblayers.conf are included verbatim in full at the end
 of this readme.
@@ -71,19 +72,19 @@ evaluation can be built using:
 
 Once the build completes, the images are available in:
 
-  tmp/deploy/images/mainlinestm32mp1/
+  tmp/deploy/images/dh-stm32mp1-dhcom-pdk2/
 
 The SD card image is specifically in:
 
-  qt5-image-demo-mainlinestm32mp1.wic
+  qt5-image-demo-dh-stm32mp1-dhcom-pdk2.wic
 
 And shall be written to the SD card using dd:
 
-  $ dd if=qt5-image-demo-mainlinestm32mp1.wic of=/dev/sdX bs=8M
+  $ dd if=qt5-image-demo-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
 
 Example local.conf
 ==================
-MACHINE = "mainlinestm32mp1"
+MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DL_DIR = "/path/to/OE/downloads"
 DISTRO ?= "mainlinestm32mp1"
 PACKAGE_CLASSES ?= "package_rpm"

@@ -1,1 +1,1 @@
-PACKAGECONFIG_append_mainlinestm32mp1 = " gstreamer "
+PACKAGECONFIG_append_dh-stm32mp1-dhcom-pdk2 = " gstreamer "

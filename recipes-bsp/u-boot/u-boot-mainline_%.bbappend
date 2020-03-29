@@ -1,8 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
-DEPENDS_append_mainlinestm32mp1 = "u-boot-mkimage-native"
-SRC_URI_append_mainlinestm32mp1 = " file://boot.cmd "
-do_compile_append_mainlinestm32mp1 () {
+DEPENDS_append_dh-stm32mp1-dhcom-pdk2 = "u-boot-mkimage-native"
+SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " file://boot.cmd "
+do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
@@ -34,6 +34,6 @@ PATCHES_COMMON = " \
 	file://0024-ARM-stm32-Enable-bootd-iminfo-imxtract-on-DHCOM.patch \
 	"
 
-SRC_URI_append_mainlinestm32mp1 = " \
+SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
 	${PATCHES_COMMON} \
 	"
