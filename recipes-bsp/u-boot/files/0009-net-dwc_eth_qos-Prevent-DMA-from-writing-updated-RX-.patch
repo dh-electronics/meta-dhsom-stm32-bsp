@@ -1,7 +1,7 @@
-From 5785a9fc07d8b9fdfeaaad65f3beaf125a6d7a00 Mon Sep 17 00:00:00 2001
+From 848cefb8a7115db67d4ab13bd1ad89310010b2c3 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 02:11:46 +0100
-Subject: [PATCH 13/13] net: dwc_eth_qos: Prevent DMA from writing updated RX
+Subject: [PATCH 09/24] net: dwc_eth_qos: Prevent DMA from writing updated RX
  DMA descriptor
 
 The DMA may attempt to write a DMA descriptor in the ring while it is
@@ -9,6 +9,7 @@ being updated. By writing the DMA descriptor buffer address to 0, it
 is assured the DMA will not use such a buffer and the buffer can be
 updated without any interference.
 
+Reviewed-by: Patrick Delaunay <patrick.delaunay@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Joe Hershberger <joe.hershberger@ni.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -20,10 +21,10 @@ Cc: Stephen Warren <swarren@nvidia.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index 96a56983a7..3e3083e20c 100644
+index 7dadb10fe7..c86b9d59a5 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
-@@ -1430,8 +1430,10 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
+@@ -1431,8 +1431,10 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
  
  	rx_desc = &(eqos->rx_descs[eqos->rx_desc_idx]);
  

@@ -1,7 +1,7 @@
-From e60b5ba0b6e434221c97401ce415982b9ec8a479 Mon Sep 17 00:00:00 2001
+From 785ab68751771368af83fbe93e7a95a94013482a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 02:02:57 +0100
-Subject: [PATCH 08/13] net: dwc_eth_qos: Fully rewrite RX descriptor field 3
+Subject: [PATCH 04/24] net: dwc_eth_qos: Fully rewrite RX descriptor field 3
 
 The RX descriptor field 3 should contain only OWN and BUF1V bits before
 being used for receiving data by the DMA engine. However, right now, if
@@ -11,6 +11,7 @@ into the field. This could lead to a residual dirty bits being left in
 the field 3 from previous transfer, and it generally does. Fully set the
 field 3 instead to clear those residual dirty bits.
 
+Reviewed-by: Patrick Delaunay <patrick.delaunay@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Joe Hershberger <joe.hershberger@ni.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -22,10 +23,10 @@ Cc: Stephen Warren <swarren@nvidia.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index 4632111635..c82e683813 100644
+index 0564bebf76..4bce6d4290 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
-@@ -1241,7 +1241,7 @@ static int eqos_start(struct udevice *dev)
+@@ -1242,7 +1242,7 @@ static int eqos_start(struct udevice *dev)
  		struct eqos_desc *rx_desc = &(eqos->rx_descs[i]);
  		rx_desc->des0 = (u32)(ulong)(eqos->rx_dma_buf +
  					     (i * EQOS_MAX_PACKET_SIZE));
@@ -34,7 +35,7 @@ index 4632111635..c82e683813 100644
  	}
  	eqos->config->ops->eqos_flush_desc(eqos->descs);
  
-@@ -1435,7 +1435,7 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
+@@ -1436,7 +1436,7 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
  	 * writes to the rest of the descriptor too.
  	 */
  	mb();

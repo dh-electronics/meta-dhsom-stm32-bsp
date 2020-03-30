@@ -1,0 +1,80 @@
+From b23f4132c5b2f9d4daf46117a906a491dfd3d543 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 25 Mar 2020 17:25:29 +0100
+Subject: [PATCH 16/24] net: ks8851: Checkpatch cleanup
+
+Fix various checkpatch complaints.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+---
+ drivers/net/ks8851_mll.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/net/ks8851_mll.c b/drivers/net/ks8851_mll.c
+index 503da7a3bf..54a273aa69 100644
+--- a/drivers/net/ks8851_mll.c
++++ b/drivers/net/ks8851_mll.c
+@@ -91,9 +91,9 @@ static void ks_enable_int(struct eth_device *dev)
+ 	ks_wrreg16(dev, KS_IER, IRQ_LCI | IRQ_TXI | IRQ_RXI);
+ }
+ 
+-static void ks_set_powermode(struct eth_device *dev, unsigned pwrmode)
++static void ks_set_powermode(struct eth_device *dev, unsigned int pwrmode)
+ {
+-	unsigned pmecr;
++	unsigned int pmecr;
+ 
+ 	ks_rdreg16(dev, KS_GRR);
+ 	pmecr = ks_rdreg16(dev, KS_PMECR);
+@@ -147,7 +147,7 @@ static void ks_read_config(struct eth_device *dev)
+  * not currently specify the exact sequence, we have chosen something
+  * that seems to work with our device.
+  */
+-static void ks_soft_reset(struct eth_device *dev, unsigned op)
++static void ks_soft_reset(struct eth_device *dev, unsigned int op)
+ {
+ 	/* Disable interrupt first */
+ 	ks_wrreg16(dev, KS_IER, 0x0000);
+@@ -417,7 +417,7 @@ static void ks_write_qmu(struct eth_device *dev, u8 *pdata, u16 len)
+ 	/* 1. set sudo-DMA mode */
+ 	ks_wrreg16(dev, KS_TXFDPR, TXFDPR_TXFPAI);
+ 	ks_wrreg16(dev, KS_RXQCR, RXQCR_CMD_CNTL | RXQCR_SDA);
+-	/* 2. write status/lenth info */
++	/* 2. write status/length info */
+ 	ks_outblk(dev, txw, 4);
+ 	/* 3. write pkt data */
+ 	ks_outblk(dev, (u16 *)pdata, ALIGN(len, 4));
+@@ -443,10 +443,10 @@ static int ks8851_mll_send(struct eth_device *dev, void *packet, int length)
+ 	if (retv >= tmplen + 12) {
+ 		ks_write_qmu(dev, data, tmplen);
+ 		return 0;
+-	} else {
+-		printf(DRIVERNAME ": failed to send packet: No buffer\n");
+-		return -1;
+ 	}
++
++	printf(DRIVERNAME ": failed to send packet: No buffer\n");
++	return -1;
+ }
+ 
+ static void ks8851_mll_halt(struct eth_device *dev)
+@@ -468,11 +468,12 @@ static int ks8851_mll_recv(struct eth_device *dev)
+ 
+ 	ks_wrreg16(dev, KS_ISR, status);
+ 
+-	if ((status & IRQ_RXI))
++	if (status & IRQ_RXI)
+ 		ks_rcv(dev, (uchar **)net_rx_packets);
+ 
+-	if ((status & IRQ_LDI)) {
++	if (status & IRQ_LDI) {
+ 		u16 pmecr = ks_rdreg16(dev, KS_PMECR);
++
+ 		pmecr &= ~PMECR_WKEVT_MASK;
+ 		ks_wrreg16(dev, KS_PMECR, pmecr | PMECR_WKEVT_LINK);
+ 	}
+-- 
+2.25.1
+

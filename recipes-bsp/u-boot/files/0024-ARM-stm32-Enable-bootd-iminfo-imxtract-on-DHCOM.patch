@@ -1,0 +1,33 @@
+From b8280517215975f3dcc015a10ba67a319e27ca5d Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 1 Apr 2020 16:39:26 +0200
+Subject: [PATCH 24/24] ARM: stm32: Enable bootd, iminfo, imxtract on DHCOM
+
+Enable these standard U-Boot commands for image manipulation and for
+starting the default boot command using 'boot' command in U-Boot shell.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ configs/stm32mp15_dhcom_basic_defconfig | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/configs/stm32mp15_dhcom_basic_defconfig b/configs/stm32mp15_dhcom_basic_defconfig
+index 683f15e7d5..f830feb306 100644
+--- a/configs/stm32mp15_dhcom_basic_defconfig
++++ b/configs/stm32mp15_dhcom_basic_defconfig
+@@ -19,10 +19,7 @@ CONFIG_SPL_MTD_SUPPORT=y
+ CONFIG_SPL_POWER_SUPPORT=y
+ CONFIG_SYS_SPI_U_BOOT_OFFS=0x80000
+ CONFIG_SYS_PROMPT="STM32MP> "
+-# CONFIG_CMD_BOOTD is not set
+ # CONFIG_CMD_ELF is not set
+-# CONFIG_CMD_IMI is not set
+-# CONFIG_CMD_XIMG is not set
+ # CONFIG_CMD_EXPORTENV is not set
+ CONFIG_CMD_EEPROM=y
+ CONFIG_CMD_MEMINFO=y
+-- 
+2.25.1
+

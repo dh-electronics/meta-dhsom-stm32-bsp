@@ -1,7 +1,7 @@
-From 9716be6077664c1f71a3cb1a006b62cb1d9fb106 Mon Sep 17 00:00:00 2001
+From ed73e1b3ec4f7caf0823b7a29484ad2fb9e6b160 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 02:09:21 +0100
-Subject: [PATCH 11/13] net: dwc_eth_qos: Invalidate RX descriptor before
+Subject: [PATCH 07/24] net: dwc_eth_qos: Invalidate RX descriptor before
  reading
 
 The current code polls the RX desciptor ring for new packets by reading
@@ -12,6 +12,7 @@ of RX descriptors in cacheable memory.
 This patch adds a missing RX descriptor invalidation, which assures the
 CPU will read a fresh copy of the RX descriptor instead of a cached one.
 
+Reviewed-by: Patrick Delaunay <patrick.delaunay@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Joe Hershberger <joe.hershberger@ni.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -23,10 +24,10 @@ Cc: Stephen Warren <swarren@nvidia.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index e2baec912f..dd100129a9 100644
+index 66cc301c8c..e40c461278 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
-@@ -1396,6 +1396,7 @@ static int eqos_recv(struct udevice *dev, int flags, uchar **packetp)
+@@ -1397,6 +1397,7 @@ static int eqos_recv(struct udevice *dev, int flags, uchar **packetp)
  	debug("%s(dev=%p, flags=%x):\n", __func__, dev, flags);
  
  	rx_desc = &(eqos->rx_descs[eqos->rx_desc_idx]);

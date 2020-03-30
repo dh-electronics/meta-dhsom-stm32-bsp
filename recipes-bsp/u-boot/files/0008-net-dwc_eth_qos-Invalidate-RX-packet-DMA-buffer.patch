@@ -1,7 +1,7 @@
-From b6bb6f5931a37a03a1f45ec2348ab2809abf6d0e Mon Sep 17 00:00:00 2001
+From 06d82b41cda68e65c305d3f9016b74206c91aae5 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 02:09:55 +0100
-Subject: [PATCH 12/13] net: dwc_eth_qos: Invalidate RX packet DMA buffer
+Subject: [PATCH 08/24] net: dwc_eth_qos: Invalidate RX packet DMA buffer
 
 This patch prevents an issue where the RX packet might have been
 accessed by the CPU, which now has cached data from the packet in
@@ -13,6 +13,7 @@ By invalidating the buffer after the CPU accessed it and before the
 DMA populates the buffer, it is assured that the buffer will not be
 corrupted.
 
+Reviewed-by: Patrick Delaunay <patrick.delaunay@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Joe Hershberger <joe.hershberger@ni.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -24,10 +25,10 @@ Cc: Stephen Warren <swarren@nvidia.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index dd100129a9..96a56983a7 100644
+index e40c461278..7dadb10fe7 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
-@@ -1429,6 +1429,9 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
+@@ -1430,6 +1430,9 @@ static int eqos_free_pkt(struct udevice *dev, uchar *packet, int length)
  	}
  
  	rx_desc = &(eqos->rx_descs[eqos->rx_desc_idx]);
@@ -37,7 +38,7 @@ index dd100129a9..96a56983a7 100644
  	rx_desc->des0 = (u32)(ulong)packet;
  	rx_desc->des1 = 0;
  	rx_desc->des2 = 0;
-@@ -1491,6 +1494,9 @@ static int eqos_probe_resources_core(struct udevice *dev)
+@@ -1492,6 +1495,9 @@ static int eqos_probe_resources_core(struct udevice *dev)
  	}
  	debug("%s: rx_pkt=%p\n", __func__, eqos->rx_pkt);
  

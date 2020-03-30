@@ -1,7 +1,7 @@
-From 7810607ad685170432f4fb0f78fc9fc15ce52e78 Mon Sep 17 00:00:00 2001
+From e6bd43384ed0a15707a81aecb1fb38611ccfbb90 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 02:03:50 +0100
-Subject: [PATCH 09/13] net: dwc_eth_qos: Correctly wrap around TX descriptor
+Subject: [PATCH 05/24] net: dwc_eth_qos: Correctly wrap around TX descriptor
  tail pointer
 
 This code programs the next descriptor in the TX descriptor ring into
@@ -13,6 +13,7 @@ which is the first descriptor in the RX ring.
 
 Fix this by adding the necessary wrap-around.
 
+Reviewed-by: Patrick Delaunay <patrick.delaunay@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Joe Hershberger <joe.hershberger@ni.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -24,10 +25,10 @@ Cc: Stephen Warren <swarren@nvidia.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index c82e683813..44fa25e657 100644
+index 4bce6d4290..c4f665bda9 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
-@@ -1372,7 +1372,8 @@ static int eqos_send(struct udevice *dev, void *packet, int length)
+@@ -1373,7 +1373,8 @@ static int eqos_send(struct udevice *dev, void *packet, int length)
  	tx_desc->des3 = EQOS_DESC3_OWN | EQOS_DESC3_FD | EQOS_DESC3_LD | length;
  	eqos->config->ops->eqos_flush_desc(tx_desc);
  
