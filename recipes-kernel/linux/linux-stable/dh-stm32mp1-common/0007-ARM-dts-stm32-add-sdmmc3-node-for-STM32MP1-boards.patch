@@ -1,7 +1,7 @@
-From ee8ae314e85c1547b928e0bc62f50e2a07638025 Mon Sep 17 00:00:00 2001
+From 78d65954505a1cfb4bcead150f9ccb872b3a2783 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:38 +0100
-Subject: [PATCH 07/11] ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards
+Subject: [PATCH 07/10] ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards
 
 On STM32MP1 EVAL and DISCOVERY boards, the SDMMC3 internal peripheral
 can be used through the GPIO extension connector. The sdmmc3 node is then
@@ -128,5 +128,5 @@ index 91fc0a315c49..3de3b6ebf758 100644
  	pinctrl-names = "default";
  	pinctrl-0 = <&spi1_pins_a>;
 -- 
-2.25.0
+2.25.1
 

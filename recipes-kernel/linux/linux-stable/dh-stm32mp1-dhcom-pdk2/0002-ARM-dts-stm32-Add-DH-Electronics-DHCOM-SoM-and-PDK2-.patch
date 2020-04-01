@@ -1,7 +1,7 @@
-From 65f8711b3a1136e3df0225099790fedc5b782b1d Mon Sep 17 00:00:00 2001
+From 22017f9aa7b4d657f89731b9192425ce3cf0abcc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 2 Dec 2019 18:06:40 +0100
-Subject: [PATCH 11/11] ARM: dts: stm32: Add DH Electronics DHCOM SoM and PDK2
+Subject: [PATCH 2/2] ARM: dts: stm32: Add DH Electronics DHCOM SoM and PDK2
  board
 
 Add support for DH Electronics DHCOM SoM and PDK2 rev. 400 carrier
@@ -33,7 +33,7 @@ index b21b3a64641a..ebe5a5af7de3 100644
  	stm32mp157c-ev1.dtb
 diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
 new file mode 100644
-index 000000000000..0199301994ae
+index 000000000000..9428593ff702
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
 @@ -0,0 +1,363 @@
@@ -773,5 +773,5 @@ index 000000000000..ee9ae7581b54
 +	status = "okay";
 +};
 -- 
-2.25.0
+2.25.1
 

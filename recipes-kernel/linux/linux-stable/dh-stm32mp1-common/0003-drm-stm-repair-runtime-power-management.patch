@@ -1,7 +1,7 @@
-From 88c5b8ded6333e67bd5a9cab96422aedb30ccb75 Mon Sep 17 00:00:00 2001
+From 196d2f2795ea01239b98f1cbe52716497445081c Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 29 Feb 2020 22:02:51 +0100
-Subject: [PATCH 03/11] drm/stm: repair runtime power management
+Subject: [PATCH 03/10] drm/stm: repair runtime power management
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,5 +43,5 @@ index 3ab4fbf8eb0d..51571f7246ab 100644
  	reg_write(ldev->regs, LTDC_BCCR, BCCR_BCBLACK);
  
 -- 
-2.25.0
+2.25.1
 

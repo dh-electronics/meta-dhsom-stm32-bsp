@@ -1,7 +1,7 @@
-From 9b5371962ec0188416860b22629d770243f7d32e Mon Sep 17 00:00:00 2001
+From 68366d0d6e6be34a3b6631ef2a8570497cae967a Mon Sep 17 00:00:00 2001
 From: Pascal Paillet <p.paillet@st.com>
 Date: Fri, 11 Oct 2019 16:05:30 +0200
-Subject: [PATCH 08/11] ARM: dts: stm32: add PWR regulators support on
+Subject: [PATCH 08/10] ARM: dts: stm32: add PWR regulators support on
  stm32mp157
 
 This patch adds support of STM32 PWR regulators on
@@ -144,5 +144,5 @@ index c9ea2f17462b..f20e0101b577 100644
  			compatible = "st,stm32mp1-exti", "syscon";
  			interrupt-controller;
 -- 
-2.25.0
+2.25.1
 

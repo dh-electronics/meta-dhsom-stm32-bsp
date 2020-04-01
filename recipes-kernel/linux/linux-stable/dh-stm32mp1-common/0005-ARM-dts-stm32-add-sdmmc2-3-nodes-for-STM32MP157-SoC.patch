@@ -1,7 +1,7 @@
-From 712549940591870b516b9eb3720fca023375d003 Mon Sep 17 00:00:00 2001
+From 2a9395501d33ec21ad0f199a4d68dbb1bec44a56 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:36 +0100
-Subject: [PATCH 05/11] ARM: dts: stm32: add sdmmc2 & 3 nodes for STM32MP157
+Subject: [PATCH 05/10] ARM: dts: stm32: add sdmmc2 & 3 nodes for STM32MP157
  SoC
 
 The STM32MP157 SoC series includes 3 instances of the SDMMC peripheral.
@@ -71,5 +71,5 @@ index f98e0370c0bc..c9ea2f17462b 100644
  
  		crc1: crc@58009000 {
 -- 
-2.25.0
+2.25.1
 

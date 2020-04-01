@@ -1,7 +1,7 @@
-From e00ed2bd74dcf0255afa0059c100d7e4173d60d8 Mon Sep 17 00:00:00 2001
+From f649c18a83101b866e5658e6fc76045fc2096e01 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:37 +0100
-Subject: [PATCH 06/11] ARM: dts: stm32: enable sdmmc2 node for stm32mp157c-ed1
+Subject: [PATCH 06/10] ARM: dts: stm32: enable sdmmc2 node for stm32mp157c-ed1
  board
 
 On STM32MP157C-ED1, the eMMC is connected on instance 2 of SDMMC
@@ -172,5 +172,5 @@ index 1d426ea8bdaf..b40a6b9a7aa6 100644
  	status = "okay";
  	/* spare dmas for other usage */
 -- 
-2.25.0
+2.25.1
 

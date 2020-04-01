@@ -1,7 +1,7 @@
-From e0eb8ea511f8018bb161c9f6e67a01a8ebd513a3 Mon Sep 17 00:00:00 2001
+From 8e1e6e435ba9d0433f6cd03b80548040702b6b91 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 17 Dec 2019 10:55:31 +0100
-Subject: [PATCH 02/11] can: m_can: Fix default pinmux glitch at init
+Subject: [PATCH 02/10] can: m_can: Fix default pinmux glitch at init
 
 The current code causes a slight glitch on the pinctrl settings when used.
 Since commit ab78029 (drivers/pinctrl: grab default handles from device core),
@@ -54,5 +54,5 @@ index 562c8317e3aa..16f03c23e479 100644
  }
  
 -- 
-2.25.0
+2.25.1
 
