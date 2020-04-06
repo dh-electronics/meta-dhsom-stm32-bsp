@@ -1,4 +1,4 @@
-SUMMARY = "A Qt5 image with all examples and demos from meta-qt5"
+SUMMARY = "An image with various examples and demos"
 
 LICENSE = "MIT"
 
@@ -21,10 +21,7 @@ IMAGE_INSTALL_DH_STM32MP1 = " \
 	gstreamer1.0 gstreamer1.0-plugins-base \
 	gstreamer1.0-plugins-good gstreamer1.0-plugins-bad \
 	\
-	qtwebengine-minimal qtwebengine-examples qtbase-examples \
-	qtmultimedia-examples kmscube \
-	\
-	weston weston-init weston-examples qtwayland \
+	weston weston-init weston-examples kmscube \
 	piglit glmark2 vk-gl-cts iperf3 stress-ng \
 	\
 	nano \
