@@ -1,7 +1,7 @@
-From 22017f9aa7b4d657f89731b9192425ce3cf0abcc Mon Sep 17 00:00:00 2001
+From 61748a25ac0ea7da98bdac3d5757729ff5d4a1cc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 2 Dec 2019 18:06:40 +0100
-Subject: [PATCH 2/2] ARM: dts: stm32: Add DH Electronics DHCOM SoM and PDK2
+Subject: [PATCH 02/10] ARM: dts: stm32: Add DH Electronics DHCOM SoM and PDK2
  board
 
 Add support for DH Electronics DHCOM SoM and PDK2 rev. 400 carrier

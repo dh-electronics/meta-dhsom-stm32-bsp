@@ -1,7 +1,7 @@
-From bc74fe0b88353f3a78e8cda3c09b3c6f2c2c926d Mon Sep 17 00:00:00 2001
+From 60073c4d645bcca0a604ee078e89e4e53fcc58c1 Mon Sep 17 00:00:00 2001
 From: Alexandre Torgue <alexandre.torgue@st.com>
 Date: Wed, 19 Feb 2020 15:32:28 +0100
-Subject: [PATCH 04/11] irqchip/stm32: Add irq retrigger support
+Subject: [PATCH 03/10] irqchip/stm32: Add irq retrigger support
 
 This commit introduces retrigger support for stm32_ext_h chip.
 It consists to rise the GIC interrupt mapped to an EXTI line.

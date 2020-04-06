@@ -1,7 +1,7 @@
-From 8225a1bfb74a61005c1c8c837eb9c9f36b443aee Mon Sep 17 00:00:00 2001
+From 0c7d0b1cba0d59dcbeaa0f8a9f1ec1c0de631495 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 20 Jan 2020 19:34:23 +0100
-Subject: [PATCH 10/11] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
+Subject: [PATCH 09/10] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
 
 Add bindings for the KS8851 ethernet present on the STM32MP1 DHCOM SoM.
 

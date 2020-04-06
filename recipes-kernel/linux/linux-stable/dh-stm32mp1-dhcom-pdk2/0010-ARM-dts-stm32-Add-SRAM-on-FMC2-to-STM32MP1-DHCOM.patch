@@ -1,7 +1,7 @@
-From 2d8d7500c9c39719565c815e28d2516e4cbea4dc Mon Sep 17 00:00:00 2001
+From 2899db07f7dda1c75d793c4884f42f5724729d10 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 26 Mar 2020 00:39:09 +0100
-Subject: [PATCH 11/11] ARM: dts: stm32: Add SRAM on FMC2 to STM32MP1 DHCOM
+Subject: [PATCH 10/10] ARM: dts: stm32: Add SRAM on FMC2 to STM32MP1 DHCOM
 
 Add bindings for the AS7C34098 SRAM present on the
 STM32MP1 DHCOM PDK2.

@@ -1,7 +1,7 @@
-From 373e1cd60581458710ff3d0d483f7441679baf78 Mon Sep 17 00:00:00 2001
+From 63cc5900320bd6333c3d548914e4b19cc8e88293 Mon Sep 17 00:00:00 2001
 From: Christophe Kerello <christophe.kerello@st.com>
 Date: Mon, 23 Mar 2020 15:58:41 +0100
-Subject: [PATCH 07/11] dt-bindings: mfd: stm32-fmc2: add STM32 FMC2 controller
+Subject: [PATCH 06/10] dt-bindings: mfd: stm32-fmc2: add STM32 FMC2 controller
  documentation
 
 This patch adds the documentation of the device tree bindings for the STM32

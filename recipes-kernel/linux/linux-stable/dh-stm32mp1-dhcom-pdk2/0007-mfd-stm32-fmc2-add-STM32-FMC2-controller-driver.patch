@@ -1,7 +1,7 @@
-From 709be4ce715c63502352bfe6f8d8493b7d86b476 Mon Sep 17 00:00:00 2001
+From 000659d3481a09eceaefc62d01c056e7bfe8cd6d Mon Sep 17 00:00:00 2001
 From: Christophe Kerello <christophe.kerello@st.com>
 Date: Mon, 23 Mar 2020 15:58:42 +0100
-Subject: [PATCH 08/11] mfd: stm32-fmc2: add STM32 FMC2 controller driver
+Subject: [PATCH 07/10] mfd: stm32-fmc2: add STM32 FMC2 controller driver
 
 The driver adds the support for the STMicroelectronics FMC2 controller
 found on STM32MP SOCs.

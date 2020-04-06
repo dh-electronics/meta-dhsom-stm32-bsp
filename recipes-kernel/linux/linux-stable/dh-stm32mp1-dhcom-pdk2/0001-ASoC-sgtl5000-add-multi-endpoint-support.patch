@@ -1,7 +1,7 @@
-From be51b4fa0e99c0350f2b111d69c235a56df663f8 Mon Sep 17 00:00:00 2001
+From b2e21e380065e3479b05f106cc3f841aef9e967a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 17 Dec 2019 22:02:47 +0100
-Subject: [PATCH 1/2] ASoC: sgtl5000: add multi endpoint support
+Subject: [PATCH 01/10] ASoC: sgtl5000: add multi endpoint support
 
 Support multiple endpoints on SGTL5000 codec port when used in
 of_graph context.

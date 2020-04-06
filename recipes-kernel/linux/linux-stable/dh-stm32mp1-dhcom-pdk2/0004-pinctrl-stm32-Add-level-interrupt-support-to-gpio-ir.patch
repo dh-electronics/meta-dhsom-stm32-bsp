@@ -1,7 +1,7 @@
-From ed9f7560b82a64ec7052f569edeb31b5f37996a6 Mon Sep 17 00:00:00 2001
+From d0a93fcd11663d3a6257d012079ab807c0319f00 Mon Sep 17 00:00:00 2001
 From: Alexandre Torgue <alexandre.torgue@st.com>
 Date: Wed, 19 Feb 2020 15:32:29 +0100
-Subject: [PATCH 05/11] pinctrl: stm32: Add level interrupt support to gpio irq
+Subject: [PATCH 04/10] pinctrl: stm32: Add level interrupt support to gpio irq
  chip
 
 GPIO hardware block is directly linked to EXTI block but EXTI handles

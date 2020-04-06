@@ -1,7 +1,7 @@
-From 1db964bac0d83e3a96afb689ab212d9de2f5bc99 Mon Sep 17 00:00:00 2001
+From 1bee06e5b3ab450f0020edb19e5010e3e2685567 Mon Sep 17 00:00:00 2001
 From: Christophe Kerello <christophe.kerello@st.com>
 Date: Mon, 23 Mar 2020 15:58:43 +0100
-Subject: [PATCH 09/11] bus: stm32-fmc2-ebi: add STM32 FMC2 EBI controller
+Subject: [PATCH 08/10] bus: stm32-fmc2-ebi: add STM32 FMC2 EBI controller
  driver
 
 The driver adds the support for the STMicroelectronics FMC2 EBI controller

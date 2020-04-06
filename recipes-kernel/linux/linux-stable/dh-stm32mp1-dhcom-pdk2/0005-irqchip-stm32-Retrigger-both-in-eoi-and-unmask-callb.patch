@@ -1,7 +1,7 @@
-From 55a19cbe4fa9fcb82ce28de04b0114318748a03d Mon Sep 17 00:00:00 2001
+From 0aee10931fd2d01e6275149e2e5da65aa37f0b09 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 23 Mar 2020 20:19:50 +0100
-Subject: [PATCH 06/11] irqchip/stm32: Retrigger both in eoi and unmask
+Subject: [PATCH 05/10] irqchip/stm32: Retrigger both in eoi and unmask
  callbacks
 
 Sampling the IRQ line state in EOI and retriggering the interrupt to
