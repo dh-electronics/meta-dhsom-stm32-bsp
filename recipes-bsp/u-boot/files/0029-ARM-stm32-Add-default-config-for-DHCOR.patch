@@ -1,22 +1,27 @@
-From 65e2a564c4ccacab3b838324b48f53e8f46c0562 Mon Sep 17 00:00:00 2001
+From 5ea96d3ae4e0edf5a97a865bdc1705eb9b286776 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 29 Mar 2020 22:15:38 +0200
-Subject: [PATCH 28/28] ARM: stm32: Add default config for AV96
+Subject: [PATCH 29/34] ARM: stm32: Add default config for DHCOR
 
-Add default U-Boot configuration for the AV96 board.
+Add default U-Boot configuration for the DHCOR SoM on AV96 board.
 
 Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
 ---
- configs/stm32mp15_dhcor_basic_defconfig | 136 ++++++++++++++++++++++++
- 1 file changed, 136 insertions(+)
+V2: No change
+---
+ configs/stm32mp15_dhcor_basic_defconfig | 138 ++++++++++++++++++++++++
+ 1 file changed, 138 insertions(+)
  create mode 100644 configs/stm32mp15_dhcor_basic_defconfig
 
 diff --git a/configs/stm32mp15_dhcor_basic_defconfig b/configs/stm32mp15_dhcor_basic_defconfig
 new file mode 100644
-index 0000000000..789bea7410
+index 0000000000..4a968609fe
 --- /dev/null
 +++ b/configs/stm32mp15_dhcor_basic_defconfig
-@@ -0,0 +1,136 @@
+@@ -0,0 +1,138 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_STM32MP=y
 +CONFIG_SYS_MALLOC_F_LEN=0x3000
@@ -95,6 +100,8 @@ index 0000000000..789bea7410
 +CONFIG_DM_MAILBOX=y
 +CONFIG_STM32_IPCC=y
 +CONFIG_I2C_EEPROM=y
++CONFIG_SYS_I2C_EEPROM_ADDR=0x53
++CONFIG_SYS_I2C_EEPROM_BUS=2
 +CONFIG_DM_MMC=y
 +CONFIG_SUPPORT_EMMC_BOOT=y
 +CONFIG_STM32_SDMMC2=y

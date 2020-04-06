@@ -1,0 +1,108 @@
+From 8f0805b727098935abfeae9a54ddc53871f6f718 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 1 Apr 2020 01:37:43 +0200
+Subject: [PATCH 32/34] ram: stm32mp1: Add support for multiple configs
+
+Add support for multiple DRAM configuration subnodes, while retaining
+the support for a single flat DRAM configuration node. This is useful
+on systems which can be manufactured in multiple configurations and
+where the DRAM configuration can be determined at runtime.
+
+The code is augmented by a function which can be overridden on board
+level, allowing a match on the configuration node name, very much like
+the fitImage configuration node name matching works. The default match
+is on the single top-level DRAM configuration, if matching on subnodes
+is required, then this board_stm32mp1_ddr_config_name_match() must be
+overridden.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+V2: Match on compatible string
+---
+ drivers/ram/stm32mp1/stm32mp1_ram.c | 39 +++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/ram/stm32mp1/stm32mp1_ram.c b/drivers/ram/stm32mp1/stm32mp1_ram.c
+index eb78f1198d..21c220694e 100644
+--- a/drivers/ram/stm32mp1/stm32mp1_ram.c
++++ b/drivers/ram/stm32mp1/stm32mp1_ram.c
+@@ -57,6 +57,33 @@ int stm32mp1_ddr_clk_enable(struct ddr_info *priv, uint32_t mem_speed)
+ 	return 0;
+ }
+ 
++__weak int board_stm32mp1_ddr_config_name_match(struct udevice *dev,
++						const char *name)
++{
++	return 0;	/* Always match */
++}
++
++static ofnode stm32mp1_ddr_get_ofnode(struct udevice *dev)
++{
++	const char *name;
++	int name_size;
++	ofnode node;
++
++	node = dev_ofnode(dev);
++	name = ofnode_get_property(node, "compatible", &name_size);
++	if (!board_stm32mp1_ddr_config_name_match(dev, name))
++		return node;
++
++	dev_for_each_subnode(node, dev) {
++		name = ofnode_get_property(node, "compatible", &name_size);
++
++		if (!board_stm32mp1_ddr_config_name_match(dev, name))
++			return node;
++	}
++
++	return ofnode_null();
++}
++
+ static __maybe_unused int stm32mp1_ddr_setup(struct udevice *dev)
+ {
+ 	struct ddr_info *priv = dev_get_priv(dev);
+@@ -64,6 +91,7 @@ static __maybe_unused int stm32mp1_ddr_setup(struct udevice *dev)
+ 	unsigned int idx;
+ 	struct clk axidcg;
+ 	struct stm32mp1_ddr_config config;
++	ofnode node = stm32mp1_ddr_get_ofnode(dev);
+ 
+ #define PARAM(x, y) \
+ 	{ x,\
+@@ -87,9 +115,9 @@ static __maybe_unused int stm32mp1_ddr_setup(struct udevice *dev)
+ 		PHY_PARAM(cal)
+ 	};
+ 
+-	config.info.speed = dev_read_u32_default(dev, "st,mem-speed", 0);
+-	config.info.size = dev_read_u32_default(dev, "st,mem-size", 0);
+-	config.info.name = dev_read_string(dev, "st,mem-name");
++	config.info.speed = ofnode_read_u32_default(node, "st,mem-speed", 0);
++	config.info.size = ofnode_read_u32_default(node, "st,mem-size", 0);
++	config.info.name = ofnode_read_string(node, "st,mem-name");
+ 	if (!config.info.name) {
+ 		debug("%s: no st,mem-name\n", __func__);
+ 		return -EINVAL;
+@@ -97,7 +125,7 @@ static __maybe_unused int stm32mp1_ddr_setup(struct udevice *dev)
+ 	printf("RAM: %s\n", config.info.name);
+ 
+ 	for (idx = 0; idx < ARRAY_SIZE(param); idx++) {
+-		ret = dev_read_u32_array(dev, param[idx].name,
++		ret = ofnode_read_u32_array(node, param[idx].name,
+ 					 (void *)((u32)&config +
+ 						  param[idx].offset),
+ 					 param[idx].size);
+@@ -164,7 +192,8 @@ static int stm32mp1_ddr_probe(struct udevice *dev)
+ 	priv->info.size = 0;
+ 	return stm32mp1_ddr_setup(dev);
+ #else
+-	priv->info.size = dev_read_u32_default(dev, "st,mem-size", 0);
++	ofnode node = stm32mp1_ddr_get_ofnode(dev);
++	priv->info.size = ofnode_read_u32_default(node, "st,mem-size", 0);
+ 	return 0;
+ #endif
+ }
+-- 
+2.25.1
+

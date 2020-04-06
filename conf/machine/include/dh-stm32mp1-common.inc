@@ -12,8 +12,9 @@ SERIAL_CONSOLE = "115200 ttySTM0"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0xc4000000"
-UBOOT_BINARY := "u-boot.img"
-UBOOT_SUFFIX ?= "img"
+UBOOT_MAKE_TARGET := "u-boot.itb all"
+UBOOT_BINARY := "u-boot.itb"
+UBOOT_SUFFIX ?= "itb"
 SPL_BINARY := "u-boot-spl.stm32"
 UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"

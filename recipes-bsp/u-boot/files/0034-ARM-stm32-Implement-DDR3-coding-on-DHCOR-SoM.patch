@@ -1,0 +1,155 @@
+From 685c831eae1b17b9e73e2d6eeef4b6cfc01dc4f2 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 1 Apr 2020 00:39:51 +0200
+Subject: [PATCH 34/34] ARM: stm32: Implement DDR3 coding on DHCOR SoM
+
+The DHCOR board does exist in multiple variants with different DDR3
+DRAM sizes. To cater for all of them, implement DDR3 code handling.
+There are two GPIOs which code the DRAM size populated on the SoM,
+read them out and use the value to pick the correct DDR3 config.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+V2: Match on compatible string
+---
+ arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi |  2 ++
+ arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi |  2 ++
+ board/dhelectronics/dh_stm32mp1/board.c    | 26 +++++++++++++++++++++-
+ configs/stm32mp15_dhcom_basic_defconfig    |  1 +
+ configs/stm32mp15_dhcor_basic_defconfig    |  1 +
+ 5 files changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+index fcdc5e6859..54416acd5c 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+@@ -5,6 +5,7 @@
+ 
+ #include <dt-bindings/clock/stm32mp1-clksrc.h>
+ #include "stm32mp157-u-boot.dtsi"
++#include "stm32mp15-ddr3-1x4Gb-1066-binG.dtsi"
+ #include "stm32mp15-ddr3-2x4Gb-1066-binG.dtsi"
+ 
+ / {
+@@ -26,6 +27,7 @@
+ 		st,stm32prog-gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;
+ 		#gpio-cells = <2>;
+ 		dh,som-coding-gpios = <&gpiof 12 0>, <&gpiof 13 0>, <&gpiof 15 0>;
++		dh,ddr3-coding-gpios = <&gpioz 6 0>, <&gpioz 7 0>;
+ 	};
+ 
+ 	led {
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+index 17a23ae21c..6db4ac37e1 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+@@ -9,6 +9,7 @@
+ 
+ #include <dt-bindings/clock/stm32mp1-clksrc.h>
+ #include "stm32mp157-u-boot.dtsi"
++#include "stm32mp15-ddr3-1x4Gb-1066-binG.dtsi"
+ #include "stm32mp15-ddr3-2x4Gb-1066-binG.dtsi"
+ 
+ / {
+@@ -16,6 +17,7 @@
+ 	config {
+ 		u-boot,dm-pre-reloc;
+ 		#gpio-cells = <2>;
++		dh,ddr3-coding-gpios = <&gpiog 0 0>, <&gpiog 1 0>;
+ 		dh,som-coding-gpios = <&gpioz 7 0>, <&gpiof 3 0>;
+ 	};
+ };
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index b72d113a6f..07a2bab10c 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -135,6 +135,7 @@ int checkboard(void)
+ 
+ #ifdef CONFIG_BOARD_EARLY_INIT_F
+ static u8 brdcode __section("data");
++static u8 ddr3code __section("data");
+ static u8 somcode __section("data");
+ 
+ static void board_get_coding_straps(void)
+@@ -150,6 +151,7 @@ static void board_get_coding_straps(void)
+ 	}
+ 
+ 	brdcode = 0;
++	ddr3code = 0;
+ 	somcode = 0;
+ 
+ 	ret = gpio_request_list_by_name_nodev(node, "dh,som-coding-gpios",
+@@ -158,13 +160,34 @@ static void board_get_coding_straps(void)
+ 	for (i = 0; i < ret; i++)
+ 		somcode |= !!dm_gpio_get_value(&(gpio[i])) << i;
+ 
++	ret = gpio_request_list_by_name_nodev(node, "dh,ddr3-coding-gpios",
++					      gpio, ARRAY_SIZE(gpio),
++					      GPIOD_IS_IN);
++	for (i = 0; i < ret; i++)
++		ddr3code |= !!dm_gpio_get_value(&(gpio[i])) << i;
++
+ 	ret = gpio_request_list_by_name_nodev(node, "dh,board-coding-gpios",
+ 					      gpio, ARRAY_SIZE(gpio),
+ 					      GPIOD_IS_IN);
+ 	for (i = 0; i < ret; i++)
+ 		brdcode |= !!dm_gpio_get_value(&(gpio[i])) << i;
+ 
+-	printf("Code:  SoM:rev=%d Board:rev=%d\n", somcode, brdcode);
++	printf("Code:  SoM:rev=%d,ddr3=%d Board:rev=%d\n",
++		somcode, ddr3code, brdcode);
++}
++
++int board_stm32mp1_ddr_config_name_match(struct udevice *dev,
++					 const char *name)
++{
++	if (ddr3code == 2 &&
++	    !strcmp(name, "st,ddr3-1066-888-bin-g-1x4gb-533mhz"))
++		return 0;
++
++	if (ddr3code == 3 &&
++	    !strcmp(name, "st,ddr3-1066-888-bin-g-2x4gb-533mhz"))
++		return 0;
++
++	return -EINVAL;
+ }
+ 
+ int board_early_init_f(void)
+@@ -537,6 +560,7 @@ int board_late_init(void)
+ #ifdef CONFIG_BOARD_EARLY_INIT_F
+ 	env_set_ulong("dh_som_rev", somcode);
+ 	env_set_ulong("dh_board_rev", brdcode);
++	env_set_ulong("dh_ddr3_code", ddr3code);
+ #endif
+ 
+ 	return 0;
+diff --git a/configs/stm32mp15_dhcom_basic_defconfig b/configs/stm32mp15_dhcom_basic_defconfig
+index 81222ce444..415bb7111b 100644
+--- a/configs/stm32mp15_dhcom_basic_defconfig
++++ b/configs/stm32mp15_dhcom_basic_defconfig
+@@ -14,6 +14,7 @@ CONFIG_FIT=y
+ CONFIG_SPL_LOAD_FIT=y
+ CONFIG_SPL_FIT_SOURCE="board/dhelectronics/dh_stm32mp1/u-boot-dhcom.its"
+ CONFIG_BOOTCOMMAND="run bootcmd_stm32mp"
++CONFIG_BOARD_EARLY_INIT_F=y
+ CONFIG_SPL_LEGACY_IMAGE_SUPPORT=y
+ CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION=y
+ CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_PARTITION=3
+diff --git a/configs/stm32mp15_dhcor_basic_defconfig b/configs/stm32mp15_dhcor_basic_defconfig
+index e75ed1a932..0b25098d89 100644
+--- a/configs/stm32mp15_dhcor_basic_defconfig
++++ b/configs/stm32mp15_dhcor_basic_defconfig
+@@ -14,6 +14,7 @@ CONFIG_FIT=y
+ CONFIG_SPL_LOAD_FIT=y
+ CONFIG_SPL_FIT_SOURCE="board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its"
+ CONFIG_BOOTCOMMAND="run bootcmd_stm32mp"
++CONFIG_BOARD_EARLY_INIT_F=y
+ CONFIG_SPL_LEGACY_IMAGE_SUPPORT=y
+ CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION=y
+ CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_PARTITION=3
+-- 
+2.25.1
+

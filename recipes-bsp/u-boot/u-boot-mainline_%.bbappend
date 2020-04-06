@@ -2,6 +2,11 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:
 
 DEPENDS_append_dh-stm32mp1-dhcom-pdk2 = "u-boot-mkimage-native"
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " file://boot.cmd "
+do_configure_append_dh-stm32mp1-dhcom-pdk2 () {
+	sed -i "s@CONFIG_SPL_FIT_SOURCE=.@&${S}/@" .config
+	sed -i "s@/incbin/(.\.\.\/\.\.\/\.\.\/@/incbin/(\"${B}/@" \
+		${S}/board/dhelectronics/dh_stm32mp1/u-boot-dhcom.its
+}
 do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
@@ -9,6 +14,11 @@ do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 
 DEPENDS_append_dh-stm32mp1-dhcor-avenger96 = "u-boot-mkimage-native"
 SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " file://boot.cmd "
+do_configure_append_dh-stm32mp1-dhcor-avenger96 () {
+	sed -i "s@CONFIG_SPL_FIT_SOURCE=.@&${S}/@" .config
+	sed -i "s@/incbin/(.\.\.\/\.\.\/\.\.\/@/incbin/(\"${B}/@" \
+		${S}/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
+}
 do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
@@ -39,10 +49,16 @@ PATCHES_COMMON = " \
 	file://0022-ARM-dts-stm32-Define-FMC2-base-address.patch \
 	file://0023-ARM-dts-stm32-Add-KS8851-16MLL-ethernet-on-FMC2.patch \
 	file://0024-ARM-stm32-Enable-bootd-iminfo-imxtract-on-DHCOM.patch \
-	file://0025-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch \
-	file://0026-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96.patch \
-	file://0027-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch \
-	file://0028-ARM-stm32-Add-default-config-for-AV96.patch \
+	file://0025-ARM-stm32-Define-I2C-EEPROM-bus-and-address-on-DHCOM.patch \
+	file://0026-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch \
+	file://0027-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96.patch \
+	file://0028-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch \
+	file://0029-ARM-stm32-Add-default-config-for-DHCOR.patch \
+	file://0030-ARM-stm32-Add-board_early_init_f-to-SPL.patch \
+	file://0031-ARM-stm32-Implement-board-coding-on-AV96.patch \
+	file://0032-ram-stm32mp1-Add-support-for-multiple-configs.patch \
+	file://0033-ARM-dts-stm32-Rework-DDR-DT-inclusion.patch \
+	file://0034-ARM-stm32-Implement-DDR3-coding-on-DHCOR-SoM.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \

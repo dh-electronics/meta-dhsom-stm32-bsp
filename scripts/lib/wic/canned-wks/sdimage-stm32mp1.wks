@@ -4,7 +4,7 @@
 
 part fsbl1 --source rawcopy --sourceparams="file=u-boot-spl.stm32" --part-name "fsbl1" --ondisk mmcblk --align 1 --size 256k
 part fsbl2 --source rawcopy --sourceparams="file=u-boot-spl.stm32" --part-name "fsbl2" --ondisk mmcblk --align 1 --size 256k
-part ssbl --source rawcopy --sourceparams="file=u-boot.img" --part-name "ssbl" --ondisk mmcblk --align 1 --size 2M
+part ssbl --source rawcopy --sourceparams="file=u-boot.itb" --part-name "ssbl" --ondisk mmcblk --align 1 --size 2M
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --part-name "rootfs" --align 4096 --use-uuid --active
 
 bootloader --ptable gpt

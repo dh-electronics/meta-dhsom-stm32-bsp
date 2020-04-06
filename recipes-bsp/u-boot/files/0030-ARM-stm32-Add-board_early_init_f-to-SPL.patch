@@ -1,0 +1,51 @@
+From 76ab0ee38a6c9fded314f0ace8112d0866539e26 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 6 Apr 2020 14:27:31 +0200
+Subject: [PATCH 30/34] ARM: stm32: Add board_early_init_f() to SPL
+
+Add weak implementation of board_early_init_f() hook into the
+STM32MP1 SPL. This can be used to read out e.g. configuration
+straps before initializing the DRAM.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+V2: No change
+---
+ arch/arm/mach-stm32mp/spl.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm/mach-stm32mp/spl.c b/arch/arm/mach-stm32mp/spl.c
+index ca4231cd0d..cd14d1065e 100644
+--- a/arch/arm/mach-stm32mp/spl.c
++++ b/arch/arm/mach-stm32mp/spl.c
+@@ -76,6 +76,11 @@ void spl_display_print(void)
+ }
+ #endif
+ 
++__weak int board_early_init_f(void)
++{
++	return 0;
++}
++
+ void board_init_f(ulong dummy)
+ {
+ 	struct udevice *dev;
+@@ -110,6 +115,12 @@ void board_init_f(ulong dummy)
+ 	/* enable console uart printing */
+ 	preloader_console_init();
+ 
++	ret = board_early_init_f();
++	if (ret) {
++		debug("board_early_init_f() failed: %d\n", ret);
++		hang();
++	}
++
+ 	ret = uclass_get_device(UCLASS_RAM, 0, &dev);
+ 	if (ret) {
+ 		printf("DRAM init failed: %d\n", ret);
+-- 
+2.25.1
+
