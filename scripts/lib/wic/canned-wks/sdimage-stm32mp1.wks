@@ -1,4 +1,4 @@
-# short-description: Create Mainline STM32MP1 SD card image with a boot partition
+# short-description: Create DH STM32MP1 SD card image with a boot partition
 # long-description: Creates a partitioned SD card image. Boot files
 # are located in the first ext4 partition.
 

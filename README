@@ -31,7 +31,7 @@ location of the metalayers.
 
   ssh://git@gitlab.denx.de/denx/meta-mainline-graphics.git		zeus-3.0
   ssh://git@gitlab.denx.de/denx/meta-mainline-common.git		zeus-3.0
-  ssh://git@gitlab.denx.de/dh-electronics/meta-mainline-stm32mp1.git	zeus-3.0
+  ssh://git@gitlab.denx.de/dh-electronics/meta-dhsom-stm32-bsp.git	zeus-3.0
   git://git.yoctoproject.org/poky					zeus
   git://github.com/openembedded/meta-openembedded.git			zeus
   git://github.com/meta-qt5/meta-qt5.git				zeus
@@ -50,7 +50,7 @@ be referenced in bblayers.conf in this order:
     /path/to/OE/meta-qt5 \
     /path/to/OE/meta-mainline-common \
     /path/to/OE/meta-mainline-graphics \
-    /path/to/OE/meta-mainline-stm32mp1 \
+    /path/to/OE/meta-dhsom-stm32-bsp \
     "
 
 The following specifics should be placed into local.conf:
@@ -126,7 +126,7 @@ BBLAYERS ?= " \
 	/path/to/OE/meta-qt5 \
 	/path/to/OE/meta-mainline-common \
 	/path/to/OE/meta-mainline-graphics \
-	/path/to/OE/meta-mainline-stm32mp1 \
+	/path/to/OE/meta-dhsom-stm32-bsp \
 	"
 
 BBLAYERS_NON_REMOVABLE ?= " \
