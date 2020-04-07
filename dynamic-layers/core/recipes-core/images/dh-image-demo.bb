@@ -8,12 +8,6 @@ IMAGE_INSTALL_DH_STM32MP1 = " \
 	kernel-modules u-boot-default-env libubootenv-bin \
 	ca-certificates iw dropbear iproute2 init-ifupdown \
 	i2c-tools canutils \
-	ttf-dejavu-sans \
-	ttf-dejavu-sans-mono \
-	ttf-dejavu-sans-condensed \
-	ttf-dejavu-serif \
-	ttf-dejavu-serif-condensed \
-	ttf-dejavu-common \
 	libdrm mesa \
 	libegl-mesa libgbm libgles1-mesa libgles2-mesa \
 	libglapi mesa-megadriver devmem2 \
