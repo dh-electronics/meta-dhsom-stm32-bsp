@@ -13,21 +13,23 @@ Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
 ---
- arch/arm/boot/dts/stm32mp157a-avenger96.dts | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 index 440cb671ac58..1e5f8aea65ff 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-@@ -86,6 +86,7 @@
- 	phy-mode = "rgmii";
- 	max-speed = <1000>;
- 	phy-handle = <&phy0>;
-+	phy-reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
- 
- 	mdio0 {
+@@ -91,6 +91,9 @@ mdio0 {
  		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 		compatible = "snps,dwmac-mdio";
++		reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
++		reset-delay-us = <1000>;
++
+ 		phy0: ethernet-phy@7 {
+ 			reg = <7>;
+ 		};
 -- 
 2.25.1
 
