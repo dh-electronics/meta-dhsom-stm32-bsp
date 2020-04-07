@@ -1,0 +1,29 @@
+From 255687148c768cc49593e5fc1f51681abaee5199 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 14 Feb 2020 09:11:43 +0100
+Subject: [PATCH] FIXME: ARM: dts: stm32: Disable TSC2004 on DHCOM due to IRQ
+ conflict
+
+The TSC2004 and KS8851 share GPIO IRQ on the same EXTI IRQ line,
+hence they are in IRQ conflict. Disable the TSC2004 for now.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
+index 684c0040392c..7d87d4939e32 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
+@@ -317,6 +317,7 @@ touchscreen@49 {
+ 		reg = <0x49>;
+ 		vio-supply = <&v3v3>;
+ 		interrupts-extended = <&gpioh 3 IRQ_TYPE_EDGE_FALLING>;
++		status = "disabled";
+ 	};
+ 
+ 	eeprom@50 {
+-- 
+2.25.1
+

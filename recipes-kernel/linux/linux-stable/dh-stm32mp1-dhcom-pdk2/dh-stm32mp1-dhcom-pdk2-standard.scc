@@ -16,3 +16,4 @@ patch 0007-mfd-stm32-fmc2-add-STM32-FMC2-controller-driver.patch
 patch 0008-bus-stm32-fmc2-ebi-add-STM32-FMC2-EBI-controller-dri.patch
 patch 0009-ARM-dts-stm32-Add-KS8851-on-FMC2-to-STM32MP1-DHCOM.patch
 patch 0010-ARM-dts-stm32-Add-SRAM-on-FMC2-to-STM32MP1-DHCOM.patch
+patch 0011-FIXME-ARM-dts-stm32-Disable-TSC2004-on-DHCOM-due-to-.patch
