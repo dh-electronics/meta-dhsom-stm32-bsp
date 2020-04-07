@@ -5,8 +5,8 @@ LICENSE = "MIT"
 inherit core-image
 
 IMAGE_INSTALL_DH_STM32MP1 = " \
-	kernel-modules dropbear iw \
-	ca-certificates dropbear iproute2 init-ifupdown \
+	kernel-modules u-boot-default-env libubootenv-bin \
+	ca-certificates iw dropbear iproute2 init-ifupdown \
 	i2c-tools canutils \
 	ttf-dejavu-sans \
 	ttf-dejavu-sans-mono \
