@@ -48,7 +48,7 @@ PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
 PREFERRED_PROVIDER_nativesdk-mesa ?= "nativesdk-mesa-mainline"
 
 # Ship kernel modules
-MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree "
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree u-boot-default-env "
 
 # List of images to be built
 IMAGE_FSTYPES ?= "tar.xz wic.xz"

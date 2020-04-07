@@ -25,6 +25,7 @@ do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
 }
 
 PATCHES_COMMON = " \
+	file://fw_env.config \
 	file://0001-arm-stm32mp1-activate-data-cache-in-SPL-and-before-r.patch \
 	file://0002-ARM-stm32-Increase-USB-power-good-delay.patch \
 	file://0003-gpio-stm32-support-gpio-ops-in-SPL.patch \
