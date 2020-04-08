@@ -25,4 +25,4 @@ setenv bootargs "${bootargs} root=PARTUUID=${uuid} rw rootwait consoleblank=0"
 
 load ${devtype} ${devnum}:${partition} ${loadaddr} boot/fitImage \
 && echo "Booting the Linux kernel..." \
-&& bootm ${loadaddr}
+&& bootm ${loadaddr}${loaddtos}

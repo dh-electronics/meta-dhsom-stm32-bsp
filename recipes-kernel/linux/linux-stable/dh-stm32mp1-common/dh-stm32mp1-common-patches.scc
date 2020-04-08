@@ -9,3 +9,4 @@ patch 0008-ARM-dts-stm32-add-PWR-regulators-support-on-stm32mp1.patch
 patch 0009-ARM-dts-stm32-Add-DAC-pins-used-on-stm32mp157c-ed1.patch
 patch 0010-ARM-dts-stm32-Add-missing-ETHCK-clock-to-ethernet-no.patch
 patch 0011-perf-Make-perf-able-to-build-with-latest-libbfd.patch
+patch 0012-kbuild-Add-support-for-building-.dts-into-.dtbo.patch

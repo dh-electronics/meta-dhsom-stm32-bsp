@@ -1,0 +1,359 @@
+From 4490bf8e2dbe858a9c062e679adb634ee4e92de8 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 26 Mar 2020 15:14:11 +0100
+Subject: [PATCH 11/21] ARM: dts: stm32: Add DT overlays for STM32MP1 DHCOM
+ PDK2
+
+Add DT overlays to support:
+ - DH 460-200 SRAM board    in header X11
+ - DH 531-100 SPI/I2C board in header X21
+ - DH 531-200 SPI/I2C board in header X22
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                    |  4 +
+ ...2mp157c-dhcom-pdk2-overlay-460-200-x11.dts | 33 +++++++
+ ...2mp157c-dhcom-pdk2-overlay-531-100-x21.dts | 50 ++++++++++
+ ...2mp157c-dhcom-pdk2-overlay-531-100-x22.dts | 25 +++++
+ ...2mp157c-dhcom-pdk2-overlay-560-200-x12.dts | 95 +++++++++++++++++++
+ arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts  | 57 -----------
+ 6 files changed, 207 insertions(+), 57 deletions(-)
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 672681941a22..09ed2906b263 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -993,6 +993,10 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157a-avenger96.dtb \
+ 	stm32mp157a-dk1.dtb \
+ 	stm32mp157c-dhcom-pdk2.dtb \
++	stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dtbo \
++	stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dtbo \
++	stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp157c-dk2.dtb \
+ 	stm32mp157c-ed1.dtb \
+ 	stm32mp157c-ev1.dtb
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dts
+new file mode 100644
+index 000000000000..255dda6a9e0b
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment-0 {
++		target-path = "/soc/nand-controller@58002000/ebi";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			#address-cells = <2>;
++			#size-cells = <1>;
++			sram@3,0 {
++				compatible = "mtd-ram";
++				reg = <3 0x0 0x80000>;
++				bank-width = <2>;
++
++				/* Timing values are in nS */
++				st,fmc2_ebi_cs_mux_enable;
++				st,fmc2_ebi_cs_transaction_type = <4>;
++				st,fmc2_ebi_cs_buswidth = <16>;
++				st,fmc2_ebi_cs_address_setup = <6>;
++				st,fmc2_ebi_cs_address_hold = <6>;
++				st,fmc2_ebi_cs_data_setup = <127>;
++				st,fmc2_ebi_cs_bus_turnaround = <9>;
++				st,fmc2_ebi_cs_data_hold = <9>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dts
+new file mode 100644
+index 000000000000..bc038beb7a47
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dts
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment-0 {
++		target-path = "/soc/i2c@40015000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			eeprom@56 {
++				compatible = "atmel,24c04";
++				reg = <0x56>;
++				pagesize = <16>;
++			};
++		};
++	};
++
++	fragment-1 {
++		target-path = "/soc/spi@44004000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			pinctrl-names = "default";
++			pinctrl-0 = <&spi1_pins_a>;
++			status = "okay";
++			cs-gpios = <&gpioz 3 0>;
++			/* Use PIO for the 128 Byte SPI EEPROM */
++			/delete-property/dmas;
++			/delete-property/dma-names;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			at25@0 {
++				compatible = "microchip,25aa010a", "atmel,at25";
++				reg = <0>;
++				spi-max-frequency = <5000000>;
++
++				at25,byte-len = <128>;
++				at25,addr-mode = <1>;
++				at25,page-size = <16>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dts
+new file mode 100644
+index 000000000000..f2d096dc933e
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment-0 {
++		target-path = "/soc/i2c@40013000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			eeprom@56 {
++				compatible = "atmel,24c04";
++				reg = <0x56>;
++				pagesize = <16>;
++			};
++		};
++	};
++
++	/* SPI2 is not connected on STM32MP1 DHCOM SoM */
++};
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+new file mode 100644
+index 000000000000..92d6922eecb9
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment-0 {
++		target-path = "/";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			display_bl: display-bl {
++				compatible = "pwm-backlight";
++				pwms = <&pwm2 0 500000 PWM_POLARITY_INVERTED>;
++				brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++				default-brightness-level = <8>;
++				enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
++				status = "okay";
++			};
++
++			panel {
++				compatible = "edt,etm0700g0edh6";
++				backlight = <&display_bl>;
++
++				port {
++					lcd_panel_in: endpoint {
++						remote-endpoint = <&lcd_display_out>;
++					};
++				};
++			};
++		};
++	};
++
++	fragment-1 {
++		target-path = "/soc/timer@40000000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			/* spare dmas for other usage (un-delete to enable pwm capture) */
++			/delete-property/dmas;
++			/delete-property/dma-names;
++			status = "okay";
++			pwm2: pwm {
++				#pwm-cells = <3>;
++				pinctrl-0 = <&pwm2_pins_a>;
++				pinctrl-names = "default";
++				status = "okay";
++			};
++			timer@1 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment-2 {
++		target-path = "/soc/display-controller@5a001000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			pinctrl-names = "default", "sleep";
++			pinctrl-0 = <&ltdc_pins_b>;
++			pinctrl-1 = <&ltdc_pins_sleep_b>;
++			status = "okay";
++
++			port {
++				lcd_display_out: endpoint {
++					remote-endpoint = <&lcd_panel_in>;
++				};
++			};
++		};
++	};
++
++	fragment-3 {
++		target-path = "/soc/i2c@40015000";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			polytouch@38 {
++				compatible = "edt,edt-ft5x06";
++				reg = <0x38>;
++				interrupt-parent = <&gpiog>;
++				interrupts = <2 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++				linux,wakeup;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+index e4cccbd75fad..a734ba7081b9 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+@@ -28,15 +28,6 @@
+ 		clock-frequency = <24000000>;
+ 	};
+ 
+-	display_bl: display-bl {
+-		compatible = "pwm-backlight";
+-		pwms = <&pwm2 0 500000 PWM_POLARITY_INVERTED>;
+-		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
+-		default-brightness-level = <8>;
+-		enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
+-		status = "okay";
+-	};
+-
+ 	ethernet_vio: vioregulator {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vio";
+@@ -47,17 +38,6 @@
+ 		regulator-boot-on;
+ 	};
+ 
+-	panel {
+-		compatible = "edt,etm0700g0edh6";
+-		backlight = <&display_bl>;
+-
+-		port {
+-			lcd_panel_in: endpoint {
+-				remote-endpoint = <&lcd_display_out>;
+-			};
+-		};
+-	};
+-
+ 	sound {
+ 		compatible = "audio-graph-card";
+ 		routing =
+@@ -145,28 +125,6 @@
+ 				bitclock-master;
+ 			};
+ 		};
+-
+-	};
+-
+-	polytouch@38 {
+-		compatible = "edt,edt-ft5x06";
+-		reg = <0x38>;
+-		interrupt-parent = <&gpiog>;
+-		interrupts = <2 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
+-		linux,wakeup;
+-	};
+-};
+-
+-&ltdc {
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&ltdc_pins_b>;
+-	pinctrl-1 = <&ltdc_pins_sleep_b>;
+-	status = "okay";
+-
+-	port {
+-		lcd_display_out: endpoint {
+-			remote-endpoint = <&lcd_panel_in>;
+-		};
+ 	};
+ };
+ 
+@@ -308,21 +266,6 @@
+ 	};
+ };
+ 
+-&timers2 {
+-	/* spare dmas for other usage (un-delete to enable pwm capture) */
+-	/delete-property/dmas;
+-	/delete-property/dma-names;
+-	status = "okay";
+-	pwm2: pwm {
+-		pinctrl-0 = <&pwm2_pins_a>;
+-		pinctrl-names = "default";
+-		status = "okay";
+-	};
+-	timer@1 {
+-		status = "okay";
+-	};
+-};
+-
+ &usart3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&usart3_pins_a>;
+-- 
+2.25.1
+

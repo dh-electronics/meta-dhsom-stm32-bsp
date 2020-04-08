@@ -8,8 +8,8 @@ Add bindings for the KS8851 ethernet present on the STM32MP1 DHCOM SoM.
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts |   1 +
- arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi | 102 +++++++++++++++++++
- 2 files changed, 103 insertions(+)
+ arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi | 103 +++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
 index 9428593ff702..e4cccbd75fad 100644
@@ -80,7 +80,7 @@ index ee9ae7581b54..9bd6a300fae6 100644
  &gpu {
  	status = "okay";
  };
-@@ -283,6 +329,62 @@
+@@ -283,6 +329,63 @@
  	status = "okay";
  };
  
@@ -106,7 +106,8 @@ index ee9ae7581b54..9bd6a300fae6 100644
 +				 <STM32_PINMUX('D', 8, AF12)>, /* FMC_D13 */
 +				 <STM32_PINMUX('D', 9, AF12)>, /* FMC_D14 */
 +				 <STM32_PINMUX('D', 10, AF12)>, /* FMC_D15 */
-+				 <STM32_PINMUX('G', 9, AF12)>; /* FMC_NE2_FMC_NCE */
++				 <STM32_PINMUX('G', 9, AF12)>, /* FMC_NE2_FMC_NCE */
++				 <STM32_PINMUX('G', 12, AF12)>; /* FMC_NE4 */
 +			bias-disable;
 +			drive-push-pull;
 +			slew-rate = <3>;
@@ -134,10 +135,10 @@ index ee9ae7581b54..9bd6a300fae6 100644
 +				 <STM32_PINMUX('D', 8, ANALOG)>, /* FMC_D13 */
 +				 <STM32_PINMUX('D', 9, ANALOG)>, /* FMC_D14 */
 +				 <STM32_PINMUX('D', 10, ANALOG)>, /* FMC_D15 */
-+				 <STM32_PINMUX('G', 9, ANALOG)>; /* FMC_NE2_FMC_NCE */
++				 <STM32_PINMUX('G', 9, ANALOG)>, /* FMC_NE2_FMC_NCE */
++				 <STM32_PINMUX('G', 12, ANALOG)>; /* FMC_NE4 */
 +		};
 +	};
-+
 +};
 +
  &pwr_regulators {
