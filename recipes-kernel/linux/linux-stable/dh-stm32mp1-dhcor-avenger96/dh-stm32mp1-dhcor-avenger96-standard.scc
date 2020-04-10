@@ -31,3 +31,4 @@ patch 0022-ARM-dts-stm32-Add-bindings-for-audio-on-AV96.patch
 patch 0023-ARM-dts-stm32-add-USB-OTG-pinctrl-to-stm32mp15.patch
 patch 0024-ARM-dts-stm32-Add-bindings-for-USB-on-AV96.patch
 patch 0025-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch
+patch 0026-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch
