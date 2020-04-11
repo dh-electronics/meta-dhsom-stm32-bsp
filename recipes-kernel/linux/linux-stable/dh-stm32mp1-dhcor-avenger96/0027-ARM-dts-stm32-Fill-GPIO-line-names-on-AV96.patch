@@ -1,0 +1,61 @@
+From 0acd1d63bbe4aca070e134569fdf30db1da4c184 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 11 Apr 2020 05:02:46 +0200
+Subject: [PATCH] ARM: dts: stm32: Fill GPIO line names on AV96
+
+Fill in the custom GPIO line names used by DH.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 35 +++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 6a6060f12350..7ce66e7ff932 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -144,6 +144,41 @@
+ 	};
+ };
+ 
++&gpioa {
++	gpio-line-names = "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "DH-GPIO-K",
++			  "DH-GPIO-I", "", "DH-GPIO-A", "";
++};
++
++&gpiob {
++	gpio-line-names = "", "", "", "",
++			  "", "DH-GPIO-J", "", "",
++			  "", "", "", "DH-GPIO-B",
++			  "", "DH-GPIO-L", "", "";
++};
++
++&gpioc {
++	gpio-line-names = "", "", "", "DH-GPIO-C",
++			  "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "";
++};
++
++&gpiod {
++	gpio-line-names = "", "", "", "",
++			  "", "", "", "",
++			  "DH-GPIO-D", "", "", "",
++			  "", "", "DH-GPIO-E", "DH-GPIO-F";
++};
++
++&gpiof {
++	gpio-line-names = "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "",
++			  "DH-GPIO-G", "DH-GPIO-H", "", "";
++};
++
+ &i2c1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c1_pins_b>;
+-- 
+2.25.1
+
