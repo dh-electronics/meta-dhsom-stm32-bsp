@@ -51,15 +51,17 @@ PATCHES_COMMON = " \
 	file://0023-ARM-dts-stm32-Add-KS8851-16MLL-ethernet-on-FMC2.patch \
 	file://0024-ARM-stm32-Enable-bootd-iminfo-imxtract-on-DHCOM.patch \
 	file://0025-ARM-stm32-Define-I2C-EEPROM-bus-and-address-on-DHCOM.patch \
-	file://0026-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch \
-	file://0027-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96.patch \
-	file://0028-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch \
-	file://0029-ARM-stm32-Add-default-config-for-DHCOR.patch \
-	file://0030-ARM-stm32-Add-board_early_init_f-to-SPL.patch \
-	file://0031-ARM-stm32-Implement-board-coding-on-AV96.patch \
-	file://0032-ram-stm32mp1-Add-support-for-multiple-configs.patch \
-	file://0033-ARM-dts-stm32-Rework-DDR-DT-inclusion.patch \
-	file://0034-ARM-stm32-Implement-DDR3-coding-on-DHCOR-SoM.patch \
+	file://0026-ARM-stm32-Hog-GPIO-PF7-high-on-DHCOM-to-unlock-SPI-N.patch \
+	file://0027-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch \
+	file://0028-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96.patch \
+	file://0029-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch \
+	file://0030-ARM-stm32-Add-default-config-for-DHCOR.patch \
+	file://0031-ARM-stm32-Add-board_early_init_f-to-SPL.patch \
+	file://0032-ARM-stm32-Implement-board-coding-on-AV96.patch \
+	file://0033-ram-stm32mp1-Add-support-for-multiple-configs.patch \
+	file://0034-ARM-dts-stm32-Rework-DDR-DT-inclusion.patch \
+	file://0035-ARM-stm32-Implement-DDR3-coding-on-DHCOR-SoM.patch \
+	file://0036-ARM-stm32-Hog-GPIO-PF7-high-on-DHCOR-to-unlock-SPI-N.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
