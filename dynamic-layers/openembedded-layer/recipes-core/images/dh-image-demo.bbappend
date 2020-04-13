@@ -8,6 +8,7 @@ IMAGE_INSTALL_DH_STM32MP1_OE = " \
 	v4l-utils yavta libgpiod libiio \
 	packagegroup-tools-bluetooth \
 	pulseaudio-server pulseaudio-misc \
+	libusbgx \
 	"
 
 IMAGE_INSTALL_append_dh-stm32mp1-dhcom-pdk2 = " ${IMAGE_INSTALL_DH_STM32MP1_OE} "
