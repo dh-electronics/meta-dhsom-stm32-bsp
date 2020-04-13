@@ -10,3 +10,14 @@ patch 0009-ARM-dts-stm32-Add-DAC-pins-used-on-stm32mp157c-ed1.patch
 patch 0010-ARM-dts-stm32-Add-missing-ETHCK-clock-to-ethernet-no.patch
 patch 0011-perf-Make-perf-able-to-build-with-latest-libbfd.patch
 patch 0012-kbuild-Add-support-for-building-.dts-into-.dtbo.patch
+patch 0013-usb-Spelling-s-enpoint-endpoint.patch
+patch 0014-usb-dwc2-create-debugfs-directory-under-usb-root.patch
+patch 0015-usb-dwc2-Fix-Stalling-a-Non-Isochronous-OUT-EP.patch
+patch 0016-usb-dwc2-Fix-NULL-qh-in-dwc2_queue_transaction.patch
+patch 0017-usb-dwc2-fix-debugfs-FIFO-count.patch
+patch 0018-usb-dwc2-Drop-unlock-lock-upon-queueing-a-work-item.patch
+patch 0019-USB-Replace-zero-length-array-with-flexible-array-me.patch
+patch 0020-usb-dwc2-add-support-for-STM32MP15-SoCs-USB-OTG-HS-a.patch
+patch 0021-usb-dwc2-Implement-set_selfpowered.patch
+patch 0022-usb-dwc2-Silence-warning-about-supplies-during-defer.patch
+patch 0023-ARM-dts-stm32-add-USB-OTG-full-support-on-stm32mp151.patch

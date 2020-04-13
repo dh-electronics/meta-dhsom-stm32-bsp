@@ -1,0 +1,76 @@
+From 195913a56f2f18ec42f42d046695fbd142837418 Mon Sep 17 00:00:00 2001
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+Date: Thu, 24 Oct 2019 17:28:33 +0200
+Subject: [PATCH 13/24] usb: Spelling s/enpoint/endpoint/
+
+Fix misspellings of "endpoint".
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Li Yang <leoyang.li@nxp.com>
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Link: https://lore.kernel.org/r/20191024152833.30698-1-geert+renesas@glider.be
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/dwc2/core.h             | 2 +-
+ drivers/usb/gadget/udc/fsl_qe_udc.h | 4 ++--
+ drivers/usb/gadget/udc/mv_u3d.h     | 2 +-
+ drivers/usb/musb/musb_gadget.c      | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index d08d070a0fb6..968e03b89d04 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -134,7 +134,7 @@ struct dwc2_hsotg_req;
+  * @target_frame: Targeted frame num to setup next ISOC transfer
+  * @frame_overrun: Indicates SOF number overrun in DSTS
+  *
+- * This is the driver's state for each registered enpoint, allowing it
++ * This is the driver's state for each registered endpoint, allowing it
+  * to keep track of transactions that need doing. Each endpoint has a
+  * lock to protect the state, to try and avoid using an overall lock
+  * for the host controller as much as possible.
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.h b/drivers/usb/gadget/udc/fsl_qe_udc.h
+index 2c537a904ee7..53ca0ff7c2cb 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.h
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.h
+@@ -333,8 +333,8 @@ struct qe_udc {
+ 	u32 resume_state;       /* USB state to resume*/
+ 	u32 usb_state;          /* USB current state */
+ 	u32 usb_next_state;     /* USB next state */
+-	u32 ep0_state;          /* Enpoint zero state */
+-	u32 ep0_dir;            /* Enpoint zero direction: can be
++	u32 ep0_state;          /* Endpoint zero state */
++	u32 ep0_dir;            /* Endpoint zero direction: can be
+ 				USB_DIR_IN or USB_DIR_OUT*/
+ 	u32 usb_sof_count;      /* SOF count */
+ 	u32 errors;             /* USB ERRORs count */
+diff --git a/drivers/usb/gadget/udc/mv_u3d.h b/drivers/usb/gadget/udc/mv_u3d.h
+index 982625b7197a..66b84f792f64 100644
+--- a/drivers/usb/gadget/udc/mv_u3d.h
++++ b/drivers/usb/gadget/udc/mv_u3d.h
+@@ -138,7 +138,7 @@ struct mv_u3d_op_regs {
+ 	u32	doorbell;	/* doorbell register */
+ };
+ 
+-/* control enpoint enable registers */
++/* control endpoint enable registers */
+ struct epxcr {
+ 	u32	epxoutcr0;	/* ep out control 0 register */
+ 	u32	epxoutcr1;	/* ep out control 1 register */
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index ffe462a657b1..b494a730262a 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -1316,7 +1316,7 @@ static int musb_gadget_dequeue(struct usb_ep *ep, struct usb_request *request)
+ }
+ 
+ /*
+- * Set or clear the halt bit of an endpoint. A halted enpoint won't tx/rx any
++ * Set or clear the halt bit of an endpoint. A halted endpoint won't tx/rx any
+  * data but will queue requests.
+  *
+  * exported to ep0 code
+-- 
+2.25.1
+
