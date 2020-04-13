@@ -21,3 +21,4 @@ patch 0020-usb-dwc2-add-support-for-STM32MP15-SoCs-USB-OTG-HS-a.patch
 patch 0021-usb-dwc2-Implement-set_selfpowered.patch
 patch 0022-usb-dwc2-Silence-warning-about-supplies-during-defer.patch
 patch 0023-ARM-dts-stm32-add-USB-OTG-full-support-on-stm32mp151.patch
+patch 0024-RFC-usb-dwc2-Run-the-core-connect-in-dwc2_hcd_init.patch
