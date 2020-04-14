@@ -13,8 +13,8 @@ This layer depends on:
   branch: zeus
   layers: meta-oe
 
-  URI: git://github.com/meta-qt5/meta-qt5.git
-  branch: zeus
+  URI: ssh://git@gitlab.denx.de/denx/meta-mainline-common.git
+  branch: zeus-3.0
 
 Building image
 ==============
@@ -56,7 +56,7 @@ be referenced in bblayers.conf in this order:
 The following specifics should be placed into local.conf:
 
   MACHINE = "dh-stm32mp1-dhcom-pdk2"
-  DISTRO = "dhlinux"
+  DISTRO = "poky"
 
 Note that MACHINE must be either "dh-stm32mp1-dhcom-pdk2" or
 "dh-stm32mp1-dhcor-avenger96". Adapt the suffixes of all the
@@ -69,7 +69,7 @@ of this readme.
 Once the configuration is complete, a Qt5 demo system image suitable for
 evaluation can be built using:
 
-  $ bitbake qt5-image-demo
+  $ bitbake core-image-minimal
 
 Once the build completes, the images are available in:
 
@@ -77,17 +77,17 @@ Once the build completes, the images are available in:
 
 The SD card image is specifically in:
 
-  qt5-image-demo-dh-stm32mp1-dhcom-pdk2.wic
+  core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic
 
 And shall be written to the SD card using dd:
 
-  $ dd if=qt5-image-demo-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
+  $ dd if=core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
 
 Example local.conf
 ==================
 MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DL_DIR = "/path/to/OE/downloads"
-DISTRO ?= "dhlinux"
+DISTRO ?= "poky"
 PACKAGE_CLASSES ?= "package_rpm"
 EXTRA_IMAGE_FEATURES = "debug-tweaks"
 USER_CLASSES ?= "buildstats image-mklibs image-prelink"
