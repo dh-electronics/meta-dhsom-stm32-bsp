@@ -1,0 +1,40 @@
+From 70cc3e45cd8cf3a2845bfb5e0fec2ae4e627654e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 16 Apr 2020 13:13:22 +0200
+Subject: [PATCH 34/37] ARM: dts: stm32: Add alternate pinmux for ADC pins
+
+Add another mux option for ADC pins, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index 5eb09437260b..aa9ab100855f 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -137,6 +137,13 @@
+ 				status = "disabled";
+ 			};
+ 
++			adc12_ain_pins_b: adc12-ain-1 {
++				pins {
++					pinmux = <STM32_PINMUX('F', 12, ANALOG)>, /* ADC1 in6 */
++						 <STM32_PINMUX('F', 13, ANALOG)>; /* ADC2 in2 */
++				};
++			};
++
+ 			cec_pins_a: cec-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('A', 15, AF4)>;
+-- 
+2.25.1
+

@@ -33,3 +33,13 @@ patch 0024-ARM-dts-stm32-Add-bindings-for-USB-on-AV96.patch
 patch 0025-ARM-dts-stm32-Rename-LEDs-to-match-silkscreen-on-AV9.patch
 patch 0026-ARM-dts-stm32-Split-AV96-into-DHCOR-SoM-and-AV96-boa.patch
 patch 0027-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
+patch 0028-ARM-dts-stm32-Add-alternate-pinmux-for-I2C2-pins.patch
+patch 0029-ARM-dts-stm32-Repair-I2C2-operation-on-AV96.patch
+patch 0030-ARM-dts-stm32-Add-alternate-pinmux-for-FDCAN1-pins.patch
+patch 0031-ARM-dts-stm32-Add-bindings-for-FDCAN1-on-AV96.patch
+patch 0032-ARM-dts-stm32-Add-alternate-pinmux-for-FDCAN2-pins.patch
+patch 0033-ARM-dts-stm32-Add-bindings-for-FDCAN2-on-AV96.patch
+patch 0034-ARM-dts-stm32-Add-alternate-pinmux-for-ADC-pins.patch
+patch 0035-ARM-dts-stm32-Add-bindings-for-ADC-on-AV96.patch
+patch 0036-ARM-dts-stm32-Add-alternate-pinmux-for-SPI2-pins.patch
+patch 0037-ARM-dts-stm32-Add-bindings-for-SPI2-on-AV96.patch
