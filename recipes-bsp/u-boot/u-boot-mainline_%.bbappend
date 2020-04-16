@@ -62,6 +62,8 @@ PATCHES_COMMON = " \
 	file://0034-ARM-dts-stm32-Rework-DDR-DT-inclusion.patch \
 	file://0035-ARM-stm32-Implement-DDR3-coding-on-DHCOR-SoM.patch \
 	file://0036-ARM-stm32-Hog-GPIO-PF7-high-on-DHCOR-to-unlock-SPI-N.patch \
+	file://0037-ARM-dts-stm32-Add-alternate-pinmux-for-I2C2-pins.patch \
+	file://0038-ARM-dts-stm32-Repair-I2C2-operation-on-AV96.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
