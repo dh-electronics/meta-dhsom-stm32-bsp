@@ -2,11 +2,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:
 
 DEPENDS_append_dh-stm32mp1-dhcom-pdk2 = "u-boot-mkimage-native"
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " file://boot.cmd "
-do_configure_append_dh-stm32mp1-dhcom-pdk2 () {
-	sed -i "s@CONFIG_SPL_FIT_SOURCE=.@&${S}/@" .config
-	sed -i "s@/incbin/(.\.\.\/\.\.\/\.\.\/@/incbin/(\"${B}/@" \
-		${S}/board/dhelectronics/dh_stm32mp1/u-boot-dhcom.its
-}
 do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
@@ -14,11 +9,6 @@ do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 
 DEPENDS_append_dh-stm32mp1-dhcor-avenger96 = "u-boot-mkimage-native"
 SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " file://boot.cmd "
-do_configure_append_dh-stm32mp1-dhcor-avenger96 () {
-	sed -i "s@CONFIG_SPL_FIT_SOURCE=.@&${S}/@" .config
-	sed -i "s@/incbin/(.\.\.\/\.\.\/\.\.\/@/incbin/(\"${B}/@" \
-		${S}/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
-}
 do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
@@ -64,6 +54,7 @@ PATCHES_COMMON = " \
 	file://0036-ARM-stm32-Hog-GPIO-PF7-high-on-DHCOR-to-unlock-SPI-N.patch \
 	file://0037-ARM-dts-stm32-Add-alternate-pinmux-for-I2C2-pins.patch \
 	file://0038-ARM-dts-stm32-Repair-I2C2-operation-on-AV96.patch \
+	file://0039-Makefile-copy-SPL_FIT_SOURCE-in-build-directory.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \

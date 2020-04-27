@@ -1,0 +1,34 @@
+From 1b2c4e3383d956327f82a4ff9f7a643041d4f6bd Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Thu, 23 Apr 2020 09:39:08 +0200
+Subject: [PATCH] Makefile: copy SPL_FIT_SOURCE in build directory
+
+Copy the .its source file selected by CONFIG_SPL_FIT_SOURCE
+in builddir and in a file named "u-boot.its".
+
+This patch avoid compilation issue when CONFIG_SPL_FIT_SOURCE is used
+and KBUILD_OUTPUT is defined, in buildman for example.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+---
+ Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 7c2067f35e..09944e6614 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1274,7 +1274,9 @@ endif
+ # Boards with more complex image requirements can provide an .its source file
+ # or a generator script
+ ifneq ($(CONFIG_SPL_FIT_SOURCE),"")
+-U_BOOT_ITS = $(subst ",,$(CONFIG_SPL_FIT_SOURCE))
++U_BOOT_ITS := u-boot.its
++$(U_BOOT_ITS): $(subst ",,$(CONFIG_SPL_FIT_SOURCE))
++	$(call if_changed,copy)
+ else
+ ifneq ($(CONFIG_SPL_FIT_GENERATOR),"")
+ U_BOOT_ITS := u-boot.its
+-- 
+2.25.1
+

@@ -187,7 +187,7 @@ index 0000000000..a4574ea135
 +	images {
 +		uboot {
 +			description = "U-Boot (32-bit)";
-+			data = /incbin/("../../../u-boot-nodtb.bin");
++			data = /incbin/("u-boot-nodtb.bin");
 +			type = "standalone";
 +			os = "U-Boot";
 +			arch = "arm";
@@ -198,7 +198,7 @@ index 0000000000..a4574ea135
 +
 +		fdt-1 {
 +			description = ".dtb";
-+			data = /incbin/("../../../arch/arm/dts/stm32mp15xx-dhcom-pdk2.dtb");
++			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcom-pdk2.dtb");
 +			type = "flat_dt";
 +			arch = "arm";
 +			compression = "none";
@@ -232,7 +232,7 @@ index 0000000000..0a8b6ac857
 +	images {
 +		uboot {
 +			description = "U-Boot (32-bit)";
-+			data = /incbin/("../../../u-boot-nodtb.bin");
++			data = /incbin/("u-boot-nodtb.bin");
 +			type = "standalone";
 +			os = "U-Boot";
 +			arch = "arm";
@@ -243,7 +243,7 @@ index 0000000000..0a8b6ac857
 +
 +		fdt-1 {
 +			description = ".dtb";
-+			data = /incbin/("../../../arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtb");
++			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtb");
 +			type = "flat_dt";
 +			arch = "arm";
 +			compression = "none";
