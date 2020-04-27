@@ -30,7 +30,7 @@ index a493a66f79a3..f8aec8467475 100644
 +	pinctrl-names = "default", "sleep";
 +	pinctrl-0 = <&m_can2_pins_a>;
 +	pinctrl-1 = <&m_can2_sleep_pins_a>;
-+	status = "okay";
++	status = "disabled";
 +};
 +
  &sai2 {
