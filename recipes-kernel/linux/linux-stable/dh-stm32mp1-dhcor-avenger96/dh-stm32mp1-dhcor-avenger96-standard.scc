@@ -43,3 +43,4 @@ patch 0034-ARM-dts-stm32-Add-alternate-pinmux-for-ADC-pins.patch
 patch 0035-ARM-dts-stm32-Add-bindings-for-ADC-on-AV96.patch
 patch 0036-ARM-dts-stm32-Add-alternate-pinmux-for-SPI2-pins.patch
 patch 0037-ARM-dts-stm32-Add-bindings-for-SPI2-on-AV96.patch
+patch 0038-ARM-dts-stm32-Add-DT-overlays-for-STM32MP1-Avenger96.patch
