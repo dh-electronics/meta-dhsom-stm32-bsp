@@ -1,20 +1,19 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
 DEPENDS_append_dh-stm32mp1-dhcom-pdk2 = "u-boot-mkimage-native"
-SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " file://boot.cmd "
 do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
 DEPENDS_append_dh-stm32mp1-dhcor-avenger96 = "u-boot-mkimage-native"
-SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " file://boot.cmd "
 do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
 PATCHES_COMMON = " \
+	file://boot.cmd \
 	file://fw_env.config \
 	file://0001-arm-stm32mp1-activate-data-cache-in-SPL-and-before-r.patch \
 	file://0002-ARM-stm32-Increase-USB-power-good-delay.patch \
