@@ -54,6 +54,7 @@ PATCHES_COMMON = " \
 	file://0037-ARM-dts-stm32-Add-alternate-pinmux-for-I2C2-pins.patch \
 	file://0038-ARM-dts-stm32-Repair-I2C2-operation-on-AV96.patch \
 	file://0039-Makefile-copy-SPL_FIT_SOURCE-in-build-directory.patch \
+	file://0040-ARM-dts-stm32-Synchronize-DDR-setttings-on-DH-SoMs.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
