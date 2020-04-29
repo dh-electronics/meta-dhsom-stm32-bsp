@@ -31,7 +31,7 @@ index 6ac0be1e1b66..3a9655ba4a2e 100644
  	};
  
  	chosen {
-@@ -315,6 +316,25 @@
+@@ -317,6 +318,25 @@
  	vdd_3v3_usbfs-supply = <&vdd_usb>;
  };
  

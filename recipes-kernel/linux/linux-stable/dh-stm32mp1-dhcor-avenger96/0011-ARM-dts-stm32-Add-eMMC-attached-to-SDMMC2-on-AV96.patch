@@ -21,7 +21,7 @@ diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm
 index 7f82fd127413..6ac0be1e1b66 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-@@ -339,6 +339,22 @@
+@@ -341,6 +341,22 @@
  	status = "okay";
  };
  

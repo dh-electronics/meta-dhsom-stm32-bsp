@@ -18,11 +18,11 @@ To: linux-arm-kernel@lists.infradead.org
  1 file changed, 14 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-index 1e5f8aea65ff..ce7f4c285991 100644
+index a7d6695f1c0c..18aae7bbb6bf 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-@@ -94,6 +94,20 @@
- 		compatible = "snps,dwmac-mdio";
+@@ -96,6 +96,20 @@
+ 
  		phy0: ethernet-phy@7 {
  			reg = <7>;
 +

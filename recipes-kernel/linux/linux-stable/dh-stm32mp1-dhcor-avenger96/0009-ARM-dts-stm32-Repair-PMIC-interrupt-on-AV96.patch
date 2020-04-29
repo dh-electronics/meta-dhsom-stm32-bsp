@@ -22,7 +22,7 @@ diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm
 index 8bc219416a6e..7f82fd127413 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-@@ -169,7 +169,7 @@
+@@ -171,7 +171,7 @@
  	pmic: stpmic@33 {
  		compatible = "st,stpmic1";
  		reg = <0x33>;
@@ -31,7 +31,7 @@ index 8bc219416a6e..7f82fd127413 100644
  		interrupt-controller;
  		#interrupt-cells = <2>;
  		status = "okay";
-@@ -227,7 +227,6 @@
+@@ -229,7 +229,6 @@
  				regulator-min-microvolt = <2900000>;
  				regulator-max-microvolt = <2900000>;
  				interrupts = <IT_CURLIM_LDO1 0>;
@@ -39,7 +39,7 @@ index 8bc219416a6e..7f82fd127413 100644
  			};
  
  			v2v8: ldo2 {
-@@ -235,7 +234,6 @@
+@@ -237,7 +236,6 @@
  				regulator-min-microvolt = <2800000>;
  				regulator-max-microvolt = <2800000>;
  				interrupts = <IT_CURLIM_LDO2 0>;
@@ -47,7 +47,7 @@ index 8bc219416a6e..7f82fd127413 100644
  			};
  
  			vtt_ddr: ldo3 {
-@@ -251,7 +249,6 @@
+@@ -253,7 +251,6 @@
  				regulator-min-microvolt = <3300000>;
  				regulator-max-microvolt = <3300000>;
  				interrupts = <IT_CURLIM_LDO4 0>;
@@ -55,7 +55,7 @@ index 8bc219416a6e..7f82fd127413 100644
  			};
  
  			vdd_sd: ldo5 {
-@@ -259,7 +256,6 @@
+@@ -261,7 +258,6 @@
  				regulator-min-microvolt = <2900000>;
  				regulator-max-microvolt = <2900000>;
  				interrupts = <IT_CURLIM_LDO5 0>;
@@ -63,7 +63,7 @@ index 8bc219416a6e..7f82fd127413 100644
  				regulator-boot-on;
  			};
  
-@@ -268,7 +264,6 @@
+@@ -270,7 +266,6 @@
  				regulator-min-microvolt = <1800000>;
  				regulator-max-microvolt = <1800000>;
  				interrupts = <IT_CURLIM_LDO6 0>;
@@ -71,7 +71,7 @@ index 8bc219416a6e..7f82fd127413 100644
  				regulator-enable-ramp-delay = <300000>;
  			};
  
-@@ -281,20 +276,17 @@
+@@ -283,20 +278,17 @@
  			bst_out: boost {
  				regulator-name = "bst_out";
  				interrupts = <IT_OCP_BOOST 0>;

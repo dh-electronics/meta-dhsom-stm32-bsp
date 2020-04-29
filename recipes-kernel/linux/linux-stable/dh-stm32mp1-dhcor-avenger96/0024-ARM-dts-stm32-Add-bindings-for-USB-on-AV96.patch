@@ -20,7 +20,7 @@ diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm
 index 133364215ebd..9471c564f9c4 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-@@ -551,3 +551,34 @@
+@@ -553,3 +553,34 @@
  		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
  	};
  };

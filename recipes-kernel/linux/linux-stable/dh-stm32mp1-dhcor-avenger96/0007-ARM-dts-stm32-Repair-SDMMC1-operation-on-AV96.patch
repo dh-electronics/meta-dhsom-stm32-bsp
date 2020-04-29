@@ -45,7 +45,7 @@ index ce7f4c285991..d988c79b986f 100644
  };
  
  &ethernet0 {
-@@ -308,15 +322,17 @@
+@@ -310,15 +324,17 @@
  
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";

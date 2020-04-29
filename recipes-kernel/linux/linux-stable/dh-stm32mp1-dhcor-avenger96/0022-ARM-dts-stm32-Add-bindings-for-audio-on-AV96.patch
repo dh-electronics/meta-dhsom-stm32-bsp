@@ -35,7 +35,7 @@ index f6e6aa9102a1..133364215ebd 100644
  	/* Enpirion EP3A8LQI U2 on the DHCOR */
  	vdd_io: regulator-buck-io {
  		compatible = "regulator-fixed";
-@@ -366,6 +373,13 @@
+@@ -368,6 +375,13 @@
  					remote-endpoint = <&hdmi_con>;
  				};
  			};
@@ -49,7 +49,7 @@ index f6e6aa9102a1..133364215ebd 100644
  		};
  	};
  
-@@ -430,6 +444,31 @@
+@@ -432,6 +446,31 @@
  	status = "okay";
  };
  

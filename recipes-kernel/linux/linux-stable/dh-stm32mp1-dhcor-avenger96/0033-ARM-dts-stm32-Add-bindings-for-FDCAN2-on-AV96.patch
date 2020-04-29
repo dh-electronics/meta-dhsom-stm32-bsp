@@ -23,7 +23,7 @@ index a493a66f79a3..f8aec8467475 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 @@ -284,6 +284,13 @@
- 	status = "okay";
+ 	status = "disabled";
  };
  
 +&m_can2 {

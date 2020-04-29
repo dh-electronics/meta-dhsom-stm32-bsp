@@ -45,7 +45,7 @@ index 5dca640122da..4d12d5e886a6 100644
  	};
  
  	sd_switch: regulator-sd_switch {
-@@ -424,3 +418,18 @@
+@@ -426,3 +420,18 @@
  	pinctrl-0 = <&uart7_pins_a>;
  	status = "okay";
  };

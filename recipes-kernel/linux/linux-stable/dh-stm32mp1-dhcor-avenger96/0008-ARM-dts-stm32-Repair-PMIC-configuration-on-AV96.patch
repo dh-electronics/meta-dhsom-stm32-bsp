@@ -42,7 +42,7 @@ index d988c79b986f..8bc219416a6e 100644
  };
  
  &ethernet0 {
-@@ -176,7 +187,7 @@
+@@ -178,7 +189,7 @@
  
  			vddcore: buck1 {
  				regulator-name = "vddcore";
@@ -51,7 +51,7 @@ index d988c79b986f..8bc219416a6e 100644
  				regulator-max-microvolt = <1350000>;
  				regulator-always-on;
  				regulator-initial-mode = <0>;
-@@ -194,8 +205,8 @@
+@@ -196,8 +207,8 @@
  
  			vdd: buck3 {
  				regulator-name = "vdd";
@@ -62,7 +62,7 @@ index d988c79b986f..8bc219416a6e 100644
  				regulator-always-on;
  				st,mask_reset;
  				regulator-initial-mode = <0>;
-@@ -308,7 +319,7 @@
+@@ -310,7 +321,7 @@
  };
  
  &pwr_regulators {
