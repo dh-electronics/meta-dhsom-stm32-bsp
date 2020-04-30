@@ -1,0 +1,48 @@
+From 0254fe611c882e0c1a8a783bacab0233cb2b10b7 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 30 Apr 2020 20:39:07 +0200
+Subject: [PATCH 56/58] ARM: dts: stm32: Add alternate pinmux for RCC pin
+
+Add another mux option for RCC pin, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index cb4a850823a0..92611a2aca4c 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -858,6 +858,21 @@
+ 				};
+ 			};
+ 
++			rcc_pins_a: rcc-pins-0 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 13, AF2)>; /* RCC_MCO_1 */
++					bias-disable;
++					drive-push-pull;
++					slew-rate = <1>;
++				};
++			};
++
++			rcc_sleep_pins_a: rcc-sleep-pins-0 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 13, ANALOG)>; /* RCC_MCO_1 */
++				};
++			};
++
+ 			sai2a_pins_a: sai2a-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('I', 5, AF10)>, /* SAI2_SCK_A */
+-- 
+2.25.1
+

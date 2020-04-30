@@ -1,0 +1,120 @@
+From f74ac13bc8d4d2854ab31212a67c3262a8320fac Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Fri, 17 Jan 2020 10:30:50 +0100
+Subject: [PATCH 50/58] dmaengine: add dma_request/release_chan_linked to
+ manage device link
+
+In order to enforce suspend/resume ordering, this patch adds a new
+API to request/release a DMA channel and create a device link
+between DMA controller (DMA channel provider) and DMA client
+(DMA channel consumer). This link avoids to suspend DMA before
+DMA clients.
+
+Clients who will use dma_request_chan_linked will have to
+unbalanced the device link by using dma_release_chan_linked.
+
+Change-Id: I37b69cf74b60091e2fff5447d6c623594d903737
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/155327
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: Alexandre TORGUE <alexandre.torgue@st.com>
+---
+ drivers/dma/dmaengine.c   | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/dmaengine.h | 11 +++++++++++
+ 2 files changed, 46 insertions(+)
+
+diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+index 4b604086b1b3..97346734eea5 100644
+--- a/drivers/dma/dmaengine.c
++++ b/drivers/dma/dmaengine.c
+@@ -732,6 +732,34 @@ struct dma_chan *dma_request_chan(struct device *dev, const char *name)
+ }
+ EXPORT_SYMBOL_GPL(dma_request_chan);
+ 
++/**
++ * dma_request_chan_linked - try to allocate an exclusive slave channel
++ * @dev:	pointer to client device structure
++ * @name:	slave channel name
++ *
++ * Returns pointer to appropriate DMA channel on success or an error pointer.
++ * Create device link between DMA channel provider and client device consumer.
++ */
++struct dma_chan *dma_request_chan_linked(struct device *dev, const char *name)
++{
++	struct dma_chan *ch = dma_request_chan(dev, name);
++	struct device *provider_dev = ch->device->dev;
++	struct device_link *link;
++
++	if (!IS_ERR_OR_NULL(ch)) {
++		link = device_link_add(dev, provider_dev, DL_FLAG_STATELESS);
++		if (!link) {
++			dev_err(provider_dev,
++				"failed to add dev link with %s\n",
++				dev_name(dev));
++			return ERR_PTR(-EINVAL);
++		}
++	}
++
++	return ch;
++}
++EXPORT_SYMBOL_GPL(dma_request_chan_linked);
++
+ /**
+  * dma_request_slave_channel - try to allocate an exclusive slave channel
+  * @dev:	pointer to client device structure
+@@ -790,6 +818,13 @@ void dma_release_channel(struct dma_chan *chan)
+ }
+ EXPORT_SYMBOL_GPL(dma_release_channel);
+ 
++void dma_release_chan_linked(struct device *dev, struct dma_chan *chan)
++{
++	device_link_remove(dev, chan->device->dev);
++	dma_release_channel(chan);
++}
++EXPORT_SYMBOL_GPL(dma_release_chan_linked);
++
+ /**
+  * dmaengine_get - register interest in dma_channels
+  */
+diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+index 8013562751a5..cb88d66e226c 100644
+--- a/include/linux/dmaengine.h
++++ b/include/linux/dmaengine.h
+@@ -1309,9 +1309,11 @@ struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
+ struct dma_chan *dma_request_slave_channel(struct device *dev, const char *name);
+ 
+ struct dma_chan *dma_request_chan(struct device *dev, const char *name);
++struct dma_chan *dma_request_chan_linked(struct device *dev, const char *name);
+ struct dma_chan *dma_request_chan_by_mask(const dma_cap_mask_t *mask);
+ 
+ void dma_release_channel(struct dma_chan *chan);
++void dma_release_chan_linked(struct device *dev, struct dma_chan *chan);
+ int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps);
+ #else
+ static inline struct dma_chan *dma_find_channel(enum dma_transaction_type tx_type)
+@@ -1346,6 +1348,11 @@ static inline struct dma_chan *dma_request_chan(struct device *dev,
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
++static inline struct dma_chan *dma_request_chan_linked(struct device *dev,
++						       const char *name)
++{
++	return ERR_PTR(-ENODEV);
++}
+ static inline struct dma_chan *dma_request_chan_by_mask(
+ 						const dma_cap_mask_t *mask)
+ {
+@@ -1354,6 +1361,10 @@ static inline struct dma_chan *dma_request_chan_by_mask(
+ static inline void dma_release_channel(struct dma_chan *chan)
+ {
+ }
++static inline void dma_release_chan_linked(struct device *dev,
++					   struct dma_chan *chan)
++{
++}
+ static inline int dma_get_slave_caps(struct dma_chan *chan,
+ 				     struct dma_slave_caps *caps)
+ {
+-- 
+2.25.1
+

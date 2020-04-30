@@ -1,0 +1,32 @@
+From e29fd9cdec8849c347061207eca41568292e2800 Mon Sep 17 00:00:00 2001
+From: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+Date: Mon, 27 Jan 2020 09:53:33 +0100
+Subject: [PATCH 39/58] dmaengine: stm32-mdma: enable descriptor_reuse
+
+Enable descriptor reuse to allow client to resubmit already processed
+descriptors in order to save descriptor creation time.
+
+Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Link: https://lore.kernel.org/r/20200127085334.13163-6-amelie.delaunay@st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/dma/stm32-mdma.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index 5838311cf990..3056582c7385 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -1614,6 +1614,8 @@ static int stm32_mdma_probe(struct platform_device *pdev)
+ 	dd->device_resume = stm32_mdma_resume;
+ 	dd->device_terminate_all = stm32_mdma_terminate_all;
+ 	dd->device_synchronize = stm32_mdma_synchronize;
++	dd->descriptor_reuse = true;
++
+ 	dd->src_addr_widths = BIT(DMA_SLAVE_BUSWIDTH_1_BYTE) |
+ 		BIT(DMA_SLAVE_BUSWIDTH_2_BYTES) |
+ 		BIT(DMA_SLAVE_BUSWIDTH_4_BYTES) |
+-- 
+2.25.1
+
