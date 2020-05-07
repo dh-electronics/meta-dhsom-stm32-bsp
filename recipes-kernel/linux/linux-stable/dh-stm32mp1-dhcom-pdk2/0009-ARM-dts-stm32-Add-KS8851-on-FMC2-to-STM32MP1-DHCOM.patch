@@ -1,7 +1,7 @@
-From 0c7d0b1cba0d59dcbeaa0f8a9f1ec1c0de631495 Mon Sep 17 00:00:00 2001
+From b32f6cbe12a6ac0ce4a9bf6b694e63e9a6d7f3d5 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 20 Jan 2020 19:34:23 +0100
-Subject: [PATCH 09/10] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
+Subject: [PATCH 09/13] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
 
 Add bindings for the KS8851 ethernet present on the STM32MP1 DHCOM SoM.
 
@@ -24,7 +24,7 @@ index 9428593ff702..e4cccbd75fad 100644
  
  	chosen {
 diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
-index ee9ae7581b54..9bd6a300fae6 100644
+index ee9ae7581b54..61c9b265357c 100644
 --- a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
 @@ -95,6 +95,52 @@
@@ -85,7 +85,7 @@ index ee9ae7581b54..9bd6a300fae6 100644
  };
  
 +&pinctrl {
-+	fmc_pins_b: fmc-0 {
++	fmc_pins_b: fmc-1 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('D', 4, AF12)>, /* FMC_NOE */
 +				 <STM32_PINMUX('D', 5, AF12)>, /* FMC_NWE */
@@ -114,7 +114,7 @@ index ee9ae7581b54..9bd6a300fae6 100644
 +		};
 +	};
 +
-+	fmc_sleep_pins_b: fmc-sleep-0 {
++	fmc_sleep_pins_b: fmc-sleep-1 {
 +		pins {
 +			pinmux = <STM32_PINMUX('D', 4, ANALOG)>, /* FMC_NOE */
 +				 <STM32_PINMUX('D', 5, ANALOG)>, /* FMC_NWE */
