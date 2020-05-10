@@ -22,4 +22,4 @@ patch 0021-usb-dwc2-Implement-set_selfpowered.patch
 patch 0022-usb-dwc2-Silence-warning-about-supplies-during-defer.patch
 patch 0023-ARM-dts-stm32-add-USB-OTG-full-support-on-stm32mp151.patch
 patch 0024-RFC-usb-dwc2-Run-the-core-connect-in-dwc2_hcd_init.patch
-patch 0025-RFC-genirq-Check-irq_data_get_irq_chip-return-value-.patch
+patch 0025-mailbox-stm32-ipcc-Update-wakeup-management.patch
