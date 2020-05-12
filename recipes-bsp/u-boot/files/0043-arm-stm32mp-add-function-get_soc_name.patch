@@ -1,0 +1,65 @@
+From 1334004203a259e9c08c99cffffece407ee25804 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Wed, 12 Feb 2020 19:37:43 +0100
+Subject: [PATCH 43/50] arm: stm32mp: add function get_soc_name
+
+Add a function get_soc_name to get a string with the full name
+of the SOC "STM32MP15xxx Rev.x"
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Acked-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/mach-stm32mp/cpu.c                    | 14 +++++++++++---
+ arch/arm/mach-stm32mp/include/mach/sys_proto.h |  4 ++++
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/mach-stm32mp/cpu.c b/arch/arm/mach-stm32mp/cpu.c
+index 3211874313..00d051f238 100644
+--- a/arch/arm/mach-stm32mp/cpu.c
++++ b/arch/arm/mach-stm32mp/cpu.c
+@@ -305,8 +305,7 @@ u32 get_cpu_package(void)
+ 	return get_otp(BSEC_OTP_PKG, PKG_SHIFT, PKG_MASK);
+ }
+ 
+-#if defined(CONFIG_DISPLAY_CPUINFO)
+-int print_cpuinfo(void)
++void get_soc_name(char name[SOC_NAME_SIZE])
+ {
+ 	char *cpu_s, *cpu_r, *pkg;
+ 
+@@ -370,7 +369,16 @@ int print_cpuinfo(void)
+ 		break;
+ 	}
+ 
+-	printf("CPU: STM32MP%s%s Rev.%s\n", cpu_s, pkg, cpu_r);
++	snprintf(name, SOC_NAME_SIZE, "STM32MP%s%s Rev.%s", cpu_s, pkg, cpu_r);
++}
++
++#if defined(CONFIG_DISPLAY_CPUINFO)
++int print_cpuinfo(void)
++{
++	char name[SOC_NAME_SIZE];
++
++	get_soc_name(name);
++	printf("CPU: %s\n", name);
+ 
+ 	return 0;
+ }
+diff --git a/arch/arm/mach-stm32mp/include/mach/sys_proto.h b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+index da46c11573..065b7b2856 100644
+--- a/arch/arm/mach-stm32mp/include/mach/sys_proto.h
++++ b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+@@ -29,6 +29,10 @@ u32 get_cpu_package(void);
+ #define PKG_AC_TFBGA361	2
+ #define PKG_AD_TFBGA257	1
+ 
++/* Get SOC name */
++#define SOC_NAME_SIZE 20
++void get_soc_name(char name[SOC_NAME_SIZE]);
++
+ /* return boot mode */
+ u32 get_bootmode(void);
+ 
+-- 
+2.25.1
+

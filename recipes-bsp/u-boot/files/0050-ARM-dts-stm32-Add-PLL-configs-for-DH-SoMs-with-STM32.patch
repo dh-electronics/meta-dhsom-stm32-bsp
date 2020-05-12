@@ -1,0 +1,87 @@
+From 2130d1e762d04306b9c3aef771d5259dc361ac8a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 12 May 2020 18:52:56 +0200
+Subject: [PATCH 50/50] ARM: dts: stm32: Add PLL configs for DH SoMs with
+ STM32MP157F
+
+The DH SoMs with faster STM32MP157F can run at up to 800 MHz,
+add matching PLL configs.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi | 9 +++++++--
+ arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi | 9 +++++++--
+ configs/stm32mp15_dhcor_basic_defconfig    | 1 +
+ 3 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+index ecaee2c367..ffae39ec6b 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+@@ -51,6 +51,10 @@
+ 	};
+ };
+ 
++&bsec {
++	u-boot,dm-spl;
++};
++
+ &gpiof {
+ 	snor-nwp {
+ 		gpio-hog;
+@@ -241,8 +245,9 @@
+ 	pll1: st,pll@0 {
+ 		compatible = "st,stm32mp1-pll";
+ 		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
++		cfg-ac = < 2 80 0 0 0 PQR(1,0,0) >;
++		frac-ac = < 0x800 >;
++		cfg-df = < 2 99 0 0 0 PQR(1,0,0) >;
+ 		u-boot,dm-pre-reloc;
+ 	};
+ 
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+index dcb7f7864c..2969bc13ce 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+@@ -23,6 +23,10 @@
+ 	};
+ };
+ 
++&bsec {
++	u-boot,dm-spl;
++};
++
+ &gpiof {
+ 	snor-nwp {
+ 		gpio-hog;
+@@ -120,8 +124,9 @@
+ 	pll1: st,pll@0 {
+ 		compatible = "st,stm32mp1-pll";
+ 		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
++		cfg-ac = < 2 80 0 0 0 PQR(1,0,0) >;
++		frac-ac = < 0x800 >;
++		cfg-df = < 2 99 0 0 0 PQR(1,0,0) >;
+ 		u-boot,dm-pre-reloc;
+ 	};
+ 
+diff --git a/configs/stm32mp15_dhcor_basic_defconfig b/configs/stm32mp15_dhcor_basic_defconfig
+index 49716333b4..0220366670 100644
+--- a/configs/stm32mp15_dhcor_basic_defconfig
++++ b/configs/stm32mp15_dhcor_basic_defconfig
+@@ -80,6 +80,7 @@ CONFIG_LED=y
+ CONFIG_LED_GPIO=y
+ CONFIG_DM_MAILBOX=y
+ CONFIG_STM32_IPCC=y
++CONFIG_SPL_MISC=y
+ CONFIG_I2C_EEPROM=y
+ CONFIG_SYS_I2C_EEPROM_ADDR=0x53
+ CONFIG_SYS_I2C_EEPROM_BUS=2
+-- 
+2.25.1
+

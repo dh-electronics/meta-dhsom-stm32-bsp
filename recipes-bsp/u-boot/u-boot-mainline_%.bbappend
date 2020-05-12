@@ -55,6 +55,16 @@ PATCHES_COMMON = " \
 	file://0038-ARM-dts-stm32-Repair-I2C2-operation-on-AV96.patch \
 	file://0039-Makefile-copy-SPL_FIT_SOURCE-in-build-directory.patch \
 	file://0040-ARM-dts-stm32-Synchronize-DDR-setttings-on-DH-SoMs.patch \
+	file://0041-arm-stm32mp-bsec-remove-unneeded-test.patch \
+	file://0042-arm-stm32mp-bsec-add-permanent-lock-support-in-bsec-.patch \
+	file://0043-arm-stm32mp-add-function-get_soc_name.patch \
+	file://0044-arm-stm32mp-fdt-update-kernel-device-tree-according-.patch \
+	file://0045-stm32mp1-add-800-MHz-profile-support.patch \
+	file://0046-stm32mp-psci-set-cntfrq-register-of-cpu-on.patch \
+	file://0047-clk-stm32mp1-correct-CKSELR-masks.patch \
+	file://0048-ARM-stm32-Make-bsec-available-in-SPL.patch \
+	file://0049-clk-stm32mp1-Handle-SoC-speed-grade-configs.patch \
+	file://0050-ARM-dts-stm32-Add-PLL-configs-for-DH-SoMs-with-STM32.patch \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \

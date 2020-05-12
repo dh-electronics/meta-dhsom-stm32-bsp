@@ -1,0 +1,65 @@
+From 9f27b52495611e48cf867607a776bf8cec7076c0 Mon Sep 17 00:00:00 2001
+From: Ludovic Barre <ludovic.barre@st.com>
+Date: Mon, 2 Mar 2020 11:27:02 +0100
+Subject: [PATCH 46/50] stm32mp: psci: set cntfrq register of cpu on
+
+This path allows to set the cntfrq register of targeted cpu.
+
+Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@st.com>
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Acked-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/mach-stm32mp/psci.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm/mach-stm32mp/psci.c b/arch/arm/mach-stm32mp/psci.c
+index 1d91b2d324..3fb038d3e7 100644
+--- a/arch/arm/mach-stm32mp/psci.c
++++ b/arch/arm/mach-stm32mp/psci.c
+@@ -30,6 +30,22 @@ u8 psci_state[STM32MP1_PSCI_NR_CPUS] __secure_data = {
+ 	 PSCI_AFFINITY_LEVEL_ON,
+ 	 PSCI_AFFINITY_LEVEL_OFF};
+ 
++static u32 __secure_data cntfrq;
++
++static u32 __secure cp15_read_cntfrq(void)
++{
++	u32 frq;
++
++	asm volatile("mrc p15, 0, %0, c14, c0, 0" : "=r" (frq));
++
++	return frq;
++}
++
++static void __secure cp15_write_cntfrq(u32 frq)
++{
++	asm volatile ("mcr p15, 0, %0, c14, c0, 0" : : "r" (frq));
++}
++
+ static inline void psci_set_state(int cpu, u8 state)
+ {
+ 	psci_state[cpu] = state;
+@@ -63,6 +79,9 @@ void __secure psci_arch_cpu_entry(void)
+ 
+ 	psci_set_state(cpu, PSCI_AFFINITY_LEVEL_ON);
+ 
++	/* write the saved cntfrq */
++	cp15_write_cntfrq(cntfrq);
++
+ 	/* reset magic in TAMP register */
+ 	writel(0xFFFFFFFF, TAMP_BACKUP_MAGIC_NUMBER);
+ }
+@@ -130,6 +149,9 @@ s32 __secure psci_cpu_on(u32 function_id, u32 target_cpu, u32 pc,
+ 	if (psci_state[cpu] == PSCI_AFFINITY_LEVEL_ON)
+ 		return ARM_PSCI_RET_ALREADY_ON;
+ 
++	/* read and save cntfrq of current cpu to write on target cpu  */
++	cntfrq = cp15_read_cntfrq();
++
+ 	/* reset magic in TAMP register */
+ 	if (readl(TAMP_BACKUP_MAGIC_NUMBER))
+ 		writel(0xFFFFFFFF, TAMP_BACKUP_MAGIC_NUMBER);
+-- 
+2.25.1
+

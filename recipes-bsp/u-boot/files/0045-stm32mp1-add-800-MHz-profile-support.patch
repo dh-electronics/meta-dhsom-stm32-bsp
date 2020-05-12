@@ -1,0 +1,154 @@
+From f5461d7b774618be7427cd1b84e71b5271876cb4 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Wed, 26 Feb 2020 11:26:43 +0100
+Subject: [PATCH 45/50] stm32mp1: add 800 MHz profile support
+
+The STM32MP1 series is available in 3 different lines which are pin-to-pin
+compatible:
+- STM32MP157: Dual Cortex-A7 cores, Cortex-M4 core @ 209 MHz,
+              3D GPU, DSI display interface and CAN FD
+- STM32MP153: Dual Cortex-A7 cores, Cortex-M4 core @ 209 MHz
+              and CAN FD
+- STM32MP151: Single Cortex-A7 core, Cortex-M4 core @ 209 MHz
+
+Each line comes with a security option (cryptography & secure boot)
+& a Cortex-A frequency option :
+
+- A : Cortex-A7 @ 650 MHz
+- C : Secure Boot + HW Crypto + Cortex-A7 @ 650 MHz
+- D : Cortex-A7 @ 800 MHz
+- F : Secure Boot + HW Crypto + Cortex-A7 @ 800 MHz
+
+This patch adds the support of STM32MP15xD and STM32MP15xF in U-Boot.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Acked-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/mach-stm32mp/cpu.c                    | 18 ++++++++++++++++++
+ arch/arm/mach-stm32mp/fdt.c                    |  7 +++++++
+ arch/arm/mach-stm32mp/include/mach/sys_proto.h |  8 +++++++-
+ doc/board/st/stm32mp1.rst                      |  8 ++++++++
+ 4 files changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-stm32mp/cpu.c b/arch/arm/mach-stm32mp/cpu.c
+index 00d051f238..10834dbd1d 100644
+--- a/arch/arm/mach-stm32mp/cpu.c
++++ b/arch/arm/mach-stm32mp/cpu.c
+@@ -311,18 +311,36 @@ void get_soc_name(char name[SOC_NAME_SIZE])
+ 
+ 	/* MPUs Part Numbers */
+ 	switch (get_cpu_type()) {
++	case CPU_STM32MP157Fxx:
++		cpu_s = "157F";
++		break;
++	case CPU_STM32MP157Dxx:
++		cpu_s = "157D";
++		break;
+ 	case CPU_STM32MP157Cxx:
+ 		cpu_s = "157C";
+ 		break;
+ 	case CPU_STM32MP157Axx:
+ 		cpu_s = "157A";
+ 		break;
++	case CPU_STM32MP153Fxx:
++		cpu_s = "153F";
++		break;
++	case CPU_STM32MP153Dxx:
++		cpu_s = "153D";
++		break;
+ 	case CPU_STM32MP153Cxx:
+ 		cpu_s = "153C";
+ 		break;
+ 	case CPU_STM32MP153Axx:
+ 		cpu_s = "153A";
+ 		break;
++	case CPU_STM32MP151Fxx:
++		cpu_s = "151F";
++		break;
++	case CPU_STM32MP151Dxx:
++		cpu_s = "151D";
++		break;
+ 	case CPU_STM32MP151Cxx:
+ 		cpu_s = "151C";
+ 		break;
+diff --git a/arch/arm/mach-stm32mp/fdt.c b/arch/arm/mach-stm32mp/fdt.c
+index a3db86dc46..3ee7d6a833 100644
+--- a/arch/arm/mach-stm32mp/fdt.c
++++ b/arch/arm/mach-stm32mp/fdt.c
+@@ -244,6 +244,8 @@ int ft_system_setup(void *blob, bd_t *bd)
+ 	get_soc_name(name);
+ 
+ 	switch (cpu) {
++	case CPU_STM32MP151Fxx:
++	case CPU_STM32MP151Dxx:
+ 	case CPU_STM32MP151Cxx:
+ 	case CPU_STM32MP151Axx:
+ 		stm32_fdt_fixup_cpu(blob, name);
+@@ -251,6 +253,8 @@ int ft_system_setup(void *blob, bd_t *bd)
+ 		soc = fdt_path_offset(blob, "/soc");
+ 		stm32_fdt_disable(blob, soc, STM32_FDCAN_BASE, "can", name);
+ 		/* fall through */
++	case CPU_STM32MP153Fxx:
++	case CPU_STM32MP153Dxx:
+ 	case CPU_STM32MP153Cxx:
+ 	case CPU_STM32MP153Axx:
+ 		stm32_fdt_disable(blob, soc, STM32_GPU_BASE, "gpu", name);
+@@ -261,8 +265,11 @@ int ft_system_setup(void *blob, bd_t *bd)
+ 	}
+ 
+ 	switch (cpu) {
++	case CPU_STM32MP157Dxx:
+ 	case CPU_STM32MP157Axx:
++	case CPU_STM32MP153Dxx:
+ 	case CPU_STM32MP153Axx:
++	case CPU_STM32MP151Dxx:
+ 	case CPU_STM32MP151Axx:
+ 		stm32_fdt_disable(blob, soc, STM32_CRYP1_BASE, "cryp", name);
+ 		stm32_fdt_disable(blob, soc, STM32_CRYP2_BASE, "cryp", name);
+diff --git a/arch/arm/mach-stm32mp/include/mach/sys_proto.h b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+index 065b7b2856..1617126bea 100644
+--- a/arch/arm/mach-stm32mp/include/mach/sys_proto.h
++++ b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
+@@ -3,13 +3,19 @@
+  * Copyright (C) 2015-2017, STMicroelectronics - All Rights Reserved
+  */
+ 
+-/* ID = Device Version (bit31:16) + Device Part Number (RPN) (bit15:0)*/
++/* ID = Device Version (bit31:16) + Device Part Number (RPN) (bit7:0) */
+ #define CPU_STM32MP157Cxx	0x05000000
+ #define CPU_STM32MP157Axx	0x05000001
+ #define CPU_STM32MP153Cxx	0x05000024
+ #define CPU_STM32MP153Axx	0x05000025
+ #define CPU_STM32MP151Cxx	0x0500002E
+ #define CPU_STM32MP151Axx	0x0500002F
++#define CPU_STM32MP157Fxx	0x05000080
++#define CPU_STM32MP157Dxx	0x05000081
++#define CPU_STM32MP153Fxx	0x050000A4
++#define CPU_STM32MP153Dxx	0x050000A5
++#define CPU_STM32MP151Fxx	0x050000AE
++#define CPU_STM32MP151Dxx	0x050000AF
+ 
+ /* return CPU_STMP32MP...Xxx constants */
+ u32 get_cpu_type(void);
+diff --git a/doc/board/st/stm32mp1.rst b/doc/board/st/stm32mp1.rst
+index 2cb327f218..b3856be9a1 100644
+--- a/doc/board/st/stm32mp1.rst
++++ b/doc/board/st/stm32mp1.rst
+@@ -25,6 +25,14 @@ It features:
+  - Standard connectivity, widely inherited from the STM32 MCU family
+  - Comprehensive security support
+ 
++Each line comes with a security option (cryptography & secure boot) and
++a Cortex-A frequency option:
++
++ - A : Cortex-A7 @ 650 MHz
++ - C : Secure Boot + HW Crypto + Cortex-A7 @ 650 MHz
++ - D : Cortex-A7 @ 800 MHz
++ - F : Secure Boot + HW Crypto + Cortex-A7 @ 800 MHz
++
+ Everything is supported in Linux but U-Boot is limited to:
+ 
+  1. UART
+-- 
+2.25.1
+

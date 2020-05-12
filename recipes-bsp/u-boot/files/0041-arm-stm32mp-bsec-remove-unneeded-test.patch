@@ -1,0 +1,55 @@
+From 080d10a5c3c2c6a5968042ea6a53bd4c4acade6b Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Wed, 12 Feb 2020 19:37:37 +0100
+Subject: [PATCH 41/50] arm: stm32mp: bsec: remove unneeded test
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Remove the test offs < 0 , as offs is unsigned.
+
+This patch solves the warnings when compiling with W=1
+on stm32mp1 board:
+
+In function ‘stm32mp_bsec_read’:
+arch/arm/mach-stm32mp/bsec.c:368:11: warning:
+comparison of unsigned expression < 0 is always false [-Wtype-limits]
+  368 |  if (offs < 0 || (offs % 4) || (size % 4))
+      |           ^
+In function ‘stm32mp_bsec_write’:
+arch/arm/mach-stm32mp/bsec.c:405:11: warning:
+comparison of unsigned expression < 0 is always false [-Wtype-limits]
+  405 |  if (offs < 0 || (offs % 4) || (size % 4))
+      |           ^
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Acked-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/mach-stm32mp/bsec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-stm32mp/bsec.c b/arch/arm/mach-stm32mp/bsec.c
+index a77c706a1a..1d904caae1 100644
+--- a/arch/arm/mach-stm32mp/bsec.c
++++ b/arch/arm/mach-stm32mp/bsec.c
+@@ -365,7 +365,7 @@ static int stm32mp_bsec_read(struct udevice *dev, int offset,
+ 		shadow = false;
+ 	}
+ 
+-	if (offs < 0 || (offs % 4) || (size % 4))
++	if ((offs % 4) || (size % 4))
+ 		return -EINVAL;
+ 
+ 	otp = offs / sizeof(u32);
+@@ -402,7 +402,7 @@ static int stm32mp_bsec_write(struct udevice *dev, int offset,
+ 		shadow = false;
+ 	}
+ 
+-	if (offs < 0 || (offs % 4) || (size % 4))
++	if ((offs % 4) || (size % 4))
+ 		return -EINVAL;
+ 
+ 	otp = offs / sizeof(u32);
+-- 
+2.25.1
+
