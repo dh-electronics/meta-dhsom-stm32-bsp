@@ -1,11 +1,12 @@
-From 655d405763b964f61a67e13e72e4ade004eb047b Mon Sep 17 00:00:00 2001
+From 886d20d7473cbd54de310d9b665177bffc056640 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 6 Apr 2020 13:41:28 +0200
-Subject: [PATCH 02/24] ARM: stm32: Increase USB power-good delay
+Subject: [PATCH] ARM: stm32: Increase USB power-good delay
 
 It seems the STM32MP1 needs to wait a bit longer until the USB Vbus
 is stable. Increase the USB power-good delay to 200 mS.
 
+Upstream-Status: Inappropriate [board configuration]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>
@@ -14,19 +15,19 @@ Cc: Patrice Chotard <patrice.chotard@st.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
-index 9a6ef53070..6096ec94b2 100644
+index f271b84a59..a99ce774c6 100644
 --- a/include/configs/stm32mp1.h
 +++ b/include/configs/stm32mp1.h
-@@ -230,7 +230,8 @@
- 	STM32MP_DFU_ALT_RAM \
- 	STM32MP_DFU_ALT_INFO \
+@@ -160,7 +160,8 @@
+ 		" then env set env_default 0;env save;fi\0" \
+ 	STM32MP_BOOTCMD \
  	BOOTENV \
 -	"boot_net_usb_start=true\0"
 +	"boot_net_usb_start=true\0" \
-+	"usb_pgood_delay=200\0"
++	"usb_pgood_delay=1000\0"
  
  #endif /* ifndef CONFIG_SPL_BUILD */
  #endif /* ifdef CONFIG_DISTRO_DEFAULTS*/
 -- 
-2.25.1
+2.27.0
 
