@@ -1,7 +1,7 @@
-From 6b0850c0629da7fd76929e23e74fea27b806f235 Mon Sep 17 00:00:00 2001
+From bcb8af97da3185eedda61dc9e52163f0220135f8 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 3 Dec 2019 00:50:25 +0100
-Subject: [PATCH 10/10] ARM: dts: stm32: Add missing ETHCK clock to ethernet
+Subject: [PATCH 10/97] ARM: dts: stm32: Add missing ETHCK clock to ethernet
  node
 
 Add missing 'eth-ck' clock to the ethernet node. These clock are used to
@@ -16,7 +16,7 @@ Cc: Patrice Chotard <patrice.chotard@st.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
-index f20e0101b577..9e7e6328f97c 100644
+index f20e0101b5773..9e7e6328f97cd 100644
 --- a/arch/arm/boot/dts/stm32mp157c.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157c.dtsi
 @@ -1380,11 +1380,13 @@
@@ -34,5 +34,5 @@ index f20e0101b577..9e7e6328f97c 100644
  				 <&rcc SYSCFG>;
  			st,syscon = <&syscfg 0x4>;
 -- 
-2.25.1
+2.27.0
 

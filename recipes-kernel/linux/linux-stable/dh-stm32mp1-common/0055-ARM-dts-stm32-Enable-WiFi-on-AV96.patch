@@ -1,0 +1,88 @@
+From 4ff953e718230a7150162bbbbea47bf0070d7af9 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 27 Mar 2020 02:09:56 +0100
+Subject: [PATCH 55/97] ARM: dts: stm32: Enable WiFi on AV96
+
+The WiFi/Bluetooth SDIO chip is attached to SDMMC3 on AV96, describe it
+in DT to make it available. Remove WiFi LED and turn it into a regulator,
+because it is a GPIO controlling the WL_REG_ON input of the WiFi chip.
+The LED is just an indicator connected to the same line, but not the
+primary function.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 38 +++++++++++++++++----
+ 1 file changed, 31 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 256eae11ce219..9c0a2d6e87e35 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -64,13 +64,6 @@
+ 		};
+ 
+ 		led5 {
+-			label = "yellow:wifi";
+-			gpios = <&gpioz 3 GPIO_ACTIVE_HIGH>;
+-			linux,default-trigger = "phy0tx";
+-			default-state = "off";
+-		};
+-
+-		led6 {
+ 			label = "blue:bt";
+ 			gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "bluetooth-power";
+@@ -102,6 +95,17 @@
+ 		regulator-boot-on;
+ 		vin-supply = <&vdd>;
+ 	};
++
++	wlan_pwr: regulator-wlan {
++		compatible = "regulator-fixed";
++
++		regulator-name = "wl-reg";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++
++		gpios = <&gpioz 3 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
+ };
+ 
+ &ethernet0 {
+@@ -387,6 +391,26 @@
+ 	status = "okay";
+ };
+ 
++&sdmmc3 {
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc3_b4_pins_b>;
++	pinctrl-1 = <&sdmmc3_b4_od_pins_b>;
++	pinctrl-2 = <&sdmmc3_b4_sleep_pins_b>;
++	broken-cd;
++	non-removable;
++	st,neg-edge;
++	bus-width = <4>;
++	vmmc-supply = <&wlan_pwr>;
++	status = "okay";
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++	brcmf: bcrmf@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++	};
++};
++
+ &uart4 {
+ 	/* On Low speed expansion header */
+ 	label = "LS-UART1";
+-- 
+2.27.0
+

@@ -1,7 +1,7 @@
-From 9b7d0e495e296ef4967ee01efd328bd5468ecd39 Mon Sep 17 00:00:00 2001
+From 5c42944af49e59376cc94d8ccd505c9abeb5bd6e Mon Sep 17 00:00:00 2001
 From: Linus Walleij <linus.walleij@linaro.org>
 Date: Tue, 17 Dec 2019 15:39:52 +0100
-Subject: [PATCH 01/10] mmc: mmci: Support any block sizes for ux500v2 and qcom
+Subject: [PATCH 01/97] mmc: mmci: Support any block sizes for ux500v2 and qcom
  variant
 
 For the ux500v2 variant of the PL18x block, any block sizes
@@ -69,7 +69,7 @@ Upstream-Status: Backport [2253ed4b36dc876d1598c4dab5587e537ec68c34]
  2 files changed, 37 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index c37e70dbe250..7e4bc9124efd 100644
+index c37e70dbe250e..7e4bc9124efde 100644
 --- a/drivers/mmc/host/mmci.c
 +++ b/drivers/mmc/host/mmci.c
 @@ -168,6 +168,8 @@ static struct variant_data variant_ux500 = {
@@ -167,7 +167,7 @@ index c37e70dbe250..7e4bc9124efd 100644
  
  	*datactrl |= MCI_DPSM_DMAENABLE;
 diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
-index 833236ecb31e..89ab73343cf3 100644
+index 833236ecb31e6..89ab73343cf30 100644
 --- a/drivers/mmc/host/mmci.h
 +++ b/drivers/mmc/host/mmci.h
 @@ -278,7 +278,11 @@ struct mmci_host;
@@ -193,5 +193,5 @@ index 833236ecb31e..89ab73343cf3 100644
  	u8			datacnt_useless:1;
  	u8			st_sdio:1;
 -- 
-2.25.1
+2.27.0
 

@@ -1,0 +1,41 @@
+From 584098bc0c126a8d568012e28e8628d874460f45 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Tue, 4 Feb 2020 14:26:05 +0100
+Subject: [PATCH 62/97] ARM: dts: stm32: add USB OTG pinctrl to stm32mp15
+
+Add pinctrl definition for USB High-Speed OTG ID pin and USB Full-Speed OTG
+DP and DM lines that can be used on stm32mp15.
+
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index 5a38a82586e0e..d32accf29769c 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -1312,6 +1312,19 @@
+ 					bias-disable;
+ 				};
+ 			};
++
++			usbotg_hs_pins_a: usbotg-hs-0 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* OTG_ID */
++				};
++			};
++
++			usbotg_fs_dp_dm_pins_a: usbotg-fs-dp-dm-0 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 11, ANALOG)>, /* OTG_FS_DM */
++						 <STM32_PINMUX('A', 12, ANALOG)>; /* OTG_FS_DP */
++				};
++			};
+ 		};
+ 
+ 		pinctrl_z: pin-controller-z@54004000 {
+-- 
+2.27.0
+

@@ -1,0 +1,32 @@
+From 6fad1ca5cbff650b4ff73546ac863dbf0b78c54f Mon Sep 17 00:00:00 2001
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Date: Tue, 12 Nov 2019 14:51:53 +0800
+Subject: [PATCH 13/97] usb: dwc2: create debugfs directory under usb root
+
+Now the USB gadget subsystem can use the USB debugfs root directory,
+so move dwc2's directory from the root of the debugfs filesystem into
+the root of usb
+
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/1573541519-28488-7-git-send-email-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/dwc2/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
+index 7f62f4cdc2651..b8f2790abf91f 100644
+--- a/drivers/usb/dwc2/debugfs.c
++++ b/drivers/usb/dwc2/debugfs.c
+@@ -770,7 +770,7 @@ int dwc2_debugfs_init(struct dwc2_hsotg *hsotg)
+ 	int			ret;
+ 	struct dentry		*root;
+ 
+-	root = debugfs_create_dir(dev_name(hsotg->dev), NULL);
++	root = debugfs_create_dir(dev_name(hsotg->dev), usb_debug_root);
+ 	hsotg->debug_root = root;
+ 
+ 	debugfs_create_file("params", 0444, root, hsotg, &params_fops);
+-- 
+2.27.0
+

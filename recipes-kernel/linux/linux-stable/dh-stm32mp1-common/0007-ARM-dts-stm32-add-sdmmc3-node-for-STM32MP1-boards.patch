@@ -1,7 +1,7 @@
-From 78d65954505a1cfb4bcead150f9ccb872b3a2783 Mon Sep 17 00:00:00 2001
+From 6ab4b0b2e14bca11b9ad218b8ddb2a962a74cc86 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:38 +0100
-Subject: [PATCH 07/10] ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards
+Subject: [PATCH 07/97] ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards
 
 On STM32MP1 EVAL and DISCOVERY boards, the SDMMC3 internal peripheral
 can be used through the GPIO extension connector. The sdmmc3 node is then
@@ -17,7 +17,7 @@ Signed-off-by: Yann Gautier <yann.gautier@st.com>
  3 files changed, 78 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
-index a907d93f8916..d31a4661f7b5 100644
+index a907d93f89161..d31a4661f7b5f 100644
 --- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 @@ -926,6 +926,60 @@
@@ -82,7 +82,7 @@ index a907d93f8916..d31a4661f7b5 100644
  				pins {
  					pinmux = <STM32_PINMUX('G', 12, AF8)>; /* SPDIF_IN1 */
 diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
-index 0615d1c8a6fc..b86c32e6a829 100644
+index 0615d1c8a6fcf..b86c32e6a8297 100644
 --- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
 @@ -444,6 +444,18 @@
@@ -105,7 +105,7 @@ index 0615d1c8a6fc..b86c32e6a829 100644
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart4_pins_a>;
 diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-index 91fc0a315c49..3de3b6ebf758 100644
+index 91fc0a315c491..3de3b6ebf758a 100644
 --- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
 @@ -284,6 +284,18 @@
@@ -128,5 +128,5 @@ index 91fc0a315c49..3de3b6ebf758 100644
  	pinctrl-names = "default";
  	pinctrl-0 = <&spi1_pins_a>;
 -- 
-2.25.1
+2.27.0
 

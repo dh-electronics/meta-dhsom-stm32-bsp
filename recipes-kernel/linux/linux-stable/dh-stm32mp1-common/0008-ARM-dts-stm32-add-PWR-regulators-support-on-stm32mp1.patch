@@ -1,7 +1,7 @@
-From 68366d0d6e6be34a3b6631ef2a8570497cae967a Mon Sep 17 00:00:00 2001
+From 9120cb41420c294b58ddb8c6ba82389dc089144d Mon Sep 17 00:00:00 2001
 From: Pascal Paillet <p.paillet@st.com>
 Date: Fri, 11 Oct 2019 16:05:30 +0200
-Subject: [PATCH 08/10] ARM: dts: stm32: add PWR regulators support on
+Subject: [PATCH 08/97] ARM: dts: stm32: add PWR regulators support on
  stm32mp157
 
 This patch adds support of STM32 PWR regulators on
@@ -20,7 +20,7 @@ Upstream-Status: Backport[111ef3fdddfefec5f42ab6ee773e9840413e9d14]
  5 files changed, 38 insertions(+), 24 deletions(-)
 
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
-index 2e4742c53d04..5f35b0146017 100644
+index 2e4742c53d048..5f35b01460170 100644
 --- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
 @@ -282,6 +282,11 @@
@@ -36,7 +36,7 @@ index 2e4742c53d04..5f35b0146017 100644
  	status = "okay";
  };
 diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
-index b86c32e6a829..721f92e383fa 100644
+index b86c32e6a8297..721f92e383fa4 100644
 --- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
 @@ -379,6 +379,11 @@
@@ -52,7 +52,7 @@ index b86c32e6a829..721f92e383fa 100644
  	status = "okay";
  };
 diff --git a/arch/arm/boot/dts/stm32mp157c-dk2.dts b/arch/arm/boot/dts/stm32mp157c-dk2.dts
-index 20ea601a546d..020ea0f0e2f0 100644
+index 20ea601a546dd..020ea0f0e2f08 100644
 --- a/arch/arm/boot/dts/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/stm32mp157c-dk2.dts
 @@ -11,14 +11,6 @@
@@ -71,7 +71,7 @@ index 20ea601a546d..020ea0f0e2f0 100644
  
  &dsi {
 diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
-index b40a6b9a7aa6..258b6d93fda2 100644
+index b40a6b9a7aa69..258b6d93fda2b 100644
 --- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
 @@ -74,22 +74,6 @@
@@ -110,7 +110,7 @@ index b40a6b9a7aa6..258b6d93fda2 100644
  	status = "okay";
  };
 diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
-index c9ea2f17462b..f20e0101b577 100644
+index c9ea2f17462b9..f20e0101b5773 100644
 --- a/arch/arm/boot/dts/stm32mp157c.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157c.dtsi
 @@ -1094,6 +1094,29 @@
@@ -144,5 +144,5 @@ index c9ea2f17462b..f20e0101b577 100644
  			compatible = "st,stm32mp1-exti", "syscon";
  			interrupt-controller;
 -- 
-2.25.1
+2.27.0
 

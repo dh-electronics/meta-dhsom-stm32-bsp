@@ -1,0 +1,32 @@
+From 537d50eba14bcc1da8b927add38d24029237392b Mon Sep 17 00:00:00 2001
+From: Benjamin Gaignard <benjamin.gaignard@st.com>
+Date: Thu, 30 Jan 2020 14:53:04 +0100
+Subject: [PATCH 40/97] ARM: dts: stm32: remove useless properties in
+ stm32mp157a-avenger96 stmpic node
+
+Theses 3 properties are not coded in driver so remove them from the DTS.
+
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 5f35b01460170..548d3adfec865 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -134,10 +134,6 @@
+ 		#interrupt-cells = <2>;
+ 		status = "okay";
+ 
+-		st,main-control-register = <0x04>;
+-		st,vin-control-register = <0xc0>;
+-		st,usb-control-register = <0x30>;
+-
+ 		regulators {
+ 			compatible = "st,stpmic1-regulators";
+ 
+-- 
+2.27.0
+

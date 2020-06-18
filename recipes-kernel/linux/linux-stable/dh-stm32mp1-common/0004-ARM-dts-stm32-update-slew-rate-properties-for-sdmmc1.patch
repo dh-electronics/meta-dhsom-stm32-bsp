@@ -1,7 +1,7 @@
-From 3069b6224ff1c006e4bda2d0a47c41298b563c2c Mon Sep 17 00:00:00 2001
+From ed3efbe4c10a5cdb2d813353581388130d69f6a8 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:35 +0100
-Subject: [PATCH 04/10] ARM: dts: stm32: update slew-rate properties for sdmmc1
+Subject: [PATCH 04/97] ARM: dts: stm32: update slew-rate properties for sdmmc1
  on stm32mp157
 
 Relax sdmmc1 pins slew-rate to minimize peak currents.
@@ -13,7 +13,7 @@ Signed-off-by: Yann Gautier <yann.gautier@st.com>
  1 file changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
-index 0a3a7d66737b..2904bc8c6a41 100644
+index 0a3a7d66737b6..2904bc8c6a41f 100644
 --- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 @@ -731,14 +731,19 @@
@@ -75,5 +75,5 @@ index 0a3a7d66737b..2904bc8c6a41 100644
  					bias-pull-up;
  				};
 -- 
-2.25.1
+2.27.0
 

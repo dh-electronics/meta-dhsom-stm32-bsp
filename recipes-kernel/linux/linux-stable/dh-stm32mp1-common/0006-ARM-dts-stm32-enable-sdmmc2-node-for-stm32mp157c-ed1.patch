@@ -1,7 +1,7 @@
-From f649c18a83101b866e5658e6fc76045fc2096e01 Mon Sep 17 00:00:00 2001
+From 30770e4080cafb7b7d175849819b2b2b8b0284c7 Mon Sep 17 00:00:00 2001
 From: Yann Gautier <yann.gautier@st.com>
 Date: Wed, 6 Nov 2019 11:09:37 +0100
-Subject: [PATCH 06/10] ARM: dts: stm32: enable sdmmc2 node for stm32mp157c-ed1
+Subject: [PATCH 06/97] ARM: dts: stm32: enable sdmmc2 node for stm32mp157c-ed1
  board
 
 On STM32MP157C-ED1, the eMMC is connected on instance 2 of SDMMC
@@ -16,7 +16,7 @@ Signed-off-by: Yann Gautier <yann.gautier@st.com>
  2 files changed, 134 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
-index 2904bc8c6a41..a907d93f8916 100644
+index 2904bc8c6a41f..a907d93f89161 100644
 --- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
 @@ -808,6 +808,124 @@
@@ -145,7 +145,7 @@ index 2904bc8c6a41..a907d93f8916 100644
  				pins {
  					pinmux = <STM32_PINMUX('G', 12, AF8)>; /* SPDIF_IN1 */
 diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
-index 1d426ea8bdaf..b40a6b9a7aa6 100644
+index 1d426ea8bdafa..b40a6b9a7aa69 100644
 --- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
 @@ -302,6 +302,22 @@
@@ -172,5 +172,5 @@ index 1d426ea8bdaf..b40a6b9a7aa6 100644
  	status = "okay";
  	/* spare dmas for other usage */
 -- 
-2.25.1
+2.27.0
 

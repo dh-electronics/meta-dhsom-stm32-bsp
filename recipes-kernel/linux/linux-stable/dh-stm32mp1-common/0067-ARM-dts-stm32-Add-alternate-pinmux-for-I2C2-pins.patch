@@ -1,0 +1,50 @@
+From 330ef38e9f0bf0e675b58f827d05062f650da179 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 16 Apr 2020 13:05:37 +0200
+Subject: [PATCH 67/97] ARM: dts: stm32: Add alternate pinmux for I2C2 pins
+
+Add another mux option for I2C2 pins, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index d32accf29769c..5153e021f9891 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -427,6 +427,23 @@
+ 				};
+ 			};
+ 
++			i2c2_pins_c: i2c2-4 {
++				pins {
++					pinmux = <STM32_PINMUX('F', 1, AF4)>, /* I2C2_SCL */
++						 <STM32_PINMUX('H', 5, AF4)>; /* I2C2_SDA */
++					bias-disable;
++					drive-open-drain;
++					slew-rate = <0>;
++				};
++			};
++
++			i2c2_pins_sleep_c: i2c2-5 {
++				pins {
++					pinmux = <STM32_PINMUX('F', 1, ANALOG)>, /* I2C2_SCL */
++						 <STM32_PINMUX('H', 5, ANALOG)>; /* I2C2_SDA */
++				};
++			};
++
+ 			i2c5_pins_a: i2c5-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('A', 11, AF4)>, /* I2C5_SCL */
+-- 
+2.27.0
+

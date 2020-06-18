@@ -1,0 +1,34 @@
+From 59a158fce30c07c134d08f012509b47f583b2aaf Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Wed, 29 Jan 2020 16:36:25 +0100
+Subject: [PATCH 81/97] dmaengine: stm32-dma: use dma_set_max_seg_size to set
+ the sg limit
+
+This patch adds dma_set_max_seg_size to define sg dma constraint.
+This constraint may be taken into account by client to scatter/gather
+its buffer.
+
+Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Link: https://lore.kernel.org/r/20200129153628.29329-6-amelie.delaunay@st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/dma/stm32-dma.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index 7e7780de47f1c..c518f1367fbb0 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -1317,6 +1317,8 @@ static int stm32_dma_probe(struct platform_device *pdev)
+ 		reset_control_deassert(dmadev->rst);
+ 	}
+ 
++	dma_set_max_seg_size(&pdev->dev, STM32_DMA_ALIGNED_MAX_DATA_ITEMS);
++
+ 	dma_cap_set(DMA_SLAVE, dd->cap_mask);
+ 	dma_cap_set(DMA_PRIVATE, dd->cap_mask);
+ 	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
+-- 
+2.27.0
+

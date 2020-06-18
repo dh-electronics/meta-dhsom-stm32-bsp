@@ -1,0 +1,36 @@
+From 8d3b3e2ac4da352444c219a5da53bc2e56963eb5 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 27 Mar 2020 01:38:01 +0100
+Subject: [PATCH 53/97] ARM: dts: stm32: Enable GPU on AV96
+
+Enable the GPU present on the STM32MP1 populated on AV96.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 1dcaf4fd510c3..256eae11ce219 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -140,6 +140,10 @@
+ 	};
+ };
+ 
++&gpu {
++	status = "okay";
++};
++
+ &i2c1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c1_pins_b>;
+-- 
+2.27.0
+

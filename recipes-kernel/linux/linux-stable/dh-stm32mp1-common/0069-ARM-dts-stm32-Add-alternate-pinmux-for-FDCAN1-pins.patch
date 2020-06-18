@@ -1,0 +1,53 @@
+From 3199535823b13f91eb8a8f18b560e46b386e2957 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 16 Apr 2020 13:05:55 +0200
+Subject: [PATCH 69/97] ARM: dts: stm32: Add alternate pinmux for FDCAN1 pins
+
+Add another mux option for FDCAN1 pins, this is used on AV96 board.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+index 5153e021f9891..33a1ef8c4be4e 100644
+--- a/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp157-pinctrl.dtsi
+@@ -713,6 +713,26 @@
+ 				};
+ 			};
+ 
++			m_can1_pins_b: m-can1-1 {
++				pins1 {
++					pinmux = <STM32_PINMUX('A', 12, AF9)>; /* CAN1_TX */
++					slew-rate = <1>;
++					drive-push-pull;
++					bias-disable;
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('A', 11, AF9)>; /* CAN1_RX */
++					bias-disable;
++				};
++			};
++
++			m_can1_sleep_pins_b: m_can1-sleep-1 {
++				pins {
++					pinmux = <STM32_PINMUX('A', 12, ANALOG)>, /* CAN1_TX */
++						 <STM32_PINMUX('A', 11, ANALOG)>; /* CAN1_RX */
++				};
++			};
++
+ 			pwm2_pins_a: pwm2-0 {
+ 				pins {
+ 					pinmux = <STM32_PINMUX('A', 3, AF1)>; /* TIM2_CH4 */
+-- 
+2.27.0
+
