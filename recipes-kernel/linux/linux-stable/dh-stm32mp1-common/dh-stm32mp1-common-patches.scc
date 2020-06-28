@@ -95,3 +95,4 @@ patch 0094-ARM-dts-stm32-use-32KB-SRAM-buffer-for-DCMI-DMA-tran.patch
 patch 0095-ARM-dts-stm32-Add-alternate-pinmux-for-RCC-pin.patch
 patch 0096-ARM-dts-stm32-Add-alternate-pinmux-for-DCMI-pins.patch
 patch 0097-ARM-dts-stm32-Add-DT-overlay-for-STM32MP1-Avenger96-.patch
+patch 0098-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
