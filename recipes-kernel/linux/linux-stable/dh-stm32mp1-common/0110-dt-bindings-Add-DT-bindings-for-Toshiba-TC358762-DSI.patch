@@ -1,0 +1,58 @@
+From e6708f2b8efeecbd29b82fff0e5d0f6033337345 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 3 Jul 2020 03:02:31 +0200
+Subject: [PATCH 110/113] dt-bindings: Add DT bindings for Toshiba TC358762
+ DSI-to-DPI bridge
+
+Add DT bindings for Toshiba TC358762 DSI-to-DPI bridge, this
+one is used in the Raspberry Pi 7" touchscreen display unit.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+To: dri-devel@lists.freedesktop.org
+Cc: Eric Anholt <eric@anholt.net>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: devicetree@vger.kernel.org
+---
+ .../display/bridge/toshiba,tc358762.txt       | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/toshiba,tc358762.txt
+
+diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358762.txt b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358762.txt
+new file mode 100644
+index 000000000000..3de8d3ab2cb7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358762.txt
+@@ -0,0 +1,29 @@
++TC358764 MIPI-DSI to DPI panel bridge
++
++Required properties:
++  - compatible: "toshiba,tc358762"
++  - reg: the virtual channel number of a DSI peripheral
++  - vddc-supply: core voltage supply, 1.2V
++
++The device node can contain following 'port' child nodes,
++according to the OF graph bindings defined in [1]:
++  0: DSI Input, not required, if the bridge is DSI controlled
++  1: DPI Output, mandatory
++
++[1]: Documentation/devicetree/bindings/media/video-interfaces.txt
++
++Example:
++
++	bridge@0 {
++		reg = <0>;
++		compatible = "toshiba,tc358762";
++		vddc-supply = <&vcc_1v2_reg>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		port@1 {
++			reg = <1>;
++			lvds_ep: endpoint {
++				remote-endpoint = <&panel_ep>;
++			};
++		};
++	};
+-- 
+2.27.0
+

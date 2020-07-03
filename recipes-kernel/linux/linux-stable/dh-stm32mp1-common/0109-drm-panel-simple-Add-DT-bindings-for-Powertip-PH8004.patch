@@ -1,0 +1,65 @@
+From 3c06b41d250222df45ed3c7114d8f5bfecb2acc1 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 2 Jul 2020 22:23:22 +0200
+Subject: [PATCH 109/113] drm/panel: simple: Add DT bindings for Powertip
+ PH800480T013
+
+Add support for Powertip PH800480T013 800x480 parallel LCD, this
+one is used in the Raspberry Pi 7" touchscreen display unit.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+To: dri-devel@lists.freedesktop.org
+Cc: Eric Anholt <eric@anholt.net>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: devicetree@vger.kernel.org
+---
+ drivers/gpu/drm/panel/panel-simple.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 8abb31f83ffc..cd5ae5dab36b 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2440,6 +2440,28 @@ static const struct panel_desc pda_91_00156_a0  = {
+ 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+ };
+ 
++static const struct drm_display_mode powertip_ph800480t013_idf02_mode = {
++	.clock = 24750,
++	.hdisplay = 800,
++	.hsync_start = 800 + 54,
++	.hsync_end = 800 + 54 + 2,
++	.htotal = 800 + 54 + 2 + 44,
++	.vdisplay = 480,
++	.vsync_start = 480 + 49,
++	.vsync_end = 480 + 49 + 2,
++	.vtotal = 480 + 49 + 2 + 22,
++	.vrefresh = 50,
++};
++
++static const struct panel_desc powertip_ph800480t013_idf02  = {
++	.modes = &powertip_ph800480t013_idf02_mode,
++	.num_modes = 1,
++	.size = {
++		.width = 152,
++		.height = 91,
++	},
++	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
++};
+ 
+ static const struct drm_display_mode qd43003c0_40_mode = {
+ 	.clock = 9000,
+@@ -3346,6 +3368,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "pda,91-00156-a0",
+ 		.data = &pda_91_00156_a0,
++	}, {
++		.compatible = "powertip,ph800480t013-idf02",
++		.data = &powertip_ph800480t013_idf02,
+ 	}, {
+ 		.compatible = "qiaodian,qd43003c0-40",
+ 		.data = &qd43003c0_40,
+-- 
+2.27.0
+
