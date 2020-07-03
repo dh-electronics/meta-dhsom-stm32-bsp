@@ -111,3 +111,4 @@ patch 0110-dt-bindings-Add-DT-bindings-for-Toshiba-TC358762-DSI.patch
 patch 0111-drm-bridge-tc358762-Add-basic-driver-for-Toshiba-TC3.patch
 patch 0112-regulator-rpi-panel-Add-regulator-backlight-driver-f.patch
 patch 0113-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
+patch 0114-ARM-dts-stm32-Add-PDK2-DTO-for-DH-638-100-DSI-mezzan.patch
