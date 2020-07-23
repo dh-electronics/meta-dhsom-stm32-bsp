@@ -1,0 +1,8 @@
+define KMACHINE dh-stm32mp1-dhcom-drc02
+define KTYPE standard
+define KARCH arm
+branch dh-stm32mp1-dhcom-drc02
+kconf hardware dh-stm32mp1-dhcom-drc02.cfg
+kconf non-hardware dh-stm32mp1-dhcom-drc02-non_hardware.cfg
+
+include dh-stm32mp1-common-patches.scc

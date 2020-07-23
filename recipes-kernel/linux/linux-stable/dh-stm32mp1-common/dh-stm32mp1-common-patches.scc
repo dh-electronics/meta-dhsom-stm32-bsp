@@ -161,3 +161,9 @@ patch 0161-ARM-dts-stm32-Add-DT-overlay-for-STM32MP1-Avenger96-.patch
 patch 0162-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
 patch 0163-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
 patch 0164-ARM-dts-stm32-Add-PDK2-DTO-for-DH-638-100-DSI-mezzan.patch
+patch 0165-tty-serial-Add-modem-control-gpio-support-for-STM32-.patch
+patch 0166-serial-stm32-add-no_console_suspend-support.patch
+patch 0167-serial-stm32-Use-generic-DT-binding-for-announcing-R.patch
+patch 0168-serial-stm32-Add-RS485-RTS-GPIO-control.patch
+patch 0169-ARM-dts-stm32-Move-ethernet-PHY-into-SoM-DT.patch
+patch 0170-ARM-dts-stm32-Add-DHSOM-based-DRC02-board.patch

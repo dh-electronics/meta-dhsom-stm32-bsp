@@ -1,7 +1,7 @@
 From 5a3a661b9317c46d1ceb9b0d954a56994d88ac07 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 3 Jul 2020 03:58:28 +0200
-Subject: [PATCH 163/163] ARM: dts: stm32: Add PDK2 DTO for DH 638-100 DSI
+Subject: [PATCH 163/169] ARM: dts: stm32: Add PDK2 DTO for DH 638-100 DSI
  mezzanine with RPi 7inch display
 
 Add DT overlay for the PDK2 board for DH 638-100 mezzanine card with

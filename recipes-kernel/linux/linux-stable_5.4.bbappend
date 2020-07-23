@@ -7,6 +7,11 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://dh-stm32mp1-common;type=kmeta;destsuffix=dh-stm32mp1-common \
 	"
 
+SRC_URI_append_dh-stm32mp1-dhcom-drc02 = " \
+	file://dh-stm32mp1-dhcom-drc02;type=kmeta;destsuffix=dh-stm32mp1-dhcom-drc02 \
+	"
+KERNEL_FEATURES_dh-stm32mp1-dhcom-drc02 = " dh-stm32mp1-dhcom-drc02-standard.scc "
+
 SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
 	file://dh-stm32mp1-dhcom-pdk2;type=kmeta;destsuffix=dh-stm32mp1-dhcom-pdk2 \
 	"
