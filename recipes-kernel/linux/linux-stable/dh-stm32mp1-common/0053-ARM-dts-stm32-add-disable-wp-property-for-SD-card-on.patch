@@ -1,0 +1,60 @@
+From 4ae70aa9552e2b99a8c9474073e943dbcc2b24f0 Mon Sep 17 00:00:00 2001
+From: Yann Gautier <yann.gautier@st.com>
+Date: Wed, 4 Mar 2020 09:09:55 +0100
+Subject: [PATCH 053/163] ARM: dts: stm32: add disable-wp property for SD-card
+ on STM32MP1 boards
+
+On STM32MP1 DK1, DK2, ED1 and EV1 boards, there is only a micro SD socket.
+This is also the case on Avenger board.
+They don't support the Write Protect pin.
+The disable-wp is then added in the SD-cards sdmmc1 nodes.
+This avoids executing some code and a warning during driver probe.
+
+Upstream-Status: Backport [79e96505387281cb42f5defd7621751c8e97207f]
+Signed-off-by: Yann Gautier <yann.gautier@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 1 +
+ arch/arm/boot/dts/stm32mp157c-ed1.dts       | 1 +
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi      | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 1f73179c1ad1..081037b510bc 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -296,6 +296,7 @@
+ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
+ 	cd-gpios = <&gpioi 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++	disable-wp;
+ 	st,sig-dir;
+ 	st,neg-edge;
+ 	st,use-ckin;
+diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+index 432528732600..d042a04e85d7 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+@@ -311,6 +311,7 @@
+ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a &sdmmc1_dir_pins_a>;
+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a &sdmmc1_dir_sleep_pins_a>;
+ 	cd-gpios = <&gpiog 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++	disable-wp;
+ 	st,sig-dir;
+ 	st,neg-edge;
+ 	st,use-ckin;
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+index 524f142ce95e..bdf74b39f874 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+@@ -477,6 +477,7 @@
+ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
+ 	cd-gpios = <&gpiob 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++	disable-wp;
+ 	st,neg-edge;
+ 	bus-width = <4>;
+ 	vmmc-supply = <&v3v3>;
+-- 
+2.27.0
+

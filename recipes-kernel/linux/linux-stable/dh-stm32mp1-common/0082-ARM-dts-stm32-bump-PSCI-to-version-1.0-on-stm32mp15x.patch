@@ -1,0 +1,35 @@
+From cdab7ffc8e3e3205438b3ea1f887ca6b0ba4e101 Mon Sep 17 00:00:00 2001
+From: Etienne Carriere <etienne.carriere@st.com>
+Date: Wed, 6 May 2020 19:48:40 +0200
+Subject: [PATCH 082/163] ARM: dts: stm32: bump PSCI to version 1.0 on
+ stm32mp15x
+
+Declare PSCI v1.0 support instead of v0.1 as the former is supported
+by the PSCI firmware stacks stm32mp15x relies on.
+
+Upstream-Status: Backport [7d4d46ba051bd706fed1aea1f3996d18a2ad1a62]
+Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 3a709f333a7f..229a69478562 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -24,10 +24,8 @@
+ 	};
+ 
+ 	psci {
+-		compatible = "arm,psci";
++		compatible = "arm,psci-1.0";
+ 		method = "smc";
+-		cpu_off = <0x84000002>;
+-		cpu_on = <0x84000003>;
+ 	};
+ 
+ 	intc: interrupt-controller@a0021000 {
+-- 
+2.27.0
+

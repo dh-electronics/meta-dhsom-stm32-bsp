@@ -1,0 +1,51 @@
+From 6cf518d0d0c01ac2979c794872ae71a1ec978bb5 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 29 Apr 2020 18:37:33 +0200
+Subject: [PATCH 084/163] ARM: dts: stm32: Repair I2C2 operation on AV96
+
+The I2C2 uses different pinmux on AV96, use correct pinmux and
+also add comments about the I2C being present on the "low-speed"
+expansion connector X6.
+
+Upstream-Status: Backport [b1c1fe1d43e372212f577c3dfa56937ed0372085]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 271f38acfeb9..438c2f70813e 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -164,7 +164,7 @@
+ 	};
+ };
+ 
+-&i2c1 {
++&i2c1 {	/* X6 I2C1 */
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c1_pins_b>;
+ 	i2c-scl-rising-time-ns = <185>;
+@@ -174,9 +174,9 @@
+ 	/delete-property/dma-names;
+ };
+ 
+-&i2c2 {
++&i2c2 {	/* X6 I2C2 */
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&i2c2_pins_b1 &i2c2_pins_b2>;
++	pinctrl-0 = <&i2c2_pins_c>;
+ 	i2c-scl-rising-time-ns = <185>;
+ 	i2c-scl-falling-time-ns = <20>;
+ 	status = "okay";
+-- 
+2.27.0
+

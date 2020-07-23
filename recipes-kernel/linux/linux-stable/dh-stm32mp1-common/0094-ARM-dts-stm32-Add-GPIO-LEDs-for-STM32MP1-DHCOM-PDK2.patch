@@ -1,0 +1,65 @@
+From feae8fe66f01210264d9b660f9b0ff263aec0107 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 13 May 2020 20:10:18 +0200
+Subject: [PATCH 094/163] ARM: dts: stm32: Add GPIO LEDs for STM32MP1 DHCOM
+ PDK2
+
+Add bindings for the four GPIO LEDs on DH PDK2 board. Note that LED5
+GPIO-E may conflict with touchscreen interrupt, hence LED5 must be
+disabled when using the DH 560-200 display unit with touchscreen.
+
+Upstream-Status: Backport [81d5fc7197984c793ae90c5516657fe8902b3f18]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts | 28 ++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+index e5036c9b9e92..b380268750f3 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+@@ -89,6 +89,34 @@
+ 		};
+ 	};
+ 
++	led {
++		compatible = "gpio-leds";
++
++		led-0 {
++			label = "green:led5";
++			gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		led-1 {
++			label = "green:led6";
++			gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		led-2 {
++			label = "green:led7";
++			gpios = <&gpioi 2 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		led-3 {
++			label = "green:led8";
++			gpios = <&gpioi 3 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++	};
++
+ 	panel {
+ 		compatible = "edt,etm0700g0edh6";
+ 		backlight = <&display_bl>;
+-- 
+2.27.0
+

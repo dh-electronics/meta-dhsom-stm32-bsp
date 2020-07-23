@@ -1,0 +1,72 @@
+From e19f2ca93417d8112d70aa40d3b630cef3655690 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@st.com>
+Date: Mon, 6 Jan 2020 14:28:34 +0100
+Subject: [PATCH 049/163] ARM: dts: stm32: add wakeup-source in all I2C nodes
+ of stm32mp157c
+
+Add the wakeup-source property in all i2c nodes of
+the SoC stm32mp157c so that those I2C controllers can become
+wakeup-source.
+
+Upstream-Status: Backport [b65b6fc569255dd36cbbb112a4339b6365d86dab]
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 938e7fd58621..ce6e978aa20e 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -483,6 +483,7 @@
+ 			resets = <&rcc I2C1_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+@@ -496,6 +497,7 @@
+ 			resets = <&rcc I2C2_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+@@ -509,6 +511,7 @@
+ 			resets = <&rcc I2C3_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+@@ -522,6 +525,7 @@
+ 			resets = <&rcc I2C5_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+@@ -1480,6 +1484,7 @@
+ 			resets = <&rcc I2C4_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+@@ -1515,6 +1520,7 @@
+ 			resets = <&rcc I2C6_R>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.27.0
+

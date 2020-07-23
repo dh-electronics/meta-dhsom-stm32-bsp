@@ -1,0 +1,37 @@
+From aa14fdbcd93932cb72dd7b77d8dc831580d0a441 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@st.com>
+Date: Mon, 7 Oct 2019 16:34:01 +0200
+Subject: [PATCH 007/163] ARM: dts: stm32: remove usb phy-names entries on
+ stm32mp157c-ev1
+
+"phy-names" entries are not used. To be compliant with DT validation
+tool, those entries have to be remove.
+
+Upstream-Status: Backport [49bb8b69b52439f6ad9931b8d2ecfa5c196c9c44]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-ev1.dts | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+index 91fc0a315c49..eb5a0ba66e35 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+@@ -335,14 +335,12 @@
+ 
+ &usbh_ehci {
+ 	phys = <&usbphyc_port0>;
+-	phy-names = "usb";
+ 	status = "okay";
+ };
+ 
+ &usbotg_hs {
+ 	dr_mode = "peripheral";
+ 	phys = <&usbphyc_port1 0>;
+-	phy-names = "usb2-phy";
+ 	status = "okay";
+ };
+ 
+-- 
+2.27.0
+

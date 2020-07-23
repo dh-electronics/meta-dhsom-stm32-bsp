@@ -1,0 +1,35 @@
+From 8e6eef383216f75e3d3de0d9b088ffd410fa6d56 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Mon, 25 Mar 2019 16:10:43 +0100
+Subject: [PATCH 156/163] ARM: dts: stm32: use 32KB SRAM buffer for DCMI DMA
+ transfer on stm32mp157
+
+Use 32 KBytes SRAM buffer for DCMI DMA transfer.
+
+Change-Id: I233786eaa9d8c8e2833cd146b2682a5eba5cddfe
+Upstream-Status: Downstream stm32-gh v5.4-stm32mp [36d4a010e80a543ce9c803d3b402c20d4fd52fb7]
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Reviewed-on: https://gerrit.st.com/128350
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: CIBUILD <smet-aci-builds@lists.codex.cro.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 9ff9f7137d3e..459f349fc7f7 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1105,7 +1105,7 @@
+ 			resets = <&rcc CAMITF_R>;
+ 			clocks = <&rcc DCMI>;
+ 			clock-names = "mclk";
+-			dmas = <&dmamux1 75 0x400 0x0d>;
++			dmas = <&dmamux1 75 0x400 0x1d>;
+ 			dma-names = "tx";
+ 			status = "disabled";
+ 		};
+-- 
+2.27.0
+

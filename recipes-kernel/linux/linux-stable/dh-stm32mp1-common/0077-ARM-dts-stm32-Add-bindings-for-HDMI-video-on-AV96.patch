@@ -1,0 +1,133 @@
+From b3e70364fa1f33a01a9ec2dddf37aa6a135fe099 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 22 Apr 2020 12:46:09 +0200
+Subject: [PATCH 077/163] ARM: dts: stm32: Add bindings for HDMI video on AV96
+
+Fill in the HDMI video pipeline from AV96 into the DT.
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Upstream-Status: Backport [64e86752d7df5ac8dc83620607da850a20c47a2c]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 79 +++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index ebf34ae15185..85116e192b61 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -25,10 +25,28 @@
+ 		spi0 = &qspi;
+ 	};
+ 
++	/* XTal Q1 */
++	cec_clock: clk-cec-fixed {
++		#clock-cells = <0>;
++		compatible = "fixed-clock";
++		clock-frequency = <24000000>;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	hdmi-out {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi_con: endpoint {
++				remote-endpoint = <&adv7513_out>;
++			};
++		};
++	};
++
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0xc0000000 0x40000000>;
+@@ -302,6 +320,50 @@
+ 		};
+ 	};
+ 
++	hdmi-transmitter@3d {
++		compatible = "adi,adv7513";
++		reg = <0x3d>, <0x2d>, <0x4d>, <0x5d>;
++		reg-names = "main", "cec", "edid", "packet";
++		clocks = <&cec_clock>;
++		clock-names = "cec";
++
++		avdd-supply = <&v3v3>;
++		dvdd-supply = <&v3v3>;
++		pvdd-supply = <&v3v3>;
++		dvdd-3v-supply = <&v3v3>;
++		bgvdd-supply = <&v3v3>;
++
++		interrupts = <9 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-parent = <&gpiog>;
++
++		status = "okay";
++
++		adi,input-depth = <8>;
++		adi,input-colorspace = "rgb";
++		adi,input-clock = "1x";
++		adi,input-style = <1>;
++		adi,input-justification = "evenly";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				adv7513_in: endpoint {
++					remote-endpoint = <&ltdc_ep0_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				adv7513_out: endpoint {
++					remote-endpoint = <&hdmi_con>;
++				};
++			};
++		};
++	};
++
+ 	eeprom@53 {
+ 		compatible = "atmel,24c02";
+ 		reg = <0x53>;
+@@ -314,6 +376,23 @@
+ 	status = "okay";
+ };
+ 
++&ltdc {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&ltdc_pins_d>;
++	pinctrl-1 = <&ltdc_sleep_pins_d>;
++	status = "okay";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ltdc_ep0_out: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&adv7513_in>;
++		};
++	};
++};
++
+ &pwr_regulators {
+ 	vdd-supply = <&vdd_io>;
+ 	vdd_3v3_usbfs-supply = <&vdd_usb>;
+-- 
+2.27.0
+

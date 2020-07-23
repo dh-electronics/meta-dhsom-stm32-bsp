@@ -1,0 +1,56 @@
+From dd97d1942ee36f548b1df19abec69fc1f9596214 Mon Sep 17 00:00:00 2001
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Thu, 26 Mar 2020 23:02:06 +0100
+Subject: [PATCH 056/163] ARM: dts: stm32: preset stm32mp15x video #address-
+ and #size-cells
+
+The cell count for address and size is defined by the binding and not
+something a board would change. Avoid each board adding this
+boilerplate by having the cell size specification in the SoC DTSI.
+
+Upstream-Status: Backport [9c32f980d999b4f441044f94005b3e649d036694]
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 5 +++++
+ arch/arm/boot/dts/stm32mp157.dtsi | 7 +++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 5260818543e5..d70fc774e0a4 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1423,6 +1423,11 @@
+ 			clock-names = "lcd";
+ 			resets = <&rcc LTDC_R>;
+ 			status = "disabled";
++
++			port {
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
+ 		};
+ 
+ 		iwdg2: watchdog@5a002000 {
+diff --git a/arch/arm/boot/dts/stm32mp157.dtsi b/arch/arm/boot/dts/stm32mp157.dtsi
+index 5e733cd16ff9..54e73ccea446 100644
+--- a/arch/arm/boot/dts/stm32mp157.dtsi
++++ b/arch/arm/boot/dts/stm32mp157.dtsi
+@@ -24,7 +24,14 @@
+ 			clock-names = "pclk", "ref", "px_clk";
+ 			resets = <&rcc DSI_R>;
+ 			reset-names = "apb";
++			#address-cells = <1>;
++			#size-cells = <0>;
+ 			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
+ 		};
+ 	};
+ };
+-- 
+2.27.0
+

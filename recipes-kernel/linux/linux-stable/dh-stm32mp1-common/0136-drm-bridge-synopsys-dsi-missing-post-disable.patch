@@ -1,0 +1,36 @@
+From 44813c4f2fc27c0fcfd06798c05e83a312c41c27 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Yannick=20Fertr=C3=A9?= <yannick.fertre@st.com>
+Date: Tue, 21 Jan 2020 11:24:56 +0100
+Subject: [PATCH 136/163] drm/bridge/synopsys: dsi: missing post disable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Sometime the post_disable function is missing (not registered).
+
+Upstream-Status: Backport [7ca0116077f54d61a0449650e8e8ea3b278d9179]
+Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
+Reviewed-by: Philippe Cornu <philippe.cornu@st.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/1579602296-7683-1-git-send-email-yannick.fertre@st.com
+---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index eb46f3e12418..cf0f2c7ce634 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -823,7 +823,8 @@ static void dw_mipi_dsi_bridge_post_disable(struct drm_bridge *bridge)
+ 	 * This needs to be fixed in the drm_bridge framework and the API
+ 	 * needs to be updated to manage our own call chains...
+ 	 */
+-	dsi->panel_bridge->funcs->post_disable(dsi->panel_bridge);
++	if (dsi->panel_bridge->funcs->post_disable)
++		dsi->panel_bridge->funcs->post_disable(dsi->panel_bridge);
+ 
+ 	if (phy_ops->power_off)
+ 		phy_ops->power_off(dsi->plat_data->priv_data);
+-- 
+2.27.0
+

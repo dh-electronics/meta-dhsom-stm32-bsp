@@ -1,0 +1,52 @@
+From 5cae5832361f50eb3e8e1969cfd1fe5da41fb901 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 22 Apr 2020 12:45:59 +0200
+Subject: [PATCH 067/163] ARM: dts: stm32: Add missing ethernet PHY skews on
+ AV96
+
+The KS9031 PHY supports configurable PHY skews to compensate for
+the board routing. Fill in the correct values.
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Upstream-Status: Backport [701f9e65e5d6418a7c051762e87ade39b9dd88dc]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 4c31c8f4db7e..8198e22d81e7 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -108,6 +108,20 @@
+ 
+ 		phy0: ethernet-phy@7 {
+ 			reg = <7>;
++
++			rxc-skew-ps = <1500>;
++			rxdv-skew-ps = <540>;
++			rxd0-skew-ps = <420>;
++			rxd1-skew-ps = <420>;
++			rxd2-skew-ps = <420>;
++			rxd3-skew-ps = <420>;
++
++			txc-skew-ps = <1440>;
++			txen-skew-ps = <540>;
++			txd0-skew-ps = <420>;
++			txd1-skew-ps = <420>;
++			txd2-skew-ps = <420>;
++			txd3-skew-ps = <420>;
+ 		};
+ 	};
+ };
+-- 
+2.27.0
+

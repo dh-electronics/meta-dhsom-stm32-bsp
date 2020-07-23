@@ -1,0 +1,88 @@
+From 6252ed456dcd5f14eda4a42eba567249f9770285 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 13 May 2020 20:10:17 +0200
+Subject: [PATCH 093/163] ARM: dts: stm32: Add GPIO keys for STM32MP1 DHCOM
+ PDK2
+
+Add bindings for the four GPIO keys on DH PDK2 board. Note that TA1
+key is polled because it's IRQ line conflicts with ethernet IRQ, the
+rest of the GPIO keys, TA2, TA3, TA4, are interrupt-driven and wake
+up sources.
+
+Upstream-Status: Backport [87cabf9405cbfba439d59fa5d956e4c5e76a061c]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts | 43 ++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+index 13b1586d4a8f..e5036c9b9e92 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include "stm32mp157c-dhcom-som.dtsi"
++#include <dt-bindings/input/input.h>
+ #include <dt-bindings/pwm/pwm.h>
+ 
+ / {
+@@ -46,6 +47,48 @@
+ 		regulator-boot-on;
+ 	};
+ 
++	gpio-keys-polled {
++		compatible = "gpio-keys-polled";
++		#size-cells = <0>;
++		poll-interval = <20>;
++
++		/*
++		 * The EXTi IRQ line 3 is shared with touchscreen and ethernet,
++		 * so mark this as polled GPIO key.
++		 */
++		button-0 {
++			label = "TA1-GPIO-A";
++			linux,code = <KEY_A>;
++			gpios = <&gpiof 3 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		#size-cells = <0>;
++
++		button-1 {
++			label = "TA2-GPIO-B";
++			linux,code = <KEY_B>;
++			gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++
++		button-2 {
++			label = "TA3-GPIO-C";
++			linux,code = <KEY_C>;
++			gpios = <&gpioi 11 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++
++		button-3 {
++			label = "TA4-GPIO-D";
++			linux,code = <KEY_D>;
++			gpios = <&gpiod 12 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++	};
++
+ 	panel {
+ 		compatible = "edt,etm0700g0edh6";
+ 		backlight = <&display_bl>;
+-- 
+2.27.0
+

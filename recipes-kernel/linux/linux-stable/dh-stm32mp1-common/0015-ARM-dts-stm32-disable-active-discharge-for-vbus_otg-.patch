@@ -1,0 +1,31 @@
+From fd486654c52b13cf47f94f5871812957e5007b12 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@st.com>
+Date: Fri, 11 Oct 2019 16:05:33 +0200
+Subject: [PATCH 015/163] ARM: dts: stm32: disable active-discharge for
+ vbus_otg on stm32mp157a-avenger96
+
+Active discharge is not needed on vbus_otg and generate unneeded current
+consumption.
+
+Upstream-Status: Backport [9737a358b56ac82940e133c5f850e58bf4955997]
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 9fafbb08aa5d..85c45a4bf9f6 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -255,7 +255,6 @@
+ 				regulator-name = "vbus_otg";
+ 				interrupts = <IT_OCP_OTG 0>;
+ 				interrupt-parent = <&pmic>;
+-				regulator-active-discharge = <1>;
+ 			};
+ 
+ 			vbus_sw: pwr_sw2 {
+-- 
+2.27.0
+

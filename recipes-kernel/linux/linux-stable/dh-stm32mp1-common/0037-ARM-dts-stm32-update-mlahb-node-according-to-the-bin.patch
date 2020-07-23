@@ -1,0 +1,36 @@
+From a4e39e654917c5ae2b91abe5da0dd1bc59a9d548 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Date: Thu, 19 Dec 2019 13:18:15 +0100
+Subject: [PATCH 037/163] ARM: dts: stm32: update mlahb node according to the
+ bindings on stm32mp15
+
+Update of the mlahb node according to to DT bindings using json-schema
+
+Upstream-Status: Backport [a09c71817f73a1354b55513aaa5acb90d840fa8e]
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 3dd570b10181..047051c56ef7 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1669,10 +1669,11 @@
+ 		};
+ 	};
+ 
+-	mlahb {
+-		compatible = "simple-bus";
++	mlahb: ahb {
++		compatible = "st,mlahb", "simple-bus";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
++		ranges;
+ 		dma-ranges = <0x00000000 0x38000000 0x10000>,
+ 			     <0x10000000 0x10000000 0x60000>,
+ 			     <0x30000000 0x30000000 0x60000>;
+-- 
+2.27.0
+

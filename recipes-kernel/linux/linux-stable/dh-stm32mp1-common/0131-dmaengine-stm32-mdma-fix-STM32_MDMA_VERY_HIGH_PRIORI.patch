@@ -1,0 +1,37 @@
+From 05e14e8444d1f823e0b974ae725c37d504e5afe0 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Mon, 2 Dec 2019 09:17:42 +0100
+Subject: [PATCH 131/163] dmaengine: stm32-mdma: fix
+ STM32_MDMA_VERY_HIGH_PRIORITY value
+
+STM32_MDMA_VERY_HIGH_PRIORITY is b11 not 0x11, so fix it with 0x3.
+
+Change-Id: I61830cc173389cbc7eefce1ce57e0aae05da1fbf
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Upstream-Status: Downstream stm32-gh v5.4-stm32mp [f34126837f1e8269f9353fc1d8eb6e884ac7d9a2]
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/151523
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: CIBUILD <smet-aci-builds@lists.codex.cro.st.com>
+Reviewed-by: Jean Philippe ROMAIN <jean-philippe.romain@st.com>
+Reviewed-by: Alexandre TORGUE <alexandre.torgue@st.com>
+---
+ drivers/dma/stm32-mdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index fbc641ff894d..6c963c757444 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -199,7 +199,7 @@
+ #define STM32_MDMA_MAX_CHANNELS		63
+ #define STM32_MDMA_MAX_REQUESTS		256
+ #define STM32_MDMA_MAX_BURST		128
+-#define STM32_MDMA_VERY_HIGH_PRIORITY	0x11
++#define STM32_MDMA_VERY_HIGH_PRIORITY	0x3
+ 
+ #define STM32_DMA_SRAM_GRANULARITY	PAGE_SIZE
+ 
+-- 
+2.27.0
+

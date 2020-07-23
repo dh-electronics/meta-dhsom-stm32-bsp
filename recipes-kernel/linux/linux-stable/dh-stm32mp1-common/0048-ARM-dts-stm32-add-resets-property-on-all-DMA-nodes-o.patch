@@ -1,0 +1,56 @@
+From 07630a3a6ce0b1832b720339f3a40bfade6d8377 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Tue, 4 Feb 2020 15:10:53 +0100
+Subject: [PATCH 048/163] ARM: dts: stm32: add resets property on all DMA nodes
+ on stm32mp151
+
+resets property is well-managed in DMA drivers. In previous products,
+there were no reset lines, that's why they are missing here in dma1, dma2,
+dmamux and mdma nodes.
+
+Upstream-Status: Backport [cc775a83db657def8b0329da27467ae2188593a8]
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 12cbcdaa3bca..938e7fd58621 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -959,6 +959,7 @@
+ 				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc DMA1>;
++			resets = <&rcc DMA1_R>;
+ 			#dma-cells = <4>;
+ 			st,mem2mem;
+ 			dma-requests = <8>;
+@@ -976,6 +977,7 @@
+ 				     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc DMA2>;
++			resets = <&rcc DMA2_R>;
+ 			#dma-cells = <4>;
+ 			st,mem2mem;
+ 			dma-requests = <8>;
+@@ -989,6 +991,7 @@
+ 			dma-masters = <&dma1 &dma2>;
+ 			dma-channels = <16>;
+ 			clocks = <&rcc DMAMUX>;
++			resets = <&rcc DMAMUX_R>;
+ 		};
+ 
+ 		adc: adc@48003000 {
+@@ -1281,6 +1284,7 @@
+ 			reg = <0x58000000 0x1000>;
+ 			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc MDMA>;
++			resets = <&rcc MDMA_R>;
+ 			#dma-cells = <5>;
+ 			dma-channels = <32>;
+ 			dma-requests = <48>;
+-- 
+2.27.0
+

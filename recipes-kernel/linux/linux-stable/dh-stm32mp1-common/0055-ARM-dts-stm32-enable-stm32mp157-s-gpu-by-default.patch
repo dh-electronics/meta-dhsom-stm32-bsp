@@ -1,0 +1,78 @@
+From 7b446e7ba5bb1ddfaaa6e71a2711af86195eaad5 Mon Sep 17 00:00:00 2001
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Thu, 26 Mar 2020 23:02:05 +0100
+Subject: [PATCH 055/163] ARM: dts: stm32: enable stm32mp157's &gpu by default
+
+In the original stm32mp157c.dtsi, the GPU was disabled as some SoC
+variants lacked a GPU. We now have separate a dtsi for each SoC
+variant and variants without a GPU lack the node altogether.
+
+As we need no board support for using the GPU, enable it by default
+and while at it remove the now redundant status = "okay" in existing
+board device trees.
+
+Suggested-by: Lucas Stach <l.stach@pengutronix.de>
+Upstream-Status: Backport [88fcb8a340e5221fdb0317a26f16d1df1776f0a9]
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157.dtsi            | 1 -
+ arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi | 4 ----
+ arch/arm/boot/dts/stm32mp157c-ed1.dts        | 1 -
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi       | 1 -
+ 4 files changed, 7 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157.dtsi b/arch/arm/boot/dts/stm32mp157.dtsi
+index 3f0a4a91cce6..5e733cd16ff9 100644
+--- a/arch/arm/boot/dts/stm32mp157.dtsi
++++ b/arch/arm/boot/dts/stm32mp157.dtsi
+@@ -15,7 +15,6 @@
+ 			clocks = <&rcc GPU>, <&rcc GPU_K>;
+ 			clock-names = "bus" ,"core";
+ 			resets = <&rcc GPU_R>;
+-			status = "disabled";
+ 		};
+ 
+ 		dsi: dsi@5a000000 {
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
+index f81dc3134135..f97e0d2ecf17 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-som.dtsi
+@@ -97,10 +97,6 @@
+ 	status = "okay";
+ };
+ 
+-&gpu {
+-	status = "okay";
+-};
+-
+ &i2c4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c4_pins_a>;
+diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+index d042a04e85d7..ed429b89616b 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+@@ -126,7 +126,6 @@
+ 
+ &gpu {
+ 	contiguous-area = <&gpu_reserved>;
+-	status = "okay";
+ };
+ 
+ &i2c4 {
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+index bdf74b39f874..cb4acd198b0c 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+@@ -137,7 +137,6 @@
+ 
+ &gpu {
+ 	contiguous-area = <&gpu_reserved>;
+-	status = "okay";
+ };
+ 
+ &i2c1 {
+-- 
+2.27.0
+

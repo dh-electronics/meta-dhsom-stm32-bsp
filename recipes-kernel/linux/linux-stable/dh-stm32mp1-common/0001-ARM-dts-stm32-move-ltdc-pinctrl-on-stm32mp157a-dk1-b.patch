@@ -1,0 +1,47 @@
+From ba8ba2f2712074a9dfc4d00ae7291cf5078d0eca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Yannick=20Fertr=C3=A9?= <yannick.fertre@st.com>
+Date: Fri, 2 Aug 2019 16:08:51 +0200
+Subject: [PATCH 001/163] ARM: dts: stm32: move ltdc pinctrl on stm32mp157a dk1
+ board
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The ltdc pinctrl must be in the display controller node and
+not in the peripheral node (hdmi bridge).
+
+Upstream-Status: Backport [29d437022f1efd3122fe7298e9a42274c7cc1773]
+Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
+Reviewed-by: Philippe Cornu <philippe.cornu@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-dk1.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+index 0615d1c8a6fc..b28d75434b63 100644
+--- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+@@ -146,9 +146,6 @@
+ 		reset-gpios = <&gpioa 10 GPIO_ACTIVE_LOW>;
+ 		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+ 		interrupt-parent = <&gpiog>;
+-		pinctrl-names = "default", "sleep";
+-		pinctrl-0 = <&ltdc_pins_a>;
+-		pinctrl-1 = <&ltdc_pins_sleep_a>;
+ 		status = "okay";
+ 
+ 		ports {
+@@ -356,6 +353,9 @@
+ };
+ 
+ &ltdc {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&ltdc_pins_a>;
++	pinctrl-1 = <&ltdc_pins_sleep_a>;
+ 	status = "okay";
+ 
+ 	port {
+-- 
+2.27.0
+

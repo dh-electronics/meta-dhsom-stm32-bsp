@@ -1,0 +1,148 @@
+From bf15d69c47c04d4a1b57d19669e410a994ee066f Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@st.com>
+Date: Fri, 11 Oct 2019 16:05:30 +0200
+Subject: [PATCH 012/163] ARM: dts: stm32: add PWR regulators support on
+ stm32mp157
+
+This patch adds support of STM32 PWR regulators on
+stm32mp157c. This replace dummy fixed regulators on
+stm32mp157c-ed1 and stm32mp157c-dk2.
+
+Upstream-Status: Backport [111ef3fdddfefec5f42ab6ee773e9840413e9d14]
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts |  5 +++++
+ arch/arm/boot/dts/stm32mp157a-dk1.dts       |  5 +++++
+ arch/arm/boot/dts/stm32mp157c-dk2.dts       |  8 -------
+ arch/arm/boot/dts/stm32mp157c-ed1.dts       | 21 +++++--------------
+ arch/arm/boot/dts/stm32mp157c.dtsi          | 23 +++++++++++++++++++++
+ 5 files changed, 38 insertions(+), 24 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 7b8c3f25861c..8b19879ac609 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -285,6 +285,11 @@
+ 	status = "okay";
+ };
+ 
++&pwr_regulators {
++	vdd-supply = <&vdd>;
++	vdd_3v3_usbfs-supply = <&vdd_usb>;
++};
++
+ &rng1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+index 1cffe0a7770b..7835d230f69c 100644
+--- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+@@ -432,6 +432,11 @@
+ 	status = "okay";
+ };
+ 
++&pwr_regulators {
++	vdd-supply = <&vdd>;
++	vdd_3v3_usbfs-supply = <&vdd_usb>;
++};
++
+ &rng1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/stm32mp157c-dk2.dts b/arch/arm/boot/dts/stm32mp157c-dk2.dts
+index d44a7c6c2e20..d26adcbeba33 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dk2.dts
+@@ -11,14 +11,6 @@
+ / {
+ 	model = "STMicroelectronics STM32MP157C-DK2 Discovery Board";
+ 	compatible = "st,stm32mp157c-dk2", "st,stm32mp157";
+-
+-	reg18: reg18 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "reg18";
+-		regulator-min-microvolt = <1800000>;
+-		regulator-max-microvolt = <1800000>;
+-		regulator-always-on;
+-	};
+ };
+ 
+ &dsi {
+diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+index 3d29b0c553e5..1c424bc6ec88 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+@@ -74,22 +74,6 @@
+ 		serial0 = &uart4;
+ 	};
+ 
+-	reg11: reg11 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "reg11";
+-		regulator-min-microvolt = <1100000>;
+-		regulator-max-microvolt = <1100000>;
+-		regulator-always-on;
+-	};
+-
+-	reg18: reg18 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "reg18";
+-		regulator-min-microvolt = <1800000>;
+-		regulator-max-microvolt = <1800000>;
+-		regulator-always-on;
+-	};
+-
+ 	sd_switch: regulator-sd_switch {
+ 		compatible = "regulator-gpio";
+ 		regulator-name = "sd_switch";
+@@ -293,6 +277,11 @@
+ 	status = "okay";
+ };
+ 
++&pwr_regulators {
++	vdd-supply = <&vdd>;
++	vdd_3v3_usbfs-supply = <&vdd_usb>;
++};
++
+ &rng1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
+index f98e0370c0bc..ed8b258256d7 100644
+--- a/arch/arm/boot/dts/stm32mp157c.dtsi
++++ b/arch/arm/boot/dts/stm32mp157c.dtsi
+@@ -1079,6 +1079,29 @@
+ 			#reset-cells = <1>;
+ 		};
+ 
++		pwr_regulators: pwr@50001000 {
++			compatible = "st,stm32mp1,pwr-reg";
++			reg = <0x50001000 0x10>;
++
++			reg11: reg11 {
++				regulator-name = "reg11";
++				regulator-min-microvolt = <1100000>;
++				regulator-max-microvolt = <1100000>;
++			};
++
++			reg18: reg18 {
++				regulator-name = "reg18";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++			};
++
++			usb33: usb33 {
++				regulator-name = "usb33";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++			};
++		};
++
+ 		exti: interrupt-controller@5000d000 {
+ 			compatible = "st,stm32mp1-exti", "syscon";
+ 			interrupt-controller;
+-- 
+2.27.0
+

@@ -1,0 +1,73 @@
+From fc2b134061fc2c12bac6fc49a3e2fac98740f911 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@st.com>
+Date: Thu, 7 Nov 2019 09:47:54 +0100
+Subject: [PATCH 098/163] net: ethernet: stmmac: Add support for syscfg clock
+
+Add optional support for syscfg clock in dwmac-stm32.c
+Now Syscfg clock is activated automatically when syscfg
+registers are used
+
+Upstream-Status: Backport [caee3174731ca342f8e418c642ae780ea9664a73]
+Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+---
+ .../net/ethernet/stmicro/stmmac/dwmac-stm32.c | 23 +++++++------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 595af2ec89fb..95ffaec4ab42 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -155,18 +155,14 @@ static int stm32mp1_clk_prepare(struct stm32_dwmac *dwmac, bool prepare)
+ 		ret = clk_prepare_enable(dwmac->syscfg_clk);
+ 		if (ret)
+ 			return ret;
+-
+-		if (dwmac->clk_eth_ck) {
+-			ret = clk_prepare_enable(dwmac->clk_eth_ck);
+-			if (ret) {
+-				clk_disable_unprepare(dwmac->syscfg_clk);
++		ret = clk_prepare_enable(dwmac->clk_eth_ck);
++		if (ret) {
++			clk_disable_unprepare(dwmac->syscfg_clk);
+ 				return ret;
+-			}
+ 		}
+ 	} else {
+ 		clk_disable_unprepare(dwmac->syscfg_clk);
+-		if (dwmac->clk_eth_ck)
+-			clk_disable_unprepare(dwmac->clk_eth_ck);
++		clk_disable_unprepare(dwmac->clk_eth_ck);
+ 	}
+ 	return ret;
+ }
+@@ -320,12 +316,10 @@ static int stm32mp1_parse_data(struct stm32_dwmac *dwmac,
+ 		return PTR_ERR(dwmac->clk_ethstp);
+ 	}
+ 
+-	/*  Clock for sysconfig */
++	/*  Optional Clock for sysconfig */
+ 	dwmac->syscfg_clk = devm_clk_get(dev, "syscfg-clk");
+-	if (IS_ERR(dwmac->syscfg_clk)) {
+-		dev_err(dev, "No syscfg clock provided...\n");
+-		return PTR_ERR(dwmac->syscfg_clk);
+-	}
++	if (IS_ERR(dwmac->syscfg_clk))
++		dwmac->syscfg_clk = NULL;
+ 
+ 	/* Get IRQ information early to have an ability to ask for deferred
+ 	 * probe if needed before we went too far with resource allocation.
+@@ -437,8 +431,7 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ 
+ 	clk_disable_unprepare(dwmac->clk_tx);
+ 	clk_disable_unprepare(dwmac->syscfg_clk);
+-	if (dwmac->clk_eth_ck)
+-		clk_disable_unprepare(dwmac->clk_eth_ck);
++	clk_disable_unprepare(dwmac->clk_eth_ck);
+ 
+ 	return ret;
+ }
+-- 
+2.27.0
+

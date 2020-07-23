@@ -1,0 +1,55 @@
+From 6f024b0f431b6b1de6f09456a9f47026732e873a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 22 Apr 2020 12:46:13 +0200
+Subject: [PATCH 081/163] ARM: dts: stm32: Rename LEDs to match silkscreen on
+ AV96
+
+The LED labels do not match the silkscreen on the board, fix it.
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Upstream-Status: Backport [878b0ba5c4d299a6cf5438e6b9b9950f875a9819]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index a1b3baf7564d..271f38acfeb9 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -55,21 +55,21 @@
+ 	led {
+ 		compatible = "gpio-leds";
+ 		led1 {
+-			label = "green:user1";
++			label = "green:user0";
+ 			gpios = <&gpioz 7 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "heartbeat";
+ 			default-state = "off";
+ 		};
+ 
+ 		led2 {
+-			label = "green:user2";
++			label = "green:user1";
+ 			gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "mmc0";
+ 			default-state = "off";
+ 		};
+ 
+ 		led3 {
+-			label = "green:user3";
++			label = "green:user2";
+ 			gpios = <&gpiog 0 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "mmc1";
+ 			default-state = "off";
+-- 
+2.27.0
+

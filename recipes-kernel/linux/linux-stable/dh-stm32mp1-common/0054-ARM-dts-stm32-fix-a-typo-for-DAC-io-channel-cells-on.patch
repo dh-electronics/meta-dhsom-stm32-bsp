@@ -1,0 +1,41 @@
+From 74d07811f6b4ffdfb73bc5d930328b25c2dc6cd3 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@st.com>
+Date: Thu, 19 Mar 2020 11:30:26 +0100
+Subject: [PATCH 054/163] ARM: dts: stm32: fix a typo for DAC io-channel-cells
+ on stm32mp15
+
+Fix a typo on STM32MP15 DAC, e.g. s/channels/channel
+
+Fixes: da6cddc7e8a4 ("ARM: dts: stm32: Add DAC support to stm32mp157c")
+
+Upstream-Status: Downstream stm32-gh v5.4-stm32mp [253a80cc9776e7bdeff68654d2040ab37b5ba022]
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 3ea05ba48215..5260818543e5 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -550,14 +550,14 @@
+ 
+ 			dac1: dac@1 {
+ 				compatible = "st,stm32-dac";
+-				#io-channels-cells = <1>;
++				#io-channel-cells = <1>;
+ 				reg = <1>;
+ 				status = "disabled";
+ 			};
+ 
+ 			dac2: dac@2 {
+ 				compatible = "st,stm32-dac";
+-				#io-channels-cells = <1>;
++				#io-channel-cells = <1>;
+ 				reg = <2>;
+ 				status = "disabled";
+ 			};
+-- 
+2.27.0
+

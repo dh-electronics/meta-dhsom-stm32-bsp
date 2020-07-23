@@ -1,0 +1,57 @@
+From 014cee812bc087c9eb2de308cf057ae1f72b0a29 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 29 Apr 2020 18:37:39 +0200
+Subject: [PATCH 090/163] ARM: dts: stm32: Add bindings for ADC on AV96
+
+Add ADC bindings to AV96 DT, the ADC inputs are present on
+low-speed expansion connector X6.
+
+Upstream-Status: Backport [8f92c7565325ed74f8f1440328c78d1b0085d573]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 2a293ed91c9b..72ca282898eb 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -128,6 +128,27 @@
+ 	};
+ };
+ 
++&adc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&adc12_ain_pins_b>;
++	vdd-supply = <&vdd>;
++	vdda-supply = <&vdda>;
++	vref-supply = <&vdda>;
++	status = "okay";
++
++	adc1: adc@0 {
++		st,adc-channels = <0 1 6>;
++		st,min-sample-time-nsecs = <5000>;
++		status = "okay";
++	};
++
++	adc2: adc@100 {
++		st,adc-channels = <0 1 2>;
++		st,min-sample-time-nsecs = <5000>;
++		status = "okay";
++	};
++};
++
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_c>;
+-- 
+2.27.0
+

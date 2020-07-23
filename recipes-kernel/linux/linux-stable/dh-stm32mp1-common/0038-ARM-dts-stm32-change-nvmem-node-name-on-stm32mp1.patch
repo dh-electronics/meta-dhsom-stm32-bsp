@@ -1,0 +1,31 @@
+From 25a60af6fdb1438e4781b405588a3139d29afd6d Mon Sep 17 00:00:00 2001
+From: Benjamin Gaignard <benjamin.gaignard@st.com>
+Date: Thu, 19 Dec 2019 15:41:17 +0100
+Subject: [PATCH 038/163] ARM: dts: stm32: change nvmem node name on stm32mp1
+
+Change non volatile node name from nvmem to efuse to be compliant
+with yaml schema.
+
+Upstream-Status: Backport [11ee8c7e44f5e66a771d0a6e07d73a66b4a696f4]
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 047051c56ef7..fb41d0778b00 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1485,7 +1485,7 @@
+ 			status = "disabled";
+ 		};
+ 
+-		bsec: nvmem@5c005000 {
++		bsec: efuse@5c005000 {
+ 			compatible = "st,stm32mp15-bsec";
+ 			reg = <0x5c005000 0x400>;
+ 			#address-cells = <1>;
+-- 
+2.27.0
+

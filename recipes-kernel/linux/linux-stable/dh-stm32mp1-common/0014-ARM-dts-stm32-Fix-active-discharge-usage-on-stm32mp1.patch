@@ -1,0 +1,67 @@
+From 5be45dca254849595d4407d58eaa12fa5c0fb4f2 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@st.com>
+Date: Fri, 11 Oct 2019 16:05:32 +0200
+Subject: [PATCH 014/163] ARM: dts: stm32: Fix active discharge usage on
+ stm32mp157
+
+Active discharge is a uint32 not a boolean.
+
+Upstream-Status: Backport [c9b2fe7ea0a7051ad66ebc0387ce7176f72a39c7]
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts | 4 ++--
+ arch/arm/boot/dts/stm32mp157a-dk1.dts       | 2 +-
+ arch/arm/boot/dts/stm32mp157c-ed1.dts       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 8b19879ac609..9fafbb08aa5d 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -255,14 +255,14 @@
+ 				regulator-name = "vbus_otg";
+ 				interrupts = <IT_OCP_OTG 0>;
+ 				interrupt-parent = <&pmic>;
+-				regulator-active-discharge;
++				regulator-active-discharge = <1>;
+ 			};
+ 
+ 			vbus_sw: pwr_sw2 {
+ 				regulator-name = "vbus_sw";
+ 				interrupts = <IT_OCP_SWOUT 0>;
+ 				interrupt-parent = <&pmic>;
+-				regulator-active-discharge;
++				regulator-active-discharge = <1>;
+ 			};
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+index 6440e7ee18d8..984a47cbd13d 100644
+--- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
+@@ -360,7 +360,7 @@
+ 			 vbus_sw: pwr_sw2 {
+ 				regulator-name = "vbus_sw";
+ 				interrupts = <IT_OCP_SWOUT 0>;
+-				regulator-active-discharge;
++				regulator-active-discharge = <1>;
+ 			 };
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/stm32mp157c-ed1.dts b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+index 6a9594bcf04c..b8cc0fb0ec48 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ed1.dts
+@@ -239,7 +239,7 @@
+ 			 vbus_sw: pwr_sw2 {
+ 				regulator-name = "vbus_sw";
+ 				interrupts = <IT_OCP_SWOUT 0>;
+-				regulator-active-discharge;
++				regulator-active-discharge = <1>;
+ 			 };
+ 		};
+ 
+-- 
+2.27.0
+

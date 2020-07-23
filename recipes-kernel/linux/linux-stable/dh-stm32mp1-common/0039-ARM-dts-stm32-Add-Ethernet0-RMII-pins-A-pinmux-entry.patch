@@ -1,0 +1,69 @@
+From b7941fa6db0333ab2df924ce28e9a305560b8345 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 19 Jan 2020 20:11:38 +0100
+Subject: [PATCH 039/163] ARM: dts: stm32: Add Ethernet0 RMII pins A pinmux
+ entry on stm32mp1
+
+Add pinmux entry for ethernet0 RMII .
+
+Upstream-Status: Backport [ab7f98c0c5468b22931025e4cb4b0b1019f018c7]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 34 ++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index 0237d4ddaa92..f40f66a692a1 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -162,6 +162,40 @@
+ 		};
+ 	};
+ 
++	ethernet0_rmii_pins_a: rmii-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('G', 13, AF11)>, /* ETH1_RMII_TXD0 */
++				 <STM32_PINMUX('G', 14, AF11)>, /* ETH1_RMII_TXD1 */
++				 <STM32_PINMUX('B', 11, AF11)>, /* ETH1_RMII_TX_EN */
++				 <STM32_PINMUX('A', 1, AF0)>,   /* ETH1_RMII_REF_CLK */
++				 <STM32_PINMUX('A', 2, AF11)>,  /* ETH1_MDIO */
++				 <STM32_PINMUX('C', 1, AF11)>;  /* ETH1_MDC */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('C', 4, AF11)>,  /* ETH1_RMII_RXD0 */
++				 <STM32_PINMUX('C', 5, AF11)>,  /* ETH1_RMII_RXD1 */
++				 <STM32_PINMUX('A', 7, AF11)>;  /* ETH1_RMII_CRS_DV */
++			bias-disable;
++		};
++	};
++
++	ethernet0_rmii_pins_sleep_a: rmii-sleep-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('G', 13, ANALOG)>, /* ETH1_RMII_TXD0 */
++				 <STM32_PINMUX('G', 14, ANALOG)>, /* ETH1_RMII_TXD1 */
++				 <STM32_PINMUX('B', 11, ANALOG)>, /* ETH1_RMII_TX_EN */
++				 <STM32_PINMUX('A', 2, ANALOG)>,  /* ETH1_MDIO */
++				 <STM32_PINMUX('C', 1, ANALOG)>,  /* ETH1_MDC */
++				 <STM32_PINMUX('C', 4, ANALOG)>,  /* ETH1_RMII_RXD0 */
++				 <STM32_PINMUX('C', 5, ANALOG)>,  /* ETH1_RMII_RXD1 */
++				 <STM32_PINMUX('A', 1, ANALOG)>,  /* ETH1_RMII_REF_CLK */
++				 <STM32_PINMUX('A', 7, ANALOG)>;  /* ETH1_RMII_CRS_DV */
++		};
++	};
++
+ 	fmc_pins_a: fmc-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('D', 4, AF12)>, /* FMC_NOE */
+-- 
+2.27.0
+

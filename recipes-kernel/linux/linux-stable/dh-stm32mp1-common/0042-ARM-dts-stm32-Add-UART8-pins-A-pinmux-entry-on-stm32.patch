@@ -1,0 +1,48 @@
+From fcb996b4f45bb61921b0db8922f599e09abcd908 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 19 Jan 2020 20:11:41 +0100
+Subject: [PATCH 042/163] ARM: dts: stm32: Add UART8 pins A pinmux entry on
+ stm32mp1
+
+Add pinmux for UART8.
+
+Upstream-Status: Backport [a7959919709e7ebe023eec362b8ae8db838588d4]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index ac6fb333fee6..024a86e626b2 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -1107,6 +1107,19 @@
+ 			bias-disable;
+ 		};
+ 	};
++
++	uart8_pins_a: uart8-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('E', 0, AF8)>; /* UART8_RX */
++			bias-disable;
++		};
++	};
+ };
+ 
+ &pinctrl_z {
+-- 
+2.27.0
+

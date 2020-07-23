@@ -1,0 +1,36 @@
+From 7d7c811b4fd66ac66c1c7cacac94e05307040c1d Mon Sep 17 00:00:00 2001
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+Date: Fri, 28 Feb 2020 10:25:57 +0100
+Subject: [PATCH 111/163] usb: dwc2: Silence warning about supplies during
+ deferred probe
+
+Don't confuse user with meaningless warning about the failure in getting
+supplies in case of deferred probe.
+
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Upstream-Status: Backport [8e11a977c8eb02aa06604b11cfb4e43eb8287537]
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+---
+ drivers/usb/dwc2/platform.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index a1be01b9c65b..c7808e5318fe 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -285,7 +285,9 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 	ret = devm_regulator_bulk_get(hsotg->dev, ARRAY_SIZE(hsotg->supplies),
+ 				      hsotg->supplies);
+ 	if (ret) {
+-		dev_err(hsotg->dev, "failed to request supplies: %d\n", ret);
++		if (ret != -EPROBE_DEFER)
++			dev_err(hsotg->dev, "failed to request supplies: %d\n",
++				ret);
+ 		return ret;
+ 	}
+ 	return 0;
+-- 
+2.27.0
+

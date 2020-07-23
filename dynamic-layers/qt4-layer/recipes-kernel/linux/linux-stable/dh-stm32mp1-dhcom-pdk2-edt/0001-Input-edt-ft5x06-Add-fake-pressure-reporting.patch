@@ -6,6 +6,7 @@ Subject: [PATCH] Input: edt-ft5x06: Add fake pressure reporting
 Report binary pressure to satisfy requirements of broken userspace.
 For example tslib test tools need this pressure reporting.
 
+Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  drivers/input/touchscreen/edt-ft5x06.c | 3 +++

@@ -1,0 +1,251 @@
+From 75fdc3fe3a9675be75563499e5875a25e9c5c33c Mon Sep 17 00:00:00 2001
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Thu, 26 Mar 2020 23:02:08 +0100
+Subject: [PATCH 058/163] ARM: dts: stm32: use uniform label names for sleep
+ pinctrl phandles
+
+Some labels follow the *_sleep_pins_* naming scheme, but some also use
+*_pins_sleep_*. Because most labels use the former and for uniformity
+with variants like sdmmc1_b4_pins_a and sdmmc1_dir_pins_a, adopt the
+*_sleep_pins_* scheme throughout.
+
+Upstream-Status: Backport [6ddf19e09fb29d1661ca4f0a5eaff7141879c7fe]
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi     | 28 ++++++++++----------
+ arch/arm/boot/dts/stm32mp157a-avenger96.dts  |  2 +-
+ arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts |  4 +--
+ arch/arm/boot/dts/stm32mp157c-ev1.dts        |  2 +-
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi       | 10 +++----
+ 5 files changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index 73c07f0dfad2..1971a9603ba6 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -37,7 +37,7 @@
+ 		};
+ 	};
+ 
+-	cec_pins_sleep_a: cec-sleep-0 {
++	cec_sleep_pins_a: cec-sleep-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('A', 15, ANALOG)>; /* HDMI_CEC */
+ 		};
+@@ -52,7 +52,7 @@
+ 		};
+ 	};
+ 
+-	cec_pins_sleep_b: cec-sleep-1 {
++	cec_sleep_pins_b: cec-sleep-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('B', 6, ANALOG)>; /* HDMI_CEC */
+ 		};
+@@ -142,7 +142,7 @@
+ 		};
+ 	};
+ 
+-	ethernet0_rgmii_pins_sleep_a: rgmii-sleep-0 {
++	ethernet0_rgmii_sleep_pins_a: rgmii-sleep-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('G', 5, ANALOG)>, /* ETH_RGMII_CLK125 */
+ 				 <STM32_PINMUX('G', 4, ANALOG)>, /* ETH_RGMII_GTX_CLK */
+@@ -182,7 +182,7 @@
+ 		};
+ 	};
+ 
+-	ethernet0_rmii_pins_sleep_a: rmii-sleep-0 {
++	ethernet0_rmii_sleep_pins_a: rmii-sleep-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('G', 13, ANALOG)>, /* ETH1_RMII_TXD0 */
+ 				 <STM32_PINMUX('G', 14, ANALOG)>, /* ETH1_RMII_TXD1 */
+@@ -250,7 +250,7 @@
+ 		};
+ 	};
+ 
+-	i2c1_pins_sleep_a: i2c1-1 {
++	i2c1_sleep_pins_a: i2c1-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('D', 12, ANALOG)>, /* I2C1_SCL */
+ 				 <STM32_PINMUX('F', 15, ANALOG)>; /* I2C1_SDA */
+@@ -267,7 +267,7 @@
+ 		};
+ 	};
+ 
+-	i2c1_pins_sleep_b: i2c1-3 {
++	i2c1_sleep_pins_b: i2c1-3 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('F', 14, ANALOG)>, /* I2C1_SCL */
+ 				 <STM32_PINMUX('F', 15, ANALOG)>; /* I2C1_SDA */
+@@ -284,7 +284,7 @@
+ 		};
+ 	};
+ 
+-	i2c2_pins_sleep_a: i2c2-1 {
++	i2c2_sleep_pins_a: i2c2-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('H', 4, ANALOG)>, /* I2C2_SCL */
+ 				 <STM32_PINMUX('H', 5, ANALOG)>; /* I2C2_SDA */
+@@ -300,7 +300,7 @@
+ 		};
+ 	};
+ 
+-	i2c2_pins_sleep_b1: i2c2-3 {
++	i2c2_sleep_pins_b1: i2c2-3 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('H', 5, ANALOG)>; /* I2C2_SDA */
+ 		};
+@@ -316,7 +316,7 @@
+ 		};
+ 	};
+ 
+-	i2c5_pins_sleep_a: i2c5-1 {
++	i2c5_sleep_pins_a: i2c5-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('A', 11, ANALOG)>, /* I2C5_SCL */
+ 				 <STM32_PINMUX('A', 12, ANALOG)>; /* I2C5_SDA */
+@@ -335,7 +335,7 @@
+ 		};
+ 	};
+ 
+-	i2s2_pins_sleep_a: i2s2-1 {
++	i2s2_sleep_pins_a: i2s2-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('I', 3, ANALOG)>, /* I2S2_SDO */
+ 				 <STM32_PINMUX('B', 9, ANALOG)>, /* I2S2_WS */
+@@ -379,7 +379,7 @@
+ 		};
+ 	};
+ 
+-	ltdc_pins_sleep_a: ltdc-a-1 {
++	ltdc_sleep_pins_a: ltdc-a-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('G',  7, ANALOG)>, /* LCD_CLK */
+ 				 <STM32_PINMUX('I', 10, ANALOG)>, /* LCD_HSYNC */
+@@ -448,7 +448,7 @@
+ 		};
+ 	};
+ 
+-	ltdc_pins_sleep_b: ltdc-b-1 {
++	ltdc_sleep_pins_b: ltdc-b-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('I', 14, ANALOG)>, /* LCD_CLK */
+ 				 <STM32_PINMUX('I', 12, ANALOG)>, /* LCD_HSYNC */
+@@ -1145,7 +1145,7 @@
+ 		};
+ 	};
+ 
+-	i2c2_pins_sleep_b2: i2c2-1 {
++	i2c2_sleep_pins_b2: i2c2-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('Z', 0, ANALOG)>; /* I2C2_SCL */
+ 		};
+@@ -1161,7 +1161,7 @@
+ 		};
+ 	};
+ 
+-	i2c4_pins_sleep_a: i2c4-1 {
++	i2c4_sleep_pins_a: i2c4-1 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('Z', 4, ANALOG)>, /* I2C4_SCL */
+ 				 <STM32_PINMUX('Z', 5, ANALOG)>; /* I2C4_SDA */
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96.dts b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+index 081037b510bc..a865c035c18b 100644
+--- a/arch/arm/boot/dts/stm32mp157a-avenger96.dts
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96.dts
+@@ -82,7 +82,7 @@
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
+-	pinctrl-1 = <&ethernet0_rgmii_pins_sleep_a>;
++	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_a>;
+ 	pinctrl-names = "default", "sleep";
+ 	phy-mode = "rgmii";
+ 	max-speed = <1000>;
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+index af99e132e1b1..06ea8c1a7c56 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts
+@@ -77,7 +77,7 @@
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rmii_pins_a>;
+-	pinctrl-1 = <&ethernet0_rmii_pins_sleep_a>;
++	pinctrl-1 = <&ethernet0_rmii_sleep_pins_a>;
+ 	pinctrl-names = "default", "sleep";
+ 	phy-mode = "rmii";
+ 	max-speed = <100>;
+@@ -147,7 +147,7 @@
+ &ltdc {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&ltdc_pins_b>;
+-	pinctrl-1 = <&ltdc_pins_sleep_b>;
++	pinctrl-1 = <&ltdc_sleep_pins_b>;
+ 	status = "okay";
+ 
+ 	port {
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+index 079e9d0b00af..96baed76cf3a 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+@@ -137,7 +137,7 @@
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
+-	pinctrl-1 = <&ethernet0_rgmii_pins_sleep_a>;
++	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_a>;
+ 	pinctrl-names = "default", "sleep";
+ 	phy-mode = "rgmii-id";
+ 	max-speed = <1000>;
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+index 9c81e7f0c561..62c6c182d5be 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+@@ -112,14 +112,14 @@
+ &cec {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&cec_pins_b>;
+-	pinctrl-1 = <&cec_pins_sleep_b>;
++	pinctrl-1 = <&cec_sleep_pins_b>;
+ 	status = "okay";
+ };
+ 
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
+-	pinctrl-1 = <&ethernet0_rgmii_pins_sleep_a>;
++	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_a>;
+ 	pinctrl-names = "default", "sleep";
+ 	phy-mode = "rgmii-id";
+ 	max-speed = <1000>;
+@@ -142,7 +142,7 @@
+ &i2c1 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&i2c1_pins_a>;
+-	pinctrl-1 = <&i2c1_pins_sleep_a>;
++	pinctrl-1 = <&i2c1_sleep_pins_a>;
+ 	i2c-scl-rising-time-ns = <100>;
+ 	i2c-scl-falling-time-ns = <7>;
+ 	status = "okay";
+@@ -364,7 +364,7 @@
+ 	clock-names = "pclk", "i2sclk", "x8k", "x11k";
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&i2s2_pins_a>;
+-	pinctrl-1 = <&i2s2_pins_sleep_a>;
++	pinctrl-1 = <&i2s2_sleep_pins_a>;
+ 	status = "okay";
+ 
+ 	i2s2_port: port {
+@@ -388,7 +388,7 @@
+ &ltdc {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&ltdc_pins_a>;
+-	pinctrl-1 = <&ltdc_pins_sleep_a>;
++	pinctrl-1 = <&ltdc_sleep_pins_a>;
+ 	status = "okay";
+ 
+ 	port {
+-- 
+2.27.0
+

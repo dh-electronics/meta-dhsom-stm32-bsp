@@ -1,0 +1,45 @@
+From fd93bc59bd8a7c7a2301458674af3f21ad7e7477 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Yannick=20Fertr=C3=A9?= <yannick.fertre@st.com>
+Date: Fri, 4 Oct 2019 15:17:02 +0200
+Subject: [PATCH 005/163] ARM: dts: stm32: add focaltech touchscreen on
+ stm32mp157c-dk2 board
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Enable focaltech ft6236 touchscreen on STM32MP157C-DK2 board.
+
+Upstream-Status: Backport [7e6c337f689475c5071a5fe49d6074e5b7c690ee]
+Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-dk2.dts | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-dk2.dts b/arch/arm/boot/dts/stm32mp157c-dk2.dts
+index 20ea601a546d..d44a7c6c2e20 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dk2.dts
+@@ -61,6 +61,19 @@
+ 	};
+ };
+ 
++&i2c1 {
++	touchscreen@38 {
++		compatible = "focaltech,ft6236";
++		reg = <0x38>;
++		interrupts = <2 2>;
++		interrupt-parent = <&gpiof>;
++		interrupt-controller;
++		touchscreen-size-x = <480>;
++		touchscreen-size-y = <800>;
++		status = "okay";
++	};
++};
++
+ &ltdc {
+ 	status = "okay";
+ 
+-- 
+2.27.0
+
