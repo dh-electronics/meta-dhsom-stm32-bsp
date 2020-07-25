@@ -18,8 +18,8 @@ Cc: devicetree@vger.kernel.org
 ---
  drivers/gpu/drm/bridge/Kconfig    |   9 +
  drivers/gpu/drm/bridge/Makefile   |   1 +
- drivers/gpu/drm/bridge/tc358762.c | 341 ++++++++++++++++++++++++++++++
- 3 files changed, 351 insertions(+)
+ drivers/gpu/drm/bridge/tc358762.c | 354 ++++++++++++++++++++++++++++++
+ 3 files changed, 364 insertions(+)
  create mode 100644 drivers/gpu/drm/bridge/tc358762.c
 
 diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
@@ -59,7 +59,7 @@ new file mode 100644
 index 000000000000..6cceec426702
 --- /dev/null
 +++ b/drivers/gpu/drm/bridge/tc358762.c
-@@ -0,0 +1,341 @@
+@@ -0,0 +1,354 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -126,6 +126,7 @@ index 000000000000..6cceec426702
 +	struct drm_connector connector;
 +	struct regulator *regulator;
 +	struct drm_panel *panel;
++	bool pre_enabled;
 +	int error;
 +};
 +
@@ -226,6 +227,15 @@ index 000000000000..6cceec426702
 +	struct tc358762 *ctx = bridge_to_tc358762(bridge);
 +	int ret;
 +
++	/*
++	 * The post_disable hook might be called multiple times.
++	 * We want to avoid regulator imbalance below.
++	 */
++	if (!ctx->pre_enabled)
++		return;
++
++	ctx->pre_enabled = false;
++
 +	ret = drm_panel_unprepare(ctx->panel);
 +	if (ret < 0)
 +		dev_err(ctx->dev, "error unpreparing panel (%d)\n", ret);
@@ -251,6 +261,8 @@ index 000000000000..6cceec426702
 +	ret = drm_panel_prepare(ctx->panel);
 +	if (ret < 0)
 +		dev_err(ctx->dev, "error preparing panel (%d)\n", ret);
++
++	ctx->pre_enabled = true;
 +}
 +
 +static void tc358762_enable(struct drm_bridge *bridge)
@@ -343,6 +355,7 @@ index 000000000000..6cceec426702
 +	mipi_dsi_set_drvdata(dsi, ctx);
 +
 +	ctx->dev = dev;
++	ctx->pre_enabled = false;
 +
 +	/* TODO: Find out how to get dual-lane mode working */
 +	dsi->lanes = 1;
