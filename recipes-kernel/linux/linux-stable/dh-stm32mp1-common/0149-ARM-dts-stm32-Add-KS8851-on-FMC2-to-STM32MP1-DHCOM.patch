@@ -9,8 +9,8 @@ Upstream-Status: Work-in-progress, blocked by missing FMC2 EBI driver
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |   1 +
- arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  | 103 ++++++++++++++++++
- 2 files changed, 104 insertions(+)
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  | 109 ++++++++++++++++++
+ 2 files changed, 110 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
 index 7c4bd615b311..b7c46e0922f7 100644
@@ -28,7 +28,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index ba905196fb54..be647cd9e747 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -94,6 +94,52 @@
+@@ -94,6 +94,58 @@
  	status = "okay";
  };
  
@@ -65,11 +65,17 @@ index ba905196fb54..be647cd9e747 100644
 +			st,fmc2_ebi_cs_mux_enable;
 +			st,fmc2_ebi_cs_transaction_type = <4>;
 +			st,fmc2_ebi_cs_buswidth = <16>;
-+			st,fmc2_ebi_cs_address_setup = <6>;
-+			st,fmc2_ebi_cs_address_hold = <6>;
-+			st,fmc2_ebi_cs_data_setup = <127>;
-+			st,fmc2_ebi_cs_bus_turnaround = <9>;
-+			st,fmc2_ebi_cs_data_hold = <9>;
++			st,fmc2_ebi_cs_address_setup = <5>;
++			st,fmc2_ebi_cs_address_hold = <5>;
++			st,fmc2_ebi_cs_bus_turnaround = <5>;
++			st,fmc2_ebi_cs_data_setup = <45>;
++			st,fmc2_ebi_cs_data_hold = <1>;
++			st,fmc2_ebi_cs_write_address_setup = <5>;
++			st,fmc2_ebi_cs_write_address_hold = <5>;
++			st,fmc2_ebi_cs_write_bus_turnaround = <5>;
++			st,fmc2_ebi_cs_write_data_setup = <45>;
++			st,fmc2_ebi_cs_write_data_hold = <1>;
++
 +		};
 +	};
 +};
@@ -81,7 +87,7 @@ index ba905196fb54..be647cd9e747 100644
  &i2c4 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&i2c4_pins_a>;
-@@ -278,6 +324,63 @@
+@@ -278,6 +330,63 @@
  	status = "okay";
  };
  
