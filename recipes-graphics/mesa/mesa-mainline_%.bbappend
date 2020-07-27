@@ -1,6 +1,6 @@
-PACKAGECONFIG_APPEND_DH_STM32MP1 = " etnaviv kmsro gallium ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)} "
-PACKAGECONFIG_append_dh-stm32mp1-dhcom-pdk2 = " ${PACKAGECONFIG_APPEND_DH_STM32MP1} "
-DEFAULT_PREFERRENCE_dh-stm32mp1-dhcom-pdk2 = "1"
-PACKAGECONFIG_append_dh-stm32mp1-dhcor-avenger96 = " ${PACKAGECONFIG_APPEND_DH_STM32MP1} "
-DEFAULT_PREFERRENCE_dh-stm32mp1-dhcor-avenger96 = "1"
 # MESA_BUILD_TYPE = "debug"
+DEFAULT_PREFERRENCE_dh-stm32mp1-dhsom = "1"
+PACKAGECONFIG_append_dh-stm32mp1-dhsom = " \
+	etnaviv kmsro gallium \
+	${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)} \
+	"

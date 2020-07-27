@@ -1,18 +1,12 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
-DEPENDS_append_dh-stm32mp1-dhcom-pdk2 = "u-boot-mkimage-native"
-do_compile_append_dh-stm32mp1-dhcom-pdk2 () {
+DEPENDS_append_dh-stm32mp1-dhsom = "u-boot-mkimage-native"
+do_compile_append_dh-stm32mp1-dhsom () {
 	uboot-mkimage -A arm -T script -C none \
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
-DEPENDS_append_dh-stm32mp1-dhcor-avenger96 = "u-boot-mkimage-native"
-do_compile_append_dh-stm32mp1-dhcor-avenger96 () {
-	uboot-mkimage -A arm -T script -C none \
-		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
-}
-
-PATCHES_COMMON = " \
+SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://0001-arm-stm32mp1-activate-data-cache-in-SPL-and-before-r.patch \
@@ -65,12 +59,4 @@ PATCHES_COMMON = " \
 	file://0048-ARM-stm32-Make-bsec-available-in-SPL.patch \
 	file://0049-clk-stm32mp1-Handle-SoC-speed-grade-configs.patch \
 	file://0050-ARM-dts-stm32-Add-PLL-configs-for-DH-SoMs-with-STM32.patch \
-	"
-
-SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
-	${PATCHES_COMMON} \
-	"
-
-SRC_URI_append_dh-stm32mp1-dhcor-avenger96 = " \
-	${PATCHES_COMMON} \
 	"
