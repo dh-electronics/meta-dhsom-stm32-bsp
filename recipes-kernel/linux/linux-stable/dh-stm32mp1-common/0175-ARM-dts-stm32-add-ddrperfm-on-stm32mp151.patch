@@ -1,0 +1,40 @@
+From b0342f4504d8909906180531f2b927b26496eb3f Mon Sep 17 00:00:00 2001
+From: Gerald Baeza <gerald.baeza@st.com>
+Date: Wed, 13 May 2020 16:50:10 +0200
+Subject: [PATCH 174/174] ARM: dts: stm32: add ddrperfm on stm32mp151
+
+The DDRPERFM is the DDR Performance Monitor embedded
+in STM32MP1 SOC.
+
+Upstream-Status: Downstream stm32-gh v5.4-stm32mp [60cec9692dc7e8e2125d14e86c2d8a95490cdec2]
+Signed-off-by: Gerald Baeza <gerald.baeza@st.com>
+Change-Id: I627c6789c87a9c8b7121298356da43013351e410
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/166972
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: Alexandre TORGUE <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 5aaf371a7ae6..15d0dce77ad0 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1486,6 +1486,14 @@
+ 			};
+ 		};
+ 
++		ddrperfm: perf@5a007000 {
++			compatible = "st,stm32-ddr-pmu";
++			reg = <0x5a007000 0x400>;
++			clocks = <&rcc DDRPERFM>, <&rcc PLL2_R>;
++			clock-names = "bus", "ddr";
++			resets = <&rcc DDRPERFM_R>;
++		};
++
+ 		usart1: serial@5c000000 {
+ 			compatible = "st,stm32h7-uart";
+ 			reg = <0x5c000000 0x400>;
+-- 
+2.27.0
+

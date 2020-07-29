@@ -168,3 +168,7 @@ patch 0168-serial-stm32-Add-RS485-RTS-GPIO-control.patch
 patch 0169-ARM-dts-stm32-Move-ethernet-PHY-into-SoM-DT.patch
 patch 0170-ARM-dts-stm32-Add-DHSOM-based-DRC02-board.patch
 patch 0171-ARM-dts-stm32-add-arm-pmu-node-on-stm32mp15.patch
+patch 0172-Documentation-perf-stm32-ddrperfm-support.patch
+patch 0173-dt-bindings-perf-stm32-ddrperfm-support.patch
+patch 0174-perf-stm32-ddrperfm-driver-creation.patch
+patch 0175-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
