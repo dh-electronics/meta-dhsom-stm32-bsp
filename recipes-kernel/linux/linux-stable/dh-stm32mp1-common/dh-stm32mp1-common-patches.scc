@@ -172,3 +172,4 @@ patch 0172-Documentation-perf-stm32-ddrperfm-support.patch
 patch 0173-dt-bindings-perf-stm32-ddrperfm-support.patch
 patch 0174-perf-stm32-ddrperfm-driver-creation.patch
 patch 0175-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
+patch 0176-ARM-dts-stm32-Fix-sdmmc2-pins-again.patch
