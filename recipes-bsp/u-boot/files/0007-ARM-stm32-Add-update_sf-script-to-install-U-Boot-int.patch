@@ -1,0 +1,40 @@
+From 4e789ee397a580a16d92eb8e7ef5b78d98e5299e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 31 Jul 2020 12:36:51 +0200
+Subject: [PATCH] ARM: stm32: Add update_sf script to install U-Boot into SF
+
+Add script to read U-Boot from SD card and write it to matching
+locations in the SPI NOR, thus making the SPI NOR bootable.
+
+Upstream-Status: Inappropriate [custom environment]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ include/configs/stm32mp1.h | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
+index a99ce774c6..64179ff20a 100644
+--- a/include/configs/stm32mp1.h
++++ b/include/configs/stm32mp1.h
+@@ -161,7 +161,17 @@
+ 	STM32MP_BOOTCMD \
+ 	BOOTENV \
+ 	"boot_net_usb_start=true\0" \
+-	"usb_pgood_delay=1000\0"
++	"usb_pgood_delay=1000\0" \
++	"update_sf=" /* Erase SPI NOR and install U-Boot from SD */	\
++		"setexpr loadaddr1 ${loadaddr} + 0x1000000 && "		\
++		"load mmc 0:4 ${loadaddr1} /boot/u-boot-spl.stm32 && "	\
++		"env set filesize1 ${filesize} && "			\
++		"load mmc 0:4 ${loadaddr} /boot/u-boot.itb && "		\
++		"sf probe && sf erase 0 0x200000 && "			\
++		"sf update ${loadaddr1} 0 ${filesize1} && "		\
++		"sf update ${loadaddr1} 0x40000 ${filesize1} && "	\
++		"sf update ${loadaddr} 0x80000 ${filesize} && "		\
++		"env set filesize1 && env set loadaddr1\0"
+ 
+ #endif /* ifndef CONFIG_SPL_BUILD */
+ #endif /* ifdef CONFIG_DISTRO_DEFAULTS*/
+-- 
+2.27.0
+
