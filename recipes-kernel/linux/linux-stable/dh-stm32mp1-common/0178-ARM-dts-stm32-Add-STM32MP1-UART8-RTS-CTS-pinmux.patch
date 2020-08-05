@@ -1,0 +1,41 @@
+From 8eba3b85fde634c12d517680dda33f4f1b003bde Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 5 Aug 2020 14:03:04 +0200
+Subject: [PATCH 177/179] ARM: dts: stm32: Add STM32MP1 UART8 RTS/CTS pinmux
+
+Add extra RTS/CTS line pinmux for STM32MP1 UART8.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/patch/11701877/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index b16ac7a85cd6..f7e86305fa28 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -1717,6 +1717,14 @@
+ 		};
+ 	};
+ 
++	uart8_rtscts_pins_a: uart8rtscts-0 {
++		pins {
++			pinmux = <STM32_PINMUX('G', 7, AF8)>, /* UART8_RTS */
++				 <STM32_PINMUX('G', 10, AF8)>; /* UART8_CTS */
++			bias-disable;
++		};
++	};
++
+ 	usbotg_hs_pins_a: usbotg-hs-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* OTG_ID */
+-- 
+2.27.0
+

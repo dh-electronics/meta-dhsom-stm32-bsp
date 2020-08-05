@@ -174,3 +174,6 @@ patch 0174-perf-stm32-ddrperfm-driver-creation.patch
 patch 0175-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
 patch 0176-ARM-dts-stm32-Fix-sdmmc2-pins-again.patch
 patch 0177-ARM-dts-stm32-Add-USB-OTG-support-to-DH-PDK2.patch
+patch 0178-ARM-dts-stm32-Add-STM32MP1-UART8-RTS-CTS-pinmux.patch
+patch 0179-ARM-dts-stm32-Drop-QSPI-CS2-pinmux-on-DHCOM.patch
+patch 0180-ARM-dts-stm32-Enable-RTS-CTS-for-DH-PDK2-UART8.patch
