@@ -17,5 +17,6 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0006-ARM-stm32-Add-fitImage-its-entry-for-587-200-DHCOR-S.patch \
 	file://0007-ARM-stm32-Add-update_sf-script-to-install-U-Boot-int.patch \
 	file://0008-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96-again.patch \
+	file://0009-ARM-dts-stm32-Pull-UART4-RX-high-on-AV96.patch \
 	file://default-device-tree.cfg \
 	"

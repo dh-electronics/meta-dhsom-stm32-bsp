@@ -1,0 +1,35 @@
+From 97982dceb5853447430c5221ff1dc269646d9c2f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 10 Aug 2020 22:27:18 +0200
+Subject: [PATCH] ARM: dts: stm32: Pull UART4 RX high on AV96
+
+There is no dedicated pull resistor on the AV96 UART4 (console UART)
+pin. In case there is no UART adapter installed on the AV96, the line
+is floating and can trigger reception of garbage characters, which in
+turn can abort U-Boot autoboot. Add default pull up to mitigate this
+problem.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20200822204536.63827-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
+index cb92fc9c14..1ae57e1854 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
+@@ -75,6 +75,8 @@
+ 	};
+ 	pins2 {
+ 		u-boot,dm-pre-reloc;
++		/delete-property/ bias-disable;
++		bias-pull-up;
+ 	};
+ };
+ 
+-- 
+2.28.0
+
