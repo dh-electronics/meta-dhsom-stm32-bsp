@@ -1,7 +1,8 @@
-From 8111de77e0f8f20b92ce19a6240f0fd9b67a7f89 Mon Sep 17 00:00:00 2001
+From 02341f86e56a97326b3156e6f44944d39f1447df Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 26 Mar 2020 15:14:11 +0100
-Subject: [PATCH 152/163] ARM: dts: stm32: Add DT overlays for STM32MP1 Avenger96
+Subject: [PATCH 153/164] ARM: dts: stm32: Add DT overlays for STM32MP1
+ Avenger96
 
 Add DT overlays to support:
  - FDCAN1 on low-speed expansion X6
@@ -13,13 +14,13 @@ Add DT overlays to support:
 Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- arch/arm/boot/dts/Makefile                    |  5 +++
- ...tm32mp157a-avenger96-overlay-fdcan1-x6.dts | 17 +++++++++
- ...tm32mp157a-avenger96-overlay-fdcan2-x6.dts | 17 +++++++++
- ...p157a-avenger96-overlay-i2c1-eeprom-x6.dts | 23 ++++++++++++
- ...p157a-avenger96-overlay-i2c2-eeprom-x6.dts | 23 ++++++++++++
- ...p157a-avenger96-overlay-spi2-eeprom-x6.dts | 35 +++++++++++++++++++
- 6 files changed, 120 insertions(+)
+ arch/arm/boot/dts/Makefile                    |  5 ++++
+ ...tm32mp157a-avenger96-overlay-fdcan1-x6.dts | 10 +++++++
+ ...tm32mp157a-avenger96-overlay-fdcan2-x6.dts | 10 +++++++
+ ...p157a-avenger96-overlay-i2c1-eeprom-x6.dts | 17 +++++++++++
+ ...p157a-avenger96-overlay-i2c2-eeprom-x6.dts | 17 +++++++++++
+ ...p157a-avenger96-overlay-spi2-eeprom-x6.dts | 28 +++++++++++++++++++
+ 6 files changed, 87 insertions(+)
  create mode 100644 arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan1-x6.dts
  create mode 100644 arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan2-x6.dts
  create mode 100644 arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts
@@ -44,10 +45,10 @@ index 06b30cd275d5..c8d846cd4c7b 100644
  	stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dtbo \
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan1-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan1-x6.dts
 new file mode 100644
-index 000000000000..8672a5782c51
+index 000000000000..d4f565d9e73c
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan1-x6.dts
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,10 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -55,21 +56,30 @@ index 000000000000..8672a5782c51
 +/dts-v1/;
 +/plugin/;
 +
-+/ {
-+	fragment-0 {
-+		target-path = "/soc/can@4400e000";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
++&m_can1 {
++	status = "okay";
 +};
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan2-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan2-x6.dts
 new file mode 100644
-index 000000000000..629459a4395b
+index 000000000000..12f51f75f264
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-fdcan2-x6.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&m_can2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts
+new file mode 100644
+index 000000000000..bf9c3cbcdace
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts
 @@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
@@ -78,51 +88,22 @@ index 000000000000..629459a4395b
 +/dts-v1/;
 +/plugin/;
 +
-+/ {
-+	fragment-0 {
-+		target-path = "/soc/can@4400f000";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts
-new file mode 100644
-index 000000000000..107d9a5112e4
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dts
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
-+ */
-+/dts-v1/;
-+/plugin/;
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
 +
-+/ {
-+	fragment-0 {
-+		target-path = "/soc/i2c@40012000";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			eeprom@56 {
-+				compatible = "atmel,24c04";
-+				reg = <0x56>;
-+				pagesize = <16>;
-+			};
-+		};
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
 +	};
 +};
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c2-eeprom-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c2-eeprom-x6.dts
 new file mode 100644
-index 000000000000..7301634d58f1
+index 000000000000..a94b81325550
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-i2c2-eeprom-x6.dts
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -130,28 +111,22 @@ index 000000000000..7301634d58f1
 +/dts-v1/;
 +/plugin/;
 +
-+/ {
-+	fragment-0 {
-+		target-path = "/soc/i2c@40013000";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			eeprom@56 {
-+				compatible = "atmel,24c04";
-+				reg = <0x56>;
-+				pagesize = <16>;
-+			};
-+		};
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
 +	};
 +};
 diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-spi2-eeprom-x6.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-spi2-eeprom-x6.dts
 new file mode 100644
-index 000000000000..4b109e7c64a1
+index 000000000000..073aadff9db8
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-spi2-eeprom-x6.dts
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,28 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -159,34 +134,27 @@ index 000000000000..4b109e7c64a1
 +/dts-v1/;
 +/plugin/;
 +
-+/ {
-+	fragment-0 {
-+		target-path = "/soc/spi@4000b000";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		__overlay__ {
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi2_pins_a>;
-+			status = "okay";
-+			cs-gpios = <&gpioi 0 0>;
-+			/* Use PIO for the 128 Byte SPI EEPROM */
-+			/delete-property/dmas;
-+			/delete-property/dma-names;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
++&spi2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi2_pins_a>;
++	status = "okay";
++	cs-gpios = <&gpioi 0 0>;
++	/* Use PIO for the 128 Byte SPI EEPROM */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	#address-cells = <1>;
++	#size-cells = <0>;
 +
-+			at25@0 {
-+				compatible = "microchip,25aa010a", "atmel,at25";
-+				reg = <0>;
-+				spi-max-frequency = <5000000>;
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
 +
-+				at25,byte-len = <128>;
-+				at25,addr-mode = <1>;
-+				at25,page-size = <16>;
-+			};
-+		};
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
 +	};
 +};
 -- 
-2.27.0
+2.28.0
 
