@@ -178,3 +178,5 @@ patch 0178-ARM-dts-stm32-Add-STM32MP1-UART8-RTS-CTS-pinmux.patch
 patch 0179-ARM-dts-stm32-Drop-QSPI-CS2-pinmux-on-DHCOM.patch
 patch 0180-ARM-dts-stm32-Enable-RTS-CTS-for-DH-PDK2-UART8.patch
 patch 0181-ARM-dts-stm32-Enable-RTS-CTS-for-DH-AV96-UART7.patch
+patch 0182-drm-panel-simple-add-support-for-Chefree-CH101OLHLWH.patch
+patch 0183-ARM-dts-stm32-Add-PDK2-DTO-for-DH-505-200-LVDS-adapt.patch
