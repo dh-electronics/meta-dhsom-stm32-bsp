@@ -62,7 +62,7 @@ index d7d44645b10d..80af0336cff6 100644
 -	max-speed = <100>;
 -	phy-handle = <&phy0>;
 -	st,eth-ref-clk-sel;
--	phy-reset-gpios = <&gpioh 15 GPIO_ACTIVE_LOW>;
+-	phy-reset-gpios = <&gpioh 3 GPIO_ACTIVE_LOW>;
 -
 -	mdio0 {
 -		#address-cells = <1>;
@@ -124,7 +124,7 @@ index a6e8c5165dd1..c61f99c152e3 100644
 +	max-speed = <100>;
 +	phy-handle = <&phy0>;
 +	st,eth-ref-clk-sel;
-+	phy-reset-gpios = <&gpioh 15 GPIO_ACTIVE_LOW>;
++	phy-reset-gpios = <&gpioh 3 GPIO_ACTIVE_LOW>;
 +
 +	mdio0 {
 +		#address-cells = <1>;

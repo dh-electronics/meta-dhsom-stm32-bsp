@@ -147,7 +147,7 @@ patch 0147-drm-bridge-tc358762-Add-basic-driver-for-Toshiba-TC3.patch
 patch 0148-regulator-rpi-panel-Add-regulator-backlight-driver-f.patch
 patch 0149-ARM-dts-stm32-Add-KS8851-on-FMC2-to-STM32MP1-DHCOM.patch
 patch 0150-ARM-dts-stm32-Add-DT-overlays-for-STM32MP1-DHCOM-PDK.patch
-patch 0151-FIXME-ARM-dts-stm32-Disable-TSC2004-on-DHCOM-due-to-.patch
+patch 0151-ARM-dts-stm32-Swap-PHY-reset-GPIO-and-TSC2004-IRQ.patch
 patch 0152-ARM-dts-stm32-add-RTC-wakeup-interrupt-on-stm32mp157.patch
 patch 0153-ARM-dts-stm32-Add-DT-overlays-for-STM32MP1-Avenger96.patch
 patch 0154-ARM-dts-stm32-add-DMA-MDMA-chaining.patch
