@@ -180,3 +180,4 @@ patch 0180-ARM-dts-stm32-Enable-RTS-CTS-for-DH-PDK2-UART8.patch
 patch 0181-ARM-dts-stm32-Enable-RTS-CTS-for-DH-AV96-UART7.patch
 patch 0182-drm-panel-simple-add-support-for-Chefree-CH101OLHLWH.patch
 patch 0183-ARM-dts-stm32-Add-PDK2-DTO-for-DH-505-200-LVDS-adapt.patch
+patch 0184-ARM-dts-stm32-Add-PDK2-DTO-for-DH-497-200-with-ETM07.patch
