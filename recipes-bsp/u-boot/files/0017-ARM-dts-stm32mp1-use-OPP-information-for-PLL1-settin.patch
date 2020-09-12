@@ -1,0 +1,126 @@
+From 4df60e2efaa7faf8f286f3064e0b3fdd42798e24 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Mon, 25 May 2020 12:19:48 +0200
+Subject: [PATCH 17/18] ARM: dts: stm32mp1: use OPP information for PLL1
+ settings in SPL
+
+This patch allows to switch the CPU frequency to 800MHz on the
+ST Microelectronics board (DK1/DK2 and EV1) or dh electronics SOM
+using the STM32MP15x SOC and when it is supported by the HW
+(for STM32MP15xD and STM32MP15xF).
+
+Upstream-Status: Backport [4a87fea6de30b6e9c59a5abb6da1d0d84c984d15]
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp15-u-boot.dtsi         | 10 ++++++++++
+ arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi   |  9 ---------
+ arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi   |  9 ---------
+ arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi |  9 ---------
+ arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi |  9 ---------
+ 5 files changed, 10 insertions(+), 36 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp15-u-boot.dtsi b/arch/arm/dts/stm32mp15-u-boot.dtsi
+index a0d971ad88..66be7df9ae 100644
+--- a/arch/arm/dts/stm32mp15-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15-u-boot.dtsi
+@@ -88,6 +88,16 @@
+ 	u-boot,dm-pre-reloc;
+ };
+ 
++&cpu0_opp_table {
++	u-boot,dm-spl;
++	opp-650000000 {
++		u-boot,dm-spl;
++	};
++	opp-800000000 {
++		u-boot,dm-spl;
++	};
++};
++
+ &gpioa {
+ 	u-boot,dm-pre-reloc;
+ };
+diff --git a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi b/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
+index e13dade463..7b8c1c1cc7 100644
+--- a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
+@@ -133,15 +133,6 @@
+ 		CLK_LPTIM45_LSE
+ 	>;
+ 
+-	/* VCO = 1300.0 MHz => P = 650 (CPU) */
+-	pll1: st,pll@0 {
+-		compatible = "st,stm32mp1-pll";
+-		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
+-		u-boot,dm-pre-reloc;
+-	};
+-
+ 	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 533 (GPU), R = 533 (DDR) */
+ 	pll2: st,pll@1 {
+ 		compatible = "st,stm32mp1-pll";
+diff --git a/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi b/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
+index b16dc28d47..ef3e7f45a3 100644
+--- a/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
+@@ -129,15 +129,6 @@
+ 		CLK_LPTIM45_LSE
+ 	>;
+ 
+-	/* VCO = 1300.0 MHz => P = 650 (CPU) */
+-	pll1: st,pll@0 {
+-		compatible = "st,stm32mp1-pll";
+-		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
+-		u-boot,dm-pre-reloc;
+-	};
+-
+ 	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 533 (GPU), R = 533 (DDR) */
+ 	pll2: st,pll@1 {
+ 		compatible = "st,stm32mp1-pll";
+diff --git a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+index fdd7c7d093..73bb5f1c6d 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
+@@ -236,15 +236,6 @@
+ 		CLK_LPTIM45_LSE
+ 	>;
+ 
+-	/* VCO = 1300.0 MHz => P = 650 (CPU) */
+-	pll1: st,pll@0 {
+-		compatible = "st,stm32mp1-pll";
+-		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
+-		u-boot,dm-pre-reloc;
+-	};
+-
+ 	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 533 (GPU), R = 533 (DDR) */
+ 	pll2: st,pll@1 {
+ 		compatible = "st,stm32mp1-pll";
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+index 399e270d81..c73318488d 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+@@ -114,15 +114,6 @@
+ 		CLK_LPTIM45_LSE
+ 	>;
+ 
+-	/* VCO = 1300.0 MHz => P = 650 (CPU) */
+-	pll1: st,pll@0 {
+-		compatible = "st,stm32mp1-pll";
+-		reg = <0>;
+-		cfg = < 2 80 0 0 0 PQR(1,0,0) >;
+-		frac = < 0x800 >;
+-		u-boot,dm-pre-reloc;
+-	};
+-
+ 	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 533 (GPU), R = 533 (DDR) */
+ 	pll2: st,pll@1 {
+ 		compatible = "st,stm32mp1-pll";
+-- 
+2.28.0
+

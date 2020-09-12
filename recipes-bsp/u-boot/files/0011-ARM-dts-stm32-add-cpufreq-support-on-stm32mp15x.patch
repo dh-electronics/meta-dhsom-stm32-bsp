@@ -1,0 +1,99 @@
+From 86cd7d989c8757f41eb242607b7b856959a615f5 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Mon, 25 May 2020 12:19:42 +0200
+Subject: [PATCH 11/18] ARM: dts: stm32: add cpufreq support on stm32mp15x
+
+This commit adds cpufreq support on stm32mp15x SOC. STM32 cpufreq uses
+operating points V2 bindings (no legacy). Nvmem cells have to be used to
+know the chip version and then which OPPs are available. Note that STM32
+cpufreq driver is mainly based on "cpufreq-dt" driver.
+
+Upstream-Status: Backport [6f2e0ad1945a188d39e759f7b87a66cc9274ecc1]
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp151.dtsi      | 21 +++++++++++++++++++++
+ arch/arm/dts/stm32mp157c-ed1.dts  |  8 ++++++++
+ arch/arm/dts/stm32mp15xx-dkx.dtsi |  8 ++++++++
+ 3 files changed, 37 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp151.dtsi b/arch/arm/dts/stm32mp151.dtsi
+index 75d2c0d296..d5216a1831 100644
+--- a/arch/arm/dts/stm32mp151.dtsi
++++ b/arch/arm/dts/stm32mp151.dtsi
+@@ -20,6 +20,24 @@
+ 			clock-frequency = <650000000>;
+ 			device_type = "cpu";
+ 			reg = <0>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			nvmem-cells = <&part_number_otp>;
++			nvmem-cell-names = "part_number";
++		};
++	};
++
++	cpu0_opp_table: cpu0-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++		opp-650000000 {
++			opp-hz = /bits/ 64 <650000000>;
++			opp-microvolt = <1200000>;
++			opp-supported-hw = <0x1>;
++		};
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1350000>;
++			opp-supported-hw = <0x2>;
+ 		};
+ 	};
+ 
+@@ -1522,6 +1540,9 @@
+ 			reg = <0x5c005000 0x400>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
++			part_number_otp: part_number_otp@4 {
++				reg = <0x4 0x1>;
++			};
+ 			ts_cal1: calib@5c {
+ 				reg = <0x5c 0x2>;
+ 			};
+diff --git a/arch/arm/dts/stm32mp157c-ed1.dts b/arch/arm/dts/stm32mp157c-ed1.dts
+index 186dc46754..c4c1202789 100644
+--- a/arch/arm/dts/stm32mp157c-ed1.dts
++++ b/arch/arm/dts/stm32mp157c-ed1.dts
+@@ -107,6 +107,14 @@
+ 	};
+ };
+ 
++&cpu0{
++	cpu-supply = <&vddcore>;
++};
++
++&cpu1{
++	cpu-supply = <&vddcore>;
++};
++
+ &dac {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&dac_ch1_pins_a &dac_ch2_pins_a>;
+diff --git a/arch/arm/dts/stm32mp15xx-dkx.dtsi b/arch/arm/dts/stm32mp15xx-dkx.dtsi
+index 7589c6f9dc..e7a46e7b5f 100644
+--- a/arch/arm/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dkx.dtsi
+@@ -116,6 +116,14 @@
+ 	status = "okay";
+ };
+ 
++&cpu0{
++	cpu-supply = <&vddcore>;
++};
++
++&cpu1{
++	cpu-supply = <&vddcore>;
++};
++
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
+-- 
+2.28.0
+

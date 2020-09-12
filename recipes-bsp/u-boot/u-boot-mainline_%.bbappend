@@ -18,5 +18,14 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0007-ARM-stm32-Add-update_sf-script-to-install-U-Boot-int.patch \
 	file://0008-ARM-dts-stm32-Adjust-PLL4-settings-on-AV96-again.patch \
 	file://0009-ARM-dts-stm32-Pull-UART4-RX-high-on-AV96.patch \
+	file://0010-arm-stm32mp-spl-add-bsec-driver-in-SPL.patch \
+	file://0011-ARM-dts-stm32-add-cpufreq-support-on-stm32mp15x.patch \
+	file://0012-board-st-create-common-file-stpmic1.c.patch \
+	file://0013-stm32mp1-clk-configure-pll1-with-OPP.patch \
+	file://0014-arm-stm32mp-add-weak-function-to-save-vddcore.patch \
+	file://0015-board-st-stpmic1-add-function-stpmic1_init.patch \
+	file://0016-board-stm32mp1-update-vddcore-in-SPL.patch \
+	file://0017-ARM-dts-stm32mp1-use-OPP-information-for-PLL1-settin.patch \
+	file://0018-power-regulator-stm32-vrefbuf-fix-a-possible-oversho.patch \
 	file://default-device-tree.cfg \
 	"

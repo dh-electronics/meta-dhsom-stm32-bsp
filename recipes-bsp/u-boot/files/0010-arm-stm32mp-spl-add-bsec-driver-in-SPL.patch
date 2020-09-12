@@ -1,0 +1,91 @@
+From 97718b3d8092413963b60a4016132d1a8a89016e Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Mon, 25 May 2020 12:19:41 +0200
+Subject: [PATCH 10/18] arm: stm32mp: spl: add bsec driver in SPL
+
+Add the bsec driver in SPL, as it is needed by SOC part number detection
+to found the supported OPP.
+
+Upstream-Status: Backport [95bd49a5aa8bd7b1018e7de1ff547efa54552e62]
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp15-u-boot.dtsi |  2 +-
+ arch/arm/mach-stm32mp/Makefile     |  2 +-
+ arch/arm/mach-stm32mp/bsec.c       | 11 ++++++-----
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp15-u-boot.dtsi b/arch/arm/dts/stm32mp15-u-boot.dtsi
+index 1279589a56..a0d971ad88 100644
+--- a/arch/arm/dts/stm32mp15-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15-u-boot.dtsi
+@@ -65,7 +65,7 @@
+ };
+ 
+ &bsec {
+-	u-boot,dm-pre-proper;
++	u-boot,dm-pre-reloc;
+ };
+ 
+ &clk_csi {
+diff --git a/arch/arm/mach-stm32mp/Makefile b/arch/arm/mach-stm32mp/Makefile
+index 66bb8cf92f..c8aa24d489 100644
+--- a/arch/arm/mach-stm32mp/Makefile
++++ b/arch/arm/mach-stm32mp/Makefile
+@@ -6,12 +6,12 @@
+ obj-y += cpu.o
+ obj-y += dram_init.o
+ obj-y += syscon.o
++obj-y += bsec.o
+ 
+ ifdef CONFIG_SPL_BUILD
+ obj-y += spl.o
+ else
+ obj-$(CONFIG_CMD_STM32PROG) += cmd_stm32prog/
+-obj-y += bsec.o
+ obj-$(CONFIG_CMD_STM32KEY) += cmd_stm32key.o
+ obj-$(CONFIG_ARMV7_PSCI) += psci.o
+ obj-$(CONFIG_TFABOOT) += boot_params.o
+diff --git a/arch/arm/mach-stm32mp/bsec.c b/arch/arm/mach-stm32mp/bsec.c
+index fc39230113..059ef0b1f5 100644
+--- a/arch/arm/mach-stm32mp/bsec.c
++++ b/arch/arm/mach-stm32mp/bsec.c
+@@ -474,20 +474,23 @@ static int stm32mp_bsec_ofdata_to_platdata(struct udevice *dev)
+ 	return 0;
+ }
+ 
+-#ifndef CONFIG_TFABOOT
+ static int stm32mp_bsec_probe(struct udevice *dev)
+ {
++#if !defined(CONFIG_TFABOOT) && !defined(CONFIG_SPL_BUILD)
+ 	int otp;
+ 	struct stm32mp_bsec_platdata *plat = dev_get_platdata(dev);
+ 
+-	/* update unlocked shadow for OTP cleared by the rom code */
++	/*
++	 * update unlocked shadow for OTP cleared by the rom code
++	 * only executed in U-Boot proper when TF-A is not used
++	 */
+ 	for (otp = 57; otp <= BSEC_OTP_MAX_VALUE; otp++)
+ 		if (!bsec_read_SR_lock(plat->base, otp))
+ 			bsec_shadow_register(plat->base, otp);
++#endif
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static const struct udevice_id stm32mp_bsec_ids[] = {
+ 	{ .compatible = "st,stm32mp15-bsec" },
+@@ -501,7 +504,5 @@ U_BOOT_DRIVER(stm32mp_bsec) = {
+ 	.ofdata_to_platdata = stm32mp_bsec_ofdata_to_platdata,
+ 	.platdata_auto_alloc_size = sizeof(struct stm32mp_bsec_platdata),
+ 	.ops = &stm32mp_bsec_ops,
+-#ifndef CONFIG_TFABOOT
+ 	.probe = stm32mp_bsec_probe,
+-#endif
+ };
+-- 
+2.28.0
+
