@@ -184,3 +184,4 @@ patch 0184-ARM-dts-stm32-Add-PDK2-DTO-for-DH-497-200-with-ETM07.patch
 patch 0185-spi-stm32-Rate-limit-the-Communication-suspended-mes.patch
 patch 0186-RFC-drm-stm-Prefer-faster-display-pixel-clock-over-s.patch
 patch 0187-ARM-dts-stm32-Enable-thermal-sensor-support-on-stm32.patch
+patch 0188-net-ks8851-ml-Add-ethtool-support-for-EEPROM-via-eep.patch
