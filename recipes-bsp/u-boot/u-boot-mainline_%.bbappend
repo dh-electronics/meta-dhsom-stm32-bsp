@@ -27,5 +27,6 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0016-board-stm32mp1-update-vddcore-in-SPL.patch \
 	file://0017-ARM-dts-stm32mp1-use-OPP-information-for-PLL1-settin.patch \
 	file://0018-power-regulator-stm32-vrefbuf-fix-a-possible-oversho.patch \
+	file://0019-ARM-dts-stm32-Add-missing-dm-spl-props-for-SPI-NOR-o.patch \
 	file://default-device-tree.cfg \
 	"

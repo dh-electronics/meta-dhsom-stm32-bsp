@@ -1,0 +1,59 @@
+From 18e9f96d38462cc1d0d9e7acbc78b455f4821d6f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 1 Oct 2020 12:17:46 +0200
+Subject: [PATCH] ARM: dts: stm32: Add missing dm-spl props for SPI NOR on AV96
+
+The u-boot,dm-spl DT props are missing on AV96, hence the pinmux and
+flash0 nodes are not included in the reduced SPL DT. This prevents
+SPI NOR boot from working at all. Fix this by filling them in.
+
+Upstream-Status: Posted [http://patchwork.ozlabs.org/project/uboot/patch/20201001102555.18053-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+index c73318488d..9d3db20876 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
+@@ -21,6 +21,10 @@
+ 	};
+ };
+ 
++&flash0 {
++	u-boot,dm-spl;
++};
++
+ &gpiof {
+ 	snor-nwp {
+ 		gpio-hog;
+@@ -49,6 +53,23 @@
+ 	u-boot,dm-spl;
+ };
+ 
++&qspi_clk_pins_a {
++	u-boot,dm-spl;
++	pins {
++		u-boot,dm-spl;
++	};
++};
++
++&qspi_bk1_pins_a {
++	u-boot,dm-spl;
++	pins1 {
++		u-boot,dm-spl;
++	};
++	pins2 {
++		u-boot,dm-spl;
++	};
++};
++
+ &rcc {
+ 	st,clksrc = <
+ 		CLK_MPU_PLL1P
+-- 
+2.28.0
+
