@@ -118,12 +118,10 @@ patch 0118-mfd-stm32-fmc2-add-STM32-FMC2-controller-driver.patch
 patch 0119-bus-stm32-fmc2-ebi-add-STM32-FMC2-EBI-controller-dri.patch
 patch 0120-RFC-genirq-Check-irq_data_get_irq_chip-return-value-.patch
 patch 0121-dmaengine-stm32-mdma-enable-descriptor_reuse.patch
-patch 0122-dmaengine-stm32-mdma-use-vchan_terminate_vdesc-in-.t.patch
 patch 0123-dmaengine-stm32-dma-enable-descriptor_reuse.patch
 patch 0124-dmaengine-stm32-dma-use-dma_set_max_seg_size-to-set-.patch
 patch 0125-dmaengine-stm32-dma-add-copy_align-constraint.patch
 patch 0126-dmaengine-stm32-dma-fix-sleeping-function-called-fro.patch
-patch 0127-dmaengine-stm32-dma-use-vchan_terminate_vdesc-in-.te.patch
 patch 0128-dmaengine-stm32-dma-direct-mode-support-through-devi.patch
 patch 0129-dmaengine-stm32-dma-Add-DMA-MDMA-chaining-support.patch
 patch 0130-dmaengine-stm32-mdma-Add-DMA-MDMA-chaining-support.patch
