@@ -1,0 +1,68 @@
+From e4471afaccfa2b9b43810a121fd2078ce14cc35a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 5 Oct 2020 21:31:51 +0200
+Subject: [PATCH 20/22] net: ks8851: Implement EEPROM MAC address readout
+
+In case there is an EEPROM attached to the KS8851 MAC and the EEPROM
+contains a valid MAC address, the MAC address is loaded into the NIC
+registers on power on. Read the MAC address out of the NIC registers
+and provide it to U-Boot.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20201008131417.6492-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+---
+ drivers/net/ks8851_mll.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/drivers/net/ks8851_mll.c b/drivers/net/ks8851_mll.c
+index 3ff173ad33..3f17d0c510 100644
+--- a/drivers/net/ks8851_mll.c
++++ b/drivers/net/ks8851_mll.c
+@@ -622,6 +622,34 @@ static int ks8851_write_hwaddr(struct udevice *dev)
+ 	return 0;
+ }
+ 
++static int ks8851_read_rom_hwaddr(struct udevice *dev)
++{
++	struct ks_net *ks = dev_get_priv(dev);
++	struct eth_pdata *pdata = dev_get_platdata(dev);
++	u16 addrl, addrm, addrh;
++
++	/* No EEPROM means no valid MAC address. */
++	if (!(ks_rdreg16(ks, KS_CCR) & CCR_EEPROM))
++		return -EINVAL;
++
++	/*
++	 * If the EEPROM contains valid MAC address, it is loaded into
++	 * the NIC on power on. Read the MAC out of the NIC registers.
++	 */
++	addrl = ks_rdreg16(ks, KS_MARL);
++	addrm = ks_rdreg16(ks, KS_MARM);
++	addrh = ks_rdreg16(ks, KS_MARH);
++
++	pdata->enetaddr[0] = (addrh >> 8) & 0xff;
++	pdata->enetaddr[1] = addrh & 0xff;
++	pdata->enetaddr[2] = (addrm >> 8) & 0xff;
++	pdata->enetaddr[3] = addrm & 0xff;
++	pdata->enetaddr[4] = (addrl >> 8) & 0xff;
++	pdata->enetaddr[5] = addrl & 0xff;
++
++	return !is_valid_ethaddr(pdata->enetaddr);
++}
++
+ static int ks8851_bind(struct udevice *dev)
+ {
+ 	return device_set_name(dev, dev->name);
+@@ -654,6 +682,7 @@ static const struct eth_ops ks8851_ops = {
+ 	.send		= ks8851_send,
+ 	.recv		= ks8851_recv,
+ 	.write_hwaddr	= ks8851_write_hwaddr,
++	.read_rom_hwaddr = ks8851_read_rom_hwaddr,
+ };
+ 
+ static const struct udevice_id ks8851_ids[] = {
+-- 
+2.28.0
+
