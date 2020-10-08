@@ -9,7 +9,7 @@ is floating and can trigger reception of garbage characters, which in
 turn can abort U-Boot autoboot. Add default pull up to mitigate this
 problem.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20200822204536.63827-1-marex@denx.de/]
+Upstream-Status: Backport [43e2d1dd47a7e9b126659dc17a10f351e49bc53b]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>

@@ -7,7 +7,7 @@ The u-boot,dm-spl DT props are missing on AV96, hence the pinmux and
 flash0 nodes are not included in the reduced SPL DT. This prevents
 SPI NOR boot from working at all. Fix this by filling them in.
 
-Upstream-Status: Posted [http://patchwork.ozlabs.org/project/uboot/patch/20201001102555.18053-1-marex@denx.de/]
+Upstream-Status: Backport [d9839417cb408415a240a5c513365973b3cb6031]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>

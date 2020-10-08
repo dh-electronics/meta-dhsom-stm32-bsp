@@ -9,7 +9,7 @@ accurate clock for HDMI pixel clock. Adjust it to generate 74.25 MHz
 instead. The PLL4P/PLL4R are generating 99 MHz instead of 100 MHz,
 which is in tolerance for the SDMMC.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20200822204525.63774-1-marex@denx.de/]
+Upstream-Status: Backport [b6055945d66d0f4e3b1ecb82af476232067a4ee4]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Gerald Baeza <gerald.baeza@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
