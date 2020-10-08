@@ -185,3 +185,4 @@ patch 0188-net-ks8851-ml-Add-ethtool-support-for-EEPROM-via-eep.patch
 patch 0189-drm-stm-Fix-bus_flags-handling.patch
 patch 0190-drm-bridge-lvds-codec-Add-support-for-pixel-data-sam.patch
 patch 0191-ARM-dts-stm32-Fix-TA3-GPIO-C-key-on-STM32MP1-DHCOM-P.patch
+patch 0192-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
