@@ -189,3 +189,4 @@ patch 0192-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
 patch 0193-ARM-dts-stm32-Consistently-enable-internal-pull-ups-.patch
 patch 0194-ARM-dts-stm32-Disable-SDMMC1-CKIN-feedback-clock.patch
 patch 0195-rsi-Default-to-WiFi-alone-configuration.patch
+patch 0196-rsi-Fix-TX-EAPOL-packet-handling-against-iwlwifi-AP.patch
