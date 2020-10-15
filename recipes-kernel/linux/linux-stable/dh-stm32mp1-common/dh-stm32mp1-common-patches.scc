@@ -188,3 +188,4 @@ patch 0191-ARM-dts-stm32-Fix-TA3-GPIO-C-key-on-STM32MP1-DHCOM-P.patch
 patch 0192-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
 patch 0193-ARM-dts-stm32-Consistently-enable-internal-pull-ups-.patch
 patch 0194-ARM-dts-stm32-Disable-SDMMC1-CKIN-feedback-clock.patch
+patch 0195-rsi-Default-to-WiFi-alone-configuration.patch
