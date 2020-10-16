@@ -103,8 +103,8 @@ index 000000000000..0e50cbb673c1
 +	status = "okay";
 +	cs-gpios = <&gpioz 3 0>;
 +	/* Use PIO for the 128 Byte SPI EEPROM */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
++	dmas;
++	dma-names;
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +
@@ -195,8 +195,8 @@ index 000000000000..9a897f4e1b4c
 +
 +&timers2 {
 +	/* spare dmas for other usage (un-delete to enable pwm capture) */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
++	dmas;
++	dma-names;
 +	status = "okay";
 +
 +	pwm2: pwm {

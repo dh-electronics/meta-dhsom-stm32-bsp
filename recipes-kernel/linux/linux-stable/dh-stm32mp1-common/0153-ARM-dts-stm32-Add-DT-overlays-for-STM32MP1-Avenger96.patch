@@ -140,8 +140,8 @@ index 000000000000..073aadff9db8
 +	status = "okay";
 +	cs-gpios = <&gpioi 0 0>;
 +	/* Use PIO for the 128 Byte SPI EEPROM */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
++	dmas;
++	dma-names;
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +

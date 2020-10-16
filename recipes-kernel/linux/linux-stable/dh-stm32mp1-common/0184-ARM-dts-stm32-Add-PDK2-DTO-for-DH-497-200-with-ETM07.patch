@@ -71,8 +71,8 @@ index 000000000000..5764cb2e62be
 +
 +&timers2 {
 +	/* spare dmas for other usage (un-delete to enable pwm capture) */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
++	dmas;
++	dma-names;
 +	status = "okay";
 +
 +	pwm2: pwm {
