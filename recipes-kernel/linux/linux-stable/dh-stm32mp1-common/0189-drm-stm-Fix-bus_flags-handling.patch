@@ -49,7 +49,7 @@ index c3dd94adff54..67f1cb905d29 100644
  	u32 val;
  	int ret;
  
-+	if (ldev->bridge)
++	if (ldev->bridge && ldev->bridge->timings)
 +		bus_flags = ldev->bridge->timings->input_bus_flags;
 +	else if (ldev->connector)
 +		bus_flags = ldev->connector->display_info.bus_flags;
