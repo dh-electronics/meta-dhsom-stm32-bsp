@@ -1,0 +1,88 @@
+From 2f0988cc1d2bf5a840c4f9c0454acb76b48b5369 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 28 Oct 2020 18:22:45 +0100
+Subject: [PATCH] ARM: dts: stm32: Fix LED5 on STM32MP1 DHCOM PDK2
+
+On the prototype DHCOM, the LED5 was connected to pin PG2 of the
+STM32MP15xx, however on the production SoM this was changed to pin
+PC6. Update the connection in the DT.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201028204617.280096-1-marex@denx.de/]
+Fixes: 81d5fc719798 ("ARM: dts: stm32: Add GPIO LEDs for STM32MP1 DHCOM PDK2")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ ...2mp157c-dhcom-pdk2-overlay-560-200-x12.dts | 24 +++++++++++++++++--
+ arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |  2 +-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+index 9a897f4e1b4c..e4f4d1ecd66b 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2020 Marek Vasut <marex@denx.de>
+  */
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/pwm/pwm.h>
+ 
+@@ -22,6 +23,25 @@
+ 		status = "okay";
+ 	};
+ 
++	gpio-keys {
++		/*
++		 * The EXTi IRQ line 6 is shared with touchscreen IRQ,
++		 * so operate button-1 as polled GPIO key.
++		 */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	gpio-keys-polled {
++		button-1 {
++			label = "TA2-GPIO-B";
++			linux,code = <KEY_B>;
++			gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
++		};
++	};
++
+ 	led {
+ 		/* LED5 GPIO-E conflicts with touchscreen IRQ */
+ 		led-0 {
+@@ -81,8 +101,8 @@
+ 		compatible = "edt,edt-ft5x06";
+ 		reg = <0x38>;
+ 		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
+-		interrupt-parent = <&gpiog>;
+-		interrupts = <2 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++		interrupt-parent = <&gpioc>;
++		interrupts = <6 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
+ 		linux,wakeup;
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
+index 6490f819b872..65f0bc123fe3 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
+@@ -73,7 +73,7 @@
+ 
+ 		led-0 {
+ 			label = "green:led5";
+-			gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
++			gpios = <&gpioc 6 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-- 
+2.28.0
+
