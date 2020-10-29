@@ -195,3 +195,6 @@ patch 0198-ARM-dts-stm32-Define-VIO-regulator-supply-on-DHCOM.patch
 patch 0199-ARM-dts-stm32-Keep-VDDA-LDO1-always-on-on-DHCOM.patch
 patch 0200-rsi-Move-card-interrupt-handling-to-RX-thread.patch
 patch 0201-rsi-Clean-up-loop-in-the-interrupt-handler.patch
+patch 0202-ARM-dts-stm32-Add-DHCOM-based-PicoITX-board.patch
+patch 0203-ARM-dts-stm32-Disable-KS8851-and-EBI2-on-PicoITX-boa.patch
+patch 0204-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-626-100-LVDS-ad.patch
