@@ -15,21 +15,17 @@ Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
 ---
- arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
 index fa04443a88f8..c9465e376634 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
-@@ -36,6 +36,14 @@
+@@ -36,6 +36,10 @@
  	status = "disabled";
  };
  
-+&ebi {
-+	status = "disabled";
-+};
-+
 +&fmc {
 +	status = "disabled";
 +};
@@ -37,7 +33,7 @@ index fa04443a88f8..c9465e376634 100644
  &gpioa {
  	/*
  	 * NOTE: The USB Port on the PicoITX needs a PWR_EN signal to enable
-@@ -94,6 +102,10 @@
+@@ -94,6 +98,10 @@
  	/delete-property/dma-names;
  };
  

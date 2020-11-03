@@ -1,0 +1,103 @@
+From b641a468ecc6c08f8bdfd4fc9a6841f0267aef3f Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@st.com>
+Date: Fri, 4 Sep 2020 15:20:43 +0200
+Subject: [PATCH 2/2] ARM: dts: stm32: add FMC2 EBI support for stm32mp157c
+
+This patch adds FMC2 External Bus Interface support on stm32mp157c.
+
+Upstream-Status: Backport [fdcf9ea31c33fe9c54dc0b99ca4f744813ba6840]
+Signed-off-by: Christophe Kerello <christophe.kerello@st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi     | 43 ++++++++++++++++++---------
+ arch/arm/boot/dts/stm32mp157c-ev1.dts | 16 +++++-----
+ 2 files changed, 38 insertions(+), 21 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 229a69478562..47ef8d1cdfdd 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1298,23 +1298,38 @@
+ 			dma-requests = <48>;
+ 		};
+ 
+-		fmc: nand-controller@58002000 {
+-			compatible = "st,stm32mp15-fmc2";
+-			reg = <0x58002000 0x1000>,
+-			      <0x80000000 0x1000>,
+-			      <0x88010000 0x1000>,
+-			      <0x88020000 0x1000>,
+-			      <0x81000000 0x1000>,
+-			      <0x89010000 0x1000>,
+-			      <0x89020000 0x1000>;
+-			interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+-			dmas = <&mdma1 20 0x10 0x12000a02 0x0 0x0>,
+-			       <&mdma1 20 0x10 0x12000a08 0x0 0x0>,
+-			       <&mdma1 21 0x10 0x12000a0a 0x0 0x0>;
+-			dma-names = "tx", "rx", "ecc";
++		fmc: memory-controller@58002000 {
++			#address-cells = <2>;
++			#size-cells = <1>;
++			compatible = "st,stm32mp1-fmc2-ebi";
++			reg = <0x58002000 0x1000>;
+ 			clocks = <&rcc FMC_K>;
+ 			resets = <&rcc FMC_R>;
+ 			status = "disabled";
++
++			ranges = <0 0 0x60000000 0x04000000>, /* EBI CS 1 */
++				 <1 0 0x64000000 0x04000000>, /* EBI CS 2 */
++				 <2 0 0x68000000 0x04000000>, /* EBI CS 3 */
++				 <3 0 0x6c000000 0x04000000>, /* EBI CS 4 */
++				 <4 0 0x80000000 0x10000000>; /* NAND */
++
++			nand-controller@4,0 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "st,stm32mp1-fmc2-nfc";
++				reg = <4 0x00000000 0x1000>,
++				      <4 0x08010000 0x1000>,
++				      <4 0x08020000 0x1000>,
++				      <4 0x01000000 0x1000>,
++				      <4 0x09010000 0x1000>,
++				      <4 0x09020000 0x1000>;
++				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&mdma1 20 0x2 0x12000a02 0x0 0x0>,
++				       <&mdma1 20 0x2 0x12000a08 0x0 0x0>,
++				       <&mdma1 21 0x2 0x12000a0a 0x0 0x0>;
++				dma-names = "tx", "rx", "ecc";
++				status = "disabled";
++			};
+ 		};
+ 
+ 		qspi: spi@58003000 {
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+index 96baed76cf3a..0122677fc1f9 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+@@ -158,14 +158,16 @@
+ 	pinctrl-0 = <&fmc_pins_a>;
+ 	pinctrl-1 = <&fmc_sleep_pins_a>;
+ 	status = "okay";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+ 
+-	nand@0 {
+-		reg = <0>;
+-		nand-on-flash-bbt;
+-		#address-cells = <1>;
+-		#size-cells = <1>;
++	nand-controller@4,0 {
++		status = "okay";
++
++		nand@0 {
++			reg = <0>;
++			nand-on-flash-bbt;
++			#address-cells = <1>;
++			#size-cells = <1>;
++		};
+ 	};
+ };
+ 
+-- 
+2.28.0
+

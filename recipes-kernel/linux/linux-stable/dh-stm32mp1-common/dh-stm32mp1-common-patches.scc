@@ -113,9 +113,8 @@ patch 0113-ASoC-sgtl5000-add-multi-endpoint-support.patch
 patch 0114-irqchip-stm32-Add-irq-retrigger-support.patch
 patch 0115-pinctrl-stm32-Add-level-interrupt-support-to-gpio-ir.patch
 patch 0116-irqchip-stm32-Retrigger-both-in-eoi-and-unmask-callb.patch
-patch 0117-dt-bindings-mfd-stm32-fmc2-add-STM32-FMC2-controller.patch
-patch 0118-mfd-stm32-fmc2-add-STM32-FMC2-controller-driver.patch
-patch 0119-bus-stm32-fmc2-ebi-add-STM32-FMC2-EBI-controller-dri.patch
+patch 0117-memory-stm32-fmc2-ebi-add-STM32-FMC2-EBI-controller-.patch
+patch 0118-ARM-dts-stm32-add-FMC2-EBI-support-for-stm32mp157c.patch
 patch 0120-RFC-genirq-Check-irq_data_get_irq_chip-return-value-.patch
 patch 0121-dmaengine-stm32-mdma-enable-descriptor_reuse.patch
 patch 0123-dmaengine-stm32-dma-enable-descriptor_reuse.patch
