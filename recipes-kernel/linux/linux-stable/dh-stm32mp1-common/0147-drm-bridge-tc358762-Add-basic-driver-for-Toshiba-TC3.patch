@@ -8,7 +8,7 @@ from tc358764 driver and panel-raspberrypi-touchscreen. This driver is
 meant to replace the panel-raspberrypi-touchscreen too, as the bridge
 connection can be described in DT too.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11692411/]
+Upstream-Status: Partial backport [1930d19cb49930b7d5be0379be9f88fcbeba9976]
 Signed-off-by: Marek Vasut <marex@denx.de>
 To: dri-devel@lists.freedesktop.org
 Cc: Eric Anholt <eric@anholt.net>

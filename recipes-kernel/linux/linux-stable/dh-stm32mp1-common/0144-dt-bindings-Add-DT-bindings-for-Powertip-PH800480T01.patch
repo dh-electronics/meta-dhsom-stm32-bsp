@@ -6,7 +6,7 @@ Subject: [PATCH 143/163] dt-bindings: Add DT bindings for Powertip PH800480T013
 Add DT bindings for Powertip PH800480T013 800x480 parallel LCD,
 this one is used in the Raspberry Pi 7" touchscreen display unit.
 
-Upstream-Status: Pending [https://cgit.freedesktop.org/drm/drm-misc/commit/?id=051e95ee7ec10050154e4c8f48be4d99ac83f8fc]
+Upstream-Status: Inappropriate [Superseded by 051e95ee7ec10050154e4c8f48be4d99ac83f8fc]
 Signed-off-by: Marek Vasut <marex@denx.de>
 To: dri-devel@lists.freedesktop.org
 Cc: Eric Anholt <eric@anholt.net>

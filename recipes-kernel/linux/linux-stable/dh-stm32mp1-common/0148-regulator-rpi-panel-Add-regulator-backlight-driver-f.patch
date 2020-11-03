@@ -6,14 +6,14 @@ Subject: [PATCH 147/163] regulator: rpi-panel: Add regulator/backlight driver fo
 This regulator/backlight driver handles the ATTINY88 present on the
 RPi 7" touchscreen panel and exposes the power/backlight interfaces.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11692403/]
+Upstream-Status: Backport [38573472278da49e2ab588062d88bc2f0c11a325]
 Signed-off-by: Marek Vasut <marex@denx.de>
-To: dri-devel@lists.freedesktop.org
 Cc: Eric Anholt <eric@anholt.net>
 Cc: Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: devicetree@vger.kernel.org
+To: dri-devel@lists.freedesktop.org
+Link: https://lore.kernel.org/r/20200809105938.6388-2-marex@denx.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
  drivers/regulator/Kconfig                     |  10 +
  drivers/regulator/Makefile                    |   1 +

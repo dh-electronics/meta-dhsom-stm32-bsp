@@ -5,13 +5,15 @@ Subject: [PATCH 142/163] dt-bindings: Add vendor prefix for Powertip
 
 The Powertip Tech. Corp. is an LCD panel manufacturer.
 
-Upstream-Status: Pending [https://cgit.freedesktop.org/drm/drm-misc/commit/?id=a26a4790a82a4675323102235a7bcbd479817b02]
+Upstream-Status: Backport [a26a4790a82a4675323102235a7bcbd479817b02]
 Signed-off-by: Marek Vasut <marex@denx.de>
 To: dri-devel@lists.freedesktop.org
 Cc: Eric Anholt <eric@anholt.net>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 Cc: devicetree@vger.kernel.org
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200728121246.23304-1-marex@denx.de
 ---
  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
  1 file changed, 2 insertions(+)
@@ -20,15 +22,15 @@ diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentat
 index 967e78c5ec0a..91edabee5227 100644
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -751,6 +751,8 @@ patternProperties:
+@@ -749,6 +749,8 @@ patternProperties:
+     description: Poslab Technology Co., Ltd.
+   "^pov,.*":
      description: Point of View International B.V.
-   "^powervr,.*":
-     description: PowerVR (deprecated, use img)
 +  "^powertip,.*":
 +    description: Powertip Tech. Corp.
+   "^powervr,.*":
+     description: PowerVR (deprecated, use img)
    "^primux,.*":
-     description: Primux Trading, S.L.
-   "^probox2,.*":
 -- 
 2.27.0
 
