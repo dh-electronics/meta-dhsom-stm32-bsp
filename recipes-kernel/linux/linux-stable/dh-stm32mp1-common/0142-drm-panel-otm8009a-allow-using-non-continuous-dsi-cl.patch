@@ -4,20 +4,19 @@ Date: Thu, 12 Dec 2019 11:36:44 +0100
 Subject: [PATCH 142/164] drm/panel: otm8009a: allow using non-continuous dsi
  clock
 
-The panel is able to work when dsi clock is non-continuos, thus
+The panel is able to work when dsi clock is non-continuous, thus
 the system power consumption can be reduced using such feature.
 
 Add MIPI_DSI_CLOCK_NON_CONTINUOUS to panel's mode_flags.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [08717bb5b14362b13eec6a1e69dc6d44782c0e2e]
+Changes in v2:
+  - Added my signed-off
+
+Upstream-Status: Backport [880ee3b7615e7cc087f659cb80ce22f5db56f9a2]
 Signed-off-by: Antonio Borneo <antonio.borneo@st.com>
-Change-Id: Id58c477c75b659c0a172db62c6cc8207319a7d80
-Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/153522
-Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
-Reviewed-by: CIBUILD <smet-aci-builds@lists.codex.cro.st.com>
-Reviewed-by: Yannick FERTRE <yannick.fertre@st.com>
-Reviewed-by: Philippe CORNU <philippe.cornu@st.com>
-Tested-by: Yannick FERTRE <yannick.fertre@st.com>
+Signed-off-by: Yannick Fertre <yannick.fertre@st.com>
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200922074253.28810-1-yannick.fertre@st.com
 ---
  drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

@@ -13,8 +13,13 @@ conservative.
 Relax the limit and allows longer LP commands (16 bytes) to be
 sent during V-sync.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [f893a376388c77a4ba40145e1af9eddaa03e0109]
+Upstream-Status: Backport [9e025e80660fe35432c81e67d401109d8e7b0ff4]
 Signed-off-by: Antonio Borneo <antonio.borneo@st.com>
+Tested-by: Philippe Cornu <philippe.cornu@st.com>
+Reviewed-by: Philippe Cornu <philippe.cornu@st.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200701143131.841-1-yannick.fertre@st.com
 ---
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 17 +++++++++--------
  1 file changed, 9 insertions(+), 8 deletions(-)

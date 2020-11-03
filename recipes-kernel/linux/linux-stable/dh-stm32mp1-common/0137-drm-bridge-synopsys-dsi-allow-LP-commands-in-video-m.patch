@@ -8,8 +8,13 @@ Current code only sends LP commands in command mode.
 Allows sending LP commands also in video mode by setting the
 proper flag in DSI_VID_MODE_CFG.
 
-Upstream-Status: Pending [https://patchwork.kernel.org/patch/11651749/]
+Upstream-Status: Backport [6188b06e0357b3bc3b91d0b67783681d34ff2b64]
 Signed-off-by: Antonio Borneo <antonio.borneo@st.com>
+Tested-by: Philippe Cornu <philippe.cornu@st.com>
+Reviewed-by: Philippe Cornu <philippe.cornu@st.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200708140836.32418-1-yannick.fertre@st.com
 ---
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 8 ++++++++
  1 file changed, 8 insertions(+)
