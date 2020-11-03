@@ -193,3 +193,5 @@ patch 0196-rsi-Fix-TX-EAPOL-packet-handling-against-iwlwifi-AP.patch
 patch 0197-ARM-dts-stm32-Fix-LED5-on-STM32MP1-DHCOM-PDK2.patch
 patch 0198-ARM-dts-stm32-Define-VIO-regulator-supply-on-DHCOM.patch
 patch 0199-ARM-dts-stm32-Keep-VDDA-LDO1-always-on-on-DHCOM.patch
+patch 0200-rsi-Move-card-interrupt-handling-to-RX-thread.patch
+patch 0201-rsi-Clean-up-loop-in-the-interrupt-handler.patch
