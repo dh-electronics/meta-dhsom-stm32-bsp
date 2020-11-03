@@ -7,7 +7,7 @@ Add DT for DH DRC02 unit, which is a universal controller device.
 The system has two ethernet ports, two CANs, RS485 and RS232, USB,
 capacitive buttons and an OLED display.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11691401/]
+Upstream-Status: Backport [fde180f06d7bc71c457879615cfc070a66a76ce0]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
@@ -15,9 +15,7 @@ Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
----
-V2: - Invert the RS485 RE/DE polarity
-    - Write electronics with lowercase e
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 ---
  arch/arm/boot/dts/Makefile                    |   1 +
  arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dts |  35 ++++

@@ -6,7 +6,7 @@ Subject: [PATCH 2/3] ARM: dts: stm32: Disable KS8851 and EBI2 on PicoITX board
 The PicoITX has only one ethernet routed out, so the KS8851 is not used
 at all. Disable the KS8851, the entire EBI2 bus and FMC controller.
 
-Upstream-Status: Inappropriate [Depends on EBI2 itself]
+Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111515.138351-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

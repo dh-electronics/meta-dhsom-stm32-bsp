@@ -1,13 +1,15 @@
 From bd9f8f970b70340daeb6cb6fccce2640acd435ce Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 22 Aug 2020 21:32:55 +0200
-Subject: [PATCH] ARM: dts: stm32: Swap PHY reset GPIO and TSC2004 IRQ
+Subject: [PATCH] ARM: dts: stm32: Swap PHY reset GPIO and TSC2004 IRQ on DHCOM
+ SOM
 
 On the production revision of the SoM, 587-200, the PHY reset GPIO and
 touchscreen IRQs are swapped to prevent collision between EXTi IRQs,
 reflect that in DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11731281/]
+Upstream-Status: Backport [9ad98319e95263469d8ca2cb543c37c5a2f40980]
+Fixes: 34e0c7847dcf ("ARM: dts: stm32: Add DH Electronics DHCOM STM32MP1 SoM and PDK2 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
@@ -15,6 +17,7 @@ Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi | 2 +-
  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  | 2 +-
