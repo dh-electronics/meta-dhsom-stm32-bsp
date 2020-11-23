@@ -2,7 +2,7 @@ define KMACHINE dh-stm32mp1-dhcom-pdk2
 define KTYPE standard
 define KARCH arm
 branch dh-stm32mp1-dhcom-pdk2
-kconf hardware dh-stm32mp1-dhcom-pdk2.cfg
-kconf non-hardware dh-stm32mp1-dhcom-pdk2-non_hardware.cfg
+kconf hardware dh-stm32mp1-dhsom-common.cfg
+kconf non-hardware dh-stm32mp1-dhsom-common-non_hardware.cfg
 
 include dh-stm32mp1-common-patches.scc
