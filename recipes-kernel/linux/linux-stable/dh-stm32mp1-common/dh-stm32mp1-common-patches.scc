@@ -132,7 +132,6 @@ patch 0134-drm-bridge-synopsys-dsi-driver-specific-configuratio.patch
 patch 0135-drm-bridge-synopsys-dsi-move-phy_ops-callbacks-aroun.patch
 patch 0136-drm-bridge-synopsys-dsi-missing-post-disable.patch
 patch 0137-drm-bridge-synopsys-dsi-allow-LP-commands-in-video-m.patch
-patch 0138-drm-bridge-synopsys-dsi-add-support-for-non-continuo.patch
 patch 0139-drm-bridge-synopsys-dsi-allow-sending-longer-LP-comm.patch
 patch 0140-drm-bridge-synopsys-dsi-read-status-error-during-tra.patch
 patch 0141-drm-stm-dsi-higher-pll-out-only-in-video-burst-mode.patch
