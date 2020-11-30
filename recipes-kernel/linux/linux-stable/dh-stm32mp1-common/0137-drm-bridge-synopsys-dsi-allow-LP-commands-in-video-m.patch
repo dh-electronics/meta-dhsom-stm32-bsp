@@ -26,9 +26,9 @@ index cf0f2c7ce634..940d99d8a388 100644
  #define VID_MODE_VPG_ENABLE		BIT(16)
  #define VID_MODE_VPG_HORIZONTAL		BIT(24)
  
-@@ -367,6 +368,13 @@ static void dw_mipi_message_config(struct dw_mipi_dsi *dsi,
+@@ -366,6 +367,13 @@ static void dw_mipi_message_config(struct dw_mipi_dsi *dsi,
+ 		val |= CMD_MODE_ALL_LP;
  
- 	dsi_write(dsi, DSI_LPCLK_CTRL, lpm ? 0 : PHY_TXREQUESTCLKHS);
  	dsi_write(dsi, DSI_CMD_MODE_CFG, val);
 +
 +	val = dsi_read(dsi, DSI_VID_MODE_CFG);
