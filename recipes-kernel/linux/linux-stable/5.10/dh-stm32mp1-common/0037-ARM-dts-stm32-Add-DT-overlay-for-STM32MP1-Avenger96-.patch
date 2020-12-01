@@ -1,0 +1,203 @@
+From 0051df424f69cc68600030d834e2779a14bacc75 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 30 Apr 2020 13:08:40 +0200
+Subject: [PATCH 37/52] ARM: dts: stm32: Add DT overlay for STM32MP1 Avenger96
+ OV5640 mezzanine card
+
+Add DT overlay for the 96boards OV5640 mezzanine card. Note that only
+the camera connected to port J3 is supported by the current hardware.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                    |  1 +
+ ...tm32mp157a-avenger96-overlay-ov5640-x7.dts | 93 +++++++++++++++++++
+ .../boot/dts/stm32mp15xx-dhcor-avenger96.dtsi | 53 +++++++++++
+ 3 files changed, 147 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index ff9acaec33c1..d948cd96231b 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1069,6 +1069,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157a-avenger96-overlay-fdcan2-x6.dtbo \
+ 	stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dtbo \
+ 	stm32mp157a-avenger96-overlay-i2c2-eeprom-x6.dtbo \
++	stm32mp157a-avenger96-overlay-ov5640-x7.dtbo \
+ 	stm32mp157a-avenger96-overlay-spi2-eeprom-x6.dtbo \
+ 	stm32mp157a-dk1.dtb \
+ 	stm32mp157a-iot-box.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
+new file mode 100644
+index 000000000000..df57334494ef
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/clock/stm32mp1-clks.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	camera0_pwr: regulator-camera0 {
++		compatible = "regulator-fixed";
++		regulator-name = "camera0-reg";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		regulator-always-on;
++	};
++
++	sram@10050000 {
++		compatible = "mmio-sram";
++		reg = <0x10050000 0x10000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x10050000 0x10000>;
++
++		dma_pool: dma_pool@0 {
++			reg = <0x0 0x10000>;
++			pool;
++		};
++	};
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	camera@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&rcc_pins_a>;
++		pinctrl-1 = <&rcc_sleep_pins_a>;
++		clocks = <&rcc CK_MCO1>;
++		clock-names = "xclk";
++		assigned-clocks = <&rcc CK_MCO1>;
++		assigned-clock-parents = <&rcc CK_HSI>;
++		assigned-clock-rates = <32000000>;
++		DOVDD-supply = <&camera0_pwr>;
++		/* GPIO-J on the Dragonboard Dual-Leopard OV5640 board */
++		powerdown-gpios = <&gpiob 5 GPIO_ACTIVE_HIGH>;
++		/* GPIO-I on the Dragonboard Dual-Leopard OV5640 board */
++		reset-gpios = <&gpioa 12 GPIO_ACTIVE_LOW>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			ov5640_0: endpoint {
++				remote-endpoint = <&stmipi_0>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
++
++&stmipi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			stmipi_0: endpoint {
++				data-lanes = <1 2>;
++				remote-endpoint = <&ov5640_0>;
++			};
++		};
++	};
++};
++
++&dma1 {
++	sram = <&dma_pool>;
++};
++
++&dma2 {
++	sram = <&dma_pool>;
++};
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+index 6df0ed9a73c8..5e0219181f16 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+@@ -126,6 +126,23 @@ adc2: adc@100 {
+ 	};
+ };
+ 
++&dcmi {
++	status = "okay";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&dcmi_pins_b>;
++	pinctrl-1 = <&dcmi_sleep_pins_b>;
++
++	port {
++		dcmi_0: endpoint {
++			remote-endpoint = <&stmipi_2>;
++			bus-width = <8>;
++			hsync-active = <0>;
++			vsync-active = <0>;
++			pclk-sample = <0>;
++		};
++	};
++};
++
+ &ethernet0 {
+ 	status = "okay";
+ 	pinctrl-0 = <&ethernet0_rgmii_pins_c>;
+@@ -218,6 +235,42 @@ &i2c2 {	/* X6 I2C2 */
+ };
+ 
+ &i2c4 {
++	stmipi: stmipi@14 {
++		compatible = "st,st-mipid02";
++		reg = <0x14>;
++		clocks = <&rcc CK_MCO1>;
++		clock-names = "xclk";
++		assigned-clocks = <&rcc CK_MCO1>;
++		assigned-clock-parents = <&rcc CK_HSE>;
++		assigned-clock-rates = <24000000>;
++		VDDE-supply = <&v1v8>;
++		VDDIN-supply = <&v1v8>;
++		reset-gpios = <&gpioz 0 GPIO_ACTIVE_LOW>;
++		status = "disabled";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				stmipi_0: endpoint {
++				};
++			};
++
++			port@2 {
++				reg = <2>;
++				stmipi_2: endpoint {
++					bus-width = <8>;
++					hsync-active = <0>;
++					vsync-active = <0>;
++					pclk-sample = <0>;
++					remote-endpoint = <&dcmi_0>;
++				};
++			};
++		};
++	};
++
+ 	hdmi-transmitter@3d {
+ 		compatible = "adi,adv7513";
+ 		reg = <0x3d>, <0x2d>, <0x4d>, <0x5d>;
+-- 
+2.29.2
+

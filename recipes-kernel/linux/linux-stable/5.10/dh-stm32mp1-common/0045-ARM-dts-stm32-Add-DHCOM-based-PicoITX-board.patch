@@ -1,0 +1,230 @@
+From a3630d8ac7d6bda9e6e3350fbcd84d0fbd7f2cb0 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 29 Oct 2020 17:57:28 +0100
+Subject: [PATCH 45/52] ARM: dts: stm32: Add DHCOM based PicoITX board
+
+Add DT for DH PicoITX unit, which is a bare-bones carrier board for
+the DHCOM. The board has ethernet port, USB, CAN, LEDs and a custom
+board-to-board expansion connector.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201103181137.443586-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/stm32mp157c-dhcom-picoitx.dts    |  35 +++++
+ .../boot/dts/stm32mp15xx-dhcom-picoitx.dtsi   | 143 ++++++++++++++++++
+ 3 files changed, 179 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 1fdde471a314..b38851ff03bb 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1084,6 +1084,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 	stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
++	stm32mp157c-dhcom-picoitx.dtb \
+ 	stm32mp157c-dk2.dtb \
+ 	stm32mp157c-ed1.dtb \
+ 	stm32mp157c-ev1.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts
+new file mode 100644
+index 000000000000..cfb8f8a0c82d
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ *
++ * DHCOM STM32MP1 variant:
++ * DHCM-STM32MP157C-C065-R102-F0819-SPI-E-CAN2-SD-RTC-T-DSI-I-01D2
++ * DHCOM PCB number: 587-200 or newer
++ * PicoITX PCB number: 487-600 or newer
++ */
++/dts-v1/;
++
++#include "stm32mp157.dtsi"
++#include "stm32mp15xc.dtsi"
++#include "stm32mp15xx-dhcom-som.dtsi"
++#include "stm32mp15xx-dhcom-picoitx.dtsi"
++
++/ {
++	model = "DH electronics STM32MP157C DHCOM PicoITX";
++	compatible = "dh,stm32mp157c-dhcom-picoitx", "dh,stm32mp157c-dhcom-som",
++		     "st,stm32mp157";
++};
++
++&m_can1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can1_pins_a>;
++	pinctrl-1 = <&m_can1_sleep_pins_a>;
++	status = "okay";
++};
++
++&m_can2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can2_pins_a>;
++	pinctrl-1 = <&m_can2_sleep_pins_a>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
+new file mode 100644
+index 000000000000..356150d28c42
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
+@@ -0,0 +1,143 @@
++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/ {
++	aliases {
++		serial0 = &uart4;
++		serial1 = &usart3;
++		serial2 = &uart8;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	led {
++		compatible = "gpio-leds";
++
++		led-0 {
++			label = "yellow:led";
++			gpios = <&gpioi 3 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++	};
++};
++
++&adc {
++	status = "disabled";
++};
++
++&dac {
++	status = "disabled";
++};
++
++&gpioa {
++	/*
++	 * NOTE: The USB Port on the PicoITX needs a PWR_EN signal to enable
++	 * port power. This signal should be handled by USB power sequencing
++	 * in order to turn on port power when USB bus is powered up, but so
++	 * far there is no such functionality.
++	 */
++	usb-port-power {
++		gpio-hog;
++		gpios = <13 GPIO_ACTIVE_LOW>;
++		output-low;
++		line-name = "usb-port-power";
++	};
++};
++
++&gpioc {
++	gpio-line-names = "", "", "", "",
++			  "", "", "In1", "",
++			  "", "", "", "",
++			  "", "", "", "";
++};
++
++&gpiod {
++	gpio-line-names = "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "Out1",
++			  "Out2", "", "", "";
++};
++
++&gpiog {
++	gpio-line-names = "In2", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "";
++};
++
++&i2c2 {	/* On board-to-board connector (optional) */
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pins_a>;
++	i2c-scl-rising-time-ns = <185>;
++	i2c-scl-falling-time-ns = <20>;
++	status = "okay";
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++};
++
++&i2c5 {	/* On board-to-board connector */
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c5_pins_a>;
++	i2c-scl-rising-time-ns = <185>;
++	i2c-scl-falling-time-ns = <20>;
++	status = "okay";
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++};
++
++&usart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&usart3_pins_a>;
++	status = "okay";
++};
++
++&uart8 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart8_pins_a &uart8_rtscts_pins_a>;
++	status = "okay";
++};
++
++&usbh_ehci {
++	phys = <&usbphyc_port0>;
++	status = "okay";
++};
++
++&usbh_ohci {
++	phys = <&usbphyc_port0>;
++	status = "okay";
++};
++
++&usbotg_hs {
++	dr_mode = "otg";
++	pinctrl-0 = <&usbotg_hs_pins_a>;
++	pinctrl-names = "default";
++	phy-names = "usb2-phy";
++	phys = <&usbphyc_port1 0>;
++	vbus-supply = <&vbus_otg>;
++	status = "okay";
++};
++
++&usbphyc {
++	status = "okay";
++};
++
++&usbphyc_port0 {
++	phy-supply = <&vdd_usb>;
++	vdda1v1-supply = <&reg11>;
++	vdda1v8-supply = <&reg18>;
++};
++
++&usbphyc_port1 {
++	phy-supply = <&vdd_usb>;
++	vdda1v1-supply = <&reg11>;
++	vdda1v8-supply = <&reg18>;
++};
+-- 
+2.29.2
+

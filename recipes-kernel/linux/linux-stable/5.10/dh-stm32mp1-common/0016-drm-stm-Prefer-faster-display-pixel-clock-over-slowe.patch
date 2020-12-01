@@ -1,0 +1,70 @@
+From 2fdf43f8d3ee533631908498a3b8e4cde5a7670f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 9 Sep 2020 20:54:44 +0200
+Subject: [PATCH 16/52] drm/stm: Prefer faster display pixel clock over slower
+ ones
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If the delta between requested pixelclock and resulting pixelclock
+is larger than the delta between requested pixelclock and the next
+step in available pixelclock (limited to 10% of pixelclock to avoid
+too much out-of-specification operation), use the faster pixelclock.
+
+This fixes the condition where the resulting pixelclock is much
+slower than the lowest clock rate supported by the display, while
+the next available pixelclock are just slightly faster than the
+highest clock rate supported by the display. Using the lower clock
+rate leads e.g. to subtle artifacts barely visible on the display,
+like flickering pixels. Using slightly faster clock leads to no
+such effect.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/patch/11766067/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Philippe Cornu <philippe.cornu@st.com>
+Cc: Vincent Abriou <vincent.abriou@st.com>
+Cc: Yannick Fertré <yannick.fertre@st.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+---
+ drivers/gpu/drm/stm/ltdc.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 6e28f707092f..07c73079293c 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -507,6 +507,25 @@ static bool ltdc_crtc_mode_fixup(struct drm_crtc *crtc,
+ {
+ 	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
+ 	int rate = mode->clock * 1000;
++	int rate_min = clk_round_rate(ldev->pixel_clk, rate);
++	int rate_max = clk_round_rate(ldev->pixel_clk, rate + (rate / 10));
++
++	/*
++	 * If the delta between requested pixelclock and resulting pixelclock
++	 * is larger than the delta between requested pixelclock and the next
++	 * step in available pixelclock (limited to 10% of pixelclock to avoid
++	 * too much out-of-specification operation), use the faster pixelclock.
++	 *
++	 * This fixes the condition where the resulting pixelclock is much
++	 * slower than the lowest clock rate supported by the display, while
++	 * the next available pixelclock are just slightly faster than the
++	 * highest clock rate supported by the display. Using the lower clock
++	 * rate leads e.g. to subtle artifacts barely visible on the display,
++	 * like flickering pixels. Using slightly faster clock leads to no
++	 * such effect.
++	 */
++	if (rate - rate_min > rate_max - rate)
++		rate = rate_max;
+ 
+ 	if (clk_set_rate(ldev->pixel_clk, rate) < 0) {
+ 		DRM_ERROR("Cannot set rate (%dHz) for pixel clk\n", rate);
+-- 
+2.29.2
+

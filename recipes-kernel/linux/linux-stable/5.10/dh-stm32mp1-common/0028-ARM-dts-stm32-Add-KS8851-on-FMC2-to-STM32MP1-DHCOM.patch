@@ -1,0 +1,76 @@
+From e7d5fa90a5265023bbd0699129a843b56a14376c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 8 Oct 2020 21:38:00 +0200
+Subject: [PATCH 28/52] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
+
+Add bindings for the KS8851 ethernet present on the STM32MP1 DHCOM SoM.
+
+Upstream-Status: Backport [b5269b6664515b4de6fd06e22ca9773530c6fc57]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 35 ++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index e257459c34dc..ac46ab363e1b 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -11,6 +11,7 @@
+ / {
+ 	aliases {
+ 		ethernet0 = &ethernet0;
++		ethernet1 = &ksz8851;
+ 	};
+ 
+ 	memory@c0000000 {
+@@ -133,6 +134,40 @@ phy0: ethernet-phy@1 {
+ 	};
+ };
+ 
++&fmc {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&fmc_pins_b>;
++	pinctrl-1 = <&fmc_sleep_pins_b>;
++	status = "okay";
++
++	ksz8851: ks8851mll@1,0 {
++		compatible = "micrel,ks8851-mll";
++		reg = <1 0x0 0x2>, <1 0x2 0x20000>;
++		interrupt-parent = <&gpioc>;
++		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++		bank-width = <2>;
++
++		/* Timing values are in nS */
++		st,fmc2-ebi-cs-mux-enable;
++		st,fmc2-ebi-cs-transaction-type = <4>;
++		st,fmc2-ebi-cs-buswidth = <16>;
++		st,fmc2-ebi-cs-address-setup-ns = <5>;
++		st,fmc2-ebi-cs-address-hold-ns = <5>;
++		st,fmc2-ebi-cs-bus-turnaround-ns = <5>;
++		st,fmc2-ebi-cs-data-setup-ns = <45>;
++		st,fmc2-ebi-cs-data-hold-ns = <1>;
++		st,fmc2-ebi-cs-write-address-setup-ns = <5>;
++		st,fmc2-ebi-cs-write-address-hold-ns = <5>;
++		st,fmc2-ebi-cs-write-bus-turnaround-ns = <5>;
++		st,fmc2-ebi-cs-write-data-setup-ns = <45>;
++		st,fmc2-ebi-cs-write-data-hold-ns = <1>;
++	};
++};
++
++&gpioc {
++	status = "okay";
++};
++
+ &i2c4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c4_pins_a>;
+-- 
+2.29.2
+

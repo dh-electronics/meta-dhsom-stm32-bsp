@@ -1,0 +1,31 @@
+From 8a389826328d852560ca7b374cf2aca8e1132f02 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 15 Oct 2020 12:55:38 +0200
+Subject: [PATCH 02/52] rsi: Default to WiFi-alone configuration
+
+The WiFi+BT coexistence setting causes WiFi instability, disable it
+until RSI provides explanation for this behavior. The same behavior
+also happens with the RSI downstream vendor driver 2.0-rc6.
+
+Upstream-Status: Inappropriate [Configuration]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/net/wireless/rsi/rsi_91x_sdio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/rsi/rsi_91x_sdio.c b/drivers/net/wireless/rsi/rsi_91x_sdio.c
+index a7b8684143f4..78ad605081ae 100644
+--- a/drivers/net/wireless/rsi/rsi_91x_sdio.c
++++ b/drivers/net/wireless/rsi/rsi_91x_sdio.c
+@@ -22,7 +22,7 @@
+ #include "rsi_hal.h"
+ 
+ /* Default operating mode is wlan STA + BT */
+-static u16 dev_oper_mode = DEV_OPMODE_STA_BT_DUAL;
++static u16 dev_oper_mode = DEV_OPMODE_WIFI_ALONE;
+ module_param(dev_oper_mode, ushort, 0444);
+ MODULE_PARM_DESC(dev_oper_mode,
+ 		 "1[Wi-Fi], 4[BT], 8[BT LE], 5[Wi-Fi STA + BT classic]\n"
+-- 
+2.29.2
+

@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}/5.4:${THISDIR}/${PN}/common:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}/5.10:${THISDIR}/${PN}/common:"
 
-KBRANCH_dh-stm32mp1-dhsom ?= "linux-5.4.y"
+KBRANCH_dh-stm32mp1-dhsom ?= "linux-5.10.y"
 COMPATIBLE_MACHINE = "(dh-stm32mp1-dhsom)"
 
 SRC_URI_append_dh-stm32mp1-dhsom = " \

@@ -1,0 +1,75 @@
+From 781c8aa33c23d2446bd6daaac335d0b7a6cc84f4 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 3 Oct 2020 00:12:38 +0200
+Subject: [PATCH 18/52] drm/bridge: lvds-codec: Add support for pixel data
+ sampling edge select
+
+The OnSemi FIN3385 Parallel-to-LVDS encoder has a dedicated input line to
+select input pixel data sampling edge. Add DT property "pixelclk-active",
+same as the one used by display timings, and configure bus flags based on
+this DT property.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/patch/11814709/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Andrzej Hajda <a.hajda@samsung.com>
+Cc: Antonio Borneo <antonio.borneo@st.com>
+Cc: Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Philippe Cornu <philippe.cornu@st.com>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Vincent Abriou <vincent.abriou@st.com>
+Cc: Yannick Fertre <yannick.fertre@st.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: dri-devel@lists.freedesktop.org
+---
+ drivers/gpu/drm/bridge/lvds-codec.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/gpu/drm/bridge/lvds-codec.c b/drivers/gpu/drm/bridge/lvds-codec.c
+index f52ccffc1bd1..a0e5b555f82e 100644
+--- a/drivers/gpu/drm/bridge/lvds-codec.c
++++ b/drivers/gpu/drm/bridge/lvds-codec.c
+@@ -19,6 +19,7 @@ struct lvds_codec {
+ 	struct device *dev;
+ 	struct drm_bridge bridge;
+ 	struct drm_bridge *panel_bridge;
++	struct drm_bridge_timings timings;
+ 	struct regulator *vcc;
+ 	struct gpio_desc *powerdown_gpio;
+ 	u32 connector_type;
+@@ -81,6 +82,7 @@ static int lvds_codec_probe(struct platform_device *pdev)
+ 	struct drm_panel *panel;
+ 	struct lvds_codec *lvds_codec;
+ 	int ret;
++	u32 val;
+ 
+ 	lvds_codec = devm_kzalloc(dev, sizeof(*lvds_codec), GFP_KERNEL);
+ 	if (!lvds_codec)
+@@ -124,6 +126,12 @@ static int lvds_codec_probe(struct platform_device *pdev)
+ 	if (IS_ERR(lvds_codec->panel_bridge))
+ 		return PTR_ERR(lvds_codec->panel_bridge);
+ 
++	if (!of_property_read_u32(dev->of_node, "pixelclk-active", &val)) {
++		lvds_codec->timings.input_bus_flags = val ?
++			DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE :
++			DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE;
++	}
++
+ 	/*
+ 	 * The panel_bridge bridge is attached to the panel's of_node,
+ 	 * but we need a bridge attached to our of_node for our user
+@@ -131,6 +139,7 @@ static int lvds_codec_probe(struct platform_device *pdev)
+ 	 */
+ 	lvds_codec->bridge.of_node = dev->of_node;
+ 	lvds_codec->bridge.funcs = &funcs;
++	lvds_codec->bridge.timings = &lvds_codec->timings;
+ 	drm_bridge_add(&lvds_codec->bridge);
+ 
+ 	platform_set_drvdata(pdev, lvds_codec);
+-- 
+2.29.2
+
