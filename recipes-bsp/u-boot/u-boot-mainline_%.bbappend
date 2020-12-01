@@ -34,5 +34,6 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0023-ARM-dts-stm32-Disable-SDMMC1-CKIN-feedback-clock.patch \
 	file://0024-ARM-dts-stm32-Add-DHCOM-based-PicoITX-board.patch \
 	file://0025-ARM-dts-stm32-Enable-SDMMC3-on-DH-DRC02.patch \
+	file://0026-ARM-dts-stm32-Add-USB-OTG-ID-pin-on-DH-AV96.patch \
 	file://default-device-tree.cfg \
 	"

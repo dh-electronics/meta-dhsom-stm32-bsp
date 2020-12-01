@@ -1,0 +1,33 @@
+From 9ac736dc8ae36df05b1d6439fa7defa49c572a39 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 2 Nov 2020 12:36:41 +0100
+Subject: [PATCH 26/26] ARM: dts: stm32: Add USB OTG ID pin on DH AV96
+
+Add USB OTG ID pin mux and switch the USB OTG port
+from peripheral to OTG mode.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20201201102920.84051-4-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
+index c1cc80bcf5..5383545434 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
++++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
+@@ -192,7 +192,8 @@
+ };
+ 
+ &usbotg_hs {
+-	dr_mode = "peripheral";
++	pinctrl-0 = <&usbotg_hs_pins_a>;
++	pinctrl-names = "default";
+ 	phys = <&usbphyc_port1 0>;
+ 	phy-names = "usb2-phy";
+ 	status = "okay";
+-- 
+2.29.2
+
