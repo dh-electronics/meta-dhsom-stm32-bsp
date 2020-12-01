@@ -1,0 +1,48 @@
+From 995e8809b05777b97a70a8f1166d1c3834df2f7f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 1 Dec 2020 10:54:29 +0100
+Subject: [PATCH 25/26] ARM: dts: stm32: Enable SDMMC3 on DH DRC02
+
+The DH DRC02 board has an on-board microSD slot,
+add DT properties to enable the slot.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20201201102920.84051-3-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+---
+NOTE: Large part of this should be in the DHCOM SoM DT, however
+      a DT sync should only happen after Linux 5.10.y and U-Boot
+      2021.01 are out.
+---
+ arch/arm/dts/stm32mp15xx-dhcom-drc02.dts | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcom-drc02.dts b/arch/arm/dts/stm32mp15xx-dhcom-drc02.dts
+index 5a237a3b7b..e8508aa4d5 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcom-drc02.dts
++++ b/arch/arm/dts/stm32mp15xx-dhcom-drc02.dts
+@@ -105,9 +105,18 @@
+ 	 * On DRC02, the SoM does not have SDIO WiFi. The pins
+ 	 * are used for on-board microSD slot instead.
+ 	 */
+-	/delete-property/broken-cd;
+-	cd-gpios = <&gpioi 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc3_b4_pins_a>;
++	pinctrl-1 = <&sdmmc3_b4_od_pins_a>;
++	pinctrl-2 = <&sdmmc3_b4_sleep_pins_a>;
++	cd-gpios = <&gpioi 10 GPIO_ACTIVE_HIGH>;
+ 	disable-wp;
++	st,neg-edge;
++	bus-width = <4>;
++	vmmc-supply = <&v3v3>;
++	vqmmc-supply = <&v3v3>;
++	mmc-ddr-3_3v;
++	status = "okay";
+ };
+ 
+ &spi1 {
+-- 
+2.29.2
+
