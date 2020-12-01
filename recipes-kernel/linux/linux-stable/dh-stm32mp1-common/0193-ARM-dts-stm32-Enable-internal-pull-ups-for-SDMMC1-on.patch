@@ -1,0 +1,52 @@
+From 764249975ab4cf96d004112509f14af321999089 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 9 Oct 2020 22:42:35 +0200
+Subject: [PATCH 1/2] ARM: dts: stm32: Enable internal pull-ups for SDMMC1 on
+ DHCOM SoM
+
+The default state of SD bus and clock line is logical HI. SD card IO is
+open-drain and pulls the bus lines LO. Always enable the SD bus pull ups
+to guarantee this behavior on DHCOM SoM. Note that on SoMs with SD bus
+voltage level shifter, the pull ups are built into the level shifter,
+however that has no negative impact.
+
+Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111441.138289-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index f8a792d0f677..2bd0197f5ff9 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -472,6 +472,20 @@
+ 	status = "okay";
+ };
+ 
++&sdmmc1_b4_pins_a {
++	/*
++	 * SD bus pull-up resistors:
++	 * - optional on SoMs with SD voltage translator
++	 * - mandatory on SoMs without SD voltage translator
++	 */
++	pins1 {
++		bias-pull-up;
++	};
++	pins2 {
++		bias-pull-up;
++	};
++};
++
+ &sdmmc2 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
+-- 
+2.29.2
+
