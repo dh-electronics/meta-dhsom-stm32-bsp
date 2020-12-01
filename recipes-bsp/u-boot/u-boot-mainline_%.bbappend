@@ -30,7 +30,7 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0019-ARM-dts-stm32-Add-missing-dm-spl-props-for-SPI-NOR-o.patch \
 	file://0020-net-ks8851-Implement-EEPROM-MAC-address-readout.patch \
 	file://0021-ARM-dts-stm32-Do-not-set-eth1addr-if-KS8851-has-EEPR.patch \
-	file://0022-ARM-dts-stm32-Consistently-enable-internal-pull-ups-.patch \
+	file://0022-ARM-dts-stm32-Enable-internal-pull-ups-for-SDMMC1-on.patch \
 	file://0023-ARM-dts-stm32-Disable-SDMMC1-CKIN-feedback-clock.patch \
 	file://0024-ARM-dts-stm32-Add-DHCOM-based-PicoITX-board.patch \
 	file://default-device-tree.cfg \

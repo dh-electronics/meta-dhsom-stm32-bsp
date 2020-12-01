@@ -1,4 +1,4 @@
-From f6bfac917c84c9365e5974079380d720f7a3cc8a Mon Sep 17 00:00:00 2001
+From f4c7eab99b04859dda5cbc4de2683ea6ac18c019 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 9 Oct 2020 22:46:12 +0200
 Subject: [PATCH 2/2] ARM: dts: stm32: Disable SDMMC1 CKIN feedback clock
@@ -9,7 +9,7 @@ limited to 50 MHz and hence SD high-speed anyway, disable the SD feedback
 clock to permit operation of the same U-Boot image on both SoM with and
 without voltage level shifter.
 
-Upstream-Status: WIP
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20201201102920.84051-2-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
@@ -18,7 +18,7 @@ Cc: Patrick Delaunay <patrick.delaunay@st.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm/dts/stm32mp15xx-dhcom.dtsi b/arch/arm/dts/stm32mp15xx-dhcom.dtsi
-index 643aec94ce..8782a3b78d 100644
+index 61bec84339..875b63aff8 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcom.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcom.dtsi
 @@ -342,7 +342,6 @@
@@ -30,5 +30,5 @@ index 643aec94ce..8782a3b78d 100644
  	vmmc-supply = <&vdd_sd>;
  	status = "okay";
 -- 
-2.28.0
+2.29.2
 

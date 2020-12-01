@@ -1,0 +1,48 @@
+From 8309bcb84a7e41c24f5dc2586d50e3cecee7ad67 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 9 Oct 2020 22:33:01 +0200
+Subject: [PATCH 1/2] ARM: dts: stm32: Enable internal pull-ups for SDMMC1 on
+ DHCOM SoM
+
+The default state of SD bus and clock line is logical HI. SD card IO is
+open-drain and pulls the bus lines LO. Always enable the SD bus pull ups
+to guarantee this behavior on DHCOM SoM. Note that on SoMs with SD bus
+voltage level shifter, the pull ups are built into the level shifter,
+however that has no negative impact.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20201201102920.84051-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcom.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcom.dtsi b/arch/arm/dts/stm32mp15xx-dhcom.dtsi
+index 643aec94ce..61bec84339 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcom.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcom.dtsi
+@@ -348,6 +348,20 @@
+ 	status = "okay";
+ };
+ 
++&sdmmc1_b4_pins_a {
++	/*
++	 * SD bus pull-up resistors:
++	 * - optional on SoMs with SD voltage translator
++	 * - mandatory on SoMs without SD voltage translator
++	 */
++	pins1 {
++		bias-pull-up;
++	};
++	pins2 {
++		bias-pull-up;
++	};
++};
++
+ &sdmmc2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
+-- 
+2.29.2
+
