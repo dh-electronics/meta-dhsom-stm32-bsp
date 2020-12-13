@@ -50,6 +50,9 @@ PREFERRED_PROVIDER_virtual/libgles2 ?= "mesa-mainline"
 PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
 PREFERRED_PROVIDER_nativesdk-mesa ?= "nativesdk-mesa-mainline"
 
+# WPE (from meta-webkit)
+PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
+
 # Ship kernel modules
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree u-boot-default-env "
 
