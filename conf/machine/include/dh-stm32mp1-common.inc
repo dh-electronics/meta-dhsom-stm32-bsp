@@ -37,8 +37,8 @@ KERNEL_CLASSES += " kernel-fitimage "
 KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 PREFERRED_PROVIDER_virtual/kernel = "linux-stable"
-PREFERRED_VERSION_linux-stable = "5.4%"
-PREFERRED_VERSION_linux-yocto = "5.4%"
+PREFERRED_VERSION_linux-stable = "5.10%"
+PREFERRED_VERSION_linux-yocto = "5.10%"
 
 # Mesa
 PREFERRED_PROVIDER_virtual/egl ?= "mesa-mainline"
