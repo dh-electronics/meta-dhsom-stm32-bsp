@@ -13,8 +13,8 @@ Reviewed-on: https://gerrit.st.com/109354
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
 Reviewed-by: Alexandre TORGUE <alexandre.torgue@st.com>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/stm32mp151.dtsi | 32 ++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
 diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
 index 327a92b19e38..f0cb9463682f 100644
@@ -70,6 +70,19 @@ index 327a92b19e38..f0cb9463682f 100644
  			dma-channels = <32>;
  			dma-requests = <48>;
  		};
+@@ -1334,9 +1352,9 @@ nand-controller@4,0 {
+ 				      <4 0x09010000 0x1000>,
+ 				      <4 0x09020000 0x1000>;
+ 				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+-				dmas = <&mdma1 20 0x2 0x12000a02 0x0 0x0>,
+-				       <&mdma1 20 0x2 0x12000a08 0x0 0x0>,
+-				       <&mdma1 21 0x2 0x12000a0a 0x0 0x0>;
++				dmas = <&mdma1 20 0x2 0x12000a02 0x0 0x0 0x0>,
++				       <&mdma1 20 0x2 0x12000a08 0x0 0x0 0x0>,
++				       <&mdma1 21 0x2 0x12000a0a 0x0 0x0 0x0>;
+ 				dma-names = "tx", "rx", "ecc";
+ 				status = "disabled";
+ 			};
 @@ -1512,8 +1530,8 @@ spi6: spi@5c001000 {
  			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&rcc SPI6_K>;
