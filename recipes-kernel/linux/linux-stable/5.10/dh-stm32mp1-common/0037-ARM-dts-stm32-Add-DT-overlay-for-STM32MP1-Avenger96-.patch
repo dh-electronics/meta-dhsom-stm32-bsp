@@ -11,28 +11,28 @@ Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/Makefile                    |  1 +
- ...tm32mp157a-avenger96-overlay-ov5640-x7.dts | 93 +++++++++++++++++++
+ ...tm32mp15xx-avenger96-overlay-ov5640-x7.dts | 93 +++++++++++++++++++
  .../boot/dts/stm32mp15xx-dhcor-avenger96.dtsi | 53 +++++++++++
  3 files changed, 147 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index ff9acaec33c1..d948cd96231b 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -1069,6 +1069,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157a-avenger96-overlay-fdcan2-x6.dtbo \
- 	stm32mp157a-avenger96-overlay-i2c1-eeprom-x6.dtbo \
- 	stm32mp157a-avenger96-overlay-i2c2-eeprom-x6.dtbo \
-+	stm32mp157a-avenger96-overlay-ov5640-x7.dtbo \
- 	stm32mp157a-avenger96-overlay-spi2-eeprom-x6.dtbo \
+ 	stm32mp15xx-avenger96-overlay-fdcan2-x6.dtbo \
+ 	stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtbo \
+ 	stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-ov5640-x7.dtbo \
+ 	stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtbo \
  	stm32mp157a-dk1.dtb \
  	stm32mp157a-iot-box.dtb \
-diff --git a/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
+diff --git a/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts b/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
 new file mode 100644
 index 000000000000..df57334494ef
 --- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157a-avenger96-overlay-ov5640-x7.dts
++++ b/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
 @@ -0,0 +1,93 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*

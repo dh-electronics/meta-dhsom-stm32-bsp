@@ -28,9 +28,9 @@ index 1fdde471a314..b38851ff03bb 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -1084,6 +1084,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
 +	stm32mp157c-dhcom-picoitx.dtb \
  	stm32mp157c-dk2.dtb \
  	stm32mp157c-ed1.dtb \

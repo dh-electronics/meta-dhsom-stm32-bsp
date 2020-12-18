@@ -13,25 +13,25 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  arch/arm/boot/dts/Makefile                    |   1 +
  ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 132 ++++++++++++++++++
  2 files changed, 133 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index 336f2b1fa6b6..ddaa4170d7b9 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -1080,6 +1080,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dtbo \
-+	stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
  	stm32mp157c-dk2.dtb \
-diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 new file mode 100644
 index 000000000000..6b7ccf0138b5
 --- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 @@ -0,0 +1,132 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*

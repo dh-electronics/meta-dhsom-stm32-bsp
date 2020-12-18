@@ -13,25 +13,25 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  arch/arm/boot/dts/Makefile                    |   1 +
  ...hcom-pdk2-overlay-638-100-x12-rpi7inch.dts | 113 ++++++++++++++++++
  2 files changed, 114 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index 25677855fc57..adbe6e665dac 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -1006,6 +1006,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dtbo \
-+	stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
  	stm32mp157c-dk2.dtb \
  	stm32mp157c-ed1.dtb \
  	stm32mp157c-ev1.dtb \
-diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
 new file mode 100644
 index 000000000000..f6413f052cc1
 --- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
 @@ -0,0 +1,113 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*

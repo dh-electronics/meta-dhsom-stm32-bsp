@@ -11,9 +11,9 @@ Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/Makefile                    |  1 +
- ...2mp157c-dhcom-pdk2-overlay-497-200-x12.dts | 66 +++++++++++++++++++
+ ...2mp15xx-dhcom-pdk2-overlay-497-200-x12.dts | 66 +++++++++++++++++++
  2 files changed, 67 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-497-200-x12.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index c82ceee7ef7f..7c32bd8e007e 100644
@@ -22,16 +22,16 @@ index c82ceee7ef7f..7c32bd8e007e 100644
 @@ -1004,6 +1004,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp157a-dk1.dtb \
  	stm32mp157c-dhcom-pdk2.dtb \
- 	stm32mp157c-dhcom-pdk2-overlay-460-200-x11.dtbo \
-+	stm32mp157c-dhcom-pdk2-overlay-497-200-x12.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x21.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-531-100-x22.dtbo \
- 	stm32mp157c-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
-diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-497-200-x12.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-497-200-x12.dts
+ 	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
 new file mode 100644
 index 000000000000..5764cb2e62be
 --- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-497-200-x12.dts
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
 @@ -0,0 +1,66 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*

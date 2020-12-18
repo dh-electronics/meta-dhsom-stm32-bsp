@@ -17,14 +17,14 @@ Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
 ---
- ...2mp157c-dhcom-pdk2-overlay-560-200-x12.dts | 24 +++++++++++++++++--
+ ...2mp15xx-dhcom-pdk2-overlay-560-200-x12.dts | 24 +++++++++++++++++--
  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |  2 +-
  2 files changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
 index 9a897f4e1b4c..e4f4d1ecd66b 100644
---- a/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-dhcom-pdk2-overlay-560-200-x12.dts
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
 @@ -3,6 +3,7 @@
   * Copyright (C) 2020 Marek Vasut <marex@denx.de>
   */
