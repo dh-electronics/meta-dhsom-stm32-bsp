@@ -200,3 +200,4 @@ patch 0205-drm-panel-simple-add-panel-dpi-support.patch
 patch 0206-ARM-dts-stm32-Fix-polarity-of-the-DH-DRC02-uSD-card-.patch
 patch 0207-ARM-dts-stm32-Connect-card-detect-signal-on-DHCOM.patch
 patch 0208-ARM-dts-stm32-Disable-WP-on-DHCOM-uSD-slot.patch
+patch 0209-Input-ili210x-Implement-pressure-reporting-for-ILI25.patch
