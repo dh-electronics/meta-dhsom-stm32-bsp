@@ -202,3 +202,5 @@ patch 0207-ARM-dts-stm32-Connect-card-detect-signal-on-DHCOM.patch
 patch 0208-ARM-dts-stm32-Disable-WP-on-DHCOM-uSD-slot.patch
 patch 0209-Input-ili210x-Implement-pressure-reporting-for-ILI25.patch
 patch 0210-ARM-dts-stm32-Add-PDK2-DTO-for-DH-672-100-CAN-FD-boa.patch
+patch 0211-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
+patch 0212-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-DRC02.patch
