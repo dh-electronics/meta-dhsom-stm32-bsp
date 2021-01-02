@@ -1,7 +1,8 @@
-From 4e789ee397a580a16d92eb8e7ef5b78d98e5299e Mon Sep 17 00:00:00 2001
+From ca074864a8754fa09a3eeecddf20b01dbb455032 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 31 Jul 2020 12:36:51 +0200
-Subject: [PATCH] ARM: stm32: Add update_sf script to install U-Boot into SF
+Subject: [PATCH 2/2] ARM: stm32: Add update_sf script to install U-Boot into
+ SF
 
 Add script to read U-Boot from SD card and write it to matching
 locations in the SPI NOR, thus making the SPI NOR bootable.
@@ -13,10 +14,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
-index a99ce774c6..64179ff20a 100644
+index cc460b9d855..1f6cb2919b5 100644
 --- a/include/configs/stm32mp1.h
 +++ b/include/configs/stm32mp1.h
-@@ -161,7 +161,17 @@
+@@ -153,7 +153,17 @@
  	STM32MP_BOOTCMD \
  	BOOTENV \
  	"boot_net_usb_start=true\0" \
@@ -36,5 +37,5 @@ index a99ce774c6..64179ff20a 100644
  #endif /* ifndef CONFIG_SPL_BUILD */
  #endif /* ifdef CONFIG_DISTRO_DEFAULTS*/
 -- 
-2.27.0
+2.29.2
 
