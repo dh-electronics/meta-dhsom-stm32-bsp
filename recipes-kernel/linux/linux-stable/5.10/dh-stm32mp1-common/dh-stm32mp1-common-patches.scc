@@ -53,3 +53,5 @@ patch 0053-Input-ili210x-Implement-pressure-reporting-for-ILI25.patch
 patch 0054-ARM-dts-stm32-Add-PDK2-DTO-for-DH-672-100-CAN-FD-boa.patch
 patch 0055-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
 patch 0056-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-DRC02.patch
+patch 0057-rpmsg-core-add-possibility-to-get-message-payload-le.patch
+patch 0058-tty-add-rpmsg-driver.patch
