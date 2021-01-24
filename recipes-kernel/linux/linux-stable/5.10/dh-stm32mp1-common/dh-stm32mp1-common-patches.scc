@@ -12,7 +12,6 @@ patch 0011-dmaengine-stm32-mdma-fix-STM32_MDMA_VERY_HIGH_PRIORI.patch
 patch 0012-dmaengine-add-dma_request-release_chan_linked-to-man.patch
 patch 0013-media-ov5640-add-support-of-V4L2_CID_LINK_FREQ.patch
 patch 0014-drm-bridge-synopsys-dsi-read-status-error-during-tra.patch
-patch 0015-drm-panel-otm8009a-allow-using-non-continuous-dsi-cl.patch
 patch 0016-drm-stm-Prefer-faster-display-pixel-clock-over-slowe.patch
 patch 0017-drm-stm-Fix-bus_flags-handling.patch
 patch 0018-drm-bridge-lvds-codec-Add-support-for-pixel-data-sam.patch
