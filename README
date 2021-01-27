@@ -9,13 +9,6 @@ This layer depends on:
   branch: dunfell
   layers: meta
 
-  URI: git://git.openembedded.org/meta-python2
-  branch: dunfell
-
-  URI: git://github.com/openembedded/meta-openembedded.git
-  branch: dunfell
-  layers: meta-oe
-
   URI: ssh://git@gitlab.denx.de/denx/meta-mainline-common.git
   branch: dunfell-3.1
 
@@ -32,13 +25,9 @@ be cloned into a location accessible to the build system and a branch listed
 below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
-  ssh://git@gitlab.denx.de/denx/meta-mainline-graphics.git		dunfell-3.1
   ssh://git@gitlab.denx.de/denx/meta-mainline-common.git		dunfell-3.1
   ssh://git@gitlab.denx.de/dh-electronics/meta-dhsom-stm32-bsp.git	dunfell-3.1
   git://git.yoctoproject.org/poky					dunfell
-  git://git.openembedded.org/meta-python2				dunfell
-  git://github.com/openembedded/meta-openembedded.git			dunfell
-  git://github.com/meta-qt5/meta-qt5.git				dunfell
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
@@ -48,13 +37,7 @@ be referenced in bblayers.conf in this order:
 
   BBLAYERS ?= " \
     /path/to/OE/poky/meta \
-    /path/to/OE/meta-python2 \
-    /path/to/OE/meta-openembedded/meta-oe \
-    /path/to/OE/meta-openembedded/meta-python \
-    /path/to/OE/meta-openembedded/meta-webserver \
-    /path/to/OE/meta-qt5 \
     /path/to/OE/meta-mainline-common \
-    /path/to/OE/meta-mainline-graphics \
     /path/to/OE/meta-dhsom-stm32-bsp \
     "
 
@@ -125,13 +108,7 @@ BBFILES ?= ""
 
 BBLAYERS ?= " \
 	/path/to/OE/poky/meta \
-	/path/to/OE/meta-python2 \
-	/path/to/OE/meta-openembedded/meta-oe \
-	/path/to/OE/meta-openembedded/meta-python \
-	/path/to/OE/meta-openembedded/meta-webserver \
-	/path/to/OE/meta-qt5 \
 	/path/to/OE/meta-mainline-common \
-	/path/to/OE/meta-mainline-graphics \
 	/path/to/OE/meta-dhsom-stm32-bsp \
 	"
 
