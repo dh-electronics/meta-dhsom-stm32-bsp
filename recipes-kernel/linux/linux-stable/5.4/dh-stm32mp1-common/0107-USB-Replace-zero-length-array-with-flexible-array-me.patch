@@ -177,7 +177,7 @@ index c656b41b57b5..218057e91723 100644
  };
  
  /*
-@@ -1902,7 +1902,7 @@ struct xhci_hcd {
+@@ -1903,7 +1903,7 @@ struct xhci_hcd {
  
  	void			*dbc;
  	/* platform-specific data -- must come last */

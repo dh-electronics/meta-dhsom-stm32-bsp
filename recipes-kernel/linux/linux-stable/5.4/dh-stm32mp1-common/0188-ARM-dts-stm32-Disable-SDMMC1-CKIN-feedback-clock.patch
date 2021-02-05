@@ -25,7 +25,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index 2bd0197f5ff9..8bfa456484d2 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -466,7 +466,6 @@
+@@ -448,7 +448,6 @@
  	broken-cd;
  	st,sig-dir;
  	st,neg-edge;

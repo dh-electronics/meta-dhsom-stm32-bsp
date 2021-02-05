@@ -23,7 +23,7 @@ diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
 index 562c8317e3aa..13f370160412 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -1200,6 +1200,8 @@ static void m_can_start(struct net_device *dev)
+@@ -1198,6 +1198,8 @@ static void m_can_start(struct net_device *dev)
  	/* basic m_can configuration */
  	m_can_chip_config(dev);
  

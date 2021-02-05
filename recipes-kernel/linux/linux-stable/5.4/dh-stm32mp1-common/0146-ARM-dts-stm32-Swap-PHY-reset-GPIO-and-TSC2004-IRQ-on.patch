@@ -40,7 +40,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index 32558c5af192..19a2f8c8eb52 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -301,7 +301,7 @@
+@@ -283,7 +283,7 @@
  		compatible = "ti,tsc2004";
  		reg = <0x49>;
  		vio-supply = <&v3v3>;

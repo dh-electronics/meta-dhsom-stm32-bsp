@@ -17,7 +17,7 @@ diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
 index e00f2fa27f00..faa8482c8246 100644
 --- a/drivers/irqchip/irq-stm32-exti.c
 +++ b/drivers/irqchip/irq-stm32-exti.c
-@@ -604,12 +604,24 @@ static void stm32_exti_h_syscore_deinit(void)
+@@ -614,12 +614,24 @@ static void stm32_exti_h_syscore_deinit(void)
  	unregister_syscore_ops(&stm32_exti_h_syscore_ops);
  }
  

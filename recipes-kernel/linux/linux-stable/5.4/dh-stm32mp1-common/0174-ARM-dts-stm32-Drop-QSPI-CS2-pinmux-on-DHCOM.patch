@@ -21,7 +21,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index c61f99c152e3..2800b881760e 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -432,8 +432,8 @@
+@@ -413,8 +413,8 @@
  
  &qspi {
  	pinctrl-names = "default", "sleep";

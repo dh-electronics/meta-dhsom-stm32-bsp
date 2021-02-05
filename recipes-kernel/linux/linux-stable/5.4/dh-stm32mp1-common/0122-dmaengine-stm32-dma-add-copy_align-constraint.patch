@@ -19,7 +19,7 @@ diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
 index c518f1367fbb..7a6a43bf0708 100644
 --- a/drivers/dma/stm32-dma.c
 +++ b/drivers/dma/stm32-dma.c
-@@ -1339,6 +1339,7 @@ static int stm32_dma_probe(struct platform_device *pdev)
+@@ -1342,6 +1342,7 @@ static int stm32_dma_probe(struct platform_device *pdev)
  		BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
  	dd->directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV);
  	dd->residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;

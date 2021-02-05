@@ -26,7 +26,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/s
 index c32968623a4a..6490f819b872 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
-@@ -37,6 +37,16 @@ button-0 {
+@@ -37,6 +37,16 @@
  			linux,code = <KEY_A>;
  			gpios = <&gpiof 3 GPIO_ACTIVE_LOW>;
  		};
@@ -43,7 +43,7 @@ index c32968623a4a..6490f819b872 100644
  	};
  
  	gpio-keys {
-@@ -50,13 +60,6 @@ button-1 {
+@@ -50,13 +60,6 @@
  			wakeup-source;
  		};
  

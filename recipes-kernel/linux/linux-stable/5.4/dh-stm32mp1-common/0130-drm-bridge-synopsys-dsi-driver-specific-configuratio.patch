@@ -50,7 +50,7 @@ diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bri
 index 675442bfc1bd..f77e1149d806 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -718,7 +718,15 @@ static void dw_mipi_dsi_vertical_timing_config(struct dw_mipi_dsi *dsi,
+@@ -723,7 +723,15 @@ static void dw_mipi_dsi_vertical_timing_config(struct dw_mipi_dsi *dsi,
  
  static void dw_mipi_dsi_dphy_timing_config(struct dw_mipi_dsi *dsi)
  {
@@ -66,7 +66,7 @@ index 675442bfc1bd..f77e1149d806 100644
  
  	/*
  	 * TODO dw drv improvements
-@@ -731,16 +739,20 @@ static void dw_mipi_dsi_dphy_timing_config(struct dw_mipi_dsi *dsi)
+@@ -736,16 +744,20 @@ static void dw_mipi_dsi_dphy_timing_config(struct dw_mipi_dsi *dsi)
  	hw_version = dsi_read(dsi, DSI_VERSION) & VERSION;
  
  	if (hw_version >= HWVER_131) {
@@ -93,7 +93,7 @@ index 675442bfc1bd..f77e1149d806 100644
  }
  
  static void dw_mipi_dsi_dphy_interface_config(struct dw_mipi_dsi *dsi)
-@@ -991,7 +1003,8 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+@@ -996,7 +1008,8 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
  	dsi->dev = dev;
  	dsi->plat_data = plat_data;
  

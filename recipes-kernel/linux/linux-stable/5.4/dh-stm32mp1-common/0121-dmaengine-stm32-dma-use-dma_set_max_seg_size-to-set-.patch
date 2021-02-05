@@ -21,7 +21,7 @@ diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
 index 7e7780de47f1..c518f1367fbb 100644
 --- a/drivers/dma/stm32-dma.c
 +++ b/drivers/dma/stm32-dma.c
-@@ -1317,6 +1317,8 @@ static int stm32_dma_probe(struct platform_device *pdev)
+@@ -1320,6 +1320,8 @@ static int stm32_dma_probe(struct platform_device *pdev)
  		reset_control_deassert(dmadev->rst);
  	}
  

@@ -23,7 +23,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index f5baa944e8d4..96c6099a27f4 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -127,6 +127,8 @@ mdio0 {
+@@ -127,6 +127,8 @@
  
  		phy0: ethernet-phy@1 {
  			reg = <1>;

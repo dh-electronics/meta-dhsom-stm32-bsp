@@ -34,7 +34,7 @@ index 8d0254d0e5ea..5ae4f1a66154 100644
  };
  
  struct ov5640_dev {
-@@ -2250,6 +2251,10 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+@@ -2260,6 +2261,10 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
  	return 0;
  }
  
@@ -45,7 +45,7 @@ index 8d0254d0e5ea..5ae4f1a66154 100644
  static int ov5640_set_fmt(struct v4l2_subdev *sd,
  			  struct v4l2_subdev_pad_config *cfg,
  			  struct v4l2_subdev_format *format)
-@@ -2690,6 +2695,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -2700,6 +2705,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
  	case V4L2_CID_VFLIP:
  		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
  		break;
@@ -54,7 +54,7 @@ index 8d0254d0e5ea..5ae4f1a66154 100644
  	default:
  		ret = -EINVAL;
  		break;
-@@ -2762,6 +2769,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+@@ -2772,6 +2779,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
  				       V4L2_CID_POWER_LINE_FREQUENCY_AUTO, 0,
  				       V4L2_CID_POWER_LINE_FREQUENCY_50HZ);
  

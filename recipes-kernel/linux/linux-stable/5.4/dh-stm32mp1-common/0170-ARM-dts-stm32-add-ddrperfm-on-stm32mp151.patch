@@ -20,7 +20,7 @@ diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dt
 index 5aaf371a7ae6..15d0dce77ad0 100644
 --- a/arch/arm/boot/dts/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1486,6 +1486,14 @@
+@@ -1501,6 +1501,14 @@
  			};
  		};
  

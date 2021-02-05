@@ -21,7 +21,7 @@ diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
 index 5632e77866dc..7faf5f8c056d 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -1646,7 +1646,8 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
+@@ -1658,7 +1658,8 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
  
  	switch (ctrl->bRequestType & USB_RECIP_MASK) {
  	case USB_RECIP_DEVICE:
@@ -31,7 +31,7 @@ index 5632e77866dc..7faf5f8c056d 100644
  		status |= hsotg->remote_wakeup_allowed <<
  			  USB_DEVICE_REMOTE_WAKEUP;
  		reply = cpu_to_le16(status);
-@@ -4527,6 +4528,26 @@ static int dwc2_hsotg_gadget_getframe(struct usb_gadget *gadget)
+@@ -4553,6 +4554,26 @@ static int dwc2_hsotg_gadget_getframe(struct usb_gadget *gadget)
  	return dwc2_hsotg_read_frameno(to_hsotg(gadget));
  }
  
@@ -58,7 +58,7 @@ index 5632e77866dc..7faf5f8c056d 100644
  /**
   * dwc2_hsotg_pullup - connect/disconnect the USB PHY
   * @gadget: The usb gadget state
-@@ -4618,6 +4639,7 @@ static int dwc2_hsotg_vbus_draw(struct usb_gadget *gadget, unsigned int mA)
+@@ -4644,6 +4665,7 @@ static int dwc2_hsotg_vbus_draw(struct usb_gadget *gadget, unsigned int mA)
  
  static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
  	.get_frame	= dwc2_hsotg_gadget_getframe,

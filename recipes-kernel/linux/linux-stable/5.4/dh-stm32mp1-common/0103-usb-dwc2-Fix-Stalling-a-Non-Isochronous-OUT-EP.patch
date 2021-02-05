@@ -21,7 +21,7 @@ diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
 index f7528f732b2a..5632e77866dc 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3790,15 +3790,26 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+@@ -3816,15 +3816,26 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
  		for (idx = 1; idx < hsotg->num_of_eps; idx++) {
  			hs_ep = hsotg->eps_out[idx];
  			/* Proceed only unmasked ISOC EPs */
@@ -50,7 +50,7 @@ index f7528f732b2a..5632e77866dc 100644
  			}
  		}
  
-@@ -4317,19 +4328,20 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
+@@ -4343,19 +4354,20 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
  		epctl = dwc2_readl(hs, epreg);
  
  		if (value) {

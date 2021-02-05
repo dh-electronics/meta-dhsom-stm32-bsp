@@ -80,7 +80,7 @@ index 919267b29e8d..871f53ad374a 100644
  			dma-names = "in";
  			dma-maxburst = <2>;
  			status = "disabled";
-@@ -1340,8 +1340,8 @@
+@@ -1355,8 +1355,8 @@
  			reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
  			reg-names = "qspi", "qspi_mm";
  			interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;

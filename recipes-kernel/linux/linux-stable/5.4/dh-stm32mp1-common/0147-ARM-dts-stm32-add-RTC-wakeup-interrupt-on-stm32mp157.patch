@@ -22,7 +22,7 @@ diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dt
 index 229a69478562..6cefbaf590ab 100644
 --- a/arch/arm/boot/dts/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1502,7 +1502,8 @@
+@@ -1517,7 +1517,8 @@
  			reg = <0x5c004000 0x400>;
  			clocks = <&rcc RTCAPB>, <&rcc RTC>;
  			clock-names = "pclk", "rtc_ck";

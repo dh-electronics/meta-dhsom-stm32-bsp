@@ -1,11 +1,12 @@
-From ba66eefa06f874abe343a0ee765aceb64fb8b4d6 Mon Sep 17 00:00:00 2001
+From 37677f792c4db506bcaf181a6fc06412d4faec23 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 28 Oct 2020 21:28:25 +0100
-Subject: [PATCH 2/2] ARM: dts: stm32: Disable WP on DHCOM uSD slot
+Date: Wed, 28 Oct 2020 21:25:44 +0100
+Subject: [PATCH 1/2] ARM: dts: stm32: Connect card-detect signal on DHCOM
 
-The uSD slot has no WP detection, disable it.
+The DHCOM SoM uSD slot card detect signal is connected to GPIO PG1,
+describe it in the DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111331.138177-3-marex@denx.de/]
+Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111331.138177-2-marex@denx.de/]
 Fixes: 34e0c7847dcf ("ARM: dts: stm32: Add DH Electronics DHCOM STM32MP1 SoM and PDK2 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
@@ -15,18 +16,19 @@ Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
 ---
- arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-index 909574ca49a6..2f63ea90eb28 100644
+index 7de1d5d36b7e..909574ca49a6 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -466,6 +466,7 @@
+@@ -447,7 +447,7 @@
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
  	pinctrl-1 = <&sdmmc1_b4_od_pins_a &sdmmc1_dir_pins_a>;
  	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a &sdmmc1_dir_sleep_pins_a>;
- 	cd-gpios = <&gpiog 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+	disable-wp;
+-	broken-cd;
++	cd-gpios = <&gpiog 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
  	st,sig-dir;
  	st,neg-edge;
  	bus-width = <4>;

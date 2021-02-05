@@ -26,7 +26,7 @@ diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
 index 266e947572c1..f60b4f3cb393 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -214,6 +214,7 @@ struct ov5640_ctrls {
+@@ -216,6 +216,7 @@ struct ov5640_ctrls {
  	struct v4l2_ctrl *test_pattern;
  	struct v4l2_ctrl *hflip;
  	struct v4l2_ctrl *vflip;
@@ -34,7 +34,7 @@ index 266e947572c1..f60b4f3cb393 100644
  };
  
  struct ov5640_dev {
-@@ -2199,6 +2200,10 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+@@ -2223,6 +2224,10 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
  	return 0;
  }
  
@@ -45,7 +45,7 @@ index 266e947572c1..f60b4f3cb393 100644
  static int ov5640_set_fmt(struct v4l2_subdev *sd,
  			  struct v4l2_subdev_pad_config *cfg,
  			  struct v4l2_subdev_format *format)
-@@ -2637,6 +2642,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -2661,6 +2666,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
  	case V4L2_CID_VFLIP:
  		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
  		break;
@@ -54,7 +54,7 @@ index 266e947572c1..f60b4f3cb393 100644
  	default:
  		ret = -EINVAL;
  		break;
-@@ -2704,6 +2711,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+@@ -2728,6 +2735,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
  				       V4L2_CID_POWER_LINE_FREQUENCY_AUTO, 0,
  				       V4L2_CID_POWER_LINE_FREQUENCY_50HZ);
  

@@ -24,7 +24,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index 88a1f0295ff0..9a01288234d8 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -258,6 +258,7 @@
+@@ -240,6 +240,7 @@
  
  			vdda: ldo1 {
  				regulator-name = "vdda";

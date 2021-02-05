@@ -26,7 +26,7 @@ index 6a2b546f6f72..8d1fea332665 100644
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi
 @@ -35,7 +35,7 @@ &gpiob {
  	 */
- 	rs485-rx-en-hog {
+ 	rs485-rx-en {
  		gpio-hog;
 -		gpios = <8 GPIO_ACTIVE_HIGH>;
 +		gpios = <8 0>;
@@ -35,7 +35,7 @@ index 6a2b546f6f72..8d1fea332665 100644
  	};
 @@ -63,7 +63,7 @@ &gpioi {
  	 */
- 	usb-hub-hog {
+ 	usb-hub {
  		gpio-hog;
 -		gpios = <2 GPIO_ACTIVE_HIGH>;
 +		gpios = <2 0>;

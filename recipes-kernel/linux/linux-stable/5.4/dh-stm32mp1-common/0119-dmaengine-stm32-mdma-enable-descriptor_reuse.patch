@@ -19,7 +19,7 @@ diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
 index 5838311cf990..3056582c7385 100644
 --- a/drivers/dma/stm32-mdma.c
 +++ b/drivers/dma/stm32-mdma.c
-@@ -1614,6 +1614,8 @@ static int stm32_mdma_probe(struct platform_device *pdev)
+@@ -1617,6 +1617,8 @@ static int stm32_mdma_probe(struct platform_device *pdev)
  	dd->device_resume = stm32_mdma_resume;
  	dd->device_terminate_all = stm32_mdma_terminate_all;
  	dd->device_synchronize = stm32_mdma_synchronize;
