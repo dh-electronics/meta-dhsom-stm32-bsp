@@ -26,7 +26,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index ac46ab363e1b..752b86785460 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -399,6 +399,20 @@ &sdmmc1 {
+@@ -400,6 +400,20 @@ &sdmmc1 {
  	status = "okay";
  };
  

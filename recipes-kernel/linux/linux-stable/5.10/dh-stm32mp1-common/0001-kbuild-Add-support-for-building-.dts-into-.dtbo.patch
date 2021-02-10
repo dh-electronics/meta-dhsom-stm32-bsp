@@ -19,7 +19,7 @@ diff --git a/Makefile b/Makefile
 index 076d4e6b9ccc..288aa5466376 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1337,6 +1337,9 @@ ifneq ($(dtstree),)
+@@ -1333,6 +1333,9 @@ ifneq ($(dtstree),)
  %.dtb: include/config/kernel.release scripts_dtc
  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
  
