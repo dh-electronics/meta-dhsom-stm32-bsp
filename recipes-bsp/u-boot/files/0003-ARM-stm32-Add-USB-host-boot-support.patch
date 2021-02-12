@@ -1,0 +1,42 @@
+From 73981ad6ddacc877ae5d7d9190af6cdbf7163dcd Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 12 Feb 2021 13:47:08 +0100
+Subject: [PATCH 3/3] ARM: stm32: Add USB host boot support
+
+Add support for booting from USB pen drive, since USB host port is
+available on the STM32MP1.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210212125052.26972-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
+ include/configs/stm32mp1.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
+index 1f6cb2919b5..a2a0822aa2e 100644
+--- a/include/configs/stm32mp1.h
++++ b/include/configs/stm32mp1.h
+@@ -103,11 +103,18 @@
+ #define BOOT_TARGET_UBIFS(func)
+ #endif
+ 
++#ifdef CONFIG_USB
++#define BOOT_TARGET_USB(func)	func(USB, usb, 0)
++#else
++#define BOOT_TARGET_USB(func)
++#endif
++
+ #define BOOT_TARGET_DEVICES(func)	\
+ 	BOOT_TARGET_MMC1(func)		\
+ 	BOOT_TARGET_UBIFS(func)		\
+ 	BOOT_TARGET_MMC0(func)		\
+ 	BOOT_TARGET_MMC2(func)		\
++	BOOT_TARGET_USB(func)		\
+ 	BOOT_TARGET_PXE(func)
+ 
+ /*
+-- 
+2.30.0
+

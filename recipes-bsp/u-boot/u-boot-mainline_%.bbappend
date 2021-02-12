@@ -11,5 +11,6 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://fw_env.config \
 	file://0001-ARM-stm32-Increase-USB-power-good-delay.patch \
 	file://0002-ARM-stm32-Add-update_sf-script-to-install-U-Boot-int.patch \
+	file://0003-ARM-stm32-Add-USB-host-boot-support.patch \
 	file://default-device-tree.cfg \
 	"
