@@ -52,7 +52,7 @@ index 000000000000..df7c2a6e163d
 +/dts-v1/;
 +/plugin/;
 +
-+&ebi {
++&fmc {
 +	#address-cells = <2>;
 +	#size-cells = <1>;
 +
@@ -62,14 +62,14 @@ index 000000000000..df7c2a6e163d
 +		bank-width = <2>;
 +
 +		/* Timing values are in nS */
-+		st,fmc2_ebi_cs_mux_enable;
-+		st,fmc2_ebi_cs_transaction_type = <4>;
-+		st,fmc2_ebi_cs_buswidth = <16>;
-+		st,fmc2_ebi_cs_address_setup = <6>;
-+		st,fmc2_ebi_cs_address_hold = <6>;
-+		st,fmc2_ebi_cs_data_setup = <127>;
-+		st,fmc2_ebi_cs_bus_turnaround = <9>;
-+		st,fmc2_ebi_cs_data_hold = <9>;
++		st,fmc2-ebi-cs-mux-enable;
++		st,fmc2-ebi-cs-transaction-type = <4>;
++		st,fmc2-ebi-cs-buswidth = <16>;
++		st,fmc2-ebi-cs-address-setup-ns = <6>;
++		st,fmc2-ebi-cs-address-hold-ns = <6>;
++		st,fmc2-ebi-cs-data-setup-ns = <127>;
++		st,fmc2-ebi-cs-bus-turnaround-ns = <9>;
++		st,fmc2-ebi-cs-data-hold-ns = <9>;
 +	};
 +};
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dts
