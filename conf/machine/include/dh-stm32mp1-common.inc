@@ -20,6 +20,9 @@ UBOOT_SUFFIX ?= "itb"
 SPL_BINARY := "u-boot-spl.stm32"
 UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"
+# fitImage DT and DTO load addresses
+UBOOT_DTB_LOADADDRESS = "0xcff00000"
+UBOOT_DTBO_LOADADDRESS = "0xcff80000"
 
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-mainline"
 PREFERRED_PROVIDER_u-boot = "u-boot-mainline"
