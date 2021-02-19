@@ -68,3 +68,7 @@ WKS_FILE = "sdimage-stm32mp1.wks"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
 IMAGE_INSTALL_append = " kernel-devicetree kernel-image-fitimage virtual/bootloader "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot virtual/bootloader:do_deploy"
+
+# Add any optional config files that might be present e.g. in other layers
+include conf/machine/include/dh-stm32mp1-common-extra.inc
+include conf/machine/${MACHINE}-extra.conf
