@@ -32,6 +32,13 @@ if test $? != 0 ; then
   exit 2
 fi
 
+# Assure that initrd relocation to the end of DRAM will not interfere
+# with application of relocated DT and DTOs at 0xcff00000 , clamp the
+# initrd relocation address below UBOOT_DTB_LOADADDRESS = 0xcff00000.
+if test -z "${initrd_high}" ; then
+  setenv initrd_high 0xcff00000
+fi
+
 # A custom script exists to load DTOs
 if test -n "${loaddtoscustom}" ; then
   # Pull DTOs from fitImage and manually apply them to base DT
