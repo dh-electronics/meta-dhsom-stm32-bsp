@@ -6,7 +6,7 @@ Subject: [PATCH 3/3] ARM: stm32: Add USB host boot support
 Add support for booting from USB pen drive, since USB host port is
 available on the STM32MP1.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210212125052.26972-1-marex@denx.de/]
+Upstream-Status: Backport [0bbfae717f4a42bfac728c116d33615cef032723]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrice Chotard <patrice.chotard@foss.st.com>
 Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
