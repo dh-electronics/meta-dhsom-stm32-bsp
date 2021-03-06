@@ -33,10 +33,10 @@ if test $? != 0 ; then
 fi
 
 # Assure that initrd relocation to the end of DRAM will not interfere
-# with application of relocated DT and DTOs at 0xcff00000 , clamp the
-# initrd relocation address below UBOOT_DTB_LOADADDRESS = 0xcff00000.
+# with application of relocated DT and DTOs at %UBOOT_DTB_LOADADDRESS% , clamp the
+# initrd relocation address below UBOOT_DTB_LOADADDRESS = %UBOOT_DTB_LOADADDRESS%.
 if test -z "${initrd_high}" ; then
-  setenv initrd_high 0xcff00000
+  setenv initrd_high %UBOOT_DTB_LOADADDRESS%
 fi
 
 # A custom script exists to load DTOs
@@ -44,9 +44,9 @@ if test -n "${loaddtoscustom}" ; then
   # Pull DTOs from fitImage and manually apply them to base DT
   if test -n "${loaddtos}" ; then
     # Matches UBOOT_DTB_LOADADDRESS in OE layer machine config
-    setexpr loadaddrdtb 0xcff00000
+    setexpr loadaddrdtb %UBOOT_DTB_LOADADDRESS%
     # Matches UBOOT_DTBO_LOADADDRESS in OE layer machine config
-    setexpr loadaddrdtbo 0xcff80000
+    setexpr loadaddrdtbo %UBOOT_DTBO_LOADADDRESS%
 
     setexpr loaddtossep gsub '#conf' ' fdt' "${loaddtos}"
     setexpr loaddtb 1
