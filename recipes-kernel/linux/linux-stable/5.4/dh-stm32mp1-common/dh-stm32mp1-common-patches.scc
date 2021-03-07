@@ -187,12 +187,9 @@ patch 0186-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
 patch 0187-ARM-dts-stm32-Enable-internal-pull-ups-for-SDMMC1-on.patch
 patch 0188-ARM-dts-stm32-Disable-SDMMC1-CKIN-feedback-clock.patch
 patch 0189-rsi-Default-to-WiFi-alone-configuration.patch
-patch 0190-rsi-Fix-TX-EAPOL-packet-handling-against-iwlwifi-AP.patch
 patch 0191-ARM-dts-stm32-Fix-LED5-on-STM32MP1-DHCOM-PDK2.patch
 patch 0192-ARM-dts-stm32-Define-VIO-regulator-supply-on-DHCOM.patch
 patch 0193-ARM-dts-stm32-Keep-VDDA-LDO1-always-on-on-DHCOM.patch
-patch 0194-rsi-Move-card-interrupt-handling-to-RX-thread.patch
-patch 0195-rsi-Clean-up-loop-in-the-interrupt-handler.patch
 patch 0196-ARM-dts-stm32-Add-DHCOM-based-PicoITX-board.patch
 patch 0197-ARM-dts-stm32-Disable-KS8851-and-EBI2-on-PicoITX-boa.patch
 patch 0198-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-626-100-LVDS-ad.patch
