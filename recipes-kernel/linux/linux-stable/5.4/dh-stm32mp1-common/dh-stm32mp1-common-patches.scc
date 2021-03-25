@@ -201,6 +201,5 @@ patch 0203-Input-ili210x-Implement-pressure-reporting-for-ILI25.patch
 patch 0204-ARM-dts-stm32-Add-PDK2-DTO-for-DH-672-100-CAN-FD-boa.patch
 patch 0205-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
 patch 0206-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-DRC02.patch
-patch 0207-vfp-force-non-conditional-encoding-for-external-Thum.patch
 patch 0208-rpmsg-core-add-possibility-to-get-message-payload-le.patch
 patch 0209-tty-add-rpmsg-driver.patch
