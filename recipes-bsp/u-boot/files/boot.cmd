@@ -56,7 +56,7 @@ if test -n "${loaddtoscustom}" ; then
         echo "Using base DT ${i}"
         imxtract ${loadaddr} ${i} ${loadaddrdtb} ;
         fdt addr ${loadaddrdtb}
-        fdt resize
+        fdt resize 0x40000
         setenv loaddtb 0
       else
         echo "Applying DTO ${i}"
