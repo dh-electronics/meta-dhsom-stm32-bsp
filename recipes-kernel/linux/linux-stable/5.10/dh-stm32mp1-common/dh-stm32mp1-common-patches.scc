@@ -1,5 +1,4 @@
 patch 0001-kbuild-Add-support-for-building-.dts-into-.dtbo.patch
-patch 0002-rsi-Default-to-WiFi-alone-configuration.patch
 patch 0006-rtc-stm32-remove-dedicated-wakeup-management.patch
 patch 0007-rtc-rtc-stm32-don-t-print-an-error-on-probe-deferral.patch
 patch 0008-rtc-rtc-stm32-change-PM-callbacks-to-_noirq.patch
