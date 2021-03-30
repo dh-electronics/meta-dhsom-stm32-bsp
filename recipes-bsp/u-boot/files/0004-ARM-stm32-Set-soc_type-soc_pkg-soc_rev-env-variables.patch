@@ -112,7 +112,7 @@ index 1520c6eaed6..60f4ad3f6e0 100644
  		break;
  	default:
 -		pkg = "??";
-+		pkg = 0;
++		*pkg = 0;
  		break;
  	}
  
