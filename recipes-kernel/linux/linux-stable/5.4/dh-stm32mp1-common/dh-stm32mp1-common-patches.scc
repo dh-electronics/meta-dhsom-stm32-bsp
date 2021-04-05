@@ -202,3 +202,8 @@ patch 0205-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
 patch 0206-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-DRC02.patch
 patch 0208-rpmsg-core-add-possibility-to-get-message-payload-le.patch
 patch 0209-tty-add-rpmsg-driver.patch
+patch 0210-nvmem-core-add-nvmem_cell_read_u8.patch
+patch 0211-cpufreq-add-stm32-cpufreq-driver.patch
+patch 0212-cpufreq-dt-platdev-Add-stm32mp157-SOC-in-the-blackli.patch
+patch 0213-cpufreq-stm32-don-t-print-an-error-on-probe-deferral.patch
+patch 0214-ARM-dts-stm32-add-cpufreq-support-on-stm32mp157.patch

@@ -45,3 +45,7 @@ patch 0048-ARM-dts-stm32-Add-PDK2-DTO-for-DH-672-100-CAN-FD-boa.patch
 patch 0049-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
 patch 0050-rpmsg-core-add-possibility-to-get-message-payload-le.patch
 patch 0051-tty-add-rpmsg-driver.patch
+patch 0052-cpufreq-add-stm32-cpufreq-driver.patch
+patch 0053-cpufreq-dt-platdev-Add-stm32mp157-SOC-in-the-blackli.patch
+patch 0054-cpufreq-dt-platdev-Blacklist-st-stm32mp151-and-st-st.patch
+patch 0055-ARM-dts-stm32-add-cpufreq-support-on-stm32mp157.patch
