@@ -5,7 +5,7 @@ KBRANCH_dh-stm32mp1-dhsom ?= "linux-${BPV}.y"
 COMPATIBLE_MACHINE = "(dh-stm32mp1-dhsom)"
 
 SRC_URI_append_dh-stm32mp1-dhsom = " \
-	file://${BPV}/dh-stm32mp1-common;type=kmeta;destsuffix=${BPV}/dh-stm32mp1-common \
+	file://${BPV}/dh-stm32mp1-dhsom;type=kmeta;destsuffix=${BPV}/dh-stm32mp1-dhsom \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-drc02 = " \

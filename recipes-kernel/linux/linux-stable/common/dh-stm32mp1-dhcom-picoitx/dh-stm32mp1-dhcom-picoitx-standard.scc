@@ -2,7 +2,7 @@ define KMACHINE dh-stm32mp1-dhcom-picoitx
 define KTYPE standard
 define KARCH arm
 branch dh-stm32mp1-dhcom-picoitx
-kconf hardware dh-stm32mp1-dhsom-common.cfg
-kconf non-hardware dh-stm32mp1-dhsom-common-non_hardware.cfg
+kconf hardware dh-stm32mp1-dhsom.cfg
+kconf non-hardware dh-stm32mp1-dhsom-non_hardware.cfg
 
-include dh-stm32mp1-common-patches.scc
+include dh-stm32mp1-dhsom-patches.scc
