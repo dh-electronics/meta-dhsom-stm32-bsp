@@ -17,7 +17,6 @@ patch 0020-perf-stm32-ddrperfm-driver-creation.patch
 patch 0021-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
 patch 0022-ARM-dts-stm32-use-exti-19-as-main-interrupt-to-suppo.patch
 patch 0023-ARM-dts-stm32-Add-IPCC-wakeup-management-on-stm32mp1.patch
-patch 0024-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
 patch 0025-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
 patch 0026-ARM-dts-stm32-Add-alternate-pinmux-for-FMC-EBI-bus.patch
 patch 0027-ARM-dts-stm32-Add-KS8851-on-FMC2-to-STM32MP1-DHCOM.patch
@@ -49,3 +48,7 @@ patch 0052-cpufreq-add-stm32-cpufreq-driver.patch
 patch 0053-cpufreq-dt-platdev-Add-stm32mp157-SOC-in-the-blackli.patch
 patch 0054-cpufreq-dt-platdev-Blacklist-st-stm32mp151-and-st-st.patch
 patch 0055-ARM-dts-stm32-add-cpufreq-support-on-stm32mp157.patch
+patch 0056-ARM-dts-stm32-Fill-GPIO-line-names-on-DHCOM-SoM.patch
+patch 0057-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
+patch 0058-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
+patch 0059-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch

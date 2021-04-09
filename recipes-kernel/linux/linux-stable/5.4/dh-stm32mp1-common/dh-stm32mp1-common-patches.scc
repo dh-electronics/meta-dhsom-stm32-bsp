@@ -152,7 +152,6 @@ patch 0151-ARM-dts-stm32-disable-dma-chaining-for-all-spi.patch
 patch 0152-ARM-dts-stm32-use-32KB-SRAM-buffer-for-DCMI-DMA-tran.patch
 patch 0153-ARM-dts-stm32-Add-alternate-pinmux-for-RCC-pin.patch
 patch 0154-ARM-dts-stm32-Add-alternate-pinmux-for-DCMI-pins.patch
-patch 0155-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
 patch 0156-ARM-dts-stm32-Add-DT-overlay-for-STM32MP1-Avenger96-.patch
 patch 0157-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
 patch 0158-ARM-dts-stm32-Add-AV96-DTO-for-DH-644-100-DSI-mezzan.patch
@@ -207,3 +206,7 @@ patch 0211-cpufreq-add-stm32-cpufreq-driver.patch
 patch 0212-cpufreq-dt-platdev-Add-stm32mp157-SOC-in-the-blackli.patch
 patch 0213-cpufreq-stm32-don-t-print-an-error-on-probe-deferral.patch
 patch 0214-ARM-dts-stm32-add-cpufreq-support-on-stm32mp157.patch
+patch 0215-ARM-dts-stm32-Fill-GPIO-line-names-on-DHCOM-SoM.patch
+patch 0216-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
+patch 0217-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
+patch 0218-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch

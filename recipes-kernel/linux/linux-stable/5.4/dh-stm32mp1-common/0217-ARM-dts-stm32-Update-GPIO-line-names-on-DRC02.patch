@@ -1,0 +1,51 @@
+From 7888107550aa43c3e6a2bfb5356b54daf17b3984 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 29 Mar 2021 21:36:13 +0200
+Subject: [PATCH 217/218] ARM: dts: stm32: Update GPIO line names on DRC02
+
+Use more specific custom GPIO line names which denote exactly where
+the GPIO came from, i.e. the base board. Also, update the new blank
+GPIO line names set up by stm32mp15xx-dhcom-som.dtsi back to their
+original values.
+
+Upstream-Status: Backport [1ab841fbab09bbc721d61a8688bd70db58643f8d]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi
+index 8d1fea332665..6d4d4a776731 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi
+@@ -43,15 +43,15 @@
+ 
+ &gpiod {
+ 	gpio-line-names = "", "", "", "",
+-			  "", "", "", "",
+-			  "", "", "", "Out1",
+-			  "Out2", "", "", "";
++			  "", "", "DHCOM-B", "",
++			  "", "", "", "DRC02-Out1",
++			  "DRC02-Out2", "", "", "";
+ };
+ 
+ &gpioi {
+-	gpio-line-names = "In1", "", "", "",
+-			  "", "", "", "",
+-			  "In2", "", "", "",
++	gpio-line-names = "DRC02-In1", "DHCOM-O", "DHCOM-H", "DHCOM-I",
++			  "DHCOM-R", "DHCOM-M", "", "",
++			  "DRC02-In2", "", "", "",
+ 			  "", "", "", "";
+ 
+ 	/*
+-- 
+2.30.2
+
