@@ -25,7 +25,7 @@ be cloned into a location accessible to the build system and a branch listed
 below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
-  https://gitlab.denx.de/denx/meta-mainline-common.git			dunfell-3.1
+  https://source.denx.de/denx/meta-mainline-common.git			dunfell-3.1
   https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		dunfell-3.1
   git://git.yoctoproject.org/poky					dunfell
 
