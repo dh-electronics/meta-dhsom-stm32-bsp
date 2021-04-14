@@ -9,7 +9,7 @@ This layer depends on:
   branch: dunfell
   layers: meta
 
-  URI: ssh://git@gitlab.denx.de/denx/meta-mainline-common.git
+  URI: https://source.denx.de/denx/meta-mainline-common.git
   branch: dunfell-3.1
 
 Building image
