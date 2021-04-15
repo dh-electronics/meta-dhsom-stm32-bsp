@@ -41,35 +41,42 @@ fi
 
 # A custom script exists to load DTOs
 if test -n "${loaddtoscustom}" ; then
-  # Pull DTOs from fitImage and manually apply them to base DT
-  if test -n "${loaddtos}" ; then
-    # Matches UBOOT_DTB_LOADADDRESS in OE layer machine config
-    setenv loadaddrdtb %UBOOT_DTB_LOADADDRESS%
-    # Matches UBOOT_DTBO_LOADADDRESS in OE layer machine config
-    setenv loadaddrdtbo %UBOOT_DTBO_LOADADDRESS%
-
-    setexpr loaddtossep gsub '#conf' ' fdt' "${loaddtos}"
-    setexpr loaddtb 1
-
-    for i in ${loaddtossep} ; do
-      if test ${loaddtb} = 1 ; then
-        echo "Using base DT ${i}"
-        imxtract ${loadaddr} ${i} ${loadaddrdtb} ;
-        fdt addr ${loadaddrdtb}
-        fdt resize 0x40000
-        setenv loaddtb 0
-      else
-        echo "Applying DTO ${i}"
-        imxtract ${loadaddr} ${i} ${loadaddrdtbo} ;
-        fdt apply ${loadaddrdtbo}
-      fi
-    done
-
-    setenv loaddtb
-    setenv loaddtossep
-    setenv loadaddrdtbo
-    setenv loadaddrdtb
+  if test -z "${loaddtos}" ; then
+    echo "Using base DT from fitImage default configuration as fallback."
+    fdt addr ${loadaddr}
+    fdt get value loaddtos /configurations default
+    setenv loaddtos "#${loaddtos}"
+    echo "To select different base DT to be adjusted using 'loaddtoscustom'"
+    echo "script and passed to Linux kernel, set 'loaddtos' variable:"
+    echo "  => env set loaddtos \#conf@...dtb"
   fi
+
+  # Matches UBOOT_DTB_LOADADDRESS in OE layer machine config
+  setenv loadaddrdtb %UBOOT_DTB_LOADADDRESS%
+  # Matches UBOOT_DTBO_LOADADDRESS in OE layer machine config
+  setenv loadaddrdtbo %UBOOT_DTBO_LOADADDRESS%
+
+  setexpr loaddtossep gsub '#conf' ' fdt' "${loaddtos}"
+  setexpr loaddtb 1
+
+  for i in ${loaddtossep} ; do
+    if test ${loaddtb} = 1 ; then
+      echo "Using base DT ${i}"
+      imxtract ${loadaddr} ${i} ${loadaddrdtb} ;
+      fdt addr ${loadaddrdtb}
+      fdt resize 0x40000
+      setenv loaddtb 0
+    else
+      echo "Applying DTO ${i}"
+      imxtract ${loadaddr} ${i} ${loadaddrdtbo} ;
+      fdt apply ${loadaddrdtbo}
+    fi
+  done
+
+  setenv loaddtb
+  setenv loaddtossep
+  setenv loadaddrdtbo
+  setenv loadaddrdtb
 
   # Run the custom DTO loader script
   #
