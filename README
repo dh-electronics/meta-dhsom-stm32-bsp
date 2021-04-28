@@ -44,7 +44,7 @@ be referenced in bblayers.conf in this order:
 The following specifics should be placed into local.conf:
 
   MACHINE = "dh-stm32mp1-dhcom-pdk2"
-  DISTRO = "poky"
+  DISTRO = "nodistro"
 
 Note that MACHINE must be either "dh-stm32mp1-dhcom-pdk2" or
 "dh-stm32mp1-dhcom-picoitx" or "dh-stm32mp1-dhcom-drc02" or
@@ -76,7 +76,7 @@ Example local.conf
 ==================
 MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DL_DIR = "/path/to/OE/downloads"
-DISTRO ?= "poky"
+DISTRO ?= "nodistro"
 PACKAGE_CLASSES ?= "package_rpm"
 EXTRA_IMAGE_FEATURES = "debug-tweaks"
 USER_CLASSES ?= "buildstats image-mklibs image-prelink"
