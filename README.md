@@ -1,33 +1,36 @@
-This layer provides BSP support for Mainline STM32MP1 platform.
+OpenEmbedded BSP layer for DH electronics STM32MP1 platforms
+============================================================
+
+This layer provides BSP for DH electronics STM32MP1 platforms.
 
 Dependencies
-============
+------------
 
 This layer depends on:
 
-  URI: git://git.yoctoproject.org/poky
-  branch: dunfell
-  layers: meta
+* URI: git://git.yoctoproject.org/poky
+  - branch: dunfell
+  - layers: meta
 
-  URI: https://source.denx.de/denx/meta-mainline-common.git
-  branch: dunfell-3.1
+* URI: https://source.denx.de/denx/meta-mainline-common.git
+  - branch: dunfell-3.1
 
 Building image
-==============
+--------------
 
 A good starting point for setting up the build environment is is the official
 Yocto Project wiki.
 
-  https://www.yoctoproject.org/docs/3.1/brief-yoctoprojectqs/brief-yoctoprojectqs.html
+* https://www.yoctoproject.org/docs/3.1/brief-yoctoprojectqs/brief-yoctoprojectqs.html
 
 Before attempting the build, the following metalayer git repositories shall
 be cloned into a location accessible to the build system and a branch listed
 below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
-  https://source.denx.de/denx/meta-mainline-common.git			dunfell-3.1
-  https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		dunfell-3.1
-  git://git.yoctoproject.org/poky					dunfell
+* https://source.denx.de/denx/meta-mainline-common.git			(branch: dunfell-3.1)
+* https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		(branch: dunfell-3.1)
+* git://git.yoctoproject.org/poky					(branch: dunfell)
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
@@ -35,22 +38,30 @@ using oe-init-build-env as specified in the Yocto Project wiki.
 In addition to the content in the wiki, the aforementioned metalayers shall
 be referenced in bblayers.conf in this order:
 
-  BBLAYERS ?= " \
-    /path/to/OE/poky/meta \
-    /path/to/OE/meta-mainline-common \
-    /path/to/OE/meta-dhsom-stm32-bsp \
-    "
+```
+BBLAYERS ?= " \
+  /path/to/OE/poky/meta \
+  /path/to/OE/meta-mainline-common \
+  /path/to/OE/meta-dhsom-stm32-bsp \
+  "
+```
 
 The following specifics should be placed into local.conf:
 
-  MACHINE = "dh-stm32mp1-dhcom-pdk2"
-  DISTRO = "nodistro"
+```
+MACHINE = "dh-stm32mp1-dhcom-pdk2"
+DISTRO = "nodistro"
+```
 
-Note that MACHINE must be either "dh-stm32mp1-dhcom-pdk2" or
-"dh-stm32mp1-dhcom-picoitx" or "dh-stm32mp1-dhcom-drc02" or
-"dh-stm32mp1-dhcor-avenger96". Adapt the suffixes of all the
-files and names of directories further in this documentation
-according to MACHINE.
+Note that MACHINE must be either of:
+
+* dh-stm32mp1-dhcom-drc02
+* dh-stm32mp1-dhcom-pdk2
+* dh-stm32mp1-dhcom-picoitx
+* dh-stm32mp1-dhcor-avenger96
+
+Adapt the suffixes of all the files and names of directories further in
+this documentation according to MACHINE.
 
 Both local.conf and bblayers.conf are included verbatim in full at the end
 of this readme.
@@ -58,22 +69,31 @@ of this readme.
 Once the configuration is complete, a basic demo system image suitable for
 evaluation can be built using:
 
-  $ bitbake core-image-minimal
+```
+$ bitbake core-image-minimal
+```
 
 Once the build completes, the images are available in:
 
-  tmp/deploy/images/dh-stm32mp1-dhcom-pdk2/
+```
+tmp/deploy/images/dh-stm32mp1-dhcom-pdk2/
+```
 
 The SD card image is specifically in:
 
-  core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic
+```
+core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic
+```
 
 And shall be written to the SD card using dd:
 
-  $ dd if=core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
+```
+$ dd if=core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
+```
 
 Example local.conf
-==================
+------------------
+```
 MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DL_DIR = "/path/to/OE/downloads"
 DISTRO ?= "nodistro"
@@ -97,9 +117,11 @@ BB_NUMBER_THREADS = "12"
 PARALLEL_MAKE = "-j 12"
 INHERIT += "buildhistory"
 BUILDHISTORY_COMMIT = "1"
+```
 
 Example bblayers.conf
-=====================
+---------------------
+```
 # LAYER_CONF_VERSION is increased each time build/conf/bblayers.conf
 # changes incompatibly
 POKY_BBLAYERS_CONF_VERSION = "2"
@@ -112,3 +134,4 @@ BBLAYERS ?= " \
 	/path/to/OE/meta-mainline-common \
 	/path/to/OE/meta-dhsom-stm32-bsp \
 	"
+```
