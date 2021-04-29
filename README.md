@@ -113,10 +113,6 @@ BB_DISKMON_DIRS = "\
 PACKAGECONFIG_append_pn-qemu-native = " sdl"
 PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 CONF_VERSION = "1"
-BB_NUMBER_THREADS = "12"
-PARALLEL_MAKE = "-j 12"
-INHERIT += "buildhistory"
-BUILDHISTORY_COMMIT = "1"
 ```
 
 Example bblayers.conf
