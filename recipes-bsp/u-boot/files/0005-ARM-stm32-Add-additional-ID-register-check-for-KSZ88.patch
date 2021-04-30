@@ -1,0 +1,59 @@
+From 7b9d3b482bbd04ca232be8b87fdc9ffd378acafa Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 30 Apr 2021 13:05:48 +0200
+Subject: [PATCH] ARM: stm32: Add additional ID register check for KSZ8851
+ presence
+
+Currently the code sets eth1addr only if /ethernet1 alias exists in DT,
+the node pointed to by the alias has "micrel,ks8851-mll" compatible
+string, and the KSZ8851 CCR register read indicates programmed EEPROM
+is not connected.
+
+This is not sufficient to detect cases where the DT still contains the
+KSZ8851 nodes, but the chip itself is not present. Extend the detection
+to handle these cases.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210430112922.27795-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+---
+ board/dhelectronics/dh_stm32mp1/board.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index f42d395098b..638f79044ad 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -85,6 +85,8 @@ DECLARE_GLOBAL_DATA_PTR;
+ #define KS_CCR_EEPROM	BIT(9)
+ #define KS_BE0		BIT(12)
+ #define KS_BE1		BIT(13)
++#define KS_CIDER	0xC0
++#define CIDER_ID	0x8870
+ 
+ int setup_mac_address(void)
+ {
+@@ -122,11 +124,18 @@ int setup_mac_address(void)
+ 	 * is present. If EEPROM is present, it must contain valid
+ 	 * MAC address.
+ 	 */
+-	u32 reg, ccr;
++	u32 reg, cider, ccr;
+ 	reg = fdt_get_base_address(gd->fdt_blob, off);
+ 	if (!reg)
+ 		goto out_set_ethaddr;
+ 
++	writew(KS_BE0 | KS_BE1 | KS_CIDER, reg + 2);
++	cider = readw(reg);
++	if ((cider & 0xfff0) != CIDER_ID) {
++		skip_eth1 = true;
++		goto out_set_ethaddr;
++	}
++
+ 	writew(KS_BE0 | KS_BE1 | KS_CCR, reg + 2);
+ 	ccr = readw(reg);
+ 	if (ccr & KS_CCR_EEPROM) {
+-- 
+2.30.2
+
