@@ -64,7 +64,7 @@ PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree u-boot-default-env "
 
 # List of images to be built
-IMAGE_FSTYPES ?= "tar.xz wic.xz"
+IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
 EXTRA_IMAGEDEPENDS += "virtual/bootloader"
