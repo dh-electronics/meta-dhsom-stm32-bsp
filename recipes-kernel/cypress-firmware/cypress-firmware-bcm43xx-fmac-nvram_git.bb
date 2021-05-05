@@ -34,9 +34,6 @@ do_install() {
 	install -m 0644 LICENCE.cypress ${D}${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-nvram
 	install -m 0644 brcmfmac43455-sdio.1MW.txt ${D}${nonarch_base_libdir}/firmware/brcm/
 
-	# Symlink the firmware names
-	ln -s brcmfmac43455-sdio.1MW.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.txt
-
 	# FIXME: Package other firmwares too
 	# FIXME: How do we handle the brcmfmac43455-sdio.*.txt options?
 }
@@ -50,18 +47,20 @@ FILES_${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypr
 
 FILES_${PN}-bcm43455-1mw-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.txt \
-	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.txt \
 	"
-
 LICENSE_${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-nvram"
 RDEPENDS_${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
 
 do_install_append_dh-stm32mp1-dhcor-avenger96 () {
+	# Symlink the firmware name to match kernel fallback
+	ln -s brcmfmac43455-sdio.1MW.txt \
+	      ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.txt
 	# Symlink the firmware name to match board type
 	ln -s brcmfmac43455-sdio.1MW.txt \
 	      ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.arrow,stm32mp157a-avenger96.txt
 }
 
 FILES_${PN}-bcm43455-1mw-sdio_append_dh-stm32mp1-dhcor-avenger96 = " \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.txt \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.arrow,stm32mp157a-avenger96.txt \
 	"
