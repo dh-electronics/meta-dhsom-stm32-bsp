@@ -52,3 +52,4 @@ patch 0056-ARM-dts-stm32-Fill-GPIO-line-names-on-DHCOM-SoM.patch
 patch 0057-ARM-dts-stm32-Fill-GPIO-line-names-on-AV96.patch
 patch 0058-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
 patch 0059-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch
+patch 0060-rsi-Assign-beacon-rate-settings-to-the-correct-rate_.patch
