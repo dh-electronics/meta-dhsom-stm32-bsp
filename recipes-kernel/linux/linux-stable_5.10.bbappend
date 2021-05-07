@@ -1,10 +1,11 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-KBRANCH_dh-stm32mp1-dhsom ?= "linux-5.10.y"
+BPV := "${@'.'.join(d.getVar('PV').split('.')[0:2])}"
+KBRANCH_dh-stm32mp1-dhsom ?= "linux-${BPV}.y"
 COMPATIBLE_MACHINE = "(dh-stm32mp1-dhsom)"
 
 SRC_URI_append_dh-stm32mp1-dhsom = " \
-	file://5.10/dh-stm32mp1-common;type=kmeta;destsuffix=5.10/dh-stm32mp1-common \
+	file://${BPV}/dh-stm32mp1-common;type=kmeta;destsuffix=${BPV}/dh-stm32mp1-common \
 	"
 
 SRC_URI_append_dh-stm32mp1-dhcom-drc02 = " \
