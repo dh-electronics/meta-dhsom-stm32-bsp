@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENCE;md5=cbc5f665d04f741f1e006d2096236ba7"
 # so that the license files will be copied from fetched source
 NO_GENERIC_LICENSE[Firmware-cypress-fmac-fw] = "LICENCE"
 
-SRCREV = "8fc2363758d916a685c7545e4f948e869d16f202"
+SRCREV = "ba140e42c3320262fc52e185c3af93eeb10117df"
 SRC_URI = "git://github.com/murata-wireless/cyw-fmac-fw;protocol=https"
 
 UPSTREAM_CHECK_COMMITS = "1"
@@ -28,10 +28,12 @@ do_install() {
 	install -d ${D}${nonarch_base_libdir}/firmware/
 	install -d ${D}${nonarch_base_libdir}/firmware/brcm/
 	install -m 0644 LICENCE ${D}${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw
-	install -m 0644 brcmfmac43455-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/
-	install -m 0644 brcmfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/
+	install -m 0644 cyfmac43455-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/
+	install -m 0644 cyfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/
 
 	# Symlink the firmware names
+	ln -s cyfmac43455-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
+	ln -s cyfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.clm_blob
 	ln -s brcmfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.clm_blob
 
 	# FIXME: Package other firmwares too
@@ -46,7 +48,9 @@ LICENSE_${PN}-cypress-license = "Firmware-cypress-fmac-fw"
 FILES_${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw"
 
 FILES_${PN}-bcm43455-1mw-sdio = " \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1MW.clm_blob \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.clm_blob \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.clm_blob \
 	"
