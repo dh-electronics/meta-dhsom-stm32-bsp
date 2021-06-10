@@ -2,10 +2,12 @@ From 831c106855f44e6f04a8ebfbdb412ad5e6530fa7 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 22 Aug 2020 22:51:03 +0200
 Subject: [PATCH 42/52] ARM: dts: stm32: Add PDK2 DTO for DH 497-200 with
- ETM0700G0EDH6 display
+ DataImage SCF0700C48GGU06CTP panel
 
 Add DT overlay for the PDK2 board for DH 497-200 adapter card with
-EDT ETM0700G0EDH6 Parallel RGB display attached to it.
+DataImage SCF0700C48GGU06CTP Parallel RGB panel attached to it. The
+Linux DT compatible string matches on SCF0700C48GGU18, which is a
+compatible panel, just like FG0700G3DSSWAGT1 and FG0700G3DSSWBG01.
 
 Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
@@ -58,7 +60,7 @@ index 000000000000..6e568a0fc80e
 +	};
 +
 +	panel {
-+		compatible = "edt,etm0700g0edh6";
++		compatible = "dataimage,scf0700c48ggu18";
 +		backlight = <&display_bl>;
 +
 +		port {
