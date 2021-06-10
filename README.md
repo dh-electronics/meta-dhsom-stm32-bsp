@@ -76,7 +76,7 @@ $ bitbake core-image-minimal
 Once the build completes, the images are available in:
 
 ```
-tmp/deploy/images/dh-stm32mp1-dhcom-pdk2/
+tmp-glibc/deploy/images/dh-stm32mp1-dhcom-pdk2/
 ```
 
 The SD card image is specifically in:
