@@ -8,7 +8,7 @@ Add missing RTC wakeup interrupt on stm32mp157c, otherwise, RTC won't be
 able to wake up the system.
 
 Change-Id: I6f3e69b34ef91d6b8c23caa35c22dd95919d2971
-Upstream-Status: Downstream stm32-gh v4.19-stm32mp [4dcc24ad4f5775b409d5da5951225b7b1d224451]
+Upstream-Status: Denied Downstream stm32-gh v4.19-stm32mp [4dcc24ad4f5775b409d5da5951225b7b1d224451]
 Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
 Reviewed-on: https://gerrit.st.com/109447
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

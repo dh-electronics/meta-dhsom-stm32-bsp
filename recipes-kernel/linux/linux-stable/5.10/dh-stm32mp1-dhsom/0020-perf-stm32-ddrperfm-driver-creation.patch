@@ -14,7 +14,7 @@ read, write and total time counters reading.
 This attribute is aside the 'events' attributes group because it is not
 a counter, as seen by perf tool.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [45799b1a89c3901b25c0b1984b7ada3d65d73667]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [45799b1a89c3901b25c0b1984b7ada3d65d73667]
 Signed-off-by: Gerald Baeza <gerald.baeza@st.com>
 Change-Id: If98c2b481b0dc42b7d9c0b6ad4aa71a63738fa13
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/131103

@@ -10,7 +10,7 @@ log:
 [   11.169338] dma dma1chan0: max buf size = 4096 bytes
 
 Change-Id: Ie627d1fc3168c0bc3225c2fbf3edfcb0ee25d626
-Upstream-Status: Downstream stm32-gh v4.19-stm32mp [1ef3ed1ff85099c47cab0492e0fd6401aead9735]
+Upstream-Status: Denied Downstream stm32-gh v4.19-stm32mp [1ef3ed1ff85099c47cab0492e0fd6401aead9735]
 Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
 Reviewed-on: https://gerrit.st.com/116223
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

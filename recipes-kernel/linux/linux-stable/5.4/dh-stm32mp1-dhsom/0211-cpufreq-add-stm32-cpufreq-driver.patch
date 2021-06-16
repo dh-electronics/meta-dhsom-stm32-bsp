@@ -7,7 +7,7 @@ This commit adds cpufreq driver support for STM32 MPU platform. This driver
 takes resources from DT and OTP bits and map (register) a common
 "cpufreq-dt" driver.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [cc9370b23a9d1bf8146bbc642b61b46589d86a2c]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [cc9370b23a9d1bf8146bbc642b61b46589d86a2c]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Change-Id: I4719b36142b5f2c42e3273e3c9fef71113cb62bd
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/144843

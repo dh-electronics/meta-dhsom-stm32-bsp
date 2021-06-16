@@ -7,7 +7,7 @@ Subject: [PATCH 24/52] ARM: dts: stm32: Add IPCC wakeup management on
 This commit adds the EXTI line 61 to IPCC node which will be used for
 wakeup from CStop and adds IPCC device to "pd_core" power domain.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [a2af75a5dba7839aab759ba02843d57dacbd4d20]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [a2af75a5dba7839aab759ba02843d57dacbd4d20]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Change-Id: Idddeb1a255048227fc284e246f13ad9e4c25ff55
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/145705

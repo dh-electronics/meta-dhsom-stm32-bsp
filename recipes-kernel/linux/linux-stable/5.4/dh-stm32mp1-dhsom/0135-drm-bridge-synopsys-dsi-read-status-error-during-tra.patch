@@ -11,7 +11,7 @@ Read the DSI_INT_ST1 status register to check if
 errors occur while reading/writing a command to panel.
 In case of error, the transfer is retried 3 times.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [a9005c41a59d92ea2d27f22d611156af5014ee2d]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [a9005c41a59d92ea2d27f22d611156af5014ee2d]
 Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
 Change-Id: I976b77e620b8efc8f9d2a9910c3f1a3a9f585b0b
 ---

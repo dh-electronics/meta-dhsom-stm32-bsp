@@ -25,7 +25,7 @@ Change-Id: Ibb01a5dbe6d7a30fc8ac33fcfe496e8796ab8ba0
 Change-Id: I20ae50d153d9ab868124c406fdc5bea4ab841d53
 Change-Id: I8e5c6be408c9a34cd1fdf8c144b2eab75ca30b88
 Change-Id: Iddad7b5e7f30f1c8d7be0f5f52b6cf2685a45983
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [6723418cf7c1f43abc20dd8ef2e739d976ce379e]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [6723418cf7c1f43abc20dd8ef2e739d976ce379e]
 Signed-off-by: M'boumba Cedric Madianga <cedric.madianga@gmail.com>
 Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>

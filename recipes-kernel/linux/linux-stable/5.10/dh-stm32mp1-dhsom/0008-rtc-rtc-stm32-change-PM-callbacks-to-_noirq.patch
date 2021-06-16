@@ -9,7 +9,7 @@ blocked during IP access.
 As the driver is registered as wakeup_source we can change PM
 callbacks to '_nor_irq()' to resume automatically.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [11f5efd00392116bfc30c0288c6dffd13144c44b]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [11f5efd00392116bfc30c0288c6dffd13144c44b]
 Change-Id: I3cd8d0e145e5ff2b1c19d9d6d8fe1d3f7f7188a1
 Signed-off-by: Gabriel Fernandez <gabriel.fernandez@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/157299

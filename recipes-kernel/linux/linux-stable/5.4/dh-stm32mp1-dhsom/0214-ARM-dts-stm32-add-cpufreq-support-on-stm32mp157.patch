@@ -8,7 +8,7 @@ operating points V2 bindings (no legacy). Nvmem cells have to be used to
 know the chip version and then which OPPs are available. Note that STM32
 cpufreq driver is mainly based on "cpufreq-dt" driver.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [8b1d4ba4b94f38081a31d25adf6e42b5611df128]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [8b1d4ba4b94f38081a31d25adf6e42b5611df128]
 Change-Id: I314bcbcd5ade81ba80c3b900f9596fb874c9a1af
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/144845

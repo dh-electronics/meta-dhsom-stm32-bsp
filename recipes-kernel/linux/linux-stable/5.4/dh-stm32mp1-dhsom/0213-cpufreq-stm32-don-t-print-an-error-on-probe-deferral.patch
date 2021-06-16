@@ -6,7 +6,7 @@ Subject: [PATCH 213/214] cpufreq: stm32: don't print an error on probe
 
 Do not print an error trace when deferring probe.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [bd6e1eea6b11ca1c08b1e8136dd5a9230e678619]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [bd6e1eea6b11ca1c08b1e8136dd5a9230e678619]
 Signed-off-by: Pascal Paillet <p.paillet@st.com>
 Change-Id: I8495887aa5b1e52e57cc3d0b983b11fc7c5a85e2
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/159112

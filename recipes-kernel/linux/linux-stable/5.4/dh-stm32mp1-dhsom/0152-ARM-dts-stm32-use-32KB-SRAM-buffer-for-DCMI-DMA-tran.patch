@@ -7,7 +7,7 @@ Subject: [PATCH 156/163] ARM: dts: stm32: use 32KB SRAM buffer for DCMI DMA
 Use 32 KBytes SRAM buffer for DCMI DMA transfer.
 
 Change-Id: I233786eaa9d8c8e2833cd146b2682a5eba5cddfe
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [36d4a010e80a543ce9c803d3b402c20d4fd52fb7]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [36d4a010e80a543ce9c803d3b402c20d4fd52fb7]
 Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 Reviewed-on: https://gerrit.st.com/128350
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

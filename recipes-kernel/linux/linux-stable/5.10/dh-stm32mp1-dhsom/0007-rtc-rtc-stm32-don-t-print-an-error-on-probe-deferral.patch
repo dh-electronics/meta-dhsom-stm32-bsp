@@ -6,7 +6,7 @@ Subject: [PATCH 07/52] rtc: rtc-stm32: don't print an error on probe deferral
 Change stm32-rtc driver to not generate an error message when
 device probe operation is deferred for a clock.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [c069e8e0b0c4ad968d6d6a23eb9e88acf76b5ecc]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [c069e8e0b0c4ad968d6d6a23eb9e88acf76b5ecc]
 Change-Id: Ia21f27df0cc31fcc69abd265e6e63d6c1d48637a
 Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/153663

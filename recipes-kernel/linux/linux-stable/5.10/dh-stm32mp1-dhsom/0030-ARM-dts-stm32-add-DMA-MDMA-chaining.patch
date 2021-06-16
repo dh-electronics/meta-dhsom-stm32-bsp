@@ -7,7 +7,7 @@ Subject: [PATCH 31/52] ARM: dts: stm32: add DMA/MDMA chaining
 - Update QSPI and HASH accordingly
 
 Change-Id: Id56bfaf33e9e79d3a0a438a4e9625cd06bbabe8e
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [3a3145ffaf17512c6abb6b2b3faa16b9d1706b67]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [3a3145ffaf17512c6abb6b2b3faa16b9d1706b67]
 Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 Reviewed-on: https://gerrit.st.com/109354
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

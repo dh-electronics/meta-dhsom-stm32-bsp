@@ -8,7 +8,7 @@ Add support of generic DT binding for annoucing RTS/CTS lines. The initial
 binding 'st,hw-flow-control' is not needed anymore since generic binding
 is available, but is kept for backward compatibility.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [d4ab7ca319a500a12633c367b1dbd683135572a9]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [d4ab7ca319a500a12633c367b1dbd683135572a9]
 Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
 Link: https://lore.kernel.org/r/20200520133932.30441-3-erwan.leray@st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

@@ -7,7 +7,7 @@ Subject: [PATCH 54/55] cpufreq: dt-platdev: Blacklist "st,stm32mp151" and
 Add  "st,stm32mp151" and "st,stm32mp153" SoC in the blacklist since
 a dedicated cpufreq driver exist for those platforms.
 
-Upstream-Status: Downstream stm32-gh v5.10-stm32mp [3dce48fd40dad7de800da6a7b8bc8b042fd65991]
+Upstream-Status: Denied Downstream stm32-gh v5.10-stm32mp [3dce48fd40dad7de800da6a7b8bc8b042fd65991]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Change-Id: I7fd55f023620de8b1da0a31fcaa863d30966a188
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/196346

@@ -9,7 +9,7 @@ update mdma1 clients channel priority level for those using wrong values.
 
 Change-Id: I99b676cc111288d3214e890b318354252a0a0171
 Fixes: 8ecf910a4de8 ("ARM: dts: stm32: Add MDMA support on STM32MP157C")
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [0bc50ee3098641458a2e9a9f035f4e2cf3930ee6]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [0bc50ee3098641458a2e9a9f035f4e2cf3930ee6]
 Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/151524
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

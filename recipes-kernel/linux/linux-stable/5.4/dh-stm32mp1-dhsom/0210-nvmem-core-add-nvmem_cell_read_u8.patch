@@ -8,7 +8,7 @@ side. This is inspired by nvmem_cell_read_u32() function.
 This helper is useful on stm32 that has 8 bits data cells stored in non
 volatile memory.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [cba7044416fd8e0e372d0aa10c34ba9ba9aee328]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [cba7044416fd8e0e372d0aa10c34ba9ba9aee328]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Change-Id: Ic0acf81af2a9d4256e5f90026c63af571f6cdac8
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/144842

@@ -12,7 +12,7 @@ to 96MHz pixel clock with 2 bytes per pixel on 2 data lanes.
 This setup has been tested successfully with ST MIPID02
 CSI-2 to parallel bridge.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [7c1fd73d91b66fae3d5e909c45843562a0c9a241]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [7c1fd73d91b66fae3d5e909c45843562a0c9a241]
 Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 Change-Id: I6032ace33d366da3615c30138083956ef5d390fa
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/142053

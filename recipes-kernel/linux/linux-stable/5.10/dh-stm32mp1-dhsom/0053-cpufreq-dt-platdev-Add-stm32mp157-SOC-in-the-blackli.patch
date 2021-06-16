@@ -9,7 +9,7 @@ available OPPs for STM32 MPU SOCs. Those OPPs are then registered to OPP
 framework. At the end this driver register a cpufreq-dt device.
 This commit allows it.
 
-Upstream-Status: Downstream stm32-gh v5.10-stm32mp [8bbf134ea43c0e86108fc30b974e18ee85435758]
+Upstream-Status: Denied Downstream stm32-gh v5.10-stm32mp [8bbf134ea43c0e86108fc30b974e18ee85435758]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@st.com>
 Change-Id: I043e4148ee68126154cb75d515aecdbdae9a83c4

@@ -14,7 +14,7 @@ Clients who will use dma_request_chan_linked will have to
 unbalanced the device link by using dma_release_chan_linked.
 
 Change-Id: I37b69cf74b60091e2fff5447d6c623594d903737
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [c86bfa940127e14f6d8a5197c793b018920a052d]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [c86bfa940127e14f6d8a5197c793b018920a052d]
 Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/155327
 Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>

@@ -5,7 +5,7 @@ Subject: [PATCH 170/170] ARM: dts: stm32: add arm-pmu node on stm32mp15
 
 Add arm-pmu node on stm32mp15.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [f9c08cee4f3ca94dede2ce92a0c8732669ec99a4]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [f9c08cee4f3ca94dede2ce92a0c8732669ec99a4]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 Signed-off-by: Marek Vasut <marex@denx.de> (update to linux-next)
 ---

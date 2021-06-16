@@ -8,7 +8,7 @@ The DDRPERFM is the DDR Performance Monitor embedded in STM32MP1 SOC.
 This documentation indicates how to enable stm32-ddr-pmu driver on
 DDRPERFM peripheral, via the device tree.
 
-Upstream-Status: Downstream stm32-gh v5.4-stm32mp [4a14631789af5c833d780b759e033197735ce2d3]
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [4a14631789af5c833d780b759e033197735ce2d3]
 Signed-off-by: Gerald Baeza <gerald.baeza@st.com>
 Change-Id: Ide317c321ff8f7d020129f4910051fc2871cd630
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/131102
