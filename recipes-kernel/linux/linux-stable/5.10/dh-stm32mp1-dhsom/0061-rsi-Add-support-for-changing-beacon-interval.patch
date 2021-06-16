@@ -6,7 +6,7 @@ Subject: [PATCH 61/61] rsi: Add support for changing beacon interval
 Pick code for changing the beacon interval (e.g. using beacon_int in
 hostap config) from the downstream RSI driver.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-wireless/patch/20210507213149.140192-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-wireless/patch/20210507213149.140192-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Amitkumar Karwar <amit.karwar@redpinesignals.com>
 Cc: Angus Ainslie <angus@akkea.ca>

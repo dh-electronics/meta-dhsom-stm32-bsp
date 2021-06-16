@@ -7,7 +7,7 @@ Subject: [PATCH 214/215] rpmsg: core: add possibility to get message payload
 Return the rpmsg buffer payload size for sending message, so rpmsg users
 can split a long message in several sub rpmsg buffers.
 
-Upstream-Status: Posted [https://lkml.org/lkml/2019/5/23/643]
+Upstream-Status: Submitted [https://lkml.org/lkml/2019/5/23/643]
 Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
 ---

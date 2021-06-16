@@ -7,7 +7,7 @@ Add DT for DH PicoITX unit, which is a bare-bones carrier board for
 the DHCOM. The board has ethernet port, USB, CAN, LEDs and a custom
 board-to-board expansion connector.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201103181137.443586-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201103181137.443586-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

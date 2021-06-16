@@ -5,7 +5,7 @@ Subject: [PATCH 177/179] ARM: dts: stm32: Add STM32MP1 UART8 RTS/CTS pinmux
 
 Add extra RTS/CTS line pinmux for STM32MP1 UART8.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11701877/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11701877/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

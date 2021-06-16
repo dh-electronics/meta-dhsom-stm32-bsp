@@ -16,7 +16,7 @@ polarity requirements, so extract bus_flags from the bridge and use them
 for LTDC configuration. Otherwise, extract bus_flags from the connector,
 which is the display.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11814707/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11814707/]
 Fixes: b759012c5fa7 ("drm/stm: Add STM32 LTDC driver")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

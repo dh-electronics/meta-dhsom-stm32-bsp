@@ -6,7 +6,7 @@ Subject: [PATCH] ARM: dts: stm32: Enable thermal sensor support on
 
 Enable STM32 Digital Thermal Sensor driver for stm32mp15xx-dhcor SoMs.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11795789/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11795789/]
 Fixes: 94cafe1b6482 ("ARM: dts: stm32: Add Avenger96 devicetree support based on STM32MP157A")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

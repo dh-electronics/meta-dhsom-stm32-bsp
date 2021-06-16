@@ -9,7 +9,7 @@ pin, SDMMC2_D5, which is PA15 in the former and PA9 in the later.
 The PA15 is correct on AV96, so fix this. This error is likely a
 result of rebasing across the stm32mp1 DT pinctrl rework.
 
-Upstream-Status: Posted [http://lists.infradead.org/pipermail/linux-arm-kernel/2020-July/590050.html]
+Upstream-Status: Submitted [http://lists.infradead.org/pipermail/linux-arm-kernel/2020-July/590050.html]
 Fixes: 611325f68102 ("ARM: dts: stm32: Add eMMC attached to SDMMC2 on AV96")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

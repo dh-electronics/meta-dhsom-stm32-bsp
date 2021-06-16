@@ -5,7 +5,7 @@ Subject: [PATCH 1/2] ARM: dts: stm32: Define VIO regulator supply on DHCOM
 
 The VIO regulator is supplied by PMIC Buck3, describe this in the DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201029194617.357423-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201029194617.357423-1-marex@denx.de/]
 Fixes: 34e0c7847dcf ("ARM: dts: stm32: Add DH Electronics DHCOM STM32MP1 SoM and PDK2 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

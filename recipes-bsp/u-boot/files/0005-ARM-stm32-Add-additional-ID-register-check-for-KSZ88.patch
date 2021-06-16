@@ -13,7 +13,7 @@ This is not sufficient to detect cases where the DT still contains the
 KSZ8851 nodes, but the chip itself is not present. Extend the detection
 to handle these cases.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210430112922.27795-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210430112922.27795-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>

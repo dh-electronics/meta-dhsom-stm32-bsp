@@ -9,7 +9,7 @@ framework through the "rpmsg-tty-channel" rpmsg service.
 This driver supports multi-instances, offering a /dev/ttyRPMSGx entry
 per rpmsg endpoint.
 
-Upstream-Status: Posted [https://lkml.org/lkml/2019/5/23/642]
+Upstream-Status: Submitted [https://lkml.org/lkml/2019/5/23/642]
 Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
 ---

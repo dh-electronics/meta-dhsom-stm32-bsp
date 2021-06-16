@@ -10,7 +10,7 @@ so fix it. This is also aligned with the RSI downstream vendor driver.
 Without this patch, an AP operating at 5 GHz does not transmit any
 beacons at all, this patch fixes that.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-wireless/patch/20210507213105.140138-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-wireless/patch/20210507213105.140138-1-marex@denx.de/]
 Fixes: d26a9559403c ("rsi: add beacon changes for AP mode")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Amitkumar Karwar <amit.karwar@redpinesignals.com>

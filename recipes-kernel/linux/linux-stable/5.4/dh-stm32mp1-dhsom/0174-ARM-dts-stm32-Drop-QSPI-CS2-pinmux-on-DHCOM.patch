@@ -5,7 +5,7 @@ Subject: [PATCH 178/179] ARM: dts: stm32: Drop QSPI CS2 pinmux on DHCOM
 
 The QSPI CS2 is not used on DHCOM, remove the pinmux settings.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11701875/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11701875/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

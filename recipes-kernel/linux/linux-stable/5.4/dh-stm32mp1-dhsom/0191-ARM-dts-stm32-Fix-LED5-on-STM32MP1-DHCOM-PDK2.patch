@@ -7,7 +7,7 @@ On the prototype DHCOM, the LED5 was connected to pin PG2 of the
 STM32MP15xx, however on the production SoM this was changed to pin
 PC6. Update the connection in the DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201028204617.280096-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201028204617.280096-1-marex@denx.de/]
 Fixes: 81d5fc719798 ("ARM: dts: stm32: Add GPIO LEDs for STM32MP1 DHCOM PDK2")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

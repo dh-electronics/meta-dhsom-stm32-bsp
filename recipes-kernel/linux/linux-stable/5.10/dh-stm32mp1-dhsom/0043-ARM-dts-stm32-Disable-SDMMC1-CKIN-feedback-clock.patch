@@ -9,7 +9,7 @@ limited to 50 MHz and hence SD high-speed anyway, disable the SD feedback
 clock to permit operation of the same U-Boot image on both SoM with and
 without voltage level shifter.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111441.138289-2-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111441.138289-2-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

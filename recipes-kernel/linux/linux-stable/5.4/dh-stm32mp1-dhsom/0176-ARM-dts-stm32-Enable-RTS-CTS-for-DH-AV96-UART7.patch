@@ -5,7 +5,7 @@ Subject: [PATCH 181/181] ARM: dts: stm32: Enable RTS/CTS for DH AV96 UART7
 
 The DH AV96 has RTS/CTS lines available on UART7, describe them in DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11731283/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11731283/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

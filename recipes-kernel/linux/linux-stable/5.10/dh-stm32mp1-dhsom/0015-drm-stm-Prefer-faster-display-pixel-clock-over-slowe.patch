@@ -20,7 +20,7 @@ rate leads e.g. to subtle artifacts barely visible on the display,
 like flickering pixels. Using slightly faster clock leads to no
 such effect.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11766067/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11766067/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Benjamin Gaignard <benjamin.gaignard@st.com>

@@ -6,7 +6,7 @@ Subject: [PATCH] ARM: dts: stm32: Add USB OTG support to DH PDK2
 The DH PDK2 board is capable of USB OTG on the X14 USB Mini-AB connector,
 fill in the missing bits to make USB OTG possible instead of peripheral.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11697865/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11697865/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

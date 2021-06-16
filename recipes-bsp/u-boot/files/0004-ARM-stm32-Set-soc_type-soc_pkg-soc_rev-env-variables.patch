@@ -7,7 +7,7 @@ Split up get_soc_name(), clean the decoding up a bit, and set up
 environment variables which contain the SoC type, package, revision.
 This is useful on SoMs, where multiple SoC options are populated.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210305141852.97101-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210305141852.97101-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: Patrice Chotard <patrice.chotard@st.com>

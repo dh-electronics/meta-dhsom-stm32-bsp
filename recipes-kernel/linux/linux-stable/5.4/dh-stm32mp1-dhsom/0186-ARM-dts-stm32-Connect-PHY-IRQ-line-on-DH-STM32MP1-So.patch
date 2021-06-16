@@ -7,7 +7,7 @@ On the production DHCOM STM32MP15xx SoM, the PHY IRQ line is connected
 to the PI11 pin. Describe it in the DT as well, so the PHY IRQ can be
 used e.g. to detect cable insertion and removal.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11824471/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11824471/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>

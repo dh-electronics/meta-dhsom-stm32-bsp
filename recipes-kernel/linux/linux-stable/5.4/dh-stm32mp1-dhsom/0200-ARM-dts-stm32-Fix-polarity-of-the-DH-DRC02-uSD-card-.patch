@@ -6,7 +6,7 @@ Subject: [PATCH] ARM: dts: stm32: Fix polarity of the DH DRC02 uSD card detect
 The uSD card detect signal on the DH DRC02 is active-high, with
 a default pull down resistor on the board. Invert the polarity.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111331.138177-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111331.138177-1-marex@denx.de/]
 Fixes: fde180f06d7b ("ARM: dts: stm32: Add DHSOM based DRC02 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

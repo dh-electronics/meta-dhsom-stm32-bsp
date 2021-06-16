@@ -7,7 +7,7 @@ The VDDA LDO1 PMIC output supplies the analog VDDA input of the
 STM32MP1 on DHCOM, keep it always on, otherwise there could be
 leakage through the SoC.
 
-Upstream-Status: Posted [http://lists.infradead.org/pipermail/linux-arm-kernel/2020-October/613155.html]
+Upstream-Status: Submitted [http://lists.infradead.org/pipermail/linux-arm-kernel/2020-October/613155.html]
 Fixes: 34e0c7847dcf ("ARM: dts: stm32: Add DH Electronics DHCOM STM32MP1 SoM and PDK2 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

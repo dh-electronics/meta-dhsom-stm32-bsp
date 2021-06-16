@@ -9,7 +9,7 @@ select input pixel data sampling edge. Add DT property "pixelclk-active",
 same as the one used by display timings, and configure bus flags based on
 this DT property.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11814709/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11814709/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Andrzej Hajda <a.hajda@samsung.com>

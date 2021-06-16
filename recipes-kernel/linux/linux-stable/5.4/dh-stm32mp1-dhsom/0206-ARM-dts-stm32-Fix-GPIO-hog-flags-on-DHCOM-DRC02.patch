@@ -7,7 +7,7 @@ The GPIO hog flags are ignored by gpiolib-of.c now, set the flags to 0.
 Since GPIO_ACTIVE_HIGH is defined as 0, this change only increases the
 correctness of the DT.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201229175521.268234-2-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201229175521.268234-2-marex@denx.de/]
 Fixes: fde180f06d7b ("ARM: dts: stm32: Add DHSOM based DRC02 board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

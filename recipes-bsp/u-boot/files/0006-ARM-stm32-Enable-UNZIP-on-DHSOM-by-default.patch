@@ -6,7 +6,7 @@ Subject: [PATCH] ARM: stm32: Enable UNZIP on DHSOM by default
 The CMD_UNZIP provides the 'gzwrite' command, which is convenient
 for writing e.g. gz-compressed images to eMMC from U-Boot.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210430114957.37335-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210430114957.37335-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>

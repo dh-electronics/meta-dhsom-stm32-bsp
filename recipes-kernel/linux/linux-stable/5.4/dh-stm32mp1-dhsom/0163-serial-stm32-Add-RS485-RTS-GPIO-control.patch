@@ -9,7 +9,7 @@ to a pin which cannot be pinmuxed as RTS. Add support for toggling
 the RTS GPIO line using the modem control GPIOs to provide at least
 some sort of emulation.
 
-Upstream-Status: Posted [https://www.spinics.net/lists/linux-serial/msg39547.html]
+Upstream-Status: Submitted [https://www.spinics.net/lists/linux-serial/msg39547.html]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Andy Shevchenko <andy.shevchenko@gmail.com>

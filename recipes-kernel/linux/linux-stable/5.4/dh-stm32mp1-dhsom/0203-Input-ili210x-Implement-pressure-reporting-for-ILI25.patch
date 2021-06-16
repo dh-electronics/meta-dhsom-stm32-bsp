@@ -9,7 +9,7 @@ information has the values ranging from 0x0 to 0xa, which is also
 matching the downstream example code. Report pressure information
 on the ILI251x.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-input/patch/20201224071238.160098-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-input/patch/20201224071238.160098-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc: Henrik Rydberg <rydberg@bitmath.org>

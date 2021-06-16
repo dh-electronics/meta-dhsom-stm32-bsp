@@ -9,7 +9,7 @@ to free up the IRQ line 11 for LAN8710i PHY IRQ. Update the connection in
 the DT. Since the IRQ line 0 is used for PMIC as well and cannot be shared
 with the button, make the button polled.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/patch/11824469/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11824469/]
 Fixes: 87cabf9405cb ("ARM: dts: stm32: Add GPIO keys for STM32MP1 DHCOM PDK2")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>

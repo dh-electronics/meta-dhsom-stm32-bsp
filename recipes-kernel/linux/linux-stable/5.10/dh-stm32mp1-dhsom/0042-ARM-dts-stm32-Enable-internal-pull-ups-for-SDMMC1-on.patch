@@ -10,7 +10,7 @@ to guarantee this behavior on DHCOM SoM. Note that on SoMs with SD bus
 voltage level shifter, the pull ups are built into the level shifter,
 however that has no negative impact.
 
-Upstream-Status: Posted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111441.138289-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201201111441.138289-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
