@@ -5,7 +5,7 @@ Subject: [PATCH 148/163] ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
 
 Add bindings for the KS8851 ethernet present on the STM32MP1 DHCOM SoM.
 
-Upstream-Status: Work-in-progress, blocked by missing FMC2 EBI driver
+Upstream-Status: Posted, work-in-progress, blocked by missing FMC2 EBI driver
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |  1 +
