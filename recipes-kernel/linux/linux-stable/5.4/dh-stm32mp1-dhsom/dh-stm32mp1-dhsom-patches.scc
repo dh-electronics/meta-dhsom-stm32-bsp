@@ -212,3 +212,4 @@ patch 0217-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
 patch 0218-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch
 patch 0219-rsi-Assign-beacon-rate-settings-to-the-correct-rate_.patch
 patch 0220-rsi-Add-support-for-changing-beacon-interval.patch
+patch 0221-ARM-dts-stm32-Prefer-HW-RTC-on-DHCOM-SoM.patch
