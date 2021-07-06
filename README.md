@@ -1,7 +1,7 @@
-OpenEmbedded BSP layer for DH electronics STM32MP1 platforms
+OpenEmbedded BSP layer for DH electronics STM32MP1 platforms with the RSI-provided RED driver
 ============================================================
 
-This layer provides BSP for DH electronics STM32MP1 platforms.
+This layer provides BSP for DH electronics STM32MP1 platforms including the RSI-provided RED driver.
 
 Dependencies
 ------------
@@ -30,7 +30,10 @@ location of the metalayers.
 
 * https://source.denx.de/denx/meta-mainline-common.git			(branch: dunfell-3.1)
 * https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		(branch: dunfell-3.1)
+* https://github.com/dh-electronics/meta-dhsom-stm32-extras.git		(branch: dunfell-3.1)
 * git://git.yoctoproject.org/poky					(branch: dunfell)
+* git://github.com/openembedded/meta-openembedded.git			(branch: dunfell)
+* git://git.openembedded.org/meta-python2				(branch: dunfell)
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
@@ -40,25 +43,31 @@ be referenced in bblayers.conf in this order:
 
 ```
 BBLAYERS ?= " \
-  /path/to/OE/poky/meta \
-  /path/to/OE/meta-mainline-common \
-  /path/to/OE/meta-dhsom-stm32-bsp \
+         /home/oe/oe-core/meta \
+         /home/oe/meta-python2 \
+         /home/oe/meta-openembedded/meta-oe \
+         /home/oe/meta-openembedded/meta-networking \
+         /home/oe/meta-openembedded/meta-perl \
+         /home/oe/meta-openembedded/meta-python \
+         /home/oe/meta-mainline-common \
+         /home/oe/meta-dhsom-stm32-bsp \
+         /home/oe/meta-dhsom-stm32-extras \
   "
 ```
 
-The following specifics should be placed into local.conf:
+The following specifics should be placed into local.conf  to build the RSI driver:
 
 ```
 MACHINE = "dh-stm32mp1-dhcom-pdk2"
 DISTRO = "nodistro"
+PREFERRED_VERSION_linux-stable = "5.4%"
+CORE_IMAGE_EXTRA_INSTALL += " kernel-dev kernel-devsrc kernel-modules packagegroup-core-tools-profile packagegroup-core-buildessential vim "
+EXTRA_IMAGE_FEATURES += "dev-pkgs tools-sdk tools-debug debug-tweaks"
 ```
 
 Note that MACHINE must be either of:
 
-* dh-stm32mp1-dhcom-drc02
 * dh-stm32mp1-dhcom-pdk2
-* dh-stm32mp1-dhcom-picoitx
-* dh-stm32mp1-dhcor-avenger96
 
 Adapt the suffixes of all the files and names of directories further in
 this documentation according to MACHINE.
@@ -70,7 +79,7 @@ Once the configuration is complete, a basic demo system image suitable for
 evaluation can be built using:
 
 ```
-$ bitbake core-image-minimal
+$ bitbake dh-image-demo 
 ```
 
 Once the build completes, the images are available in:
@@ -82,52 +91,12 @@ tmp/deploy/images/dh-stm32mp1-dhcom-pdk2/
 The SD card image is specifically in:
 
 ```
-core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic
+dh-image-demo-dh-stm32mp1-dhcom-pdk2.wic
 ```
 
 And shall be written to the SD card using dd:
 
 ```
-$ dd if=core-image-minimal-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
+$ dd if=dh-image-demo-dh-stm32mp1-dhcom-pdk2.wic of=/dev/sdX bs=8M
 ```
 
-Example local.conf
-------------------
-```
-MACHINE = "dh-stm32mp1-dhcom-pdk2"
-DL_DIR = "/path/to/OE/downloads"
-DISTRO ?= "nodistro"
-PACKAGE_CLASSES ?= "package_rpm"
-EXTRA_IMAGE_FEATURES = "debug-tweaks"
-USER_CLASSES ?= "buildstats image-mklibs image-prelink"
-PATCHRESOLVE = "noop"
-BB_DISKMON_DIRS = "\
-    STOPTASKS,${TMPDIR},1G,100K \
-    STOPTASKS,${DL_DIR},1G,100K \
-    STOPTASKS,${SSTATE_DIR},1G,100K \
-    STOPTASKS,/tmp,100M,100K \
-    ABORT,${TMPDIR},100M,1K \
-    ABORT,${DL_DIR},100M,1K \
-    ABORT,${SSTATE_DIR},100M,1K \
-    ABORT,/tmp,10M,1K"
-PACKAGECONFIG_append_pn-qemu-native = " sdl"
-PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
-CONF_VERSION = "1"
-```
-
-Example bblayers.conf
----------------------
-```
-# LAYER_CONF_VERSION is increased each time build/conf/bblayers.conf
-# changes incompatibly
-POKY_BBLAYERS_CONF_VERSION = "2"
-
-BBPATH = "${TOPDIR}"
-BBFILES ?= ""
-
-BBLAYERS ?= " \
-	/path/to/OE/poky/meta \
-	/path/to/OE/meta-mainline-common \
-	/path/to/OE/meta-dhsom-stm32-bsp \
-	"
-```
