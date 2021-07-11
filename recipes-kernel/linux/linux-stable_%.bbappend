@@ -10,3 +10,4 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://common/dh-stm32mp1-dhsom;type=kmeta;destsuffix=common/dh-stm32mp1-dhsom \
 	"
 KERNEL_FEATURES_dh-stm32mp1-dhsom = " dh-stm32mp1-dhsom-standard.scc "
+DEPENDS_append_dh-stm32mp1-dhsom = " lzop-native "
