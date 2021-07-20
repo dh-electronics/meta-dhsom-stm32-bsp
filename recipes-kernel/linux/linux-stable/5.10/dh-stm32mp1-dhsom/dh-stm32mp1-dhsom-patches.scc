@@ -16,7 +16,6 @@ patch 0020-perf-stm32-ddrperfm-driver-creation.patch
 patch 0021-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
 patch 0022-ARM-dts-stm32-use-exti-19-as-main-interrupt-to-suppo.patch
 patch 0023-ARM-dts-stm32-Add-IPCC-wakeup-management-on-stm32mp1.patch
-patch 0025-ARM-dts-stm32-Connect-PHY-IRQ-line-on-DH-STM32MP1-So.patch
 patch 0026-ARM-dts-stm32-Add-alternate-pinmux-for-FMC-EBI-bus.patch
 patch 0027-ARM-dts-stm32-Add-KS8851-on-FMC2-to-STM32MP1-DHCOM.patch
 patch 0028-ARM-dts-stm32-Add-DT-overlays-for-STM32MP1-DHCOM-PDK.patch
@@ -52,4 +51,3 @@ patch 0058-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
 patch 0059-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch
 patch 0061-rsi-Add-support-for-changing-beacon-interval.patch
 patch 0062-ARM-dts-stm32-Prefer-HW-RTC-on-DHCOM-SoM.patch
-patch 0063-ARM-dts-stm32-Rework-LAN8710Ai-PHY-reset-on-DHCOM-So.patch
