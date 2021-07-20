@@ -1,0 +1,52 @@
+From 08cb29b5de7bca83d0f9d5e81cacf600cfec9a95 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 20 Jul 2021 23:15:43 +0200
+Subject: [PATCH] ARM: dts: stm32: Fix AV96 eMMC pinmux
+
+Commit 500327e2ea7 ("ARM: dts: stm32mp1: DT alignment with Linux kernel v5.8-rc1")
+renamed sdmmc2_d47_pins_b phandle to sdmmc2_d47_pins_c, but without updating
+the AV96 DT which uses that phandle. Linux missed similar update as well and
+it was only added in commit 1ad6e36ec266 ("ARM: dts: stm32: Fix sdmmc2 pins
+on AV96") .
+
+Update the AV96 DT pinmux phandle, otherwise eMMC 8bit mode does not work
+and access to eMMC takes a very long time to fall back to 4bit mode.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210720214607.191550-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi | 2 +-
+ arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
+index 1ae57e18542..8b275e4950e 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
+@@ -57,7 +57,7 @@
+ 	};
+ };
+ 
+-&sdmmc2_d47_pins_b {
++&sdmmc2_d47_pins_c {
+ 	u-boot,dm-spl;
+ 	pins {
+ 		u-boot,dm-spl;
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
+index 9b5dda318ec..0e860e5cf88 100644
+--- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
++++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dts
+@@ -152,7 +152,7 @@
+ 
+ &sdmmc2 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_b>;
++	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_c>;
+ 	non-removable;
+ 	no-sd;
+ 	no-sdio;
+-- 
+2.30.2
+

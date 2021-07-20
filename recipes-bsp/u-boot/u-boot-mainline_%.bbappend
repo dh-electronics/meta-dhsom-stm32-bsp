@@ -19,5 +19,6 @@ SRC_URI_append_dh-stm32mp1-dhsom = " \
 	file://0004-ARM-stm32-Set-soc_type-soc_pkg-soc_rev-env-variables.patch \
 	file://0005-ARM-stm32-Add-additional-ID-register-check-for-KSZ88.patch \
 	file://0006-ARM-stm32-Enable-UNZIP-on-DHSOM-by-default.patch \
+	file://0007-ARM-dts-stm32-Fix-AV96-eMMC-pinmux.patch \
 	file://default-device-tree.cfg \
 	"
