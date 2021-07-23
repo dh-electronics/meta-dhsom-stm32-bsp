@@ -214,3 +214,4 @@ patch 0220-rsi-Add-support-for-changing-beacon-interval.patch
 patch 0221-ARM-dts-stm32-Prefer-HW-RTC-on-DHCOM-SoM.patch
 patch 0222-ARM-dts-stm32-Rework-LAN8710Ai-PHY-reset-on-DHCOM-So.patch
 patch 0223-ARM-dts-stm32-Disable-LAN8710-EDPD-on-DHCOM.patch
+patch 0224-ARM-dts-stm32-Reduce-DHCOR-SPI-NOR-frequency-to-50-M.patch
