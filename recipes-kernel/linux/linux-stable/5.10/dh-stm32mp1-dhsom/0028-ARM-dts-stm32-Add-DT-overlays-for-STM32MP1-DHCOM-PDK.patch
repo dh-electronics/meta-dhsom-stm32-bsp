@@ -15,10 +15,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  arch/arm/boot/dts/Makefile                    |   4 +
  ...2mp15xx-dhcom-pdk2-overlay-460-200-x11.dts |  27 +++++
  ...2mp15xx-dhcom-pdk2-overlay-531-100-x21.dts |  39 +++++++
- ...2mp15xx-dhcom-pdk2-overlay-531-100-x22.dts |  19 +++
- ...2mp15xx-dhcom-pdk2-overlay-560-200-x12.dts | 108 ++++++++++++++++++
- arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |  56 ---------
- 6 files changed, 197 insertions(+), 56 deletions(-)
+ ...2mp15xx-dhcom-pdk2-overlay-531-100-x22.dts |  19 ++++
+ ...2mp15xx-dhcom-pdk2-overlay-560-200-x12.dts | 107 ++++++++++++++++++
+ arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi |  55 ---------
+ 6 files changed, 196 insertions(+), 55 deletions(-)
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dts
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dts
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dts
@@ -147,7 +147,7 @@ new file mode 100644
 index 000000000000..5ed89201399d
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
-@@ -0,0 +1,108 @@
+@@ -0,0 +1,107 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -247,13 +247,12 @@ index 000000000000..5ed89201399d
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +
-+	polytouch@38 {
-+		compatible = "edt,edt-ft5x06";
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
 +		reg = <0x38>;
 +		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
 +		interrupt-parent = <&gpioc>;
 +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
-+		linux,wakeup;
 +	};
 +};
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
@@ -275,8 +274,8 @@ index 8456f172d4b1..65f0bc123fe3 100644
 -
  	gpio-keys-polled {
  		compatible = "gpio-keys-polled";
- 		#size-cells = <0>;
-@@ -105,17 +96,6 @@ led-3 {
+ 		poll-interval = <20>;
+@@ -103,17 +94,6 @@ led-3 {
  		};
  	};
  
@@ -294,17 +293,16 @@ index 8456f172d4b1..65f0bc123fe3 100644
  	sound {
  		compatible = "audio-graph-card";
  		routing =
-@@ -183,27 +163,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
+@@ -181,26 +161,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
  		};
  
  	};
 -
--	polytouch@38 {
--		compatible = "edt,edt-ft5x06";
+-	touchscreen@38 {
+-		compatible = "edt,edt-ft5406";
 -		reg = <0x38>;
 -		interrupt-parent = <&gpiog>;
 -		interrupts = <2 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
--		linux,wakeup;
 -	};
 -};
 -
