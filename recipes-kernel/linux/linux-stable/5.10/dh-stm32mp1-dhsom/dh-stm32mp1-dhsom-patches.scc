@@ -51,5 +51,4 @@ patch 0058-ARM-dts-stm32-Update-GPIO-line-names-on-DRC02.patch
 patch 0059-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch
 patch 0061-rsi-Add-support-for-changing-beacon-interval.patch
 patch 0062-ARM-dts-stm32-Prefer-HW-RTC-on-DHCOM-SoM.patch
-patch 0063-ARM-dts-stm32-Disable-LAN8710-EDPD-on-DHCOM.patch
 patch 0064-ARM-dts-stm32-Reduce-DHCOR-SPI-NOR-frequency-to-50-M.patch
