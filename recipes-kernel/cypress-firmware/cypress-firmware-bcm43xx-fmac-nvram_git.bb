@@ -51,7 +51,7 @@ do_install() {
 	ln -s cyfmac54591-pcie.1XA.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac54591-pcie.1XA.txt
 }
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 
 PACKAGES = " \
 	${PN}-cypress-license \
@@ -71,103 +71,103 @@ PACKAGES = " \
 	${PN}-bcm54591-1xa-pcie \
 	"
 
-LICENSE_${PN}-cypress-license = "Firmware-cypress-fmac-nvram"
-FILES_${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-nvram"
+LICENSE:${PN}-cypress-license = "Firmware-cypress-fmac-nvram"
+FILES:${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-nvram"
 
-FILES_${PN}-bcm43012-1lv-sdio = " \
+FILES:${PN}-bcm43012-1lv-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43012-sdio.1LV.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43012-sdio.1LV.txt \
 	"
-LICENSE_${PN}-bcm43012-1lv-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43012-1lv-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43012-1lv-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43012-1lv-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43340-1bw-sdio = " \
+FILES:${PN}-bcm43340-1bw-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43340-sdio.1BW.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43340-sdio.1BW.txt \
 	"
-LICENSE_${PN}-bcm43340-1bw-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43340-1bw-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43340-1bw-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43340-1bw-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43362-sn8000-sdio = " \
+FILES:${PN}-bcm43362-sn8000-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43362-sdio.SN8000.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43362-sdio.SN8000.txt \
 	"
-LICENSE_${PN}-bcm43362-sn8000-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43362-sn8000-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43362-sn8000-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43362-sn8000-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm4339-1ck-sdio = " \
+FILES:${PN}-bcm4339-1ck-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac4339-sdio.1CK.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac4339-sdio.1CK.txt \
 	"
-LICENSE_${PN}-bcm4339-1ck-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm4339-1ck-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4339-1ck-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4339-1ck-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm4339-zp-sdio = " \
+FILES:${PN}-bcm4339-zp-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac4339-sdio.ZP.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac4339-sdio.ZP.txt \
 	"
-LICENSE_${PN}-bcm4339-zp-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm4339-zp-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4339-zp-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4339-zp-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43430-1dx-sdio = " \
+FILES:${PN}-bcm43430-1dx-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1DX.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.1DX.txt \
 	"
-LICENSE_${PN}-bcm43430-1dx-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43430-1dx-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43430-1dx-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43430-1dx-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43430-1fx-sdio = " \
+FILES:${PN}-bcm43430-1fx-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1FX.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.1FX.txt \
 	"
-LICENSE_${PN}-bcm43430-1fx-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43430-1fx-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43430-1fx-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43430-1fx-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43430-1ln-sdio = " \
+FILES:${PN}-bcm43430-1ln-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1LN.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.1LN.txt \
 	"
-LICENSE_${PN}-bcm43430-1ln-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43430-1ln-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43430-1ln-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43430-1ln-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43455-1hk-sdio = " \
+FILES:${PN}-bcm43455-1hk-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1HK.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1HK.txt \
 	"
-LICENSE_${PN}-bcm43455-1hk-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43455-1hk-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43455-1hk-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43455-1hk-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43455-1lc-sdio = " \
+FILES:${PN}-bcm43455-1lc-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1LC.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1LC.txt \
 	"
-LICENSE_${PN}-bcm43455-1lc-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43455-1lc-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43455-1lc-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43455-1lc-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm43455-1mw-sdio = " \
+FILES:${PN}-bcm43455-1mw-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1MW.txt \
 	"
-LICENSE_${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm4354-1bb-sdio = " \
+FILES:${PN}-bcm4354-1bb-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac4354-sdio.1BB.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac4354-sdio.1BB.txt \
 	"
-LICENSE_${PN}-bcm4354-1bb-sdio = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm4354-1bb-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4354-1bb-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4354-1bb-sdio += "${PN}-cypress-license"
 
-FILES_${PN}-bcm4356-1cx-pcie = " \
+FILES:${PN}-bcm4356-1cx-pcie = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac4356-pcie.1CX.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac4356-pcie.1CX.txt \
 	"
-LICENSE_${PN}-bcm4356-1cx-pcie = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm4356-1cx-pcie += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4356-1cx-pcie = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4356-1cx-pcie += "${PN}-cypress-license"
 
-FILES_${PN}-bcm54591-1xa-pcie = " \
+FILES:${PN}-bcm54591-1xa-pcie = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac54591-pcie.1XA.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac54591-pcie.1XA.txt \
 	"
-LICENSE_${PN}-bcm54591-1xa-pcie = "Firmware-cypress-fmac-nvram"
-RDEPENDS_${PN}-bcm54591-1xa-pcie += "${PN}-cypress-license"
+LICENSE:${PN}-bcm54591-1xa-pcie = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm54591-1xa-pcie += "${PN}-cypress-license"

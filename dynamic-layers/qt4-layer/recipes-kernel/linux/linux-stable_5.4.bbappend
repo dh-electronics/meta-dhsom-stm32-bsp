@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI_append_dh-stm32mp1-dhcom-pdk2 = " \
+SRC_URI:append:dh-stm32mp1-dhcom-pdk2 = " \
 	file://dh-stm32mp1-dhcom-pdk2-edt;type=kmeta;destsuffix=dh-stm32mp1-dhcom-pdk2-edt \
 	"
-KERNEL_FEATURES_append_dh-stm32mp1-dhcom-pdk2 = " dh-stm32mp1-dhcom-pdk2-edt.scc "
+KERNEL_FEATURES:append:dh-stm32mp1-dhcom-pdk2 = " dh-stm32mp1-dhcom-pdk2-edt.scc "

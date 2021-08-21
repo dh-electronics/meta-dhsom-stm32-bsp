@@ -40,14 +40,14 @@ do_install() {
 	# FIXME: How do we handle the brcmfmac43455-sdio.*.clm_blob options?
 }
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 
 PACKAGES = " ${PN}-cypress-license ${PN}-bcm43455-1mw-sdio "
 
-LICENSE_${PN}-cypress-license = "Firmware-cypress-fmac-fw"
-FILES_${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw"
+LICENSE:${PN}-cypress-license = "Firmware-cypress-fmac-fw"
+FILES:${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw"
 
-FILES_${PN}-bcm43455-1mw-sdio = " \
+FILES:${PN}-bcm43455-1mw-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1MW.clm_blob \
@@ -55,5 +55,5 @@ FILES_${PN}-bcm43455-1mw-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.clm_blob \
 	"
 
-LICENSE_${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-fw"
-RDEPENDS_${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-fw"
+RDEPENDS:${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"

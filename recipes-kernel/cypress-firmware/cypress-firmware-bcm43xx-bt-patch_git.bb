@@ -50,7 +50,7 @@ do_install() {
 	ln -s CYW4350C0.1BB.hcd ${D}${nonarch_base_libdir}/firmware/brcm/CYW4350C0.hcd
 }
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 
 PACKAGES = " \
 	${PN}-cypress-license \
@@ -58,62 +58,62 @@ PACKAGES = " \
 	${PN}-cyw43341b0 ${PN}-cyw4335c0 ${PN}-cyw4350c0 \
 	"
 
-LICENSE_${PN}-cypress-license = "Firmware-cypress-bt-patch"
-FILES_${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-bt-patch"
+LICENSE:${PN}-cypress-license = "Firmware-cypress-bt-patch"
+FILES:${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-bt-patch"
 
-FILES_${PN}-bcm43012c0 = " \
+FILES:${PN}-bcm43012c0 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM43012C0_003.001.015.0230.0237.1LV.sAnt.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM43012C0_003.001.015.0240.0243.1LV.dAnt.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW43012C0.1LV.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM43012C0.hcd \
 	"
-FILES_${PN}-bcm4343a1 = " \
+FILES:${PN}-bcm4343a1 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM4343A1_001.002.009.0153.0520.1DX.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW43430A1.1DX.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM4343A1.hcd \
 	"
-FILES_${PN}-bcm4345c0 = " \
+FILES:${PN}-bcm4345c0 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM4345C0_003.001.025.0172.0344.1MW.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW4345C0.1MW.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM4345C0.hcd \
 	"
-FILES_${PN}-bcm4356a2 = " \
+FILES:${PN}-bcm4356a2 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM4356A2_001.003.015.0112.0410.1CX.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW4354A2.1CX.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM4356A2.hcd \
 	"
-FILES_${PN}-bcm4359d0 = " \
+FILES:${PN}-bcm4359d0 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM4359D0_004.001.016.0223.0230.1XA.dAnt.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM4359D0_004.001.016.0223.0231.1XA.sAnt.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW4359D0.1XA.hcd \
 	${nonarch_base_libdir}/firmware/brcm/BCM4359D0.hcd \
 	"
-FILES_${PN}-cyw43341b0 = " \
+FILES:${PN}-cyw43341b0 = " \
 	${nonarch_base_libdir}/firmware/brcm/CYW43341B0.1BW.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW43341B0.hcd \
 	"
-FILES_${PN}-cyw4335c0 = " \
+FILES:${PN}-cyw4335c0 = " \
 	${nonarch_base_libdir}/firmware/brcm/CYW4335C0.ZP.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW4335C0.hcd \
 	"
-FILES_${PN}-cyw4350c0 = " \
+FILES:${PN}-cyw4350c0 = " \
 	${nonarch_base_libdir}/firmware/brcm/CYW4350C0.1BB.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW4350C0.hcd \
 	"
 
-LICENSE_${PN}-bcm43012c0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-bcm43012c0 += "${PN}-cypress-license"
-LICENSE_${PN}-bcm4343a1 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-bcm4343a1 += "${PN}-cypress-license"
-LICENSE_${PN}-bcm4345c0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-bcm4345c0 += "${PN}-cypress-license"
-LICENSE_${PN}-bcm4356a2 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-bcm4356a2 += "${PN}-cypress-license"
-LICENSE_${PN}-bcm4359d0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-bcm4359d0 += "${PN}-cypress-license"
-LICENSE_${PN}-cyw43341b0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-cyw43341b0 += "${PN}-cypress-license"
-LICENSE_${PN}-cyw4335c0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-cyw4335c0 += "${PN}-cypress-license"
-LICENSE_${PN}-cyw4350c0 = "Firmware-cypress-bt-patch"
-RDEPENDS_${PN}-cyw4350c0 += "${PN}-cypress-license"
+LICENSE:${PN}-bcm43012c0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-bcm43012c0 += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4343a1 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-bcm4343a1 += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4345c0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-bcm4345c0 += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4356a2 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-bcm4356a2 += "${PN}-cypress-license"
+LICENSE:${PN}-bcm4359d0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-bcm4359d0 += "${PN}-cypress-license"
+LICENSE:${PN}-cyw43341b0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-cyw43341b0 += "${PN}-cypress-license"
+LICENSE:${PN}-cyw4335c0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-cyw4335c0 += "${PN}-cypress-license"
+LICENSE:${PN}-cyw4350c0 = "Firmware-cypress-bt-patch"
+RDEPENDS:${PN}-cyw4350c0 += "${PN}-cypress-license"
