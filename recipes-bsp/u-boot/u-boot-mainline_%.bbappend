@@ -1,7 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 RPROVIDES:${PN} = "virtual/bootloader"
 
-DEPENDS:append:dh-stm32mp1-dhsom = "u-boot-mainline-tools-native"
+DEPENDS:append:dh-stm32mp1-dhsom = " u-boot-mainline-tools-native "
 do_compile:append:dh-stm32mp1-dhsom () {
 	sed -i -e "s/%UBOOT_DTB_LOADADDRESS%/${UBOOT_DTB_LOADADDRESS}/g" \
 		-e "s/%UBOOT_DTBO_LOADADDRESS%/${UBOOT_DTBO_LOADADDRESS}/g" \
