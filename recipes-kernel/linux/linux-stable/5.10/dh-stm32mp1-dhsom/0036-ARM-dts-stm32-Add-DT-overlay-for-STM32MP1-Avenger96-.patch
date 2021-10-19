@@ -197,7 +197,7 @@ index 6df0ed9a73c8..5e0219181f16 100644
 +
  	hdmi-transmitter@3d {
  		compatible = "adi,adv7513";
- 		reg = <0x3d>, <0x2d>, <0x4d>, <0x5d>;
+ 		reg = <0x3d>, <0x4d>, <0x2d>, <0x5d>;
 -- 
 2.29.2
 

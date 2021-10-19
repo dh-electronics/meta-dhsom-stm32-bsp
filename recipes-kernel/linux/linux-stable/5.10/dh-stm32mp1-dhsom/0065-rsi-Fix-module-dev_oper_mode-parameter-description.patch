@@ -45,7 +45,7 @@ index 77da2894ead2c..0ee50000ceef8 100644
 +++ b/drivers/net/wireless/rsi/rsi_91x_sdio.c
 @@ -24,10 +24,7 @@
  /* Default operating mode is wlan STA + BT */
- static u16 dev_oper_mode = DEV_OPMODE_WIFI_ALONE;
+ static u16 dev_oper_mode = DEV_OPMODE_STA_BT_DUAL;
  module_param(dev_oper_mode, ushort, 0444);
 -MODULE_PARM_DESC(dev_oper_mode,
 -		 "1[Wi-Fi], 4[BT], 8[BT LE], 5[Wi-Fi STA + BT classic]\n"
