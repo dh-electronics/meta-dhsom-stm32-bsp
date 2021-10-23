@@ -23,6 +23,6 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0008-ARM-stm32-Set-environment-sector-size-to-4k-on-DHSOM.patch \
 	file://0009-ARM-dts-stm32-Reduce-DHCOR-SPI-NOR-frequency-to-50-M.patch \
 	file://0010-Revert-configs-stm32mp1-only-support-SD-card-after-N.patch \
-	file://0011-ARM-stm32-Enable-DFU-SF-support-on-DHSOM.patch \
+	file://0011-ARM-stm32-Enable-DFU-MTD-support-on-DHSOM.patch \
 	file://default-device-tree.cfg \
 	"
