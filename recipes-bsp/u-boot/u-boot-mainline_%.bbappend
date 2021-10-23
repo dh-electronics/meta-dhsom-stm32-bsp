@@ -25,5 +25,6 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0010-Revert-configs-stm32mp1-only-support-SD-card-after-N.patch \
 	file://0011-ARM-stm32-Enable-DFU-MTD-support-on-DHSOM.patch \
 	file://0012-ARM-dts-stm32-Drop-nWP-GPIO-hog-on-DHSOM.patch \
+	file://0013-ARM-stm32-Increase-default-SF-bus-frequency-to-50-MH.patch \
 	file://default-device-tree.cfg \
 	"
