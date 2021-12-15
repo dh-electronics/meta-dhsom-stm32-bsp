@@ -52,3 +52,6 @@ patch 0059-ARM-dts-stm32-Update-GPIO-line-names-on-PicoITX.patch
 patch 0061-rsi-Add-support-for-changing-beacon-interval.patch
 patch 0062-ARM-dts-stm32-Prefer-HW-RTC-on-DHCOM-SoM.patch
 patch 0066-ARM-dts-stm32-Add-DRC02-DTO-for-SoM-with-populated-R.patch
+patch 0067-dt-bindings-display-simple-Add-Multi-Inno-Technology.patch
+patch 0068-drm-panel-simple-add-Multi-Inno-Technology-MI0700S4T.patch
+patch 0069-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-548-200-DPI-ada.patch
