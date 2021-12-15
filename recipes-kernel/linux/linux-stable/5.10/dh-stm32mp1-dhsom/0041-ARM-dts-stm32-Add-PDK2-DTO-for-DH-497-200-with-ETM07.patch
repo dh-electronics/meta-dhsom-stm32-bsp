@@ -13,8 +13,8 @@ Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/Makefile                    |  1 +
- ...2mp15xx-dhcom-pdk2-overlay-497-200-x12.dts | 66 +++++++++++++++++++
- 2 files changed, 67 insertions(+)
+ ...2mp15xx-dhcom-pdk2-overlay-497-200-x12.dts | 24 +++++++++++++++++++
+ 2 files changed, 25 insertions(+)
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
@@ -34,72 +34,30 @@ new file mode 100644
 index 000000000000..6e568a0fc80e
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,24 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
 + */
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/pwm/pwm.h>
-+
 +/dts-v1/;
 +/plugin/;
 +
-+&{/} {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
 +
-+	display_bl: display-bl {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm2 3 500000 PWM_POLARITY_INVERTED>;
-+		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
-+		default-brightness-level = <8>;
-+		enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	panel {
-+		compatible = "dataimage,scf0700c48ggu18";
-+		backlight = <&display_bl>;
-+
-+		port {
-+			lcd_panel_in: endpoint {
-+				remote-endpoint = <&lcd_display_out>;
-+			};
-+		};
-+	};
++&display_bl {
++	pwms = <&pwm2 3 500000 PWM_POLARITY_INVERTED>;
 +};
 +
-+&timers2 {
-+	/* spare dmas for other usage (un-delete to enable pwm capture) */
-+	dmas;
-+	dma-names;
-+	status = "okay";
-+
-+	pwm2: pwm {
-+		#pwm-cells = <3>;
-+		pinctrl-0 = <&pwm2_pins_a>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+
-+	timer@1 {
-+		status = "okay";
-+	};
++&ltdc_dpi_out {
++	remote-endpoint = <&panel_in>;
 +};
 +
-+&ltdc {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&ltdc_pins_b>;
-+	pinctrl-1 = <&ltdc_sleep_pins_b>;
-+	status = "okay";
++&panel {
++	compatible = "dataimage,scf0700c48ggu18";
++};
 +
-+	port {
-+		lcd_display_out: endpoint {
-+			remote-endpoint = <&lcd_panel_in>;
-+		};
-+	};
++&panel_in {
++	remote-endpoint = <&ltdc_dpi_out>;
 +};
 -- 
 2.29.2

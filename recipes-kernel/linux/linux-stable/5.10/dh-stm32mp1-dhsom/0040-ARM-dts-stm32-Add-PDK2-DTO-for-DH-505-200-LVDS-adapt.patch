@@ -10,9 +10,11 @@ Chefree CH101OLHLWH-002 LVDS display attached to it.
 Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- arch/arm/boot/dts/Makefile                    |   1 +
- ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 132 ++++++++++++++++++
- 2 files changed, 133 insertions(+)
+ arch/arm/boot/dts/Makefile                    |  1 +
+ ...x-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi | 75 +++++++++++++++++++
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 26 +++++++
+ 3 files changed, 102 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
@@ -27,52 +29,22 @@ index 336f2b1fa6b6..ddaa4170d7b9 100644
  	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
  	stm32mp157c-dk2.dtb \
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
 new file mode 100644
 index 000000000000..6b7ccf0138b5
 --- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
-@@ -0,0 +1,132 @@
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+@@ -0,0 +1,75 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
-+ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
 + */
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/pwm/pwm.h>
-+
 +/dts-v1/;
 +/plugin/;
 +
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
 +&{/} {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	display_bl: display-bl {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm2 3 5000000 0>;
-+		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
-+		default-brightness-level = <8>;
-+		enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	gpio-keys {
-+		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
-+		button-1 {
-+			/* Use status as /delete-node/ does not work in DTOs */
-+			status = "disabled";
-+		};
-+	};
-+
-+	led {
-+		/* LED7 GPIO-H conflicts with touchscreen IRQ */
-+		led-2 {
-+			/* Use status as /delete-node/ does not work in DTOs */
-+			status = "disabled";
-+		};
-+	};
-+
 +	lvds-encoder {
 +		compatible = "onsemi,fin3385", "lvds-encoder";
 +		pixelclk-active = <0>;
@@ -85,7 +57,7 @@ index 000000000000..6b7ccf0138b5
 +				reg = <0>;
 +
 +				lvds_bridge_in: endpoint {
-+					remote-endpoint = <&ltdc_ep0_out>;
++					remote-endpoint = <&ltdc_dpi_out>;
 +				};
 +			};
 +
@@ -93,54 +65,15 @@ index 000000000000..6b7ccf0138b5
 +				reg = <1>;
 +
 +				lvds_bridge_out: endpoint {
-+					remote-endpoint = <&lvds_panel_in>;
++					remote-endpoint = <&panel_in>;
 +				};
 +			};
 +		};
 +	};
-+
-+	panel {
-+		compatible = "chefree,ch101olhlwh-002";
-+		backlight = <&display_bl>;
-+
-+		port {
-+			lvds_panel_in: endpoint {
-+				remote-endpoint = <&lvds_bridge_out>;
-+			};
-+		};
-+	};
 +};
 +
-+&timers2 {
-+	/* spare dmas for other usage (un-delete to enable pwm capture) */
-+	dmas;
-+	dma-names;
-+	status = "okay";
-+
-+	pwm2: pwm {
-+		#pwm-cells = <3>;
-+		pinctrl-0 = <&pwm2_pins_a>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+
-+	timer@1 {
-+		status = "okay";
-+	};
-+};
-+
-+&ltdc {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&ltdc_pins_b>;
-+	pinctrl-1 = <&ltdc_sleep_pins_b>;
-+	status = "okay";
-+
-+	port {
-+		ltdc_ep0_out: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&lvds_bridge_in>;
-+		};
-+	};
++&display_bl {
++	pwms = <&pwm2 3 5000000 0>;
 +};
 +
 +&i2c5 {
@@ -163,6 +96,50 @@ index 000000000000..6b7ccf0138b5
 +		compatible = "atmel,24c04";
 +		reg = <0x50>;
 +		pagesize = <16>;
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&lvds_bridge_in>;
++};
++
++&panel {
++	compatible = "chefree,ch101olhlwh-002";
++};
++
++&panel_in {
++	remote-endpoint = <&lvds_bridge_out>;
++};
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+new file mode 100644
+index 000000000000..7d873da23ae5
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys {
++		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	led {
++		/* LED7 GPIO-H conflicts with touchscreen IRQ */
++		led-2 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
 +	};
 +};
 -- 
