@@ -55,3 +55,4 @@ patch 0066-ARM-dts-stm32-Add-DRC02-DTO-for-SoM-with-populated-R.patch
 patch 0067-dt-bindings-display-simple-Add-Multi-Inno-Technology.patch
 patch 0068-drm-panel-simple-add-Multi-Inno-Technology-MI0700S4T.patch
 patch 0069-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-548-200-DPI-ada.patch
+patch 0070-ARM-dts-stm32-Add-CM4-reserved-memory-rproc-and-IPCC.patch
