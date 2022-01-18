@@ -20,6 +20,9 @@ repos:
     refspec: dunfell
     layers:
       meta-oe:
+      meta-filesystems:
+      meta-gnome:
+      meta-multimedia:
       meta-networking:
       meta-perl:
       meta-python:
