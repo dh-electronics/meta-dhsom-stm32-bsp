@@ -1,0 +1,73 @@
+From cee1565cfd83d1287c41e79c76e4ae80ec49e66b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 7 Apr 2021 20:15:39 +0200
+Subject: [PATCH 74/78] clk: stm32mp1: Split ETHCK_K into separate MUX and GATE
+ clock
+
+The ETHCK_K are modeled as composite clock of MUX and GATE, however per
+STM32MP1 Reference Manual RM0436 Rev 3, Page 574, Figure 83. Peripheral
+clock distribution for Ethernet, ETHPTPDIV divider is attached past the
+ETHCK_K mux, and ETH_CLK/eth_clk_fb clock are output past ETHCKEN gate.
+Therefore, in case ETH_CLK/eth_clk_fb are not in use AND PTP clock are
+in use, ETHCKEN gate can be turned off. Current driver does not permit
+that, fix it.
+
+This patch converts ETHCK_K from composite clock into a ETHCKEN gate,
+ETHPTP_K from composite clock into ETHPTPDIV divider, and adds another
+NO_ID clock "ck_ker_eth" which models the ETHSRC mux and is parent clock
+to both ETHCK_K and ETHPTP_K. Therefore, all references to ETHCK_K and
+ETHPTP_K remain functional as before.
+
+[1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
+    Figure 83. Peripheral clock distribution for Ethernet
+    https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157-advanced-armbased-32bit-mpus-stmicroelectronics.pdf
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220118202958.1840431-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ drivers/clk/clk-stm32mp1.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
+index 4c5129bc89e23..a4838a9a8af92 100644
+--- a/drivers/clk/clk-stm32mp1.c
++++ b/drivers/clk/clk-stm32mp1.c
+@@ -1948,7 +1948,6 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
+ 	KCLK(DSI_K, "dsi_k", dsi_src, 0, G_DSI, M_DSI),
+ 	KCLK(ADFSDM_K, "adfsdm_k", sai_src, 0, G_ADFSDM, M_SAI1),
+ 	KCLK(USBO_K, "usbo_k", usbo_src, 0, G_USBO, M_USBO),
+-	KCLK(ETHCK_K, "ethck_k", eth_src, 0, G_ETHCK, M_ETHCK),
+ 
+ 	/* Particulary Kernel Clocks (no mux or no gate) */
+ 	MGATE_MP1(DFSDM_K, "dfsdm_k", "ck_mcu", 0, G_DFSDM),
+@@ -1957,11 +1956,16 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
+ 	MGATE_MP1(GPU_K, "gpu_k", "pll2_q", 0, G_GPU),
+ 	MGATE_MP1(DAC12_K, "dac12_k", "ck_lsi", 0, G_DAC12),
+ 
+-	COMPOSITE(ETHPTP_K, "ethptp_k", eth_src, CLK_OPS_PARENT_ENABLE |
++	COMPOSITE(NO_ID, "ck_ker_eth", eth_src, CLK_OPS_PARENT_ENABLE |
+ 		  CLK_SET_RATE_NO_REPARENT,
+ 		  _NO_GATE,
+ 		  _MMUX(M_ETHCK),
+-		  _DIV(RCC_ETHCKSELR, 4, 4, 0, NULL)),
++		  _NO_DIV),
++
++	MGATE_MP1(ETHCK_K, "ethck_k", "ck_ker_eth", 0, G_ETHCK),
++
++	DIV(ETHPTP_K, "ethptp_k", "ck_ker_eth", CLK_OPS_PARENT_ENABLE |
++	    CLK_SET_RATE_NO_REPARENT, RCC_ETHCKSELR, 4, 4, 0),
+ 
+ 	/* RTC clock */
+ 	DIV(NO_ID, "ck_hse_rtc", "ck_hse", 0, RCC_RTCDIVR, 0, 6, 0),
+-- 
+2.34.1
+

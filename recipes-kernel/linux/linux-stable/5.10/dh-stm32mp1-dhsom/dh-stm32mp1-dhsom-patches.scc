@@ -56,3 +56,11 @@ patch 0067-dt-bindings-display-simple-Add-Multi-Inno-Technology.patch
 patch 0068-drm-panel-simple-add-Multi-Inno-Technology-MI0700S4T.patch
 patch 0069-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-548-200-DPI-ada.patch
 patch 0070-ARM-dts-stm32-Add-CM4-reserved-memory-rproc-and-IPCC.patch
+patch 0071-clk-stm32mp1-convert-to-module-driver.patch
+patch 0072-clk-stm32mp1-move-RCC-reset-controller-into-RCC-cloc.patch
+patch 0073-clk-stm32mp1-fix-missing-spin_lock_init.patch
+patch 0074-clk-stm32mp1-Split-ETHCK_K-into-separate-MUX-and-GAT.patch
+patch 0075-clk-stm32mp1-Add-parent_data-to-ETHRX-clock.patch
+patch 0076-ARM-dts-stm32-Add-alternate-pinmux-for-ethernet0-pin.patch
+patch 0077-ARM-dts-stm32-Add-alternate-pinmux-for-mco2-pins.patch
+patch 0078-ARM-dts-stm32-Switch-DWMAC-RMII-clock-to-MCO2-on-DHC.patch

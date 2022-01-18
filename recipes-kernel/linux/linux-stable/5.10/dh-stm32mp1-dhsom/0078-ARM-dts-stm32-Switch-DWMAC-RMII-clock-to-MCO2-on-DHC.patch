@@ -1,0 +1,90 @@
+From b21d1e16e33f1a81c2c5fb30f50b2bd4c3db5f3e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 8 Apr 2021 18:15:45 +0200
+Subject: [PATCH 78/78] ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on
+ DHCOM
+
+The DHCOM SoM has two options for supplying ETHRX clock to the DWMAC
+block and PHY. Either (1) ETHCK_K generates 50 MHz clock on ETH_CLK
+pad for the PHY and the same 50 MHz clock are fed back to ETHRX via
+internal eth_clk_fb clock connection OR (2) ETH_CLK is not used at
+all, MCO2 generates 50 MHz clock on MCO2 output pad for the PHY and
+the same MCO2 clock are fed back into ETHRX via ETH_RX_CLK input pad
+using external pad-to-pad connection.
+
+Option (1) has two downsides. ETHCK_K is supplied directly from either
+PLL3_Q or PLL4_P, hence the PLL output is limited to exactly 50 MHz and
+since the same PLL output is also used to supply SDMMC blocks, the
+performance of SD and eMMC access is affected. The second downside is
+that using this option, the EMI of the SoM is higher.
+
+Option (2) solves both of those problems, so implement it here. In this
+case, the PLL4_P is no longer limited and can be operated faster, at
+100 MHz, which improves SDMMC performance (read performance is improved
+from ~41 MiB/s to ~57 MiB/s with dd if=/dev/mmcblk1 of=/dev/null bs=64M
+count=1). The EMI interference also decreases.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220118202958.1840431-5-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 22 ++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index c01bfb10fb49a..953dc8ce2e6f9 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -116,15 +116,29 @@ &dts {
+ 	status = "okay";
+ };
+ 
++&rcc {
++	/* Connect MCO2 output to ETH_RX_CLK input via pad-pad connection */
++	clocks = <&rcc CK_MCO2>;
++	clock-names = "ETH_RX_CLK/ETH_REF_CLK";
++
++	/*
++	 * Set PLL4P output to 100 MHz to supply SDMMC with faster clock,
++	 * set MCO2 output to 50 MHz to supply ETHRX clock with PLL4P/2,
++	 * so that MCO2 behaves as a divider for the ETHRX clock here.
++	 */
++	assigned-clocks = <&rcc CK_MCO2>, <&rcc PLL4_P>;
++	assigned-clock-parents = <&rcc PLL4_P>;
++	assigned-clock-rates = <50000000>, <100000000>;
++};
++
+ &ethernet0 {
+ 	status = "okay";
+-	pinctrl-0 = <&ethernet0_rmii_pins_a>;
+-	pinctrl-1 = <&ethernet0_rmii_sleep_pins_a>;
++	pinctrl-0 = <&ethernet0_rmii_pins_b &mco2_pins_a>;
++	pinctrl-1 = <&ethernet0_rmii_sleep_pins_b &mco2_sleep_pins_a>;
+ 	pinctrl-names = "default", "sleep";
+ 	phy-mode = "rmii";
+ 	max-speed = <100>;
+ 	phy-handle = <&phy0>;
+-	st,eth-ref-clk-sel;
+ 
+ 	mdio0 {
+ 		#address-cells = <1>;
+@@ -136,7 +150,7 @@ phy0: ethernet-phy@1 {
+ 			/* LAN8710Ai */
+ 			compatible = "ethernet-phy-id0007.c0f0",
+ 				     "ethernet-phy-ieee802.3-c22";
+-			clocks = <&rcc ETHCK_K>;
++			clocks = <&rcc CK_MCO2>;
+ 			reset-gpios = <&gpioh 3 GPIO_ACTIVE_LOW>;
+ 			reset-assert-us = <500>;
+ 			reset-deassert-us = <500>;
+-- 
+2.34.1
+

@@ -1,0 +1,33 @@
+From 729308c6beb9bd49aa108f4a945444ccbdbbdf5c Mon Sep 17 00:00:00 2001
+From: Wang Hai <wanghai38@huawei.com>
+Date: Wed, 30 Jun 2021 09:58:23 +0800
+Subject: [PATCH 73/78] clk: stm32mp1: fix missing spin_lock_init()
+
+The driver allocates the spinlock but not initialize it.
+Use spin_lock_init() on it to initialize it correctly.
+
+Upstream-Status: Backport [b1f247714acb2a78452ba555807764b2c1115a40]
+Fixes: c392df194a2d ("clk: stm32mp1: move RCC reset controller into RCC clock driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Link: https://lore.kernel.org/r/20210630015824.2555840-1-wanghai38@huawei.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/clk-stm32mp1.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
+index 66e1bcc94d382..4c5129bc89e23 100644
+--- a/drivers/clk/clk-stm32mp1.c
++++ b/drivers/clk/clk-stm32mp1.c
+@@ -2140,6 +2140,7 @@ static int stm32_rcc_reset_init(struct device *dev, void __iomem *base,
+ 	if (!reset_data)
+ 		return -ENOMEM;
+ 
++	spin_lock_init(&reset_data->lock);
+ 	reset_data->membase = base;
+ 	reset_data->rcdev.owner = THIS_MODULE;
+ 	reset_data->rcdev.ops = &stm32_reset_ops;
+-- 
+2.34.1
+
