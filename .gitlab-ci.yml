@@ -1,0 +1,12 @@
+Trigger repository mirroring:
+  stage: deploy
+  rules:
+    - if: '$DO_REPOSITORY_MIRROR != "yes"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "dunfell-3.1"'
+  trigger:
+    strategy: depend
+    include:
+      - file: github-mirror-ci.yml
+        project: $CI_PROJECT_PATH
+        ref: github-mirror-ci
