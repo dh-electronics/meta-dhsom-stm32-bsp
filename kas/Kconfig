@@ -36,6 +36,14 @@ config INCLUDE_EXTRAS_YML
     features and applications, it is large and requires much longer
     build time.
 
+config KAS_TARGET_IMAGE
+  string "KAS Target image"
+  default "core-image-base" if !INCLUDE_EXTRAS_YML
+  default "dh-image-demo" if INCLUDE_EXTRAS_YML
+  help
+    The build target that will be built. This is often an image name, e.g.
+    core-image-base or dh-image-demo (if INCLUDE_EXTRAS_YML=y).
+
 comment "Inferred and expert settings"
 
 config KAS_BUILD_SYSTEM
