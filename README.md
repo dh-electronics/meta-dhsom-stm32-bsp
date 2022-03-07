@@ -40,8 +40,13 @@ First, install KAS to current user local bin directory:
 ```
 $ pip3 install kas
 ```
+Second, clone this metalayer git repository into a location accessible to the build system:
 
-Second, configure the build parameters, especially the work directory where the
+```
+git clone https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git -b dunfell-3.1
+```
+
+Third, configure the build parameters, especially the work directory where the
 build stores all the data. This directory must have sufficient amount of space,
 around 25 GiB for basic build and 100 GiB for build with all examples.
 
