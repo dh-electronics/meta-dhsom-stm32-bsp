@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.cypress;md5=cbc5f665d04f741f1e006d2096236ba7"
 # so that the license files will be copied from fetched source
 NO_GENERIC_LICENSE[Firmware-cypress-fmac-nvram] = "LICENCE.cypress"
 
-SRCREV = "8710e74e79470f666912c3ccadf1e354d6fb209c"
+SRCREV = "d0ddc35f8ade6ba5629c3a6d0a9c810078a9ebbc"
 SRC_URI = "git://github.com/murata-wireless/cyw-fmac-nvram;protocol=https"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -43,11 +43,14 @@ do_install() {
 	ln -s cyfmac43430-sdio.1DX.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1DX.txt
 	ln -s cyfmac43430-sdio.1FX.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1FX.txt
 	ln -s cyfmac43430-sdio.1LN.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.1LN.txt
+	ln -s cyfmac43439-sdio.1YN.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.1YN.txt
 	ln -s cyfmac43455-sdio.1HK.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1HK.txt
 	ln -s cyfmac43455-sdio.1LC.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1LC.txt
 	ln -s cyfmac43455-sdio.1MW.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.txt
 	ln -s cyfmac4354-sdio.1BB.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac4354-sdio.1BB.txt
 	ln -s cyfmac4356-pcie.1CX.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac4356-pcie.1CX.txt
+	ln -s cyfmac4373-sdio.2AE.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac4373-sdio.2AE.txt
+	ln -s cyfmac4373-sdio.2BC.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac4373-sdio.2BC.txt
 	ln -s cyfmac54591-pcie.1XA.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac54591-pcie.1XA.txt
 }
 
@@ -63,11 +66,14 @@ PACKAGES = " \
 	${PN}-bcm43430-1dx-sdio \
 	${PN}-bcm43430-1fx-sdio \
 	${PN}-bcm43430-1ln-sdio \
+	${PN}-bcm43439-1yn-sdio \
 	${PN}-bcm43455-1hk-sdio \
 	${PN}-bcm43455-1lc-sdio \
 	${PN}-bcm43455-1mw-sdio \
 	${PN}-bcm4354-1bb-sdio \
 	${PN}-bcm4356-1cx-pcie \
+	${PN}-bcm4373-2ae-sdio \
+	${PN}-bcm4373-2bc-sdio \
 	${PN}-bcm54591-1xa-pcie \
 	"
 
@@ -130,6 +136,13 @@ FILES:${PN}-bcm43430-1ln-sdio = " \
 LICENSE:${PN}-bcm43430-1ln-sdio = "Firmware-cypress-fmac-nvram"
 RDEPENDS:${PN}-bcm43430-1ln-sdio += "${PN}-cypress-license"
 
+FILES:${PN}-bcm43439-1yn-sdio = " \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.1YN.txt \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac43439-sdio.1YN.txt \
+	"
+LICENSE:${PN}-bcm43439-1yn-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm43439-1yn-sdio += "${PN}-cypress-license"
+
 FILES:${PN}-bcm43455-1hk-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1HK.txt \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43455-sdio.1HK.txt \
@@ -164,6 +177,20 @@ FILES:${PN}-bcm4356-1cx-pcie = " \
 	"
 LICENSE:${PN}-bcm4356-1cx-pcie = "Firmware-cypress-fmac-nvram"
 RDEPENDS:${PN}-bcm4356-1cx-pcie += "${PN}-cypress-license"
+
+FILES:${PN}-bcm4373-2ae-sdio = " \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac4373-sdio.2AE.txt \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac4373-sdio.2AE.txt \
+	"
+LICENSE:${PN}-bcm4373-2ae-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4373-2ae-sdio += "${PN}-cypress-license"
+
+FILES:${PN}-bcm4373-2bc-sdio = " \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac4373-sdio.2BC.txt \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac4373-sdio.2BC.txt \
+	"
+LICENSE:${PN}-bcm4373-2bc-sdio = "Firmware-cypress-fmac-nvram"
+RDEPENDS:${PN}-bcm4373-2bc-sdio += "${PN}-cypress-license"
 
 FILES:${PN}-bcm54591-1xa-pcie = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac54591-pcie.1XA.txt \
