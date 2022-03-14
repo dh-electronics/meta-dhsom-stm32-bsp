@@ -58,7 +58,11 @@ at commit $(git -c core.abbrev=12 show --pretty=format:'%h ("%s")' --no-patch).
 Upstream-Status: Inappropriate [configuration]
 EOF
 
+timestamp="$(date --rfc-3339=date)"
 # 7. Tag this revision with a tag by date and git-hash from the layer repo.
-git -C "$sourcedir" tag "dh-$(date --rfc-3339=date)-g$(git -c core.abbrev=12 show --pretty=format:'%h' --no-patch)"
+git -C "$sourcedir" tag -a -F - "dh-${timestamp}-g$(git -c core.abbrev=12 show --pretty=format:'%h' --no-patch)" <<EOF
+DH-Electronics release on ${timestamp}
+EOF
 
 # 8. Push to other repository.
+echo "Staged sources are in $sourcedir/"
