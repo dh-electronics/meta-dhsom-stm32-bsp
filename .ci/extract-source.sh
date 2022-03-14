@@ -43,10 +43,13 @@ cp -vt "$sourcedir" "$B/.config"
 (cd "$sourcedir"; ARCH="$arch" make savedefconfig)
 
 # 6. Commit this defconfig into the tree.
+timestamp="$(date --rfc-3339=date)"
 export GIT_AUTHOR_NAME="DH-Electronics Ci"
 export GIT_AUTHOR_EMAIL="none@none"
+export GIT_AUTHOR_DATE="$timestamp 00:00:00"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+export GIT_COMMITTER_DATE="$timestamp 00:00:00"
 
 mv "$sourcedir/defconfig" "$sourcedir/$defconfig_name"
 git -C "$sourcedir" add "$defconfig_name"
@@ -60,7 +63,6 @@ at commit $(git -c core.abbrev=12 show --pretty=format:'%h ("%s")' --no-patch).
 Upstream-Status: Inappropriate [configuration]
 EOF
 
-timestamp="$(date --rfc-3339=date)"
 # 7. Tag this revision with a tag by date and git-hash from the layer repo.
 git -C "$sourcedir" tag -a -F - "dh-${timestamp}-g$(git -c core.abbrev=12 show --pretty=format:'%h' --no-patch)" <<EOF
 DH-Electronics release on ${timestamp}
@@ -75,7 +77,10 @@ echo ""
 echo ""
 
 if [[ "$full_remote_uri" != "" ]]; then
-    git -C "$sourcedir" tag --list --merged=HEAD | xargs -L32 git -C "$sourcedir" push "$full_remote_uri"
+    git -C "$sourcedir" tag --list --merged=HEAD | xargs -L512 git -C "$sourcedir" push "$full_remote_uri"
+
+    echo "Done! Removing source dir $sourcedir/ ..."
+    rm -rf "$sourcedir"
 else
     echo "Skipping git-push as no remote as specified."
 fi
