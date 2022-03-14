@@ -3,15 +3,25 @@ set -e
 
 bitbake_target="${1}"
 arch="${2:-arm}"
-defconfig_name="${3:-dh_defconfig}"
+
+if [[ "$3" != "" ]]; then
+    defconfig_name="$3"
+elif [[ "$bitbake_target" == virtual/kernel ]]; then
+    defconfig_name="arch/$arch/configs/dh_defconfig"
+elif [[ "$bitbake_target" == virtual/bootloader ]]; then
+    defconfig_name="configs/dh_defconfig"
+else
+    echo "$0: can't guess defconfig name." >&2
+    exit 1
+fi
 
 # 1. Run the build up to the do_configure task after which sources and
 #    configuration are ready and can be extracted from the workdir.
-kas build --target "$bitbake_target" -c configure
+kas build .ci/kas-ci.yml --target "$bitbake_target" -c configure
 
 # 2. Extract paths to the source and build directories and inject them into our
 #    environment.
-source <(kas shell -c 'bitbake -e virtual/kernel | grep -E "^[SB]="')
+source <(kas shell .ci/kas-ci.yml -c 'bitbake -e '"$bitbake_target"' | grep -E "^[SB]="')
 echo "Source Directory:    $S"
 echo "Build Directory:     $B"
 
@@ -36,8 +46,8 @@ export GIT_AUTHOR_EMAIL="none@none"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
-mv "$sourcedir/defconfig" "$sourcedir/arch/$arch/configs/$defconfig_name"
-git -C "$sourcedir" add "arch/$arch/configs/$defconfig_name"
+mv "$sourcedir/defconfig" "$sourcedir/$defconfig_name"
+git -C "$sourcedir" add "$defconfig_name"
 git -C "$sourcedir" commit -F - <<EOF
 ARM: configs: Add defconfig for DH-Electronics
 
@@ -49,6 +59,6 @@ Upstream-Status: Inappropriate [configuration]
 EOF
 
 # 7. Tag this revision with a tag by date and git-hash from the layer repo.
-git -C "$sourcedir" tag "dh-$(date --rfc3339=date)-g$(git -c core.abbrev=12 show --pretty=format:'%h' --no-patch)"
+git -C "$sourcedir" tag "dh-$(date --rfc-3339=date)-g$(git -c core.abbrev=12 show --pretty=format:'%h' --no-patch)"
 
 # 8. Push to other repository.

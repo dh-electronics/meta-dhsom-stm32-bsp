@@ -1,0 +1,18 @@
+header:
+  version: 2
+
+distro: nodistro
+machine: dh-stm32mp1-dhcom-pdk2
+
+repos:
+  meta-dhsom-stm32-bsp:
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    refspec: dunfell
+    layers:
+      meta:
+
+  meta-mainline-common:
+    url: https://source.denx.de/denx/meta-mainline-common.git
+    refspec: dunfell-3.1
