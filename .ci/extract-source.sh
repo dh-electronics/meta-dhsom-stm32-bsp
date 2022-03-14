@@ -15,6 +15,8 @@ else
     exit 1
 fi
 
+full_remote_uri="$4"
+
 # 1. Run the build up to the do_configure task after which sources and
 #    configuration are ready and can be extracted from the workdir.
 kas build .ci/kas-ci.yml --target "$bitbake_target" -c configure
@@ -64,5 +66,16 @@ git -C "$sourcedir" tag -a -F - "dh-${timestamp}-g$(git -c core.abbrev=12 show -
 DH-Electronics release on ${timestamp}
 EOF
 
-# 8. Push to other repository.
+# 8. Push to other repository.  We push all tags leading up to HEAD to provide
+#    reference points if users want to diff.
+echo ""
+echo ""
 echo "Staged sources are in $sourcedir/"
+echo ""
+echo ""
+
+if [[ "$full_remote_uri" != "" ]]; then
+    git -C "$sourcedir" tag --list --merged=HEAD | xargs -L32 git -C "$sourcedir" push "$full_remote_uri"
+else
+    echo "Skipping git-push as no remote as specified."
+fi
