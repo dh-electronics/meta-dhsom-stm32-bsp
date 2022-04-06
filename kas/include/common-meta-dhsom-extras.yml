@@ -34,7 +34,7 @@ repos:
 
   meta-qt5:
     url: https://github.com/meta-qt5/meta-qt5.git
-    refspec: honister
+    refspec: master
 
   meta-games:
     url: https://github.com/cazfi/meta-games.git
@@ -50,7 +50,7 @@ repos:
 
   meta-clang:
     url: https://github.com/kraj/meta-clang.git
-    refspec: honister
+    refspec: master
 
   meta-browser:
     url: https://github.com/OSSystems/meta-browser.git
