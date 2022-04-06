@@ -156,7 +156,7 @@ DL_DIR = "/path/to/OE/downloads"
 DISTRO ?= "nodistro"
 PACKAGE_CLASSES ?= "package_rpm"
 EXTRA_IMAGE_FEATURES = "debug-tweaks"
-USER_CLASSES ?= "buildstats image-mklibs image-prelink"
+USER_CLASSES ?= "buildstats"
 PATCHRESOLVE = "noop"
 BB_DISKMON_DIRS = "\
     STOPTASKS,${TMPDIR},1G,100K \
