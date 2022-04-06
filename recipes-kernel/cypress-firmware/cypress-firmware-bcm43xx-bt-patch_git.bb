@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.cypress;md5=cbc5f665d04f741f1e006d2096236ba7"
 NO_GENERIC_LICENSE[Firmware-cypress-bt-patch] = "LICENCE.cypress"
 
 SRCREV = "760f04b8f0f68bb38929ed462383e80b19d3e355"
-SRC_URI = "git://github.com/murata-wireless/cyw-bt-patch;protocol=https"
+SRC_URI = "git://github.com/murata-wireless/cyw-bt-patch;protocol=https;branch=master"
 
 UPSTREAM_CHECK_COMMITS = "1"
 

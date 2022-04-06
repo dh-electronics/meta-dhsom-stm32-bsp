@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.cypress;md5=cbc5f665d04f741f1e006d2096236ba7"
 NO_GENERIC_LICENSE[Firmware-cypress-fmac-nvram] = "LICENCE.cypress"
 
 SRCREV = "d0ddc35f8ade6ba5629c3a6d0a9c810078a9ebbc"
-SRC_URI = "git://github.com/murata-wireless/cyw-fmac-nvram;protocol=https"
+SRC_URI = "git://github.com/murata-wireless/cyw-fmac-nvram;protocol=https;branch=master"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 EXCLUDE_FROM_SHLIBS = "1"

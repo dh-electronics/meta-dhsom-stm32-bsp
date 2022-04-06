@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENCE;md5=cbc5f665d04f741f1e006d2096236ba7"
 NO_GENERIC_LICENSE[Firmware-cypress-fmac-fw] = "LICENCE"
 
 SRCREV = "67048feb163cbbdbf780ab0a64bbc5250243767f"
-SRC_URI = "git://github.com/murata-wireless/cyw-fmac-fw;protocol=https"
+SRC_URI = "git://github.com/murata-wireless/cyw-fmac-fw;protocol=https;branch=master"
 
 UPSTREAM_CHECK_COMMITS = "1"
 
