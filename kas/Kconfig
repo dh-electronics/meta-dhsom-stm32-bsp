@@ -44,6 +44,38 @@ config KAS_TARGET_IMAGE
     The build target that will be built. This is often an image name, e.g.
     core-image-base or dh-image-demo (if INCLUDE_EXTRAS_YML=y).
 
+config INCLUDE_EXTRAS_CHROMIUM_YML
+  bool "Include Chromium browser layers in build"
+  help
+    Include Chromium browser layers in bblayers.conf . This adds the
+    Chromium browser built with WL backend into dh-image-demo. This
+    requires considerable amount of build time and disk space.
+
+config INCLUDE_EXTRAS_GAMES_YML
+  bool "Include Games layers in build"
+  help
+    Include Games layer in bblayers.conf . This adds the Neverball game
+    into the dh-image-demo, which is useful for testing point sprites.
+
+config INCLUDE_EXTRAS_GRAPHICS_YML
+  bool "Include Graphics layers in build"
+  help
+    Include Graphics layer in bblayers.conf . This adds up-to-date GPU
+    testing and debugging tools into dh-image-demo . This is specific
+    to dunfell OE release and not needed in Kirkstone release.
+
+config INCLUDE_EXTRAS_QT5_YML
+  bool "Include Qt5 layers in build"
+  help
+    Include Qt5 layer in bblayers.conf . This adds Qt5 libraries and
+    examples into dh-image-demo .
+
+config INCLUDE_EXTRAS_WPE_YML
+  bool "Include WPE layers in build"
+  help
+    Include WPE layer in bblayers.conf . This adds WPE webkit browser
+    into dh-image-demo .
+
 comment "Inferred and expert settings"
 
 config KAS_BUILD_SYSTEM
@@ -69,3 +101,28 @@ config KAS_INCLUDE_EXTRAS_YML_FILE
   string "KAS Extras layer YML file"
   depends on INCLUDE_EXTRAS_YML
   default "include/common-meta-dhsom-extras.yml"
+
+config KAS_INCLUDE_EXTRAS_CHROMIUM_YML_FILE
+  string "KAS Extras layer CHROMIUM YML file"
+  depends on INCLUDE_EXTRAS_CHROMIUM_YML
+  default "include/common-meta-dhsom-extras-chromium.yml"
+
+config KAS_INCLUDE_EXTRAS_GAMES_YML_FILE
+  string "KAS Extras layer GAMES YML file"
+  depends on INCLUDE_EXTRAS_GAMES_YML && INCLUDE_EXTRAS_QT5_YML
+  default "include/common-meta-dhsom-extras-games.yml"
+
+config KAS_INCLUDE_EXTRAS_GRAPHICS_YML_FILE
+  string "KAS Extras layer GRAPHICS YML file"
+  depends on INCLUDE_EXTRAS_GRAPHICS_YML
+  default "include/common-meta-dhsom-extras-graphics.yml"
+
+config KAS_INCLUDE_EXTRAS_QT5_YML_FILE
+  string "KAS Extras layer Qt5 YML file"
+  depends on INCLUDE_EXTRAS_QT5_YML
+  default "include/common-meta-dhsom-extras-qt5.yml"
+
+config KAS_INCLUDE_EXTRAS_WPE_YML_FILE
+  string "KAS Extras layer WPE YML file"
+  depends on INCLUDE_EXTRAS_WPE_YML
+  default "include/common-meta-dhsom-extras-wpe.yml"

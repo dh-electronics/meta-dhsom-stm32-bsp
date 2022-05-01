@@ -1,0 +1,11 @@
+header:
+  version: 2
+
+repos:
+  meta-security:
+    url: https://git.yoctoproject.org/meta-security
+    refspec: dunfell
+
+  meta-webkit:
+    url: https://github.com/Igalia/meta-webkit.git
+    refspec: dunfell

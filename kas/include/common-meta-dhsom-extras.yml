@@ -6,14 +6,6 @@ distro: dhlinux
 target:
   - dh-image-demo
 
-local_conf_header:
-  metaclang: |
-    BBMASK += "meta-clang/recipes-core/busybox/busybox_1.34%.bbappend"
-
-bblayers_conf_header:
-  metaclang: |
-    LAYERSERIES_COMPAT_clang-layer:append = " dunfell"
-
 repos:
   meta-openembedded:
     url: https://git.openembedded.org/meta-openembedded
@@ -27,40 +19,6 @@ repos:
       meta-perl:
       meta-python:
       meta-webserver:
-
-  meta-python2:
-    url: https://git.openembedded.org/meta-python2
-    refspec: dunfell
-
-  meta-qt5:
-    url: https://github.com/meta-qt5/meta-qt5.git
-    refspec: master
-
-  meta-games:
-    url: https://github.com/cazfi/meta-games.git
-    refspec: master
-
-  meta-security:
-    url: https://git.yoctoproject.org/meta-security
-    refspec: dunfell
-
-  meta-webkit:
-    url: https://github.com/Igalia/meta-webkit.git
-    refspec: dunfell
-
-  meta-clang:
-    url: https://github.com/kraj/meta-clang.git
-    refspec: master
-
-  meta-browser:
-    url: https://github.com/OSSystems/meta-browser.git
-    refspec: master
-    layers:
-      meta-chromium:
-
-  meta-mainline-graphics:
-    url: https://source.denx.de/denx/meta-mainline-graphics.git
-    refspec: dunfell-3.1
 
   meta-dhsom-extras:
     url: https://github.com/dh-electronics/meta-dhsom-extras.git
