@@ -1,17 +1,26 @@
 if test -n "${distro_bootpart}"; then
-  setenv partition "${distro_bootpart}"
+  setenv bootpartition "${distro_bootpart}"
 else
-  setenv partition "${bootpart}"
+  setenv bootpartition "${bootpart}"
 fi
 
-if test ! -e ${devtype} ${devnum}:${partition} boot/fitImage; then
+setenv bootfile boot/fitImage
+setenv rootpartition ${bootpartition}
+
+# Handle legacy split boot and root partition layout
+if test ! -e ${devtype} ${devnum}:${bootpartition} ${bootfile}; then
+	setenv bootfile fitImage
+	setexpr rootpartition ${bootpartition} + 1
+fi
+
+if test ! -e ${devtype} ${devnum}:${bootpartition} ${bootfile}; then
   echo "This boot medium does not contain a suitable fitImage file for this system."
-  echo "devtype=${devtype} devnum=${devnum} partition=${partition} loadaddr=${loadaddr}"
+  echo "devtype=${devtype} devnum=${devnum} partition=${bootpartition} loadaddr=${loadaddr}"
   echo "Aborting boot process."
   exit 1
 fi
 
-part uuid ${devtype} ${devnum}:${partition} uuid
+part uuid ${devtype} ${devnum}:${rootpartition} uuid
 
 # Some STM32MP1-based systems do not encode the baudrate in the console variable
 if test "${console}" = "ttySTM0" && test -n "${baudrate}"; then
@@ -24,10 +33,10 @@ fi
 
 setenv bootargs "${bootargs} root=PARTUUID=${uuid} rw rootwait consoleblank=0"
 
-load ${devtype} ${devnum}:${partition} ${loadaddr} boot/fitImage
+load ${devtype} ${devnum}:${bootpartition} ${loadaddr} ${bootfile}
 if test $? != 0 ; then
   echo "Failed to load fitImage file for this system from boot medium."
-  echo "devtype=${devtype} devnum=${devnum} partition=${partition} loadaddr=${loadaddr}"
+  echo "devtype=${devtype} devnum=${devnum} partition=${bootpartition} loadaddr=${loadaddr}"
   echo "Aborting boot process."
   exit 2
 fi
