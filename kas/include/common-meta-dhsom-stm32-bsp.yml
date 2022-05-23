@@ -11,7 +11,7 @@ target:
 repos:
   poky:
     url: https://git.yoctoproject.org/git/poky
-    refspec: dunfell
+    refspec: kirkstone
     layers:
       meta:
 

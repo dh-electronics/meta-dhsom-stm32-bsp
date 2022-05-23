@@ -1,14 +1,6 @@
 header:
   version: 2
 
-local_conf_header:
-  metaclang: |
-    BBMASK += "meta-clang/recipes-core/busybox/busybox_1.34%.bbappend"
-
-bblayers_conf_header:
-  metaclang: |
-    LAYERSERIES_COMPAT_clang-layer:append = " dunfell"
-
 repos:
   meta-clang:
     url: https://github.com/kraj/meta-clang.git

@@ -1,7 +1,0 @@
-header:
-  version: 2
-
-repos:
-  meta-mainline-graphics:
-    url: https://source.denx.de/denx/meta-mainline-graphics.git
-    refspec: dunfell-3.1

@@ -57,13 +57,6 @@ config INCLUDE_EXTRAS_GAMES_YML
     Include Games layer in bblayers.conf . This adds the Neverball game
     into the dh-image-demo, which is useful for testing point sprites.
 
-config INCLUDE_EXTRAS_GRAPHICS_YML
-  bool "Include Graphics layers in build"
-  help
-    Include Graphics layer in bblayers.conf . This adds up-to-date GPU
-    testing and debugging tools into dh-image-demo . This is specific
-    to dunfell OE release and not needed in Kirkstone release.
-
 config INCLUDE_EXTRAS_QT5_YML
   bool "Include Qt5 layers in build"
   help
@@ -111,11 +104,6 @@ config KAS_INCLUDE_EXTRAS_GAMES_YML_FILE
   string "KAS Extras layer GAMES YML file"
   depends on INCLUDE_EXTRAS_GAMES_YML && INCLUDE_EXTRAS_QT5_YML
   default "include/common-meta-dhsom-extras-games.yml"
-
-config KAS_INCLUDE_EXTRAS_GRAPHICS_YML_FILE
-  string "KAS Extras layer GRAPHICS YML file"
-  depends on INCLUDE_EXTRAS_GRAPHICS_YML
-  default "include/common-meta-dhsom-extras-graphics.yml"
 
 config KAS_INCLUDE_EXTRAS_QT5_YML_FILE
   string "KAS Extras layer Qt5 YML file"

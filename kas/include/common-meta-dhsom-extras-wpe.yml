@@ -4,8 +4,8 @@ header:
 repos:
   meta-security:
     url: https://git.yoctoproject.org/meta-security
-    refspec: dunfell
+    refspec: kirkstone
 
   meta-webkit:
     url: https://github.com/Igalia/meta-webkit.git
-    refspec: dunfell
+    refspec: kirkstone
