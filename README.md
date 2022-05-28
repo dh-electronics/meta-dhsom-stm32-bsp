@@ -116,6 +116,7 @@ Note that MACHINE must be either of:
 * dh-stm32mp1-dhcom-pdk2
 * dh-stm32mp1-dhcom-picoitx
 * dh-stm32mp1-dhcor-avenger96
+* dh-stm32mp1-dhcor-drc-compact
 
 Adapt the suffixes of all the files and names of directories further in
 this documentation according to MACHINE.
