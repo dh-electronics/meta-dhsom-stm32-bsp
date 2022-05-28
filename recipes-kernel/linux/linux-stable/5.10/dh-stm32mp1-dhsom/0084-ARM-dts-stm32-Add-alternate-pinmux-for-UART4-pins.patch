@@ -1,0 +1,60 @@
+From 2bdbed69eadfa430dd4ad514f2b5b32722fa6d69 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 28 May 2022 19:31:58 +0200
+Subject: [PATCH 84/88] ARM: dts: stm32: Add alternate pinmux for UART4 pins
+
+Add another mux option for UART4 pins, this is used on DRC Compact board.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 30 ++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index f418346b8992c..06a8af4b4486a 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -1818,6 +1818,36 @@ pins2 {
+ 		};
+ 	};
+ 
++	uart4_pins_d: uart4-3 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 13, AF8)>; /* UART4_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
++			bias-disable;
++		};
++	};
++
++	uart4_idle_pins_d: uart4-idle-3 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 13, ANALOG)>; /* UART4_TX */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
++			bias-disable;
++		};
++	};
++
++	uart4_sleep_pins_d: uart4-sleep-3 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 13, ANALOG)>, /* UART4_TX */
++				 <STM32_PINMUX('B', 2, ANALOG)>; /* UART4_RX */
++		};
++	};
++
+ 	uart7_pins_a: uart7-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 8, AF7)>; /* UART7_TX */
+-- 
+2.35.1
+

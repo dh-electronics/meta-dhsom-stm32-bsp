@@ -1,0 +1,215 @@
+From 9035751d275037cbbffb1f1cf781773b4912de9b Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 5 Jan 2021 10:05:21 +0100
+Subject: [PATCH 80/88] phy: stm32: manage 1v1 and 1v8 supplies at pll
+ activation/deactivation
+
+PLL block requires to be powered with 1v1 and 1v8 supplies to catch
+ENABLE signal.
+Currently, supplies are managed through phy_ops .power_on/off, and PLL
+activation/deactivation is managed through phy_ops .init/exit.
+The sequence of phy_ops .power_on/.phy_init, .power_off/.exit is USB
+drivers dependent.
+To ensure a good behavior of the PLL, supplies have to be managed at PLL
+activation/deactivation. That means the supplies need to be put in usbphyc
+node and not in phy children nodes.
+
+Upstream-Status: Backport [613a475f0be10930474b5cf67c1c9aaa0c992798]
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20210105090525.23164-3-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/phy/st/phy-stm32-usbphyc.c | 102 +++++++++++++----------------
+ 1 file changed, 46 insertions(+), 56 deletions(-)
+
+diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
+index 2b3639cba51aa..cd267ef0d1ea6 100644
+--- a/drivers/phy/st/phy-stm32-usbphyc.c
++++ b/drivers/phy/st/phy-stm32-usbphyc.c
+@@ -58,7 +58,6 @@ struct pll_params {
+ struct stm32_usbphyc_phy {
+ 	struct phy *phy;
+ 	struct stm32_usbphyc *usbphyc;
+-	struct regulator_bulk_data supplies[NUM_SUPPLIES];
+ 	u32 index;
+ 	bool active;
+ };
+@@ -70,6 +69,7 @@ struct stm32_usbphyc {
+ 	struct reset_control *rst;
+ 	struct stm32_usbphyc_phy **phys;
+ 	int nphys;
++	struct regulator_bulk_data supplies[NUM_SUPPLIES];
+ 	int switch_setup;
+ };
+ 
+@@ -153,10 +153,30 @@ static bool stm32_usbphyc_has_one_phy_active(struct stm32_usbphyc *usbphyc)
+ 	return false;
+ }
+ 
++static int stm32_usbphyc_pll_disable(struct stm32_usbphyc *usbphyc)
++{
++	void __iomem *pll_reg = usbphyc->base + STM32_USBPHYC_PLL;
++
++	/* Check if other phy port active */
++	if (stm32_usbphyc_has_one_phy_active(usbphyc))
++		return 0;
++
++	stm32_usbphyc_clr_bits(pll_reg, PLLEN);
++	/* Wait for minimum width of powerdown pulse (ENABLE = Low) */
++	udelay(PLL_PWR_DOWN_TIME_US);
++
++	if (readl_relaxed(pll_reg) & PLLEN) {
++		dev_err(usbphyc->dev, "PLL not reset\n");
++		return -EIO;
++	}
++
++	return regulator_bulk_disable(NUM_SUPPLIES, usbphyc->supplies);
++}
++
+ static int stm32_usbphyc_pll_enable(struct stm32_usbphyc *usbphyc)
+ {
+ 	void __iomem *pll_reg = usbphyc->base + STM32_USBPHYC_PLL;
+-	bool pllen = (readl_relaxed(pll_reg) & PLLEN);
++	bool pllen = readl_relaxed(pll_reg) & PLLEN;
+ 	int ret;
+ 
+ 	/* Check if one phy port has already configured the pll */
+@@ -164,46 +184,35 @@ static int stm32_usbphyc_pll_enable(struct stm32_usbphyc *usbphyc)
+ 		return 0;
+ 
+ 	if (pllen) {
+-		stm32_usbphyc_clr_bits(pll_reg, PLLEN);
+-		/* Wait for minimum width of powerdown pulse (ENABLE = Low) */
+-		udelay(PLL_PWR_DOWN_TIME_US);
++		ret = stm32_usbphyc_pll_disable(usbphyc);
++		if (ret)
++			return ret;
+ 	}
+ 
+-	ret = stm32_usbphyc_pll_init(usbphyc);
++	ret = regulator_bulk_enable(NUM_SUPPLIES, usbphyc->supplies);
+ 	if (ret)
+ 		return ret;
+ 
+-	stm32_usbphyc_set_bits(pll_reg, PLLEN);
++	ret = stm32_usbphyc_pll_init(usbphyc);
++	if (ret)
++		goto reg_disable;
+ 
++	stm32_usbphyc_set_bits(pll_reg, PLLEN);
+ 	/* Wait for maximum lock time */
+ 	udelay(PLL_LOCK_TIME_US);
+ 
+ 	if (!(readl_relaxed(pll_reg) & PLLEN)) {
+ 		dev_err(usbphyc->dev, "PLLEN not set\n");
+-		return -EIO;
++		ret = -EIO;
++		goto reg_disable;
+ 	}
+ 
+ 	return 0;
+-}
+-
+-static int stm32_usbphyc_pll_disable(struct stm32_usbphyc *usbphyc)
+-{
+-	void __iomem *pll_reg = usbphyc->base + STM32_USBPHYC_PLL;
+-
+-	/* Check if other phy port active */
+-	if (stm32_usbphyc_has_one_phy_active(usbphyc))
+-		return 0;
+ 
+-	stm32_usbphyc_clr_bits(pll_reg, PLLEN);
+-	/* Wait for minimum width of powerdown pulse (ENABLE = Low) */
+-	udelay(PLL_PWR_DOWN_TIME_US);
++reg_disable:
++	regulator_bulk_disable(NUM_SUPPLIES, usbphyc->supplies);
+ 
+-	if (readl_relaxed(pll_reg) & PLLEN) {
+-		dev_err(usbphyc->dev, "PLL not reset\n");
+-		return -EIO;
+-	}
+-
+-	return 0;
++	return ret;
+ }
+ 
+ static int stm32_usbphyc_phy_init(struct phy *phy)
+@@ -231,25 +240,9 @@ static int stm32_usbphyc_phy_exit(struct phy *phy)
+ 	return stm32_usbphyc_pll_disable(usbphyc);
+ }
+ 
+-static int stm32_usbphyc_phy_power_on(struct phy *phy)
+-{
+-	struct stm32_usbphyc_phy *usbphyc_phy = phy_get_drvdata(phy);
+-
+-	return regulator_bulk_enable(NUM_SUPPLIES, usbphyc_phy->supplies);
+-}
+-
+-static int stm32_usbphyc_phy_power_off(struct phy *phy)
+-{
+-	struct stm32_usbphyc_phy *usbphyc_phy = phy_get_drvdata(phy);
+-
+-	return regulator_bulk_disable(NUM_SUPPLIES, usbphyc_phy->supplies);
+-}
+-
+ static const struct phy_ops stm32_usbphyc_phy_ops = {
+ 	.init = stm32_usbphyc_phy_init,
+ 	.exit = stm32_usbphyc_phy_exit,
+-	.power_on = stm32_usbphyc_phy_power_on,
+-	.power_off = stm32_usbphyc_phy_power_off,
+ 	.owner = THIS_MODULE,
+ };
+ 
+@@ -314,7 +307,7 @@ static int stm32_usbphyc_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct phy_provider *phy_provider;
+ 	u32 version;
+-	int ret, port = 0;
++	int ret, i, port = 0;
+ 
+ 	usbphyc = devm_kzalloc(dev, sizeof(*usbphyc), GFP_KERNEL);
+ 	if (!usbphyc)
+@@ -356,11 +349,20 @@ static int stm32_usbphyc_probe(struct platform_device *pdev)
+ 		goto clk_disable;
+ 	}
+ 
++	for (i = 0; i < NUM_SUPPLIES; i++)
++		usbphyc->supplies[i].supply = supplies_names[i];
++
++	ret = devm_regulator_bulk_get(dev, NUM_SUPPLIES, usbphyc->supplies);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
++			dev_err(dev, "failed to get regulators: %d\n", ret);
++		goto clk_disable;
++	}
++
+ 	for_each_child_of_node(np, child) {
+ 		struct stm32_usbphyc_phy *usbphyc_phy;
+ 		struct phy *phy;
+ 		u32 index;
+-		int i;
+ 
+ 		phy = devm_phy_create(dev, child, &stm32_usbphyc_phy_ops);
+ 		if (IS_ERR(phy)) {
+@@ -378,18 +380,6 @@ static int stm32_usbphyc_probe(struct platform_device *pdev)
+ 			goto put_child;
+ 		}
+ 
+-		for (i = 0; i < NUM_SUPPLIES; i++)
+-			usbphyc_phy->supplies[i].supply = supplies_names[i];
+-
+-		ret = devm_regulator_bulk_get(&phy->dev, NUM_SUPPLIES,
+-					      usbphyc_phy->supplies);
+-		if (ret) {
+-			if (ret != -EPROBE_DEFER)
+-				dev_err(&phy->dev,
+-					"failed to get regulators: %d\n", ret);
+-			goto put_child;
+-		}
+-
+ 		ret = of_property_read_u32(child, "reg", &index);
+ 		if (ret || index > usbphyc->nphys) {
+ 			dev_err(&phy->dev, "invalid reg property: %d\n", ret);
+-- 
+2.35.1
+

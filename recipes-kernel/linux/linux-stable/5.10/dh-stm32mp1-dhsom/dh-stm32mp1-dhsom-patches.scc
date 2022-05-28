@@ -64,3 +64,12 @@ patch 0075-clk-stm32mp1-Add-parent_data-to-ETHRX-clock.patch
 patch 0076-ARM-dts-stm32-Add-alternate-pinmux-for-ethernet0-pin.patch
 patch 0077-ARM-dts-stm32-Add-alternate-pinmux-for-mco2-pins.patch
 patch 0078-ARM-dts-stm32-Switch-DWMAC-RMII-clock-to-MCO2-on-DHC.patch
+patch 0080-phy-stm32-manage-1v1-and-1v8-supplies-at-pll-activat.patch
+patch 0081-phy-stm32-replace-regulator_bulk-by-multiple-regulat.patch
+patch 0082-phy-stm32-manage-optional-vbus-regulator-on-phy_powe.patch
+patch 0083-ARM-dts-stm32-Add-alternate-pinmux-for-UART3-pins.patch
+patch 0084-ARM-dts-stm32-Add-alternate-pinmux-for-UART4-pins.patch
+patch 0085-ARM-dts-stm32-Add-alternate-pinmux-for-UART5-pins.patch
+patch 0086-ARM-dts-stm32-Add-alternate-pinmux-for-CAN1-pins.patch
+patch 0087-ARM-dts-stm32-Add-alternate-pinmux-for-SPI2-pins.patch
+patch 0088-ARM-dts-stm32-Add-DHCOR-based-DRC-Compact-board.patch

@@ -1,0 +1,50 @@
+From 4da39821bf3c464a35c69953eddfed50da736595 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 28 May 2022 21:58:45 +0200
+Subject: [PATCH 86/88] ARM: dts: stm32: Add alternate pinmux for CAN1 pins
+
+Add another mux option for CAN1 pins, this is used on DRC Compact board.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index a39d92780a956..a9f8f51bcfbd6 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -941,6 +941,26 @@ pins {
+ 		};
+ 	};
+ 
++	m_can1_pins_c: m-can1-2 {
++		pins1 {
++			pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
++			slew-rate = <1>;
++			drive-push-pull;
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('H', 14, AF9)>; /* CAN1_RX */
++			bias-disable;
++		};
++	};
++
++	m_can1_sleep_pins_c: m_can1-sleep-2 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 13, ANALOG)>, /* CAN1_TX */
++				 <STM32_PINMUX('H', 14, ANALOG)>; /* CAN1_RX */
++		};
++	};
++
+ 	m_can2_pins_a: m-can2-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
+-- 
+2.35.1
+

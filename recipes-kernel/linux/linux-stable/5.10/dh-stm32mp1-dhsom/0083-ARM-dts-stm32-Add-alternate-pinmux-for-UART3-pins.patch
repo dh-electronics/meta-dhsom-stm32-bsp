@@ -1,0 +1,71 @@
+From 2ea58aa02597975fa12cef456c72e7bbb11939db Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 28 May 2022 21:59:09 +0200
+Subject: [PATCH 83/88] ARM: dts: stm32: Add alternate pinmux for UART3 pins
+
+Add another mux option for UART3 pins, this is used on DRC Compact board.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 41 ++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index 2649f32db5a2d..f418346b8992c 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -2095,6 +2095,47 @@ pins {
+ 		};
+ 	};
+ 
++	usart3_pins_e: usart3-4 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 10, AF7)>, /* USART3_TX */
++				 <STM32_PINMUX('G', 8, AF8)>; /* USART3_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 11, AF7)>, /* USART3_RX */
++				 <STM32_PINMUX('D', 11, AF7)>; /* USART3_CTS_NSS */
++			bias-pull-up;
++		};
++	};
++
++	usart3_idle_pins_e: usart3-idle-4 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 10, ANALOG)>, /* USART3_TX */
++				 <STM32_PINMUX('D', 11, ANALOG)>; /* USART3_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('G', 8, AF8)>; /* USART3_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('B', 11, AF7)>; /* USART3_RX */
++			bias-pull-up;
++		};
++	};
++
++	usart3_sleep_pins_e: usart3-sleep-4 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 10, ANALOG)>, /* USART3_TX */
++				 <STM32_PINMUX('G', 8, ANALOG)>, /* USART3_RTS */
++				 <STM32_PINMUX('D', 11, ANALOG)>, /* USART3_CTS_NSS */
++				 <STM32_PINMUX('B', 11, ANALOG)>; /* USART3_RX */
++		};
++	};
++
+ 	usbotg_hs_pins_a: usbotg-hs-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* OTG_ID */
+-- 
+2.35.1
+
