@@ -1,0 +1,6 @@
+header:
+  version: 2
+  includes:
+    - include/common-meta-dhsom-stm32-bsp.yml
+
+machine: dh-stm32mp1-dhcor-avenger96
