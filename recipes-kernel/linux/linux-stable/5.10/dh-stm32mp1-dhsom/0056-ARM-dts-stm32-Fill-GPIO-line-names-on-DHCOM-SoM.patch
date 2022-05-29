@@ -25,7 +25,7 @@ diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st
 index 2a20818c91e4..98caa6db1c43 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
-@@ -164,10 +164,70 @@ ksz8851: ks8851mll@1,0 {
+@@ -164,10 +164,70 @@ ksz8851: ethernet@1,0 {
  	};
  };
  
