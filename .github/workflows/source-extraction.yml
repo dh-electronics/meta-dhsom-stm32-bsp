@@ -8,6 +8,7 @@ on:
 jobs:
   extract-kernel:
     name: Extract Kernel source tree
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/siemens/kas
     steps:
