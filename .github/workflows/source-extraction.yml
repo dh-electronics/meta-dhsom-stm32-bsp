@@ -1,0 +1,29 @@
+name: Extract Kernel and U-Boot source trees
+
+on:
+  push:
+    branches:
+      - source-extraction
+
+jobs:
+  extract-kernel:
+    name: Extract Kernel source tree
+    container:
+      image: ghcr.io/siemens/kas
+    steps:
+      - name: Checkout meta-layer
+        uses: actions/checkout@v2
+
+      - name: Cache downloads, sstate, and dependencies
+        uses: actions/cache@v3
+        with:
+          key: oe-cache-${{ runner.os }}
+          path: |
+            ./meta-mainline-common/
+            ./poky/
+            ./build/downloads/
+            ./build/sstate-cache/
+
+      - name: Run Kernel source extraction
+        run: |
+          ./.ci/extract-source.sh virtual/kernel arm
