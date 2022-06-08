@@ -9,8 +9,6 @@ jobs:
   extract-kernel:
     name: Extract Kernel source tree
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siemens/kas/kas:latest
     steps:
       - name: Checkout meta-layer
         uses: actions/checkout@v2
