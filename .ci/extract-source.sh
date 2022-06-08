@@ -24,12 +24,16 @@ full_remote_uri="$4"
 # 2. Extract paths to the source and build directories and inject them into our
 #    environment.
 source <(.ci/kas-container shell .ci/kas-ci.yml -c 'bitbake -e '"$bitbake_target"' | grep -E "^[SB]="')
+# Prepend current directory due to kas-container environment
+S="${PWD}$S"
+B="${PWD}$B"
+
 echo "Source Directory:    $S"
 echo "Build Directory:     $B"
 
 # 3. Create a staging clone of the sources.  This will be needed to inject a
 #    defconfig and tag.
-sourcedir="$(mktemp -d "sources-${bitbake_target/\//-}-XXXX")"
+sourcedir="sources-${bitbake_target/\//-}"
 echo "Staging Sources:     $sourcedir"
 git clone -o local "$S" "$sourcedir"
 
