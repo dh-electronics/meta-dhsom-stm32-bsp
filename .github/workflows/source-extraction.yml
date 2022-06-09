@@ -17,6 +17,10 @@ jobs:
       - name: Checkout meta-layer
         uses: actions/checkout@v2
 
+      - name: Install kernel build depndencies
+        run: |
+          sudo apt-get install libncurses-dev gawk flex bison openssl libssl-dev libelf-dev libudev-dev libpci-dev libiberty-dev autoconf
+
       - name: Cache downloads, sstate, and dependencies
         uses: actions/cache@v3
         with:
