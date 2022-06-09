@@ -19,13 +19,19 @@ full_remote_uri="$4"
 
 # 1. Run the build up to the do_configure task after which sources and
 #    configuration are ready and can be extracted from the workdir.
-kas build .ci/kas-ci.yml --target "$bitbake_target" -c configure
+.ci/kas-container build .ci/kas-ci.yml --target "$bitbake_target" -c configure
 
 # 2. Extract paths to the source and build directories and inject them into our
 #    environment.
-source <(kas shell .ci/kas-ci.yml -c 'bitbake -e '"$bitbake_target"' | grep -E "^[SB]="')
+source <(.ci/kas-container shell .ci/kas-ci.yml -c 'bitbake -e '"$bitbake_target"' | grep -E "^[SB]="')
+# Prepend current directory due to kas-container environment
+S="${PWD}$S"
+B="${PWD}$B"
+
 echo "Source Directory:    $S"
 echo "Build Directory:     $B"
+
+exit 0
 
 # 3. Create a staging clone of the sources.  This will be needed to inject a
 #    defconfig and tag.
