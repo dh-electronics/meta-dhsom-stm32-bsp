@@ -73,7 +73,10 @@ git -C "$sourcedir" tag -a -F - "dh-${timestamp}-g$(git -c core.abbrev=12 show -
 DH-Electronics release on ${timestamp}
 EOF
 
-# 8. Push to other repository.  We push all tags leading up to HEAD to provide
+# 8. Create the `latest` branch which points to this tag
+git -C "$sourcedir" branch --force latest
+
+# 9. Push to other repository.  We push all tags leading up to HEAD to provide
 #    reference points if users want to diff.
 echo ""
 echo ""
@@ -83,9 +86,10 @@ echo ""
 
 if [[ "$full_remote_uri" != "" ]]; then
     git -C "$sourcedir" tag --list --merged=HEAD | xargs -L512 git -C "$sourcedir" push "$full_remote_uri"
+    git -C "$sourcedir" push "$full_remote_uri" --force latest
 
     echo "Done! Removing source dir $sourcedir/ ..."
     rm -rf "$sourcedir"
 else
-    echo "Skipping git-push as no remote as specified."
+    echo "Skipping git-push as no remote was specified."
 fi

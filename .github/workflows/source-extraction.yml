@@ -29,4 +29,4 @@ jobs:
 
       - name: Run Kernel source extraction
         run: |
-          ./.ci/extract-source.sh virtual/kernel arm
+          ./.ci/extract-source.sh virtual/kernel arm "" "https://github.com/dh-electronics/linux-stm32mp1-development.git"
