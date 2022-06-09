@@ -36,7 +36,7 @@ echo "Build Directory:     $B"
 sourcedirname="sources-${bitbake_target/\//-}"
 sourcedir="build/${sourcedirname}"
 echo "Staging Sources:     $sourcedir"
-.ci/kas-container shell .ci/kas-ci.yml -c "git clone -o local \"$S\" \"$sourcedirname\""
+.ci/kas-container shell .ci/kas-ci.yml -c "git clone -o local --dissociate \"$S\" \"$sourcedirname\""
 
 # 4. Detach from whatever branch was used - we will only reference by tag
 #    later.
