@@ -25,19 +25,18 @@ full_remote_uri="$4"
 #    environment.
 source <(.ci/kas-container shell .ci/kas-ci.yml -c 'bitbake -e '"$bitbake_target"' | grep -E "^[SB]="')
 # Prepend current directory due to kas-container environment
-S="${PWD}$S"
-B="${PWD}$B"
+S="$S"
+B="$B"
 
 echo "Source Directory:    $S"
 echo "Build Directory:     $B"
 
-exit 0
-
 # 3. Create a staging clone of the sources.  This will be needed to inject a
 #    defconfig and tag.
-sourcedir="sources-${bitbake_target/\//-}"
+sourcedirname="sources-${bitbake_target/\//-}"
+sourcedir="build/${sourcedirname}"
 echo "Staging Sources:     $sourcedir"
-git clone -o local "$S" "$sourcedir"
+.ci/kas-container shell .ci/kas-ci.yml -c "git clone -o local \"$S\" \"$sourcedirname\""
 
 # 4. Detach from whatever branch was used - we will only reference by tag
 #    later.
@@ -45,7 +44,7 @@ git -C "$sourcedir" switch --detach
 
 # 5. Copy the configuration into the sources and use the kernel build-system to
 #    make a defconfig from it.
-cp -vt "$sourcedir" "$B/.config"
+cp -vt "$sourcedir" "$PWD$B/.config"
 (cd "$sourcedir"; ARCH="$arch" make savedefconfig)
 
 # 6. Commit this defconfig into the tree.
