@@ -64,4 +64,3 @@ patch 0075-clk-stm32mp1-Add-parent_data-to-ETHRX-clock.patch
 patch 0076-ARM-dts-stm32-Add-alternate-pinmux-for-ethernet0-pin.patch
 patch 0077-ARM-dts-stm32-Add-alternate-pinmux-for-mco2-pins.patch
 patch 0078-ARM-dts-stm32-Switch-DWMAC-RMII-clock-to-MCO2-on-DHC.patch
-patch 0079-ARM-dts-stm32-Fix-PHY-post-reset-delay-on-Avenger96.patch
