@@ -1,62 +1,66 @@
-From a0dc842e005dac26eee4118e6c3df4e9b2874c89 Mon Sep 17 00:00:00 2001
-From: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Date: Thu, 23 May 2019 18:03:20 +0200
-Subject: [PATCH 57/58] rpmsg: core: add possibility to get message payload
- length
+From b219d8c0b52062e5407491ad9db7d1ff8f833a09 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 15 Oct 2021 11:47:00 +0200
+Subject: [PATCH 89/96] rpmsg: core: add API to get MTU
 
-Return the rpmsg buffer payload size for sending message, so rpmsg users
+Return the rpmsg buffer MTU for sending message, so rpmsg users
 can split a long message in several sub rpmsg buffers.
 
-Upstream-Status: Submitted [https://lkml.org/lkml/2019/5/23/643]
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+Upstream-Status: Backport [e279317e9aeb11d8670e0a5acb10d50566eea9c9]
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Suman Anna <s-anna@ti.com>
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Link: https://lore.kernel.org/r/20211015094701.5732-2-arnaud.pouliquen@foss.st.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/rpmsg_core.c       | 20 ++++++++++++++++++++
+ drivers/rpmsg/rpmsg_core.c       | 21 +++++++++++++++++++++
  drivers/rpmsg/rpmsg_internal.h   |  2 ++
- drivers/rpmsg/virtio_rpmsg_bus.c | 11 +++++++++++
+ drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
  include/linux/rpmsg.h            | 10 ++++++++++
  4 files changed, 43 insertions(+)
 
 diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-index 91de940896e3..7241cbd19e45 100644
+index 028ca5961bc2a..9818029d3a3d8 100644
 --- a/drivers/rpmsg/rpmsg_core.c
 +++ b/drivers/rpmsg/rpmsg_core.c
-@@ -283,6 +283,26 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+@@ -283,6 +283,27 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
  }
  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
  
 +/**
-+ * rpmsg_get_buf_payload_size()
-+ * This function returns buffer payload size available for sending messages.
-+ *
++ * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
 + * @ept: the rpmsg endpoint
 + *
-+ * Returns buffer payload size on success and an appropriate error value on
-+ * failure.
++ * This function returns maximum buffer size available for a single outgoing message.
++ *
++ * Return: the maximum transmission size on success and an appropriate error
++ * value on failure.
 + */
-+int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept)
++
++ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
 +{
 +	if (WARN_ON(!ept))
 +		return -EINVAL;
-+	if (!ept->ops->get_buf_payload_size)
-+		return -ENXIO;
++	if (!ept->ops->get_mtu)
++		return -ENOTSUPP;
 +
-+	return ept->ops->get_buf_payload_size(ept);
++	return ept->ops->get_mtu(ept);
 +}
-+EXPORT_SYMBOL(rpmsg_get_buf_payload_size);
++EXPORT_SYMBOL(rpmsg_get_mtu);
 +
  /*
   * match a rpmsg channel with a channel info struct.
   * this is used to make sure we're not creating rpmsg devices for channels
 diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 3fc83cd50e98..9802fc451044 100644
+index 3fc83cd50e98f..e6f88ee90ff6e 100644
 --- a/drivers/rpmsg/rpmsg_internal.h
 +++ b/drivers/rpmsg/rpmsg_internal.h
 @@ -47,6 +47,7 @@ struct rpmsg_device_ops {
   * @trysendto:		see @rpmsg_trysendto(), optional
   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
   * @poll:		see @rpmsg_poll(), optional
-+ * @get_buf_payload_size: see @rpmsg_get_buf_payload_size(), optional
++ * @get_mtu:		see @rpmsg_get_mtu(), optional
   *
   * Indirection table for the operations that a rpmsg backend should implement.
   * In addition to @destroy_ept, the backend must at least implement @send and
@@ -64,19 +68,19 @@ index 3fc83cd50e98..9802fc451044 100644
  			     void *data, int len);
  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
  			     poll_table *wait);
-+	int (*get_buf_payload_size)(struct rpmsg_endpoint *ept);
++	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
  };
  
  int rpmsg_register_device(struct rpmsg_device *rpdev);
 diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 7d7ed4e5cce7..9216476aeb80 100644
+index 7d7ed4e5cce7b..4abc86162da37 100644
 --- a/drivers/rpmsg/virtio_rpmsg_bus.c
 +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
 @@ -181,6 +181,7 @@ static int virtio_rpmsg_trysendto(struct rpmsg_endpoint *ept, void *data,
  				  int len, u32 dst);
  static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
  					   u32 dst, void *data, int len);
-+static int virtio_get_buf_payload_size(struct rpmsg_endpoint *ept);
++static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept);
  
  static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
  	.destroy_ept = virtio_rpmsg_destroy_ept,
@@ -84,35 +88,34 @@ index 7d7ed4e5cce7..9216476aeb80 100644
  	.trysend = virtio_rpmsg_trysend,
  	.trysendto = virtio_rpmsg_trysendto,
  	.trysend_offchannel = virtio_rpmsg_trysend_offchannel,
-+	.get_buf_payload_size = virtio_get_buf_payload_size,
++	.get_mtu = virtio_rpmsg_get_mtu,
  };
  
  /**
-@@ -705,6 +707,15 @@ static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
+@@ -705,6 +707,14 @@ static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
  	return rpmsg_send_offchannel_raw(rpdev, src, dst, data, len, false);
  }
  
-+static int virtio_get_buf_payload_size(struct rpmsg_endpoint *ept)
++static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
 +{
 +	struct rpmsg_device *rpdev = ept->rpdev;
 +	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
-+	int size = vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
 +
-+	return size < 0 ? -EMSGSIZE : size;
++	return vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
 +}
 +
  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
  			     struct rpmsg_hdr *msg, unsigned int len)
  {
 diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-index 9fe156d1c018..250df2165086 100644
+index a68972b097b72..765efc1408262 100644
 --- a/include/linux/rpmsg.h
 +++ b/include/linux/rpmsg.h
 @@ -135,6 +135,8 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
  __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
  			poll_table *wait);
  
-+int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept);
++ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
 +
  #else
  
@@ -121,7 +124,7 @@ index 9fe156d1c018..250df2165086 100644
  	return 0;
  }
  
-+static int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept)
++static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
 +{
 +	/* This shouldn't be possible */
 +	WARN_ON(1);
@@ -133,5 +136,5 @@ index 9fe156d1c018..250df2165086 100644
  
  /* use a macro to avoid include chaining to get THIS_MODULE */
 -- 
-2.29.2
+2.35.1
 

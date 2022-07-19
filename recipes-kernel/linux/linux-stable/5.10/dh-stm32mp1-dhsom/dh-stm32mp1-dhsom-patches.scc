@@ -39,8 +39,6 @@ patch 0045-ARM-dts-stm32-Disable-KS8851-and-EBI2-on-PicoITX-boa.patch
 patch 0046-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-626-100-LVDS-ad.patch
 patch 0048-ARM-dts-stm32-Add-PDK2-DTO-for-DH-672-100-CAN-FD-boa.patch
 patch 0049-ARM-dts-stm32-Fix-GPIO-hog-flags-on-DHCOM-PicoITX.patch
-patch 0050-rpmsg-core-add-possibility-to-get-message-payload-le.patch
-patch 0051-tty-add-rpmsg-driver.patch
 patch 0052-cpufreq-add-stm32-cpufreq-driver.patch
 patch 0053-cpufreq-dt-platdev-Add-stm32mp157-SOC-in-the-blackli.patch
 patch 0054-cpufreq-dt-platdev-Blacklist-st-stm32mp151-and-st-st.patch
@@ -73,3 +71,11 @@ patch 0085-ARM-dts-stm32-Add-alternate-pinmux-for-UART5-pins.patch
 patch 0086-ARM-dts-stm32-Add-alternate-pinmux-for-CAN1-pins.patch
 patch 0087-ARM-dts-stm32-Add-alternate-pinmux-for-SPI2-pins.patch
 patch 0088-ARM-dts-stm32-Add-DHCOR-based-DRC-Compact-board.patch
+patch 0089-rpmsg-core-add-API-to-get-MTU.patch
+patch 0090-tty-add-rpmsg-driver.patch
+patch 0091-tty-rpmsg-Assign-returned-id-to-a-local-variable.patch
+patch 0092-tty-rpmsg-Unify-variable-used-to-keep-an-error-code.patch
+patch 0093-tty-rpmsg-Use-dev_err_probe-in-probe.patch
+patch 0094-tty-rpmsg-Add-pr_fmt-to-prefix-messages.patch
+patch 0095-tty-rpmsg-Define-tty-name-via-constant-string-litera.patch
+patch 0096-tty-rpmsg-Fix-race-condition-releasing-tty-port.patch

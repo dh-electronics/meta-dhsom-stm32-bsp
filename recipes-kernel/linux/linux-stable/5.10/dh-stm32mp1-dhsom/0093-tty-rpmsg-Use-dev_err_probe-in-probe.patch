@@ -1,0 +1,48 @@
+From 9cd9b3147a35ac9167bb484abf9b75ddfba07402 Mon Sep 17 00:00:00 2001
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 25 Oct 2021 16:51:46 +0300
+Subject: [PATCH 93/96] tty: rpmsg: Use dev_err_probe() in ->probe()
+
+It's fine to use dev_err_probe() in ->probe() even if we know
+it won't be deferred.
+
+Upstream-Status: Backport [8673ef7bd96dd75ed308cb71d48a292eaa1b72fa]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20211025135148.53944-3-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/tty/rpmsg_tty.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+index 390c5f71d78a3..091862a057b37 100644
+--- a/drivers/tty/rpmsg_tty.c
++++ b/drivers/tty/rpmsg_tty.c
+@@ -153,10 +153,8 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
+ 	int ret;
+ 
+ 	cport = rpmsg_tty_alloc_cport();
+-	if (IS_ERR(cport)) {
+-		dev_err(dev, "Failed to alloc tty port\n");
+-		return PTR_ERR(cport);
+-	}
++	if (IS_ERR(cport))
++		return dev_err_probe(dev, PTR_ERR(cport), "Failed to alloc tty port\n");
+ 
+ 	tty_port_init(&cport->port);
+ 	cport->port.ops = &rpmsg_tty_port_ops;
+@@ -164,9 +162,8 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
+ 	tty_dev = tty_port_register_device(&cport->port, rpmsg_tty_driver,
+ 					   cport->id, dev);
+ 	if (IS_ERR(tty_dev)) {
+-		dev_err(dev, "Failed to register tty port\n");
+-		ret = PTR_ERR(tty_dev);
+-		goto  err_destroy;
++		ret = dev_err_probe(dev, PTR_ERR(tty_dev), "Failed to register tty port\n");
++		goto err_destroy;
+ 	}
+ 
+ 	cport->rpdev = rpdev;
+-- 
+2.35.1
+
