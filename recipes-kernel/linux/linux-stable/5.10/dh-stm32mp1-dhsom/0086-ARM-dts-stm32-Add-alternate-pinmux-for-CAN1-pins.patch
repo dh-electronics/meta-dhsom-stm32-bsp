@@ -5,11 +5,12 @@ Subject: [PATCH 86/88] ARM: dts: stm32: Add alternate pinmux for CAN1 pins
 
 Add another mux option for CAN1 pins, this is used on DRC Compact board.
 
-Upstream-Status: Pending
+Upstream-Status: Backport [bdb1f18fa959aa305c97708345fa9d9f90a59ef3]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)

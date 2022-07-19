@@ -7,11 +7,12 @@ Subject: [PATCH] ARM: dts: stm32: Add CM4 reserved memory, rproc and IPCC on
 Add reserved memory nodes for CortexM4 on the STM32MP1 DHCOR SoM, enable
 rproc to control the CM4 and IPCC mailbox to interact with it.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220111024802.112583-1-marex@denx.de/]
+Upstream-Status: Backport [1deab7ed164fc4df348dd0401d34d2ff5b48edd5]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcor-som.dtsi | 56 ++++++++++++++++++++
  1 file changed, 56 insertions(+)

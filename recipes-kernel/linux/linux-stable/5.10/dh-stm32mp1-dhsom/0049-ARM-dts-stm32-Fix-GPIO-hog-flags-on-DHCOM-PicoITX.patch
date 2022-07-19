@@ -7,7 +7,7 @@ The GPIO hog flags are ignored by gpiolib-of.c now, set the flags to 0.
 Due to a change in gpiolib-of.c, setting flags to GPIO_ACTIVE_LOW and
 using output-low DT property leads to the GPIO being set high instead.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201229175521.268234-1-marex@denx.de/]
+Upstream-Status: Backport [10793e557acece49fe1c55e8f4563f6b89543c18]
 Fixes: ac68793f49de ("ARM: dts: stm32: Add DHCOM based PicoITX board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
@@ -16,6 +16,7 @@ Cc: Patrice Chotard <patrice.chotard@st.com>
 Cc: Patrick Delaunay <patrick.delaunay@st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

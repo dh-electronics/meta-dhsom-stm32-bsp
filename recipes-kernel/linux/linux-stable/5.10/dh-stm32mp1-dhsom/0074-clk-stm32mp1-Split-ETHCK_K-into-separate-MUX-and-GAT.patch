@@ -22,7 +22,7 @@ ETHPTP_K remain functional as before.
     Figure 83. Peripheral clock distribution for Ethernet
     https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157-advanced-armbased-32bit-mpus-stmicroelectronics.pdf
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220118202958.1840431-1-marex@denx.de/]
+Upstream-Status: Backport [e33b88b6d7c212de866296dda6a19738c5a978a8]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc: Christophe Roullier <christophe.roullier@foss.st.com>
@@ -32,7 +32,10 @@ Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: linux-clk@vger.kernel.org
 Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-arm-kernel@lists.infradead.org
+Link: https://lore.kernel.org/r/20220118202958.1840431-1-marex@denx.de
+Tested-by: Johann Neuhauser <jneuhauser@dh-electronics.com>
+Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
  drivers/clk/clk-stm32mp1.c | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)

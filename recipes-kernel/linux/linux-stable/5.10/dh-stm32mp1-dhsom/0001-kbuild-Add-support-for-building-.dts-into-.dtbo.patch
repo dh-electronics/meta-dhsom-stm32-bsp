@@ -6,7 +6,7 @@ Subject: [PATCH 01/52] kbuild: Add support for building %.dts into %.dtbo
 This patch adds minor addition to kbuild to permit building .dtbo
 targets from .dts files. This is useful for compiling DT overlays.
 
-Upstream-Status: Pending
+Upstream-Status: Pending [Use KERNEL_DTC_FLAGS += "-@" in machine config for Linux >= 5.15.y]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  Makefile                   | 3 +++

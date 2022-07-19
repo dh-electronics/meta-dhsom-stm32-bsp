@@ -6,10 +6,12 @@ Subject: [PATCH 68/69] drm/panel: simple: add Multi-Inno Technology
 
 Add Multi-Inno Technology MI0700S4T-6 7" 800x480 DPI panel support.
 
-Upstream-Status: Submitted [https://lore.kernel.org/all/20211222133250.6628-1-marex@denx.de/]
+Upstream-Status: Backport [a5d092d37eb5d25520d283985082e977bda68eb7]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 To: dri-devel@lists.freedesktop.org
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211222133250.6628-1-marex@denx.de
 ---
  drivers/gpu/drm/panel/panel-simple.c | 33 ++++++++++++++++++++++++++++
  1 file changed, 33 insertions(+)

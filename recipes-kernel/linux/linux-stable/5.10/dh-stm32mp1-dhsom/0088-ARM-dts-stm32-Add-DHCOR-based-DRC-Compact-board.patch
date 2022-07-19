@@ -7,11 +7,12 @@ Add DT for DH DRC Compact unit, which is a universal controller device.
 The system has two ethernet ports, one CAN, RS485 and RS232, USB, uSD
 card slot, eMMC and SDIO Wi-Fi.
 
-Upstream-Status: Pending
+Upstream-Status: Backport [49c66eb382da2ecac40f0b7d0e529ec9d24ce84e]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/Makefile                    |   1 +
  .../dts/stm32mp153c-dhcor-drc-compact.dts     |  30 ++

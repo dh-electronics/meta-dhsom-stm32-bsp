@@ -5,7 +5,7 @@ Subject: [PATCH 36/52] ARM: dts: stm32: Add alternate pinmux for DCMI pins
 
 Add another mux option for DCMI pins, this is used on AV96 board.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11731289/]
+Upstream-Status: Backport [bcdf998ea3eae91921eb1327664db227fd6b773e]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>

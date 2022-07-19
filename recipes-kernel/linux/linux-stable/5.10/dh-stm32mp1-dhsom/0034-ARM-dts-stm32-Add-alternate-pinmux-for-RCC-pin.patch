@@ -5,7 +5,7 @@ Subject: [PATCH 35/52] ARM: dts: stm32: Add alternate pinmux for RCC pin
 
 Add another mux option for RCC pin, this is used on AV96 board.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/patch/11731287/]
+Upstream-Status: Backport [f95a5242c54d528eab5c7c4f3f5910d72f585bbe]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Alexandre Torgue <alexandre.torgue@st.com>
 Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
