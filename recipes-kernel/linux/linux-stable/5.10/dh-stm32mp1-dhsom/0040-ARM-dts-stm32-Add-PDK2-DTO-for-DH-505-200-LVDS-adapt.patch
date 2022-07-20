@@ -47,7 +47,7 @@ index 000000000000..6b7ccf0138b5
 +&{/} {
 +	lvds-encoder {
 +		compatible = "onsemi,fin3385", "lvds-encoder";
-+		pixelclk-active = <0>;
++		pclk-sample = <1>;
 +
 +		ports {
 +			#address-cells = <1>;
