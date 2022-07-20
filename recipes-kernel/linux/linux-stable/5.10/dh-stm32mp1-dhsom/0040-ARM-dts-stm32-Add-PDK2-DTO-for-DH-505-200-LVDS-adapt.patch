@@ -80,7 +80,7 @@ index 000000000000..6b7ccf0138b5
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +
-+	ili251x@41 {
++	touchscreen@41 {
 +		compatible = "ilitek,ili251x";
 +		reg = <0x41>;
 +		interrupt-parent = <&gpioi>;
