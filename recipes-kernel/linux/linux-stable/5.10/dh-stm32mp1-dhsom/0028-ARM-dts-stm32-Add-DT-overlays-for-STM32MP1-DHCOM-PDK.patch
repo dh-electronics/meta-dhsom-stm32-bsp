@@ -18,9 +18,9 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  ...2mp15xx-dhcom-pdk2-overlay-460-200-x11.dts | 27 ++++++++
  ...2mp15xx-dhcom-pdk2-overlay-531-100-x21.dts | 39 +++++++++++
  ...2mp15xx-dhcom-pdk2-overlay-531-100-x22.dts | 19 ++++++
- ...2mp15xx-dhcom-pdk2-overlay-560-200-x12.dts | 66 +++++++++++++++++++
+ ...2mp15xx-dhcom-pdk2-overlay-560-200-x12.dts | 47 +++++++++++++++++++
  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi | 55 ----------------
- 7 files changed, 219 insertions(+), 55 deletions(-)
+ 7 files changed, 200 insertions(+), 55 deletions(-)
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dts
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dts
@@ -220,7 +220,7 @@ new file mode 100644
 index 000000000000..5ed89201399d
 --- /dev/null
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2020 Marek Vasut <marex@denx.de>
@@ -231,25 +231,6 @@ index 000000000000..5ed89201399d
 +#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
 +
 +&{/} {
-+	gpio-keys {
-+		/*
-+		 * The EXTi IRQ line 6 is shared with touchscreen IRQ,
-+		 * so operate button-1 as polled GPIO key.
-+		 */
-+		button-1 {
-+			/* Use status as /delete-node/ does not work in DTOs */
-+			status = "disabled";
-+		};
-+	};
-+
-+	gpio-keys-polled {
-+		button-1 {
-+			label = "TA2-GPIO-B";
-+			linux,code = <KEY_B>;
-+			gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
 +	led {
 +		/* LED5 GPIO-E conflicts with touchscreen IRQ */
 +		led-0 {
