@@ -13,6 +13,8 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://default-device-tree.cfg \
+	file://0001-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
+	file://0002-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
 	"
 
 # U-Boot release extra version, used as identifier of a patch
@@ -20,4 +22,4 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20220924.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20220925.01"
