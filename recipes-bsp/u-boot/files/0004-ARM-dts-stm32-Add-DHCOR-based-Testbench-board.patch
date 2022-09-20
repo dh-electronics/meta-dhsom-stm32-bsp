@@ -1,0 +1,451 @@
+From 7f406e79cba042bb9cce65a187996adba30e1b4c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 20 Sep 2022 03:50:59 +0200
+Subject: [PATCH] ARM: dts: stm32: Add DHCOR based Testbench board
+
+Add DT for DHCOR Testbench board, which is a testbench for testing of
+DHCOR SoM during manufacturing. This is effectively a trimmed down
+version of AV96 board with CSI-2 bridge, HDMI bridge, WiFi, Audio and
+LEDs removed and used as GPIOs instead. Furthermore, the PMIC Buck3
+is always configured from PMIC NVM to cater for both 1V8 and 3V3 SoM
+variant.
+
+Upstream-Status: Backport [0de10e2fe1d6c06e2142f492cce86aad501893b5]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
+ arch/arm/dts/Makefile                         |   3 +-
+ .../stm32mp15xx-dhcor-testbench-u-boot.dtsi   | 101 ++++++++++
+ arch/arm/dts/stm32mp15xx-dhcor-testbench.dts  | 182 ++++++++++++++++++
+ board/dhelectronics/dh_stm32mp1/board.c       |  40 ++--
+ .../dh_stm32mp1/u-boot-dhcor.its              |  21 +-
+ 5 files changed, 330 insertions(+), 17 deletions(-)
+ create mode 100644 arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi
+ create mode 100644 arch/arm/dts/stm32mp15xx-dhcor-testbench.dts
+
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index a7e0d9f6c0e..d49ac012782 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -1176,7 +1176,8 @@ dtb-$(CONFIG_STM32MP15x) += \
+ 	stm32mp15xx-dhcom-pdk2.dtb \
+ 	stm32mp15xx-dhcom-picoitx.dtb \
+ 	stm32mp15xx-dhcor-avenger96.dtb \
+-	stm32mp15xx-dhcor-drc-compact.dtb
++	stm32mp15xx-dhcor-drc-compact.dtb \
++	stm32mp15xx-dhcor-testbench.dtb
+ 
+ dtb-$(CONFIG_SOC_K3_AM6) += \
+ 	k3-am654-base-board.dtb \
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi
+new file mode 100644
+index 00000000000..e86056fbf06
+--- /dev/null
++++ b/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi
+@@ -0,0 +1,101 @@
++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++
++#include "stm32mp15xx-dhcor-u-boot.dtsi"
++
++/ {
++	aliases {
++		mmc0 = &sdmmc1;
++		mmc1 = &sdmmc2;
++		usb0 = &usbotg_hs;
++	};
++
++	config {
++		dh,board-coding-gpios = <&gpiog 13 0>, <&gpiod 9 0>;
++	};
++};
++
++
++&ethernet0 {
++	phy-reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
++
++	mdio0 {
++		ethernet-phy@7 {
++			reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <11000>;
++			reset-deassert-us = <1000>;
++		};
++	};
++};
++
++&sdmmc1 {
++	u-boot,dm-spl;
++	st,use-ckin;
++	st,cmd-gpios = <&gpiod 2 0>;
++	st,ck-gpios = <&gpioc 12 0>;
++	st,ckin-gpios = <&gpioe 4 0>;
++};
++
++&sdmmc1_b4_pins_a {
++	u-boot,dm-spl;
++	pins1 {
++		u-boot,dm-spl;
++	};
++	pins2 {
++		u-boot,dm-spl;
++	};
++};
++
++&sdmmc1_dir_pins_b {
++	u-boot,dm-spl;
++	pins1 {
++		u-boot,dm-spl;
++	};
++	pins2 {
++		u-boot,dm-spl;
++	};
++};
++
++&sdmmc2 {
++	u-boot,dm-spl;
++};
++
++&sdmmc2_b4_pins_a {
++	u-boot,dm-spl;
++	pins1 {
++		u-boot,dm-spl;
++	};
++	pins2 {
++		u-boot,dm-spl;
++	};
++};
++
++&sdmmc2_d47_pins_c {
++	u-boot,dm-spl;
++	pins {
++		u-boot,dm-spl;
++	};
++};
++
++&uart4 {
++	u-boot,dm-pre-reloc;
++};
++
++&uart4_pins_b {
++	u-boot,dm-pre-reloc;
++	pins1 {
++		u-boot,dm-pre-reloc;
++	};
++	pins2 {
++		u-boot,dm-pre-reloc;
++		/delete-property/ bias-disable;
++		bias-pull-up;
++	};
++};
++
++&usbotg_hs {
++	u-boot,force-b-session-valid;
++	hnp-srp-disable;
++};
+diff --git a/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts b/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts
+new file mode 100644
+index 00000000000..0c36a5b499d
+--- /dev/null
++++ b/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts
+@@ -0,0 +1,182 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++
++#include "stm32mp151.dtsi"
++#include "stm32mp15xx-dhcor-som.dtsi"
++
++/ {
++	model = "DH electronics STM32MP15xx DHCOR Testbench";
++	compatible = "dh,stm32mp15xx-dhcor-testbench", "st,stm32mp1xx";
++
++	aliases {
++		ethernet0 = &ethernet0;
++		mmc0 = &sdmmc1;
++		mmc1 = &sdmmc2;
++		serial0 = &uart4;
++		serial1 = &uart7;
++		spi0 = &qspi;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	sd_switch: regulator-sd_switch {
++		compatible = "regulator-gpio";
++		regulator-name = "sd_switch";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <2900000>;
++		regulator-type = "voltage";
++		regulator-always-on;
++
++		gpios = <&gpioi 5 GPIO_ACTIVE_HIGH>;
++		gpios-states = <0>;
++		states = <1800000 0x1>,
++			 <2900000 0x0>;
++	};
++};
++
++&adc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&adc12_ain_pins_b>;
++	vdd-supply = <&vdd>;
++	vdda-supply = <&vdda>;
++	vref-supply = <&vdda>;
++	status = "okay";
++
++	adc1: adc@0 {
++		st,adc-channels = <0 1 6>;
++		st,min-sample-time-nsecs = <5000>;
++		status = "okay";
++	};
++
++	adc2: adc@100 {
++		st,adc-channels = <0 1 2>;
++		st,min-sample-time-nsecs = <5000>;
++		status = "okay";
++	};
++};
++
++&ethernet0 {
++	status = "okay";
++	pinctrl-0 = <&ethernet0_rgmii_pins_c>;
++	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_c>;
++	pinctrl-names = "default", "sleep";
++	phy-mode = "rgmii";
++	max-speed = <1000>;
++	phy-handle = <&phy0>;
++
++	mdio0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "snps,dwmac-mdio";
++		reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
++		reset-delay-us = <1000>;
++
++		phy0: ethernet-phy@7 {
++			reg = <7>;
++
++			rxc-skew-ps = <1500>;
++			rxdv-skew-ps = <540>;
++			rxd0-skew-ps = <420>;
++			rxd1-skew-ps = <420>;
++			rxd2-skew-ps = <420>;
++			rxd3-skew-ps = <420>;
++
++			txc-skew-ps = <1440>;
++			txen-skew-ps = <540>;
++			txd0-skew-ps = <420>;
++			txd1-skew-ps = <420>;
++			txd2-skew-ps = <420>;
++			txd3-skew-ps = <420>;
++		};
++	};
++};
++
++&sdmmc1 {
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_b>;
++	pinctrl-1 = <&sdmmc1_b4_od_pins_a &sdmmc1_dir_pins_b>;
++	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a &sdmmc1_dir_sleep_pins_b>;
++	cd-gpios = <&gpioi 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++	disable-wp;
++	st,sig-dir;
++	st,neg-edge;
++	st,use-ckin;
++	bus-width = <4>;
++	vmmc-supply = <&vdd_sd>;
++	vqmmc-supply = <&sd_switch>;
++	status = "okay";
++};
++
++&sdmmc2 {
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_c>;
++	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_c>;
++	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_c>;
++	bus-width = <8>;
++	mmc-ddr-1_8v;
++	no-sd;
++	no-sdio;
++	non-removable;
++	st,neg-edge;
++	vmmc-supply = <&v3v3>;
++	vqmmc-supply = <&v3v3>;
++	status = "okay";
++};
++
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins_b>;
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++};
++
++&uart7 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart7_pins_a>;
++	uart-has-rtscts;
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++};
++
++&usbh_ehci {
++	phys = <&usbphyc_port0>;
++	status = "okay";
++};
++
++&usbh_ohci {
++	phys = <&usbphyc_port0>;
++	status = "okay";
++};
++
++&usbotg_hs {
++	pinctrl-0 = <&usbotg_hs_pins_a>;
++	pinctrl-names = "default";
++	phy-names = "usb2-phy";
++	phys = <&usbphyc_port1 0>;
++	status = "okay";
++	vbus-supply = <&vbus_otg>;
++};
++
++&usbphyc {
++	status = "okay";
++};
++
++&usbphyc_port0 {
++	phy-supply = <&vdd_usb>;
++};
++
++&usbphyc_port1 {
++	phy-supply = <&vdd_usb>;
++};
++
++&vdd {
++	/delete-property/ regulator-always-on;
++	regulator-min-microvolt = <1200000>;
++};
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index c6799a16c37..eebd57f4602 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -615,7 +615,7 @@ static int board_get_regulator_buck3_nvm_uv_av96(int *uv)
+ 	if (!prop || !len)
+ 		return -ENODEV;
+ 
+-	if (!strstr(prop, "avenger96"))
++	if (!strstr(prop, "avenger96") && !strstr(prop, "dhcor-testbench"))
+ 		return -EINVAL;
+ 
+ 	/* Read out STPMIC1 NVM and determine default Buck3 voltage. */
+@@ -632,18 +632,32 @@ static int board_get_regulator_buck3_nvm_uv_av96(int *uv)
+ 	bucks_vout >>= STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_OFFSET(3);
+ 	bucks_vout &= STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_MASK;
+ 
+-	/*
+-	 * Avenger96 board comes in multiple regulator configurations:
+-	 * - rev.100 or rev.200 have Buck3 preconfigured to 3V3 operation on
+-	 *   boot and contains extra Enpirion EP53A8LQI DCDC converter which
+-	 *   supplies the IO. Reduce Buck3 voltage to 2V9 to not waste power.
+-	 * - rev.200L have Buck3 preconfigured to 1V8 operation and have no
+-	 *   Enpirion EP53A8LQI DCDC anymore, the IO is supplied from Buck3.
+-	 */
+-	if (bucks_vout == STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_3V3)
+-		*uv = 2900000;
+-	else
+-		*uv = 1800000;
++	if (strstr(prop, "avenger96")) {
++		/*
++		 * Avenger96 board comes in multiple regulator configurations:
++		 * - rev.100 or rev.200 have Buck3 preconfigured to
++		 *   3V3 operation on boot and contains extra Enpirion
++		 *   EP53A8LQI DCDC converter which supplies the IO.
++		 *   Reduce Buck3 voltage to 2V9 to not waste power.
++		 * - rev.200L have Buck3 preconfigured to 1V8 operation
++		 *   and have no Enpirion EP53A8LQI DCDC anymore, the
++		 *   IO is supplied from Buck3.
++		 */
++		if (bucks_vout == STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_3V3)
++			*uv = 2900000;
++		else
++			*uv = 1800000;
++	} else {
++		/* Testbench always respects Buck3 NVM settings */
++		if (bucks_vout == STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_3V3)
++			*uv = 3300000;
++		else if (bucks_vout == STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_3V0)
++			*uv = 3000000;
++		else if (bucks_vout == STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_1V8)
++			*uv = 1800000;
++		else	/* STPMIC_NVM_BUCKS_VOUT_SHR_BUCK_1V2 */
++			*uv = 1200000;
++	}
+ 
+ 	return 0;
+ }
+diff --git a/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its b/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
+index de7dcb317f3..f9c1075616b 100644
+--- a/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
++++ b/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
+@@ -18,13 +18,21 @@
+ 
+ 		fdt-1 {
+ 			description = ".dtb";
+-			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtb");
++			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcor-testbench.dtb");
+ 			type = "flat_dt";
+ 			arch = "arm";
+ 			compression = "none";
+ 		};
+ 
+ 		fdt-2 {
++			description = ".dtb";
++			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtb");
++			type = "flat_dt";
++			arch = "arm";
++			compression = "none";
++		};
++
++		fdt-3 {
+ 			description = ".dtb";
+ 			data = /incbin/("arch/arm/dts/stm32mp15xx-dhcor-drc-compact.dtb");
+ 			type = "flat_dt";
+@@ -38,18 +46,25 @@
+ 
+ 		config-1 {
+ 			/* DT+SoM+board model */
+-			description = "arrow,stm32mp15xx-avenger96_somrev0_boardrev1";
++			description = "dh,stm32mp15xx-dhcor-testbench_somrev0_boardrev1";
+ 			firmware = "uboot";
+ 			fdt = "fdt-1";
+ 		};
+ 
+ 		config-2 {
+ 			/* DT+SoM+board model */
+-			description = "dh,stm32mp15xx-dhcor-drc-compact_somrev0_boardrev0";
++			description = "arrow,stm32mp15xx-avenger96_somrev0_boardrev1";
+ 			firmware = "uboot";
+ 			fdt = "fdt-2";
+ 		};
+ 
++		config-3 {
++			/* DT+SoM+board model */
++			description = "dh,stm32mp15xx-dhcor-drc-compact_somrev0_boardrev0";
++			firmware = "uboot";
++			fdt = "fdt-3";
++		};
++
+ 		/* Add 586-200..586-400 with fdt-2..fdt-4 here */
+ 	};
+ };
+-- 
+2.35.1
+
