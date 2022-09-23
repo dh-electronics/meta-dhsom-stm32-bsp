@@ -15,6 +15,7 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://default-device-tree.cfg \
 	file://0001-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
 	file://0002-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
+	file://0003-ARM-dts-stm32-Remove-buck3-regulator-always-on-on-AV.patch \
 	"
 
 # U-Boot release extra version, used as identifier of a patch
