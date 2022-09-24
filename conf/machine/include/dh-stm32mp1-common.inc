@@ -1,7 +1,7 @@
 DEFAULTTUNE ?= "cortexa7thf-neon-vfpv4"
 SOC_FAMILY ?= "stm32mp1"
 
-MACHINEOVERRIDES =. "dh-stm32mp1-dhsom:dh-dhsom:"
+MACHINEOVERRIDES =. "dh-dhsom:dh-stm32mp1-dhsom:"
 
 ARM_INSTRUCTION_SET = "thumb"
 
