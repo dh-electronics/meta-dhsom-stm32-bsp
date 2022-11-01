@@ -48,6 +48,32 @@ if test -z "${initrd_high}" ; then
   setenv initrd_high %UBOOT_DTB_LOADADDRESS%
 fi
 
+# Check whether PLL4P supplies 100 MHz to MCO2, MCO2 divides these 100 MHz
+# by 2 and supplies DHCOM LAN8710Ai PHY. This is so since U-Boot 2021.04
+# 69ea30e688c4 ("ARM: dts: stm32: Switch to MCO2 for PHY 50 MHz clock")
+# but older U-Boot versions still set PLL4P to 50 MHz and supply the PHY
+# directly from PLL4P. This OE layer contains a backport of Linux commit
+# 73ab99aad50c ("ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on DHCOM")
+# which requires PLL4P to supply MCO2 as described above, otherwise the PHY
+# would fail to work in Linux. In case of old U-Boot version, fix up the
+# PLL4P and MCO2 settings here and urge users to update.
+
+setexpr somname sub ".*stm32mp15.*dhcom.*" "match" "${board_name}"
+if test "${somname}" = "match" ; then
+	setexpr pll4cfgr2divp *0x5000089c \& 0x3f
+	if test "${pll4cfgr2divp}" = "b" ; then
+		echo "WARNING"
+		echo "Old PLL4P / MCO2 setting detected, please update bootloader"
+		echo "to U-Boot 2021.04 or newer. Applying fixup. Refer to commits:"
+		echo "  U-Boot: 69ea30e688c4 (ARM: dts: stm32: Switch to MCO2 for PHY 50 MHz clock)"
+		echo "  Linux:  73ab99aad50c (ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on DHCOM)"
+		# Set RCC PLL4 DIVP=6, DIVQ=12, DIVR=12
+		mw 0x5000089c 0xb0b05
+		# Set RCC MCO2 source to PLL4P, divided by 2
+		mw 0x50000804 0x1013
+	fi
+fi
+
 # A custom script exists to load DTOs
 if test -n "${loaddtoscustom}" ; then
   if test -z "${loaddtos}" ; then
