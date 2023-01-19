@@ -79,6 +79,5 @@ patch 0093-tty-rpmsg-Use-dev_err_probe-in-probe.patch
 patch 0094-tty-rpmsg-Add-pr_fmt-to-prefix-messages.patch
 patch 0095-tty-rpmsg-Define-tty-name-via-constant-string-litera.patch
 patch 0096-tty-rpmsg-Fix-race-condition-releasing-tty-port.patch
-patch 0097-wifi-rsi-Fix-handling-of-802.3-EAPOL-frames-sent-via.patch
 patch 0098-ARM-dts-stm32-Add-DHCOR-based-Testbench-board.patch
 patch 0099-drm-etnaviv-Disable-softpin.patch
