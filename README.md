@@ -46,8 +46,8 @@ below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
 * https://source.denx.de/denx/meta-mainline-common.git			(branch: dunfell or kirkstone)
-* https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git	(branch: dunfell or kirkstone)
-* git://git.yoctoproject.org/poky								(branch: dunfell or kirkstone)
+* https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git    	(branch: dunfell or kirkstone)
+* git://git.yoctoproject.org/poky					(branch: dunfell or kirkstone)
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
