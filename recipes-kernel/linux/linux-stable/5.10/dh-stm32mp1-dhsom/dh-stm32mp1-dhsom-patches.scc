@@ -81,3 +81,5 @@ patch 0095-tty-rpmsg-Define-tty-name-via-constant-string-litera.patch
 patch 0096-tty-rpmsg-Fix-race-condition-releasing-tty-port.patch
 patch 0098-ARM-dts-stm32-Add-DHCOR-based-Testbench-board.patch
 patch 0099-drm-etnaviv-Disable-softpin.patch
+patch 0100-drm-panel-simple-Add-Team-Source-Display-TST043015CM.patch
+patch 0101-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-553-100-DPI-ada.patch
