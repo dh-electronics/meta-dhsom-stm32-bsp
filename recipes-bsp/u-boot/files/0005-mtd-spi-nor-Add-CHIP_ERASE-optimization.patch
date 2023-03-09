@@ -1,0 +1,79 @@
+From 9386dd8548d1fb87e80992ba8fb37ddd32f5c0aa Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 2 Mar 2023 02:38:03 +0100
+Subject: [PATCH] mtd: spi-nor: Add CHIP_ERASE optimization
+
+Add support for CHIP_ERASE opcode 0xc7 . This is useful in case the
+entire SPI NOR is supposed to be erase at once, as is it considerably
+faster than 4k sector erase and even slightly faster than 64k block
+erase. The spi_nor_erase_chip() implementation is adapted from Linux
+6.1.y as of commit 7d54cb2c26dad ("Linux 6.1.14") . The chip erase is
+only used in case the entire MTD device is being erased, and the chip
+does support this functionality.
+
+Timing figures from W25Q128JW:
+16 MiB erase using 4kiB sector erase opcode 0x20 ... 107.5s
+16 MiB erase using 64kiB block erase opcode 0xd8 ... 39.1s
+16 MiB erase using chip erase opcode 0xc7 .......... 38.7s
+
+Upstream-Status: Backport [b91a0822d752a1d46ea9ad1ad0d28b93b16088f9]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Vignesh R <vigneshr@ti.com>
+---
+ drivers/mtd/spi/spi-nor-core.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/spi/spi-nor-core.c b/drivers/mtd/spi/spi-nor-core.c
+index 3b7c817c023..993d39c57e6 100644
+--- a/drivers/mtd/spi/spi-nor-core.c
++++ b/drivers/mtd/spi/spi-nor-core.c
+@@ -872,6 +872,30 @@ static int read_bar(struct spi_nor *nor, const struct flash_info *info)
+ }
+ #endif
+ 
++/**
++ * spi_nor_erase_chip() - Erase the entire flash memory.
++ * @nor:	pointer to 'struct spi_nor'.
++ *
++ * Return: 0 on success, -errno otherwise.
++ */
++static int spi_nor_erase_chip(struct spi_nor *nor)
++{
++	struct spi_mem_op op =
++		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CHIP_ERASE, 0),
++			   SPI_MEM_OP_NO_ADDR,
++			   SPI_MEM_OP_NO_DUMMY,
++			   SPI_MEM_OP_NO_DATA);
++	int ret;
++
++	spi_nor_setup_op(nor, &op, nor->write_proto);
++
++	ret = spi_mem_exec_op(nor->spi, &op);
++	if (ret)
++		return ret;
++
++	return nor->mtd.size;
++}
++
+ /*
+  * Initiate the erasure of a single sector. Returns the number of bytes erased
+  * on success, a negative error code on error.
+@@ -943,7 +967,12 @@ static int spi_nor_erase(struct mtd_info *mtd, struct erase_info *instr)
+ 		if (ret < 0)
+ 			goto erase_err;
+ 
+-		ret = spi_nor_erase_sector(nor, addr);
++		if (len == mtd->size &&
++		    !(nor->flags & SNOR_F_NO_OP_CHIP_ERASE)) {
++			ret = spi_nor_erase_chip(nor);
++		} else {
++			ret = spi_nor_erase_sector(nor, addr);
++		}
+ 		if (ret < 0)
+ 			goto erase_err;
+ 
+-- 
+2.39.2
+
