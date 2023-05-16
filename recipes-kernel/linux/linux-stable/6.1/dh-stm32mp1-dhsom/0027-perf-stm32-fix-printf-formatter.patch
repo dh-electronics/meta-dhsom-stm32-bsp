@@ -1,0 +1,43 @@
+From 11be5dd7da4f2f79ec2fd68f85de6eea2ae85bbe Mon Sep 17 00:00:00 2001
+From: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Date: Fri, 19 Nov 2021 11:46:13 +0100
+Subject: [PATCH 27/49] perf: stm32: fix printf formatter
+
+Printing pointer is discouraged because this might leak kernel memory.
+Fix this smatch warning:
+
+ 'drivers/perf/stm32_ddr_pmu.c:288 stm32_ddr_pmu_sysfs_show() warn:
+  argument 3 to %lx specifier is cast from pointer'
+
+Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp e28c5624c06695dd7e67fd8f60624c9f427d7f5d]
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Change-Id: Idb76113c684daa4e3ae83069ceda6058dfc84a9e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/228948
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/perf/stm32_ddr_pmu.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
+index 9191cbd492b48..c0082109aa16a 100644
+--- a/drivers/perf/stm32_ddr_pmu.c
++++ b/drivers/perf/stm32_ddr_pmu.c
+@@ -281,11 +281,10 @@ static ssize_t stm32_ddr_pmu_sysfs_show(struct device *dev,
+ 					struct device_attribute *attr,
+ 					char *buf)
+ {
+-	struct dev_ext_attribute *eattr;
++	struct dev_ext_attribute *eattr = container_of(attr, struct dev_ext_attribute, attr);
++	unsigned long cnt_id = (unsigned long)eattr->var;
+ 
+-	eattr = container_of(attr, struct dev_ext_attribute, attr);
+-
+-	return sprintf(buf, "config=0x%lx\n", (unsigned long)eattr->var);
++	return sprintf(buf, "config=%ld\n", cnt_id);
+ }
+ 
+ #define STM32_DDR_PMU_ATTR(_name, _func, _config)			\
+-- 
+2.39.2
+

@@ -1,0 +1,162 @@
+From 98d7dead6f827d1d698c3cbb98a2e7ca8643a6a1 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Date: Mon, 18 Oct 2021 19:05:01 +0200
+Subject: [PATCH 09/49] dmaengine: stm32-dma: fix chaining deadlock issue in
+ case of MDMA threaded IRQ
+
+For DMA/MDMA chaining mode, as soon as a transfer finishes, the MDMA GIC
+interrupt is raised and then MDMA isr is called. Regarding MDMA status
+register, the MDMA isr code schedules a tasklet to complete the DMA
+transfer. At the execution of this tasklet (softirq),
+stm32_dma_mdma_flush_remaining is called to check if there are some
+remaining data in SRAM and if yes, starts a new transfer and waits
+transfer end by spinning the CPU.
+At the end of this transfer MDMA interrupt is raised and MDMA isr is then
+called again to the "active wait" done in stm32_dma_mdma_flush_remaining.
+
+When the MDMA isr is called under interrupt context (which is the case on
+our mainline Kernel) everything is fine. We have:
+
+mdma_isr
+	-->tasklet_execution
+		-->new transfer started-->active wait on transfer end
+			mdma_isr-->complete the transfer
+
+But we have a deadlock when MDMA isr is executed in a thread (which is the
+case in Linux-RT kernel or if force_irqthreads is set). In this case the
+MDMA isr AND the execution of the tasklet are done in the same thread. The
+consequence is the CPU spinning in stm32_dma_mdma_flush_remaining will
+"block" the MDMA isr thread and any new MDMA interrupt can't be serviced
+and so stm32_dma_mdma_flush_remaining will wait up to a timeout.
+
+This patch moves the tasklet code in a work in order to release the MDMA
+ISR thread.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git cf3f92f2ea2f9bfb6c84a55da32a90b1f3cc5916]
+Fixes: 73c0a39c5d48 ("dmaengine: stm32-dma: Add DMA/MDMA chaining support")
+Change-Id: I1c5d8bb6f277cf7983f163a4cae99b8c68fde2bd
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/241891
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+---
+ drivers/dma/stm32-dma.c | 65 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 51 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index c55787ce049d3..cdd7b53f528f1 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -232,6 +232,8 @@ struct stm32_dma_chan {
+ 	u32 use_mdma;
+ 	u32 sram_size;
+ 	u32 residue_after_drain;
++	struct workqueue_struct *mdma_wq;
++	struct work_struct mdma_work;
+ };
+ 
+ struct stm32_dma_device {
+@@ -554,6 +556,8 @@ static int stm32_dma_mdma_drain(struct stm32_dma_chan *chan)
+ 	int ret;
+ 	unsigned long flags;
+ 
++	flush_workqueue(chan->mdma_wq);
++
+ 	/* DMA/MDMA chain: drain remaining data in SRAM */
+ 
+ 	/* Get the residue on MDMA side */
+@@ -787,28 +791,46 @@ static int stm32_dma_mdma_flush_remaining(struct stm32_dma_chan *chan)
+ 
+ static void stm32_dma_start_transfer(struct stm32_dma_chan *chan);
+ 
+-static void stm32_mdma_chan_complete(void *param, const struct dmaengine_result *result)
++static void stm32_mdma_chan_complete_worker(struct work_struct *work)
+ {
+-	struct stm32_dma_chan *chan = param;
++	struct stm32_dma_chan *chan = container_of(work, struct stm32_dma_chan, mdma_work);
++	unsigned long flags;
+ 	int ret;
+ 
+ 	chan->busy = false;
+ 	chan->status = DMA_COMPLETE;
+-	if (result->result == DMA_TRANS_NOERROR) {
+-		ret = stm32_dma_mdma_flush_remaining(chan);
+-		if (ret) {
+-			dev_err(chan2dev(chan), "Can't flush DMA: %d\n", ret);
+-			return;
+-		}
++	ret = stm32_dma_mdma_flush_remaining(chan);
++	if (ret) {
++		dev_err(chan2dev(chan), "Can't flush DMA: %d\n", ret);
++		return;
++	}
+ 
+-		if (chan->next_sg == chan->desc->num_sgs) {
+-			vchan_cookie_complete(&chan->desc->vdesc);
+-			chan->desc = NULL;
++	spin_lock_irqsave(&chan->vchan.lock, flags);
++
++	if (chan->next_sg == chan->desc->num_sgs) {
++		vchan_cookie_complete(&chan->desc->vdesc);
++		chan->desc = NULL;
++	}
++
++	stm32_dma_start_transfer(chan);
++
++	spin_unlock_irqrestore(&chan->vchan.lock, flags);
++}
++
++static void stm32_mdma_chan_complete(void *param, const struct dmaengine_result *result)
++{
++	struct stm32_dma_chan *chan = param;
++
++	if (result->result == DMA_TRANS_NOERROR) {
++		if (!queue_work(chan->mdma_wq, &chan->mdma_work)) {
++			chan->busy = false;
++			chan->status = DMA_COMPLETE;
++			dev_warn(chan2dev(chan), "Work already queued\n");
+ 		}
+-		stm32_dma_start_transfer(chan);
+ 	} else {
+-		dev_err(chan2dev(chan), "MDMA transfer error: %d\n",
+-			result->result);
++		chan->busy = false;
++		chan->status = DMA_COMPLETE;
++		dev_err(chan2dev(chan), "MDMA transfer error: %d\n", result->result);
+ 	}
+ }
+ 
+@@ -1508,6 +1530,7 @@ static int stm32_dma_mdma_prep_slave_sg(struct stm32_dma_chan *chan,
+ 		if (mchan->dir != DMA_MEM_TO_DEV) {
+ 			m_desc->desc->callback_result = stm32_mdma_chan_complete;
+ 			m_desc->desc->callback_param = chan;
++			INIT_WORK(&chan->mdma_work, stm32_mdma_chan_complete_worker);
+ 		}
+ 	}
+ 
+@@ -2287,6 +2310,20 @@ static int stm32_dma_probe(struct platform_device *pdev)
+ 					goto err_dma;
+ 
+ 				dev_info(&pdev->dev, "can't request MDMA chan for %s\n", name);
++			} else {
++				/*
++				 * Allocate workqueue per channel in case of MDMA/DMA chaining, to
++				 * avoid deadlock with MDMA callback stm32_mdma_chan_complete() when
++				 * MDMA interrupt handler is executed in a thread (which is the
++				 * case in Linux-RT kernel or if force_irqthreads is set).
++				 */
++				chan->mdma_wq = alloc_ordered_workqueue("dma_work-%s", 0, name);
++				if (!chan->mdma_wq) {
++					dma_release_channel(mchan->chan);
++					mchan->chan = NULL;
++					dev_warn(&pdev->dev,
++						 "can't alloc MDMA workqueue for %s\n", name);
++				}
+ 			}
+ 		}
+ 	}
+-- 
+2.39.2
+

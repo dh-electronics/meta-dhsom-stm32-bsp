@@ -1,0 +1,45 @@
+From b18066247797176ca99afa4c3323f0f9297d15ba Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 16 Dec 2022 02:47:30 +0100
+Subject: [PATCH 23/49] net: ks8851: Drop IRQ threading
+
+Request non-threaded IRQ in the KSZ8851 driver, this fixes the following warning:
+"
+NOHZ tick-stop error: Non-RCU local softirq work is pending, handler #08!!!
+"
+
+Upstream-Status: Submitted [https://lore.kernel.org/all/20221216124731.122459-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Geoff Levand <geoff@infradead.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: netdev@vger.kernel.org
+---
+ drivers/net/ethernet/micrel/ks8851_common.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/micrel/ks8851_common.c b/drivers/net/ethernet/micrel/ks8851_common.c
+index cfbc900d4aeb9..1eba4ba0b95cf 100644
+--- a/drivers/net/ethernet/micrel/ks8851_common.c
++++ b/drivers/net/ethernet/micrel/ks8851_common.c
+@@ -443,9 +443,7 @@ static int ks8851_net_open(struct net_device *dev)
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	ret = request_threaded_irq(dev->irq, NULL, ks8851_irq,
+-				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+-				   dev->name, ks);
++	ret = request_irq(dev->irq, ks8851_irq, IRQF_TRIGGER_LOW, dev->name, ks);
+ 	if (ret < 0) {
+ 		netdev_err(dev, "failed to get irq\n");
+ 		return ret;
+-- 
+2.39.2
+

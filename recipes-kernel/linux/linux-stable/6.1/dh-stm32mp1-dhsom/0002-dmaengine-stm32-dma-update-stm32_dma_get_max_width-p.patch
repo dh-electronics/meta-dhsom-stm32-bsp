@@ -1,0 +1,57 @@
+From e7741382ef1dec4df86d8cc56b4dc1dbf30b0b18 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Tue, 5 Jan 2021 15:56:29 +0100
+Subject: [PATCH 02/49] dmaengine: stm32-dma: update stm32_dma_get_max_width
+ prototype
+
+buf_addr parameter of stm32_dma_set_xfer_param function is a dma_addr_t.
+But buf_addr is only used as a u64 for do_div() use.
+To avoid extra u64 variables, move buf_addr parameter of
+stm32_dma_get_max_width function from dma_addr_t to u64, and, even if it is
+not required, explicitly cast to u64 when calling stm32_dma_get_max_width.
+
+Change-Id: I953e48a94451b45a6872b380fed8b1fb9e1805ea
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 5b693545c355544efa45ffc23b08f1dee4f6f9ad]
+Fixes: ea4ff9e3b63f ("dmaengine: stm32: take address into account when computing max width")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/189766
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@st.com>
+---
+ drivers/dma/stm32-dma.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index 40946389be7d7..1cfac9850286f 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -265,7 +265,7 @@ static int stm32_dma_get_width(struct stm32_dma_chan *chan,
+ }
+ 
+ static enum dma_slave_buswidth stm32_dma_get_max_width(u32 buf_len,
+-						       dma_addr_t buf_addr,
++						       u64 buf_addr,
+ 						       u32 threshold)
+ {
+ 	enum dma_slave_buswidth max_width;
+@@ -934,7 +934,7 @@ static int stm32_dma_set_xfer_param(struct stm32_dma_chan *chan,
+ 			return dst_burst_size;
+ 
+ 		/* Set memory data size */
+-		src_addr_width = stm32_dma_get_max_width(buf_len, buf_addr,
++		src_addr_width = stm32_dma_get_max_width(buf_len, (u64)buf_addr,
+ 							 fifoth);
+ 		chan->mem_width = src_addr_width;
+ 		src_bus_width = stm32_dma_get_width(chan, src_addr_width);
+@@ -990,7 +990,7 @@ static int stm32_dma_set_xfer_param(struct stm32_dma_chan *chan,
+ 			return src_burst_size;
+ 
+ 		/* Set memory data size */
+-		dst_addr_width = stm32_dma_get_max_width(buf_len, buf_addr,
++		dst_addr_width = stm32_dma_get_max_width(buf_len, (u64)buf_addr,
+ 							 fifoth);
+ 		chan->mem_width = dst_addr_width;
+ 		dst_bus_width = stm32_dma_get_width(chan, dst_addr_width);
+-- 
+2.39.2
+

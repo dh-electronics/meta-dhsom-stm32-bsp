@@ -1,0 +1,42 @@
+From ded94c662b87bd22a3e76eaefbc9d4c7a810a78b Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 6 Apr 2022 12:24:47 +0200
+Subject: [PATCH 12/49] dmaengine: stm32-dma: fix
+ stm32_mdma_chan_complete_worker with nested lock
+
+As in stm32_dma_issue_pending, because stm32_dma_start_transfer triggers
+MDMA driver to start MDMA channel, PROVE_LOCKING is lost between DMA
+channel lock and MDMA channel lock, that's why it says "May be due to
+missing lock nesting notation.
+So, fix stm32_mdma_chan_complete_worker with nesting notation, to avoid
+a false positive warning.
+
+Change-Id: Ic2c83817b56a25121610bfcaec98cf4fd620910b
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 2b0e499c9b040f40979e3bc7bb493e1aed33e9b4]
+Fixes: cf3f92f2ea2f ("dmaengine: stm32-dma: fix chaining deadlock issue in case of MDMA threaded IRQ")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/247094
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+---
+ drivers/dma/stm32-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index f3c824917dc39..dbd3e64ba1ce2 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -808,7 +808,7 @@ static void stm32_mdma_chan_complete_worker(struct work_struct *work)
+ 		return;
+ 	}
+ 
+-	spin_lock_irqsave(&chan->vchan.lock, flags);
++	spin_lock_irqsave_nested(&chan->vchan.lock, flags, SINGLE_DEPTH_NESTING);
+ 
+ 	if (chan->next_sg == chan->desc->num_sgs) {
+ 		vchan_cookie_complete(&chan->desc->vdesc);
+-- 
+2.39.2
+

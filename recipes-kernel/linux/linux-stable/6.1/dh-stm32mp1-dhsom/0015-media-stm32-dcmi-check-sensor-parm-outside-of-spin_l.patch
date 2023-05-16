@@ -1,0 +1,101 @@
+From c56a9be09b35faf9321413ebd2e685e2803135c8 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 19 Jan 2022 16:29:18 +0100
+Subject: [PATCH 15/49] media: stm32: dcmi: check sensor parm outside of
+ spin_lock area
+
+Within the function dcmi_start_streaming, v4l2_g_parm_cap is called
+to evaluation bandwidth in order to use continuous or snapshot mode.
+This leads to a BUG: sleeping function called from invalid context
+since a mutex is used within the spin_lock protected area.
+
+v4l2_g_parm_cap doesn't have to be done within the protected area
+hence move this code earlier in the function to avoid reaching
+this situation.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git aa4fde9b11c0fd5491e8339368a4494868482a35]
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Ieb276d3bb26d74b1e89f144569cfceab3718ca7f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/236272
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 54 ++++++++++----------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index 098c0c25f12d4..9f9b840784416 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -765,6 +765,33 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (ret)
+ 		goto err_media_pipeline_stop;
+ 
++	/* Check if snapshop mode is necessary for jpeg capture */
++	if (dcmi->sd_format->fourcc == V4L2_PIX_FMT_JPEG) {
++		unsigned int rate;
++		struct v4l2_streamparm p = {
++			.type = V4L2_BUF_TYPE_VIDEO_CAPTURE
++		};
++		struct v4l2_fract frame_interval = {1, 30};
++
++		ret = v4l2_g_parm_cap(dcmi->vdev, dcmi->source, &p);
++		if (!ret)
++			frame_interval = p.parm.capture.timeperframe;
++
++		rate = dcmi->fmt.fmt.pix.sizeimage *
++		       frame_interval.denominator / frame_interval.numerator;
++
++		/*
++		 * If rate exceed DMA capabilities, switch to snapshot mode
++		 * to ensure that current DMA transfer is elapsed before
++		 * capturing a new JPEG.
++		 */
++		if (rate > MAX_DMA_BANDWIDTH) {
++			val |= CR_CM;
++			dev_dbg(dcmi->dev, "Capture rate is too high for continuous mode (%d > %d bytes/s), switch to snapshot mode\n",
++				rate, MAX_DMA_BANDWIDTH);
++		}
++	}
++
+ 	spin_lock_irq(&dcmi->irqlock);
+ 
+ 	/* Set bus width */
+@@ -818,33 +845,6 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (dcmi->do_crop)
+ 		dcmi_set_crop(dcmi);
+ 
+-	/* Enable jpeg capture */
+-	if (dcmi->sd_format->fourcc == V4L2_PIX_FMT_JPEG) {
+-		unsigned int rate;
+-		struct v4l2_streamparm p = {
+-			.type = V4L2_BUF_TYPE_VIDEO_CAPTURE
+-		};
+-		struct v4l2_fract frame_interval = {1, 30};
+-
+-		ret = v4l2_g_parm_cap(dcmi->vdev, dcmi->source, &p);
+-		if (!ret)
+-			frame_interval = p.parm.capture.timeperframe;
+-
+-		rate = dcmi->fmt.fmt.pix.sizeimage *
+-		       frame_interval.denominator / frame_interval.numerator;
+-
+-		/*
+-		 * If rate exceed DMA capabilities, switch to snapshot mode
+-		 * to ensure that current DMA transfer is elapsed before
+-		 * capturing a new JPEG.
+-		 */
+-		if (rate > MAX_DMA_BANDWIDTH) {
+-			reg_set(dcmi->regs, DCMI_CR, CR_CM);/* Snapshot mode */
+-			dev_dbg(dcmi->dev, "Capture rate is too high for continuous mode (%d > %d bytes/s), switch to snapshot mode\n",
+-				rate, MAX_DMA_BANDWIDTH);
+-		}
+-	}
+-
+ 	/* Enable dcmi */
+ 	reg_set(dcmi->regs, DCMI_CR, CR_ENABLE);
+ 
+-- 
+2.39.2
+

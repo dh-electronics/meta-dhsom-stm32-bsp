@@ -1,0 +1,51 @@
+From 6709770f3f024715d2ffd59af7417ef56b228193 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 24 Dec 2020 09:24:02 +0100
+Subject: [PATCH 37/49] ARM: dts: stm32: Add PDK2 DTO for DH 672-100 CAN/FD
+ board
+
+Add DT overlay for 672-100 expansion card, which contains CAN/FD transceiver
+and enables PDK2 to use one more CAN/FD interface.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                          |  1 +
+ .../stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts  | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index e7ae77b6ae9ea..20bda87d6dff7 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1243,6 +1243,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtbo \
+ 	stm32mp157c-dhcom-picoitx.dtb \
+ 	stm32mp157c-dk2.dtb \
+ 	stm32mp157c-dk2-scmi.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts
+new file mode 100644
+index 0000000000000..3f7e69ac308d6
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&m_can2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can2_pins_a>;
++	pinctrl-1 = <&m_can2_sleep_pins_a>;
++	status = "okay";
++};
+-- 
+2.39.2
+

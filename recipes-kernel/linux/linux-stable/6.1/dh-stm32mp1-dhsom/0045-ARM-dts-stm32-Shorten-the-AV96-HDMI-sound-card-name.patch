@@ -1,0 +1,43 @@
+From eff9efc7d71f125897946343b63cfe754c12d8fb Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 18 May 2023 02:34:36 +0200
+Subject: [PATCH 45/49] ARM: dts: stm32: Shorten the AV96 HDMI sound card name
+
+Fix the following error in kernel log due to too long sound card name:
+"
+asoc-audio-graph-card sound: ASoC: driver name too long 'STM32MP1-AV96-HDMI' -> 'STM32MP1-AV96-H'
+"
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230518004232.422893-1-marex@denx.de/]
+Fixes: e027da342772 ("ARM: dts: stm32: Add bindings for audio on AV96")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+index 2c246ac641533..f068e4fcc404f 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+@@ -88,7 +88,7 @@ sd_switch: regulator-sd_switch {
+ 
+ 	sound {
+ 		compatible = "audio-graph-card";
+-		label = "STM32MP1-AV96-HDMI";
++		label = "STM32-AV96-HDMI";
+ 		dais = <&sai2a_port>;
+ 		status = "okay";
+ 	};
+-- 
+2.39.2
+

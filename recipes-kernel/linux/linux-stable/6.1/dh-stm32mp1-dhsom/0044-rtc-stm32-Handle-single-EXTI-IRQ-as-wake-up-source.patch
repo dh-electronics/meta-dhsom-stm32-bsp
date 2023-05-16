@@ -1,0 +1,70 @@
+From 1114773b80534b3d06deb8aa6d0233e664dbe85f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 18 May 2023 02:22:03 +0200
+Subject: [PATCH 44/49] rtc: stm32: Handle single EXTI IRQ as wake up source
+
+The arch/arm/boot/dts/stm32mp151.dtsi specifies one interrupt for the
+RTC node, while the expectation of the RTC driver is two interrupts on
+STM32MP15xx SoC, one connected to GIC interrupt controller and another
+one to EXTI. Per STM32MP15xx reference manual, the two interrupts serve
+the same purpose, except the EXTI one can also wake the system up. The
+EXTI driver already internally handles this GIC and EXTI duality and
+maps the EXTI interrupt onto GIC during runtime, and only uses the EXTI
+for wake up functionality.
+
+Therefore, fix the driver such that if on STM32MP15xx there is only one
+interrupt specified in the DT, use that interrupt as EXTI interrupt and
+set it as wake up source.
+
+This fixes the following warning in the kernel log on STM32MP15xx:
+"
+stm32_rtc 5c004000.rtc: error -ENXIO: IRQ index 1 not found
+stm32_rtc 5c004000.rtc: alarm can't wake up the system: -6
+"
+
+This also fixes the system wake up via built-in RTC using e.g.:
+$ rtcwake -s 5 -m mem
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230518003311.415018-1-marex@denx.de/]
+Fixes: b72252b6580c ("rtc: stm32: add stm32mp1 rtc support")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+---
+ drivers/rtc/rtc-stm32.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index ac9e228b56d0b..614eea876220c 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -780,14 +780,15 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+ 
+ 	ret = device_init_wakeup(&pdev->dev, true);
+ 	if (rtc->data->has_wakeirq) {
+-		rtc->wakeirq_alarm = platform_get_irq(pdev, 1);
++		rtc->wakeirq_alarm = platform_get_irq_optional(pdev, 1);
+ 		if (rtc->wakeirq_alarm > 0) {
+ 			ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
+ 							    rtc->wakeirq_alarm);
+-		} else {
++		} else if (rtc->wakeirq_alarm == -EPROBE_DEFER) {
+ 			ret = rtc->wakeirq_alarm;
+-			if (rtc->wakeirq_alarm == -EPROBE_DEFER)
+-				goto err;
++			goto err;
++		} else {
++			ret = dev_pm_set_wake_irq(&pdev->dev, rtc->irq_alarm);
+ 		}
+ 	}
+ 	if (ret)
+-- 
+2.39.2
+

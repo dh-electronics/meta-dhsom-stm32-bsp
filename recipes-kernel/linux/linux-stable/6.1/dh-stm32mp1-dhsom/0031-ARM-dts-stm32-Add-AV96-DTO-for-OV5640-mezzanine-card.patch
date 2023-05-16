@@ -1,0 +1,148 @@
+From f745632101e948a46269d7a868aaed8cd313c63c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 30 Apr 2020 13:08:40 +0200
+Subject: [PATCH 31/49] ARM: dts: stm32: Add AV96 DTO for OV5640 mezzanine card
+
+Add DT overlay for the 96boards OV5640 mezzanine card. Note that only
+the camera connected to port J3 is supported by the current hardware.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ ...tm32mp15xx-avenger96-overlay-ov5640-x7.dts | 111 ++++++++++++++++++
+ 2 files changed, 112 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index a7f72708d715f..b940ea6fdf677 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1222,6 +1222,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp15xx-avenger96-overlay-fdcan2-x6.dtbo \
+ 	stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtbo \
+ 	stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-ov5640-x7.dtbo \
+ 	stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtbo \
+ 	stm32mp157a-dk1.dtb \
+ 	stm32mp157a-dk1-scmi.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts b/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
+new file mode 100644
+index 0000000000000..357ebe2d45d76
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/clock/stm32mp1-clks.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	camera0_pwr: regulator-camera0 {
++		compatible = "regulator-fixed";
++		regulator-name = "camera0-reg";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	sram@10050000 {
++		compatible = "mmio-sram";
++		reg = <0x10050000 0x10000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x10050000 0x10000>;
++
++		dma_pool: dma_pool@0 {
++			reg = <0x0 0x10000>;
++			pool;
++		};
++	};
++};
++
++&dcmi {
++	status = "okay";
++};
++
++&dcmi_0 {
++	hsync-active = <0>;
++	vsync-active = <0>;
++	pclk-sample = <0>;
++};
++
++&dma1 {
++	sram = <&dma_pool>;
++};
++
++&dma2 {
++	sram = <&dma_pool>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	camera@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		clocks = <&rcc CK_MCO1>;
++		clock-names = "xclk";
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&mco1_pins_a>;
++		pinctrl-1 = <&mco1_sleep_pins_a>;
++		assigned-clocks = <&rcc CK_MCO1>;
++		assigned-clock-parents = <&rcc CK_HSE>;
++		assigned-clock-rates = <24000000>;
++		DOVDD-supply = <&camera0_pwr>;
++		/* GPIO-J on the Dragonboard Dual-Leopard OV5640 board */
++		powerdown-gpios = <&gpiob 5 GPIO_ACTIVE_HIGH>;
++		/* GPIO-I on the Dragonboard Dual-Leopard OV5640 board */
++		reset-gpios = <&gpioa 12 GPIO_ACTIVE_LOW>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			ov5640_0: endpoint {
++				remote-endpoint = <&stmipi_0>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
++
++&stmipi {
++	/*
++	 * Inhibit any pin and clock configuration described by the node
++	 * representing STMIPID02. The OV5640 sensor on I2C2 is probed
++	 * first and must configure MCO1 pinmux and activate MCO1 clock
++	 * as those clock supply the sensor internal state machine, and
++	 * without the clock the sensor cannot operate. The STMIPID02 is
++	 * probed second, and should not attempt to adjust MCO1 pinmux
++	 * nor clock configuration. Since DTO does not allow deletion of
++	 * base DT properties, set the base DT properties to empty ones.
++	 */
++	pinctrl-names;
++	pinctrl-0;
++	pinctrl-1;
++	assigned-clocks;
++	assigned-clock-parents;
++	assigned-clock-rates;
++	status = "okay";
++};
++
++&stmipi_0 {
++	data-lanes = <1 2>;
++	remote-endpoint = <&ov5640_0>;
++};
+-- 
+2.39.2
+

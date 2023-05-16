@@ -1,0 +1,72 @@
+From 789b227f3c1c8f308cc6f9235dc00a4254002d17 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Mon, 2 Dec 2019 11:47:27 +0100
+Subject: [PATCH 13/49] media: stm32-dcmi: improve JPEG capture framerate
+
+Enable JPEG capture in continuous mode for capture
+rates sustainable by DMA engine, otherwise switch to
+the safer snapshot mode alternative.
+This allows to double JPEG capture framerate for 720p
+and below resolutions.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 8af9f79bf9cabfdcd0e6a07863e3432980f89f02]
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Change-Id: I363a536e0df58fa53b04f2a4ea2c7ab29085e34b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/151589
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: CIBUILD <smet-aci-builds@lists.codex.cro.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 30 ++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index 37458d4d9564b..f281974bd1c74 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -95,6 +95,9 @@ enum state {
+ #define MIN_HEIGHT	16U
+ #define MAX_HEIGHT	2592U
+ 
++/* DMA can sustain YUV 720p@15fps max */
++#define MAX_DMA_BANDWIDTH	(1280 * 720 * 2 * 15)
++
+ #define TIMEOUT_MS	1000
+ 
+ #define OVERRUN_ERROR_THRESHOLD	3
+@@ -816,8 +819,31 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		dcmi_set_crop(dcmi);
+ 
+ 	/* Enable jpeg capture */
+-	if (dcmi->sd_format->fourcc == V4L2_PIX_FMT_JPEG)
+-		reg_set(dcmi->regs, DCMI_CR, CR_CM);/* Snapshot mode */
++	if (dcmi->sd_format->fourcc == V4L2_PIX_FMT_JPEG) {
++		unsigned int rate;
++		struct v4l2_streamparm p = {
++			.type = V4L2_BUF_TYPE_VIDEO_CAPTURE
++		};
++		struct v4l2_fract frame_interval = {1, 30};
++
++		ret = v4l2_g_parm_cap(dcmi->vdev, dcmi->source, &p);
++		if (!ret)
++			frame_interval = p.parm.capture.timeperframe;
++
++		rate = dcmi->fmt.fmt.pix.sizeimage *
++		       frame_interval.denominator / frame_interval.numerator;
++
++		/*
++		 * If rate exceed DMA capabilities, switch to snapshot mode
++		 * to ensure that current DMA transfer is elapsed before
++		 * capturing a new JPEG.
++		 */
++		if (rate > MAX_DMA_BANDWIDTH) {
++			reg_set(dcmi->regs, DCMI_CR, CR_CM);/* Snapshot mode */
++			dev_dbg(dcmi->dev, "Capture rate is too high for continuous mode (%d > %d bytes/s), switch to snapshot mode\n",
++				rate, MAX_DMA_BANDWIDTH);
++		}
++	}
+ 
+ 	/* Enable dcmi */
+ 	reg_set(dcmi->regs, DCMI_CR, CR_ENABLE);
+-- 
+2.39.2
+

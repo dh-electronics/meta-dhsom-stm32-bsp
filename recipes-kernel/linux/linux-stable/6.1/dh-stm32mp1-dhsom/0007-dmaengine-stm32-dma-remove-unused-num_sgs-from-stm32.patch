@@ -1,0 +1,48 @@
+From ed87a5efc695347a3405e6e96c6491e8489b7658 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 2 Dec 2021 18:02:59 +0100
+Subject: [PATCH 07/49] dmaengine: stm32-dma: remove unused num_sgs from
+ stm32_dma_mdma struct
+
+This patch fixes the following smatch warning:
+drivers/dma/stm32-dma.c:1517 stm32_dma_mdma_prep_slave_sg() error: uninitialized symbol 'num_sgs'.
+
+This warning is in DMA/MDMA chaining. num_sgs of stm32_dma_mdma struct is
+never used, so, instead of fixing the unitialized assignment, remove the
+relative code.
+
+Change-Id: I16cc36985eb3ada6ef3f7527f6311d83d97727fd
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git ebf7c65c62927b2cd60287f1134b8d448c27108c]
+Fixes: b5fbe5ba43b9 ("dmaengine: stm32-dma: Add DMA/MDMA chaining support")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/231006
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+---
+ drivers/dma/stm32-dma.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index 7940bf7b10ed4..0b4fd7df1b87e 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -196,7 +196,6 @@ struct stm32_dma_mdma {
+ 	enum dma_transfer_direction dir;
+ 	dma_addr_t sram_buf;
+ 	u32 sram_period;
+-	u32 num_sgs;
+ };
+ 
+ struct stm32_dma_sg_req {
+@@ -1514,7 +1513,6 @@ static int stm32_dma_mdma_prep_slave_sg(struct stm32_dma_chan *chan,
+ 
+ 	chan->mchan.sram_buf = desc->dma_buf;
+ 	chan->mchan.sram_period = sram_period;
+-	chan->mchan.num_sgs = num_sgs;
+ 
+ 	return 0;
+ 
+-- 
+2.39.2
+

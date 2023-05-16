@@ -1,0 +1,47 @@
+From 83d30a281591bb85e7fca9b6e508610b70b3f39d Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Thu, 3 Mar 2022 17:53:20 +0100
+Subject: [PATCH 16/49] media: stm32-dcmi: do not lock in irq callback
+
+dcmi_irq_callback() doesn't need to hold the spinlock to protect
+dcmi->misr read access within dcmi_irq_thread() because IRQF_ONESHOT
+flag is set. IRQF_ONESHOT flag ensures that interrupt is disabled
+till the end of dcmi_irq_thread(), preventing dcmi_irq_callback()
+to be called concurrently.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 1b8f7b826f840e94b253c1b22b3ce4a6375068c0]
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Change-Id: If5b8eeb34aa4e50ae276a233128b3461bf0bf2c2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/242300
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index 9f9b840784416..1a62a02f10263 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -472,17 +472,12 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)
+ static irqreturn_t dcmi_irq_callback(int irq, void *arg)
+ {
+ 	struct stm32_dcmi *dcmi = arg;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&dcmi->irqlock, flags);
+ 
+ 	dcmi->misr = reg_read(dcmi->regs, DCMI_MIS);
+ 
+ 	/* Clear interrupt */
+ 	reg_set(dcmi->regs, DCMI_ICR, IT_FRAME | IT_OVR | IT_ERR);
+ 
+-	spin_unlock_irqrestore(&dcmi->irqlock, flags);
+-
+ 	return IRQ_WAKE_THREAD;
+ }
+ 
+-- 
+2.39.2
+

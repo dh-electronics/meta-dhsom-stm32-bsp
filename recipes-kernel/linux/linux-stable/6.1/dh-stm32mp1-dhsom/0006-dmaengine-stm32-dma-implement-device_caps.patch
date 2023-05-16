@@ -1,0 +1,49 @@
+From 61ab7574e2cac860fd6c55ee38c1a7a376da9471 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 28 Sep 2021 09:55:05 +0200
+Subject: [PATCH 06/49] dmaengine: stm32-dma: implement device_caps
+
+It is useful to set max_sg_burst (max number of bytes sent per transfer),
+also in case of DMA/MDMA chaining is used.
+
+Change-Id: I2d4bd95dcc1e624d81a10c5a6ebba44d860b63d7
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git f3fa386e6d32377800ceeae1381bdacd2855aeff]
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/225433
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+---
+ drivers/dma/stm32-dma.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index a232caa4b9027..7940bf7b10ed4 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -406,6 +406,16 @@ static void stm32_dma_set_fifo_config(struct stm32_dma_chan *chan,
+ 	}
+ }
+ 
++static void stm32_dma_slave_caps(struct dma_chan *c, struct dma_slave_caps *caps)
++{
++	struct stm32_dma_chan *chan = to_stm32_dma_chan(c);
++
++	if (chan->use_mdma)
++		caps->max_sg_burst = 0; /* unlimited */
++	else
++		caps->max_sg_burst = STM32_DMA_ALIGNED_MAX_DATA_ITEMS;
++}
++
+ static int stm32_dma_slave_config(struct dma_chan *c,
+ 				  struct dma_slave_config *config)
+ {
+@@ -2235,6 +2245,7 @@ static int stm32_dma_probe(struct platform_device *pdev)
+ 	dd->device_issue_pending = stm32_dma_issue_pending;
+ 	dd->device_prep_slave_sg = stm32_dma_prep_slave_sg;
+ 	dd->device_prep_dma_cyclic = stm32_dma_prep_dma_cyclic;
++	dd->device_caps = stm32_dma_slave_caps;
+ 	dd->device_config = stm32_dma_slave_config;
+ 	dd->device_pause = stm32_dma_pause;
+ 	dd->device_resume = stm32_dma_resume;
+-- 
+2.39.2
+

@@ -1,0 +1,38 @@
+From c3031bab7bda9dcbc25cb262f79d3ec94c8dcdf9 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 28 Feb 2022 18:24:46 +0100
+Subject: [PATCH 10/49] dmaengine: stm32-dma: synchronize also MDMA in case of
+ chaining
+
+Callbacks may be scheduled on MDMA side so, when synchronizing stm32-dma,
+also synchronize stm32-mdma in case of chaining.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 0721b66ff98f625679d3f3a009a6dd7df92ae26c]
+Fixes: 73c0a39c5d48 ("dmaengine: stm32-dma: Add DMA/MDMA chaining support")
+Change-Id: I446f9483715cad2eab8340b1ee845baf1d8e0ee3
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/241889
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+---
+ drivers/dma/stm32-dma.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index cdd7b53f528f1..1d2af6e31d0ab 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -625,6 +625,9 @@ static void stm32_dma_synchronize(struct dma_chan *c)
+ 		if (stm32_dma_mdma_drain(chan))
+ 			dev_err(chan2dev(chan), "%s: can't drain DMA\n", __func__);
+ 
++	if (chan->use_mdma)
++		dmaengine_synchronize(mchan->chan);
++
+ 	vchan_synchronize(&chan->vchan);
+ }
+ 
+-- 
+2.39.2
+

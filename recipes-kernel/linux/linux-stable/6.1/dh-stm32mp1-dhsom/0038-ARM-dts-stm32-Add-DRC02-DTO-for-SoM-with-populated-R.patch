@@ -1,0 +1,53 @@
+From a4e91bd8c951434907698207e4d382fa3675a28e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 29 Sep 2021 14:05:50 +0200
+Subject: [PATCH 38/49] ARM: dts: stm32: Add DRC02 DTO for SoM with populated
+ RSI WiFi
+
+Add DT overlay for the DRC02 board to enable configuration where the
+DHSOM inserted into the DRC02 has RSI 9116 WiFi populated on the SoM
+and where the microSD slot on the bottom of DRC02 must not be used.
+
+This permits a non-default configuration of the SoM and DRC02 board
+used for custom device setup with on-SoM WiFi.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                            |  1 +
+ .../dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts  | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 20bda87d6dff7..34f619fd242ad 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1215,6 +1215,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp151a-prtt1c.dtb \
+ 	stm32mp151a-prtt1s.dtb \
+ 	stm32mp153c-dhcom-drc02.dtb \
++	stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtbo \
+ 	stm32mp153c-dhcor-drc-compact.dtb \
+ 	stm32mp157a-avenger96.dtb \
+ 	stm32mp157a-dhcor-avenger96.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts
+new file mode 100644
+index 0000000000000..ea60557a5aca2
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&sdmmc3 {
++	broken-cd;
++	cd-gpios;
++};
+-- 
+2.39.2
+

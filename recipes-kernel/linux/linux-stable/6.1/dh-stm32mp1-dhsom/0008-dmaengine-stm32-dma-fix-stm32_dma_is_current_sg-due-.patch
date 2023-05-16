@@ -1,0 +1,43 @@
+From 4d43d7484551c09f12030b564d97c5115c516e8f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 9 Nov 2021 17:39:14 +0100
+Subject: [PATCH 08/49] dmaengine: stm32-dma: fix stm32_dma_is_current_sg() due
+ to DBM pause/resume
+
+In case of Double Buffer Mode (DBM) and if the transfer has been paused,
+then resumed but not yet reconfigured, stm32_dma_is_current_sg() needs to
+be fixed:
+- call stm32_dma_is_current_sg() only in case of cyclic transfer
+- in stm32_dma_is_current_sg() return true if the transfer is circular but
+  not double-buffer, as circular means CT (current target) is not used
+- in stm32_dma_is_current_sg() return true if the current target (SM0AR or
+  SM1AR) is in the address range of the first or second target.
+
+Change-Id: Iffcbc3120e8f1b82eaea123d7231c19d7b7d711e
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git bb61399fb3df4bbadffab6403c2d9c6437af6e50]
+Fixes: dae54988803f ("dmaengine: stm32-dma: add device_pause/device_resume support")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/239473
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@foss.st.com>
+---
+ drivers/dma/stm32-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+index 0b4fd7df1b87e..c55787ce049d3 100644
+--- a/drivers/dma/stm32-dma.c
++++ b/drivers/dma/stm32-dma.c
+@@ -1901,7 +1901,7 @@ static bool stm32_dma_is_current_sg(struct stm32_dma_chan *chan)
+ 		return true;
+ 
+ 	sg_req = &chan->desc->sg_req[chan->next_sg];
+-	period_len = sg_req->len;
++	period_len = sg_dma_len(&sg_req->stm32_sgl_req);
+ 
+ 	/* DBM - take care of a previous pause/resume not yet post reconfigured */
+ 	if (dma_scr & STM32_DMA_SCR_CT) {
+-- 
+2.39.2
+

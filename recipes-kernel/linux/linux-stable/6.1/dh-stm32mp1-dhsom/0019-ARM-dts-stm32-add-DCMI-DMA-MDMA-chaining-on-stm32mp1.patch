@@ -1,0 +1,35 @@
+From 3bf8fa75f4bd1186d9424a8007654ed65bf40950 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Mon, 15 Nov 2021 17:01:42 +0100
+Subject: [PATCH 19/49] ARM: dts: stm32: add DCMI DMA/MDMA chaining on
+ stm32mp15 family
+
+This patch enables DMA/MDMA chaining for DCMI.
+bit31 activate DMA/MDMA chaining and bit[30-29]
+represent the SRAM buffer size.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git f37de57b273b97a82f9697ffb0503284f539b61d]
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Change-Id: Icc73e6222cde96f10b1468ba607f3f59bf60cf34
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/228033
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 1d5523d8e06da..527e82b3f941c 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1184,7 +1184,7 @@ dcmi: dcmi@4c006000 {
+ 			resets = <&rcc CAMITF_R>;
+ 			clocks = <&rcc DCMI>;
+ 			clock-names = "mclk";
+-			dmas = <&dmamux1 75 0x400 0x01>;
++			dmas = <&dmamux1 75 0x400 0xe0000001>;
+ 			dma-names = "tx";
+ 			status = "disabled";
+ 		};
+-- 
+2.39.2
+

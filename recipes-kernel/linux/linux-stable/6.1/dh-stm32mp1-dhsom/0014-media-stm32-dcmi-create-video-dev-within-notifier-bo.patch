@@ -1,0 +1,86 @@
+From 1301e24b7fbad538c3f55a2f6eaf4671816f414b Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@st.com>
+Date: Wed, 30 Sep 2020 11:44:29 +0200
+Subject: [PATCH 14/49] media: stm32-dcmi: create video dev within notifier
+ bound
+
+In case of an error during the initialization of the sensor,
+the video device is still available since created at the
+probe of the dcmi driver. Moreover the device wouldn't
+be released even when removing the module since the release
+is performed as part of the notifier unbind callback
+(not called if no sensor is properly initialized).
+
+This patch move the video device creation with the v4l2 notifier
+bound handler in order to avoid having a video device created when
+an error happen during the pipe (dcmi - sensor) initialization.
+
+This also makes the video device creation symmetric with the
+release which is already done within the notifier unbind handler.
+
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git 725647d116532c92f2d76254c220eab550f48afc]
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
+Change-Id: I7379937e5cad03fe679bcd0a67767611743091a6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/161830
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: CIBUILD <smet-aci-builds@lists.codex.cro.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 23 ++++++++++----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index f281974bd1c74..098c0c25f12d4 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -1883,6 +1883,15 @@ static int dcmi_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 
+ 	dev_dbg(dcmi->dev, "Subdev \"%s\" bound\n", subdev->name);
+ 
++	ret = video_register_device(dcmi->vdev, VFL_TYPE_VIDEO, -1);
++	if (ret) {
++		dev_err(dcmi->dev, "Failed to register video device\n");
++		return ret;
++	}
++
++	dev_dbg(dcmi->dev, "Device registered as %s\n",
++		video_device_node_name(dcmi->vdev));
++
+ 	/*
+ 	 * Link this sub-device to DCMI, it could be
+ 	 * a parallel camera sensor or a bridge
+@@ -1895,10 +1904,11 @@ static int dcmi_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 				    &dcmi->vdev->entity, 0,
+ 				    MEDIA_LNK_FL_IMMUTABLE |
+ 				    MEDIA_LNK_FL_ENABLED);
+-	if (ret)
++	if (ret) {
+ 		dev_err(dcmi->dev, "Failed to create media pad link with subdev \"%s\"\n",
+ 			subdev->name);
+-	else
++		video_unregister_device(dcmi->vdev);
++	} else
+ 		dev_dbg(dcmi->dev, "DCMI is now linked to \"%s\"\n",
+ 			subdev->name);
+ 
+@@ -2102,15 +2112,6 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	}
+ 	dcmi->vdev->entity.flags |= MEDIA_ENT_FL_DEFAULT;
+ 
+-	ret = video_register_device(dcmi->vdev, VFL_TYPE_VIDEO, -1);
+-	if (ret) {
+-		dev_err(dcmi->dev, "Failed to register video device\n");
+-		goto err_media_entity_cleanup;
+-	}
+-
+-	dev_dbg(dcmi->dev, "Device registered as %s\n",
+-		video_device_node_name(dcmi->vdev));
+-
+ 	/* Buffer queue */
+ 	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	q->io_modes = VB2_MMAP | VB2_READ | VB2_DMABUF;
+-- 
+2.39.2
+

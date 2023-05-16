@@ -1,0 +1,40 @@
+From 8d8ed15ed1e00b0410e91ca3aff99952ab52c8ca Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 5 Mar 2023 21:51:07 +0100
+Subject: [PATCH 17/49] media: stm32-dcmi: Enable incoherent buffer allocation
+
+Set allow_cache_hints to 1 for the vb2_queue capture queue in the
+STM32MP15xx DCMI V4L2 driver. This allows us to allocate buffers
+with the V4L2_MEMORY_FLAG_NON_COHERENT set. On STM32MP15xx SoCs,
+this enables caching for this memory, which improves performance
+when being read from CPU.
+
+This change should be safe from race conditions since videobuf2
+already invalidates or flushes the appropriate cache lines in
+its prepare() and finish() methods.
+
+Tested on a STM32MP157F SoC. Resulted in 4x buffer access speedup.
+
+Upstream-Status: Backport [82b88d4da541e986e40445773b9c19187622d230]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index 1a62a02f10263..db684172042e2 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -2117,6 +2117,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	q->mem_ops = &vb2_dma_contig_memops;
+ 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+ 	q->min_buffers_needed = 2;
++	q->allow_cache_hints = 1;
+ 	q->dev = &pdev->dev;
+ 
+ 	ret = vb2_queue_init(q);
+-- 
+2.39.2
+
