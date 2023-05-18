@@ -1,12 +1,9 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
-DEPENDS:append:dh-stm32mp1-dhsom = " u-boot-mainline-tools-native "
-do_compile:append:dh-stm32mp1-dhsom () {
+do_compile:prepend:dh-stm32mp1-dhsom () {
 	sed -i -e "s/%UBOOT_DTB_LOADADDRESS%/${UBOOT_DTB_LOADADDRESS}/g" \
 		-e "s/%UBOOT_DTBO_LOADADDRESS%/${UBOOT_DTBO_LOADADDRESS}/g" \
 		${WORKDIR}/boot.cmd
-	uboot-mkimage -A arm -T script -C none \
-		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
 SRC_URI:append:dh-stm32mp1-dhsom = " \
@@ -25,4 +22,4 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230309.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230518.01"
