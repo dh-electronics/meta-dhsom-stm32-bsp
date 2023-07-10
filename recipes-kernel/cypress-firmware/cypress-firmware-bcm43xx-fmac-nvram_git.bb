@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.cypress;md5=cbc5f665d04f741f1e006d2096236ba7"
 # so that the license files will be copied from fetched source
 NO_GENERIC_LICENSE[Firmware-cypress-fmac-nvram] = "LICENCE.cypress"
 
-SRCREV = "d0ddc35f8ade6ba5629c3a6d0a9c810078a9ebbc"
+SRCREV = "9b7d93eb3e13b2d2ed8ce3a01338ceb54151b77a"
 SRC_URI = "git://github.com/murata-wireless/cyw-fmac-nvram;protocol=https;branch=master"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
