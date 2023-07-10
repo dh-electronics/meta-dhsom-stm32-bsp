@@ -1,0 +1,112 @@
+From 3b9adf0fc76000bd50c4188e87dab1219580e425 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 17 May 2023 23:37:20 +0200
+Subject: [PATCH 3/3] ARM: stm32: Power cycle Buck3 in reset on DHSOM
+
+In case the DHSOM is in suspend state and either reset button is pushed
+or IWDG2 triggers a watchdog reset, then DRAM initialization could fail
+as follows:
+
+  "
+  RAM: DDR3L 32bits 2x4Gb 533MHz
+  DDR invalid size : 0x4, expected 0x40000000
+  DRAM init failed: -22
+  ### ERROR ### Please RESET the board ###
+  "
+
+Avoid this failure by not keeping any Buck regulators enabled during reset,
+let the SoC and DRAMs power cycle fully. Since the change which keeps Buck3
+VDD enabled during reset is ST specific, move this addition to ST specific
+SPL board initialization so that it wouldn't affect the DHSOM .
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230517220239.329807-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+NOTE: This is 2023.07 material
+NOTE: d1a4b09de64 ("board: st: stpmic1: add function stpmic1_init")
+      mentions 'keep vdd on during the reset cycle (to avoid issue
+      when backup battery is absent)', but there is no further
+      description of the 'issue'. Can you please elaborate ?
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ board/st/common/stpmic1.c | 10 +++-------
+ board/st/common/stpmic1.h |  2 +-
+ board/st/stm32mp1/spl.c   | 13 +++++++++++--
+ 3 files changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/board/st/common/stpmic1.c b/board/st/common/stpmic1.c
+index d52dce4f657..969ad484864 100644
+--- a/board/st/common/stpmic1.c
++++ b/board/st/common/stpmic1.c
+@@ -185,21 +185,17 @@ static int stmpic_buck1_set(struct udevice *dev, u32 voltage_mv)
+ }
+ 
+ /* early init of PMIC */
+-void stpmic1_init(u32 voltage_mv)
++struct udevice *stpmic1_init(u32 voltage_mv)
+ {
+ 	struct udevice *dev;
+ 
+ 	if (uclass_get_device_by_driver(UCLASS_PMIC,
+ 					DM_DRIVER_GET(pmic_stpmic1), &dev))
+-		return;
++		return NULL;
+ 
+ 	/* update VDDCORE = BUCK1 */
+ 	if (voltage_mv)
+ 		stmpic_buck1_set(dev, voltage_mv);
+ 
+-	/* Keep vdd on during the reset cycle */
+-	pmic_clrsetbits(dev,
+-			STPMIC1_BUCKS_MRST_CR,
+-			STPMIC1_MRST_BUCK(STPMIC1_BUCK3),
+-			STPMIC1_MRST_BUCK(STPMIC1_BUCK3));
++	return dev;
+ }
+diff --git a/board/st/common/stpmic1.h b/board/st/common/stpmic1.h
+index b17d6f16338..7a7169d7cea 100644
+--- a/board/st/common/stpmic1.h
++++ b/board/st/common/stpmic1.h
+@@ -3,4 +3,4 @@
+  * Copyright (C) 2020, STMicroelectronics - All Rights Reserved
+  */
+ 
+-void stpmic1_init(u32 voltage_mv);
++struct udevice *stpmic1_init(u32 voltage_mv);
+diff --git a/board/st/stm32mp1/spl.c b/board/st/stm32mp1/spl.c
+index 747ec7e445a..8b4a529f759 100644
+--- a/board/st/stm32mp1/spl.c
++++ b/board/st/stm32mp1/spl.c
+@@ -5,6 +5,8 @@
+ 
+ #include <config.h>
+ #include <common.h>
++#include <power/pmic.h>
++#include <power/stpmic1.h>
+ #include <asm/arch/sys_proto.h>
+ #include "../common/stpmic1.h"
+ 
+@@ -19,8 +21,15 @@ void board_vddcore_init(u32 voltage_mv)
+ 
+ int board_early_init_f(void)
+ {
+-	if (IS_ENABLED(CONFIG_PMIC_STPMIC1) && CONFIG_IS_ENABLED(POWER))
+-		stpmic1_init(opp_voltage_mv);
++	if (IS_ENABLED(CONFIG_PMIC_STPMIC1) && CONFIG_IS_ENABLED(POWER)) {
++		struct udevice *dev = stpmic1_init(opp_voltage_mv);
++
++		/* Keep vdd on during the reset cycle */
++		pmic_clrsetbits(dev,
++				STPMIC1_BUCKS_MRST_CR,
++				STPMIC1_MRST_BUCK(STPMIC1_BUCK3),
++				STPMIC1_MRST_BUCK(STPMIC1_BUCK3));
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.40.1
+

@@ -10,11 +10,9 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://default-device-tree.cfg \
-	file://0001-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
-	file://0002-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
-	file://0003-ARM-dts-stm32-Remove-buck3-regulator-always-on-on-AV.patch \
-	file://0004-ARM-dts-stm32-Add-DHCOR-based-Testbench-board.patch \
-	file://0005-mtd-spi-nor-Add-CHIP_ERASE-optimization.patch \
+	file://0001-ARM-stm32-Fix-OF_LIST-on-DHCOR.patch \
+	file://0002-ARM-stm32-Add-IWDG-handling-into-PSCI-suspend-code.patch \
+	file://0003-ARM-stm32-Power-cycle-Buck3-in-reset-on-DHSOM.patch \
 	"
 
 # U-Boot release extra version, used as identifier of a patch
@@ -22,4 +20,4 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230518.02"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230710.01"
