@@ -37,7 +37,7 @@ do_install() {
 	# Symlink the firmware names
 	ln -s CYW43012C0.1LV.hcd ${D}${nonarch_base_libdir}/firmware/brcm/BCM43012C0.hcd
 	ln -s BCM43012C0_003.001.015.0303.0267.1LV.sAnt.hcd ${D}${nonarch_base_libdir}/firmware/brcm/CYW43012C0.1LV.hcd
-	ln -s CYW43430A1.1DX.hcd ${D}${nonarch_base_libdir}/firmware/brcm/BCM4343A1.hcd
+	ln -s CYW43430A1.1DX.hcd ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd
 	ln -s BCM43430A1_001.002.009.0159.0528.1DX.hcd ${D}${nonarch_base_libdir}/firmware/brcm/CYW43430A1.1DX.hcd
 	ln -s CYW4343A2.1YN.hcd ${D}${nonarch_base_libdir}/firmware/brcm/BCM4343A2.hcd
 	ln -s CYW4343A2_001.003.016.0031.0000.1YN.hcd ${D}${nonarch_base_libdir}/firmware/brcm/CYW4343A2.1YN.hcd
@@ -77,7 +77,7 @@ FILES:${PN}-bcm43012c0 = " \
 FILES:${PN}-bcm4343a1 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM43430A1_001.002.009.0159.0528.1DX.hcd \
 	${nonarch_base_libdir}/firmware/brcm/CYW43430A1.1DX.hcd \
-	${nonarch_base_libdir}/firmware/brcm/BCM4343A1.hcd \
+	${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd \
 	"
 FILES:${PN}-bcm4343a2 = " \
 	${nonarch_base_libdir}/firmware/brcm/CYW4343A2_001.003.016.0031.0000.1YN.hcd \
