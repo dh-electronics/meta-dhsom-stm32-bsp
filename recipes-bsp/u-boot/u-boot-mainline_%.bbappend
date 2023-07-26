@@ -13,6 +13,7 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0001-ARM-stm32-Fix-OF_LIST-on-DHCOR.patch \
 	file://0002-ARM-stm32-Add-IWDG-handling-into-PSCI-suspend-code.patch \
 	file://0003-ARM-stm32-Power-cycle-Buck3-in-reset-on-DHSOM.patch \
+	file://0004-ARM-dts-stm32-Switch-DWMAC-RMII-clock-to-MCO2-on-DHC.patch \
 	"
 
 # U-Boot release extra version, used as identifier of a patch
@@ -20,4 +21,4 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230710.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20230727.01"
