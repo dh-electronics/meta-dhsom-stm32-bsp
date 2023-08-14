@@ -87,3 +87,4 @@ FILES:${PN}-bcm4373-2ae-sdio = " \
 
 LICENSE:${PN}-bcm4373-2ae-sdio = "Firmware-cypress-fmac-fw"
 RDEPENDS:${PN}-bcm4373-2ae-sdio += "${PN}-cypress-license"
+RCONFLICTS:${PN}-bcm4373-2ae-sdio = "linux-firmware-bcm4373"
