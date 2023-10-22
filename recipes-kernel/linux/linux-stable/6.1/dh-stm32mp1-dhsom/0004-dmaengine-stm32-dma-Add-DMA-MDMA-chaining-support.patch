@@ -41,8 +41,8 @@ Reviewed-on: https://gerrit.st.com/102860
 Reviewed-on: https://gerrit.st.com/102845
 Reviewed-on: https://gerrit.st.com/102846
 ---
- drivers/dma/stm32-dma.c | 782 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 727 insertions(+), 55 deletions(-)
+ drivers/dma/stm32-dma.c | 787 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 729 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
 index 5dade7c0cfeda..a232caa4b9027 100644
@@ -977,18 +977,27 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	/*
  	 * Calculate the residue means compute the descriptors
  	 * information:
-@@ -1352,7 +1960,7 @@ static size_t stm32_dma_desc_residue(struct stm32_dma_chan *chan,
+@@ -1348,12 +1956,11 @@ static size_t stm32_dma_desc_residue(struct stm32_dma_chan *chan,
+ 
+ 	residue = stm32_dma_get_remaining_bytes(chan);
+ 
+-	if ((chan->desc->cyclic || chan->trig_mdma) && !stm32_dma_is_current_sg(chan)) {
++	if (chan->desc->cyclic && !stm32_dma_is_current_sg(chan)) {
  		n_sg++;
  		if (n_sg == chan->desc->num_sgs)
  			n_sg = 0;
--		residue = sg_req->len;
+-		if (!chan->trig_mdma)
+-			residue = sg_req->len;
 +		residue = sg_dma_len(&sg_req->stm32_sgl_req);
  	}
  
  	/*
-@@ -1364,7 +1972,7 @@ static size_t stm32_dma_desc_residue(struct stm32_dma_chan *chan,
+@@ -1363,9 +1970,9 @@ static size_t stm32_dma_desc_residue(struct stm32_dma_chan *chan,
+ 	 * residue = remaining bytes from NDTR + remaining
+ 	 * periods/sg to be transferred
  	 */
- 	if (!chan->desc->cyclic || n_sg != 0)
+-	if ((!chan->desc->cyclic && !chan->trig_mdma) || n_sg != 0)
++	if (!chan->desc->cyclic || n_sg != 0)
  		for (i = n_sg; i < desc->num_sgs; i++)
 -			residue += desc->sg_req[i].len;
 +			residue += sg_dma_len(&desc->sg_req[i].stm32_sgl_req);
