@@ -1,6 +1,6 @@
-From b836a1ca1c88bd2f2842ddfff56ba60ed7e00bf8 Mon Sep 17 00:00:00 2001
+From a70df80aa719ef12dcd19be7711784dc16c6f5b7 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 18 May 2023 02:53:50 +0200
+Date: Tue, 11 Jul 2023 15:11:21 +0200
 Subject: [PATCH 44/44] ARM: dts: stm32: Add missing detach mailbox for DHCOR
  SoM
 
@@ -16,9 +16,10 @@ in sync regarding the mailboxes to fix the detach issue and the warning:
 stm32-rproc 10000000.m4: mbox_request_channel_byname() could not locate channel named "detach"
 "
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230518011246.438097-4-marex@denx.de/]
+Upstream-Status: Backport [2f38de940f072db369edd3e6e8d82bb8f42c5c9b]
 Fixes: 6257dfc1c412 ("ARM: dts: stm32: Add coprocessor detach mbox on stm32mp15x-dkx boards")
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/stm32mp15xx-dhcor-som.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)

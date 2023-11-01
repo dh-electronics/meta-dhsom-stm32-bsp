@@ -1,6 +1,6 @@
-From 6e9e1cf52a58483df3a615f95dce8dab5de5c79e Mon Sep 17 00:00:00 2001
+From 42eab73f48072cc119954c9d278cb2d140d7b719 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 10 May 2023 00:36:08 +0200
+Date: Wed, 17 May 2023 21:43:47 +0200
 Subject: [PATCH 20/44] irqchip/stm32-exti: Add STM32MP15xx IWDG2 EXTI to GIC
  map
 
@@ -8,9 +8,11 @@ The EXTI interrupt 46 is mapped to GIC interrupt 151. Add the
 missing mapping, which is used for IWDG2 pretimeout interrupt
 and wake up source.
 
-Upstream-Status: Submitted [https://lore.kernel.org/all/20230517194349.105745-1-marex@denx.de/]
+Upstream-Status: Backport [1c5187968846fd252d42924fd54f3aad5a6ad7ff]
 Reviewed-by: Antonio Borneo <antonio.borneo@foss.st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230517194349.105745-1-marex@denx.de
 ---
  drivers/irqchip/irq-stm32-exti.c | 1 +
  1 file changed, 1 insertion(+)
