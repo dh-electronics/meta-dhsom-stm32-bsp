@@ -1,7 +1,7 @@
-From aa12d611c0732f67fa965b20e06f21709d9772d9 Mon Sep 17 00:00:00 2001
+From 557d679d35ee0e76efa45a24e2637703e49f326c Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 11 May 2023 21:55:45 +0200
-Subject: [PATCH 2/3] ARM: stm32: Add IWDG handling into PSCI suspend code
+Subject: [PATCH 2/5] ARM: stm32: Add IWDG handling into PSCI suspend code
 
 In case the IWDG is enabled by either U-Boot or Linux, the IWDG can never
 be disabled again. That includes low power states, which means that if the
@@ -145,5 +145,5 @@ index 1e69673e88b..39b5200949a 100644
  	writel(0x3, STM32_RCC_BASE + RCC_MP_SREQCLRR);
  	ddr_sw_self_refresh_exit();
 -- 
-2.40.1
+2.42.0
 

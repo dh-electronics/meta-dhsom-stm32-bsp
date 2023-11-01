@@ -1,7 +1,7 @@
-From 3b9adf0fc76000bd50c4188e87dab1219580e425 Mon Sep 17 00:00:00 2001
+From ca4f4911fa142fb9b34743a9efc190721611ecdf Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 17 May 2023 23:37:20 +0200
-Subject: [PATCH 3/3] ARM: stm32: Power cycle Buck3 in reset on DHSOM
+Date: Thu, 18 May 2023 00:02:39 +0200
+Subject: [PATCH 3/5] ARM: stm32: Power cycle Buck3 in reset on DHSOM
 
 In case the DHSOM is in suspend state and either reset button is pushed
 or IWDG2 triggers a watchdog reset, then DRAM initialization could fail
@@ -19,18 +19,9 @@ let the SoC and DRAMs power cycle fully. Since the change which keeps Buck3
 VDD enabled during reset is ST specific, move this addition to ST specific
 SPL board initialization so that it wouldn't affect the DHSOM .
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230517220239.329807-1-marex@denx.de/]
+Upstream-Status: Backport [b3d97f8ce34011b8928919822eb17b98477f3d72]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-NOTE: This is 2023.07 material
-NOTE: d1a4b09de64 ("board: st: stpmic1: add function stpmic1_init")
-      mentions 'keep vdd on during the reset cycle (to avoid issue
-      when backup battery is absent)', but there is no further
-      description of the 'issue'. Can you please elaborate ?
----
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: uboot-stm32@st-md-mailman.stormreply.com
+Reviewed-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
 ---
  board/st/common/stpmic1.c | 10 +++-------
  board/st/common/stpmic1.h |  2 +-
@@ -108,5 +99,5 @@ index 747ec7e445a..8b4a529f759 100644
  	return 0;
  }
 -- 
-2.40.1
+2.42.0
 

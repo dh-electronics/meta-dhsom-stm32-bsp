@@ -1,7 +1,8 @@
-From d4e7266ac024b4952c9ef63c61167aa35fbe89bc Mon Sep 17 00:00:00 2001
+From 271bbc5275f8e953808eb40d88a1e32f6532217c Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 27 Jul 2023 17:27:42 +0200
-Subject: [PATCH] gpio: Use separate bitfield array to indicate GPIO is claimed
+Date: Wed, 2 Aug 2023 01:26:02 +0200
+Subject: [PATCH 5/5] gpio: Use separate bitfield array to indicate GPIO is
+ claimed
 
 The current gpio-uclass design uses name field in struct gpio_dev_priv as
 an indicator that GPIO is claimed by consumer. This overloads the function
@@ -16,25 +17,28 @@ where any pin which has already been configured as AF could no longer be
 claimed as dual-purpose GPIO. This is important for pins like STM32 MMCI
 st,cmd-gpios .
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230727155025.82680-1-marex@denx.de/]
+Upstream-Status: Backport [aaf5b5923054efbf1244dc7fbae68d0bd2a03cf7]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Simon Glass <sjg@chromium.org>
 ---
-Cc: Michal Suchanek <msuchanek@suse.de>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc: Samuel Holland <samuel@sholland.org>
-Cc: Simon Glass <sjg@chromium.org>
----
- drivers/gpio/gpio-uclass.c | 35 ++++++++++++++++++++++++++++++-----
+ drivers/gpio/gpio-uclass.c | 64 +++++++++++++++++++++++++++++++++++---
  include/asm-generic/gpio.h |  2 ++
- 2 files changed, 32 insertions(+), 5 deletions(-)
+ 2 files changed, 61 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/gpio/gpio-uclass.c b/drivers/gpio/gpio-uclass.c
-index 712119c3415..25873f07bd4 100644
+index 712119c3415..3e33a12456b 100644
 --- a/drivers/gpio/gpio-uclass.c
 +++ b/drivers/gpio/gpio-uclass.c
-@@ -75,6 +75,20 @@ static int gpio_to_device(unsigned int gpio, struct gpio_desc *desc)
+@@ -28,6 +28,8 @@
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
++#define GPIO_ALLOC_BITS	32
++
+ /**
+  * gpio_desc_init() - Initialize the GPIO descriptor
+  *
+@@ -75,6 +77,46 @@ static int gpio_to_device(unsigned int gpio, struct gpio_desc *desc)
  	return -ENOENT;
  }
  
@@ -49,13 +53,39 @@ index 712119c3415..25873f07bd4 100644
 + */
 +static bool gpio_is_claimed(struct gpio_dev_priv *uc_priv, unsigned int offset)
 +{
-+	return !!(uc_priv->claimed[offset / 32] & BIT(offset % 32));
++	return !!(uc_priv->claimed[offset / GPIO_ALLOC_BITS] & BIT(offset % GPIO_ALLOC_BITS));
++}
++
++/**
++ * gpio_set_claim() - Set GPIO claimed by consumer
++ *
++ * Set a bit which indicate the GPIO is claimed by consumer
++ *
++ * @uc_priv:	gpio_dev_priv pointer.
++ * @offset:	gpio offset within the device
++ */
++static void gpio_set_claim(struct gpio_dev_priv *uc_priv, unsigned int offset)
++{
++	uc_priv->claimed[offset / GPIO_ALLOC_BITS] |= BIT(offset % GPIO_ALLOC_BITS);
++}
++
++/**
++ * gpio_clear_claim() - Clear GPIO claimed by consumer
++ *
++ * Clear a bit which indicate the GPIO is claimed by consumer
++ *
++ * @uc_priv:	gpio_dev_priv pointer.
++ * @offset:	gpio offset within the device
++ */
++static void gpio_clear_claim(struct gpio_dev_priv *uc_priv, unsigned int offset)
++{
++	uc_priv->claimed[offset / GPIO_ALLOC_BITS] &= ~BIT(offset % GPIO_ALLOC_BITS);
 +}
 +
  #if CONFIG_IS_ENABLED(DM_GPIO_LOOKUP_LABEL)
  /**
   * dm_gpio_lookup_label() - look for name in gpio device
-@@ -94,7 +108,7 @@ static int dm_gpio_lookup_label(const char *name,
+@@ -94,7 +136,7 @@ static int dm_gpio_lookup_label(const char *name,
  
  	*offset = -1;
  	for (i = 0; i < uc_priv->gpio_count; i++) {
@@ -64,7 +94,7 @@ index 712119c3415..25873f07bd4 100644
  			continue;
  		if (!strcmp(name, uc_priv->name[i])) {
  			*offset = i;
-@@ -350,7 +364,7 @@ int dm_gpio_request(struct gpio_desc *desc, const char *label)
+@@ -350,7 +392,7 @@ int dm_gpio_request(struct gpio_desc *desc, const char *label)
  	int ret;
  
  	uc_priv = dev_get_uclass_priv(dev);
@@ -73,16 +103,16 @@ index 712119c3415..25873f07bd4 100644
  		return -EBUSY;
  	str = strdup(label);
  	if (!str)
-@@ -362,6 +376,8 @@ int dm_gpio_request(struct gpio_desc *desc, const char *label)
+@@ -362,6 +404,8 @@ int dm_gpio_request(struct gpio_desc *desc, const char *label)
  			return ret;
  		}
  	}
 +
-+	uc_priv->claimed[desc->offset / 32] |= BIT(desc->offset % 32);
++	gpio_set_claim(uc_priv, desc->offset);
  	uc_priv->name[desc->offset] = str;
  
  	return 0;
-@@ -438,7 +454,7 @@ int _dm_gpio_free(struct udevice *dev, uint offset)
+@@ -438,7 +482,7 @@ int _dm_gpio_free(struct udevice *dev, uint offset)
  	int ret;
  
  	uc_priv = dev_get_uclass_priv(dev);
@@ -91,15 +121,15 @@ index 712119c3415..25873f07bd4 100644
  		return -ENXIO;
  	if (ops->rfree) {
  		ret = ops->rfree(dev, offset);
-@@ -446,6 +462,7 @@ int _dm_gpio_free(struct udevice *dev, uint offset)
+@@ -446,6 +490,7 @@ int _dm_gpio_free(struct udevice *dev, uint offset)
  			return ret;
  	}
  
-+	uc_priv->claimed[offset / 32] &= ~BIT(offset % 32);
++	gpio_clear_claim(uc_priv, offset);
  	free(uc_priv->name[offset]);
  	uc_priv->name[offset] = NULL;
  
-@@ -480,7 +497,7 @@ static int check_reserved(const struct gpio_desc *desc, const char *func)
+@@ -480,7 +525,7 @@ static int check_reserved(const struct gpio_desc *desc, const char *func)
  		return -ENOENT;
  
  	uc_priv = dev_get_uclass_priv(desc->dev);
@@ -108,7 +138,7 @@ index 712119c3415..25873f07bd4 100644
  		printf("%s: %s: error: gpio %s%d not reserved\n",
  		       desc->dev->name, func,
  		       uc_priv->bank_name ? uc_priv->bank_name : "",
-@@ -826,7 +843,7 @@ static int get_function(struct udevice *dev, int offset, bool skip_unused,
+@@ -826,7 +871,7 @@ static int get_function(struct udevice *dev, int offset, bool skip_unused,
  		return -EINVAL;
  	if (namep)
  		*namep = uc_priv->name[offset];
@@ -117,12 +147,13 @@ index 712119c3415..25873f07bd4 100644
  		return GPIOF_UNUSED;
  	if (ops->get_function) {
  		int ret;
-@@ -1341,6 +1358,13 @@ static int gpio_post_probe(struct udevice *dev)
+@@ -1341,6 +1386,14 @@ static int gpio_post_probe(struct udevice *dev)
  	if (!uc_priv->name)
  		return -ENOMEM;
  
-+	uc_priv->claimed = calloc(DIV_ROUND_UP(uc_priv->gpio_count, 32),
-+				  sizeof(*uc_priv->claimed));
++	uc_priv->claimed = calloc(DIV_ROUND_UP(uc_priv->gpio_count,
++					       GPIO_ALLOC_BITS),
++				  GPIO_ALLOC_BITS / 8);
 +	if (!uc_priv->claimed) {
 +		free(uc_priv->name);
 +		return -ENOMEM;
@@ -131,7 +162,7 @@ index 712119c3415..25873f07bd4 100644
  	return gpio_renumber(NULL);
  }
  
-@@ -1353,6 +1377,7 @@ static int gpio_pre_remove(struct udevice *dev)
+@@ -1353,6 +1406,7 @@ static int gpio_pre_remove(struct udevice *dev)
  		if (uc_priv->name[i])
  			free(uc_priv->name[i]);
  	}
@@ -160,5 +191,5 @@ index c4a7fd28439..a21c606f2b8 100644
  };
  
 -- 
-2.40.1
+2.42.0
 

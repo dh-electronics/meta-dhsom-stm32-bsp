@@ -1,7 +1,7 @@
-From af5cef171f32f0ad516ab61c0ce9b0217c684b1e Mon Sep 17 00:00:00 2001
+From 9418d80620f7d3e8e6ba4ee6bc5284710f7ef4d3 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 18 Jan 2022 21:29:58 +0100
-Subject: [PATCH] ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on DHCOM
+Date: Thu, 27 Jul 2023 01:58:07 +0200
+Subject: [PATCH 4/5] ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on DHCOM
 
 The DHCOM SoM has two options for supplying ETHRX clock to the DWMAC
 block and PHY. Either (1) ETHCK_K generates 50 MHz clock on ETH_CLK
@@ -26,15 +26,9 @@ count=1). The EMI interference also decreases.
 Ported from Linux kernel commit
 73ab99aad50cd ("ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on DHCOM")
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230726235807.497657-1-marex@denx.de/]
+Upstream-Status: Backport [c9678850bdef44bd7cab6238c56151b54d809047]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: u-boot@dh-electronics.com
-Cc: uboot-stm32@st-md-mailman.stormreply.com
----
-V2: Add U-Boot specifics to cater also for clock and clock-names in stm32mp151.dtsi
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
  arch/arm/dts/stm32mp15xx-dhcom-som.dtsi    | 22 ++++++++++++++++++----
  arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi | 14 ++++++++++++++
@@ -117,5 +111,5 @@ index bc0730cf2bd..ff5e9034951 100644
  		CLK_MPU_PLL1P
  		CLK_AXI_PLL2P
 -- 
-2.40.1
+2.42.0
 

@@ -1,7 +1,7 @@
-From cd458c549b8f6c5f93c20a5509b044367111ccbe Mon Sep 17 00:00:00 2001
+From a1667456a4fc5239dee7b30315645de7d6c9010d Mon Sep 17 00:00:00 2001
 From: Tom Rini <trini@konsulko.com>
 Date: Thu, 4 May 2023 20:11:02 -0400
-Subject: [PATCH 1/3] ARM: stm32: Fix OF_LIST on DHCOR
+Subject: [PATCH 1/5] ARM: stm32: Fix OF_LIST on DHCOR
 
 The ITS file used to build the images here lists three dtb files as
 being used. Today, these are built by the logic that will over-build dtb
@@ -33,5 +33,5 @@ index b54ff930146..d4786500271 100644
  CONFIG_ENV_IS_IN_SPI_FLASH=y
  CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
 -- 
-2.40.1
+2.42.0
 
