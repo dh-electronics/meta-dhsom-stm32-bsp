@@ -1,0 +1,39 @@
+From ca06841680208c78d942e141f42cb2dd15b32e9b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 9 Oct 2020 22:49:37 +0200
+Subject: [PATCH 36/88] ARM: dts: stm32: Disable SDMMC1 CKIN feedback clock
+
+The STM32MP1 DHCOM SoM can be built with either bus voltage level shifter
+or without one on the SDMMC1 interface. Because the SDMMC1 interface is
+limited to 50 MHz and hence SD high-speed anyway, disable the SD feedback
+clock to permit operation of the same U-Boot image on both SoM with and
+without voltage level shifter.
+
+Upstream-Status: Backport [32d4878b26c1c69c893c6a1f6f7004d1bcc57a79]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Patrick Delaunay <patrick.delaunay@st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index f0de09d1f3891..2991658d6d203 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -398,7 +398,6 @@ &sdmmc1 {
+ 	disable-wp;
+ 	st,sig-dir;
+ 	st,neg-edge;
+-	st,use-ckin;
+ 	bus-width = <4>;
+ 	vmmc-supply = <&vdd_sd>;
+ 	status = "okay";
+-- 
+2.42.0
+

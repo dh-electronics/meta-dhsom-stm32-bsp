@@ -1,0 +1,47 @@
+From f5de07c90e7a51184dd92d5284a0293c627fd953 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 30 Oct 2020 09:50:53 +0100
+Subject: [PATCH 39/88] ARM: dts: stm32: Add PicoITX DTO for DH 626-100 LVDS
+ adapter with CH101OLHLWH display
+
+Add DT overlay for the PicoITX board for DH 626-100 adapter card with
+Chefree CH101OLHLWH-002 LVDS display attached to it. This is used to
+form a DHMI system.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                                | 1 +
+ ...p15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 31257d1b0637f..43ebc1fc6747f 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1087,6 +1087,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
+ 	stm32mp157c-dhcom-picoitx.dtb \
++	stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtbo \
+ 	stm32mp157c-dk2.dtb \
+ 	stm32mp157c-ed1.dtb \
+ 	stm32mp157c-ev1.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts
+new file mode 100644
+index 0000000000000..32e75cabe0032
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
+-- 
+2.42.0
+

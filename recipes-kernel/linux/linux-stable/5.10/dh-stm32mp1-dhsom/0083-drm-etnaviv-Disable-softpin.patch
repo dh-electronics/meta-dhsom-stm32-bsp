@@ -1,0 +1,37 @@
+From 888ba47d88c5499a89ad784775b68efb53453a5f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 2 Dec 2022 00:13:49 +0100
+Subject: [PATCH 83/88] drm/etnaviv: Disable softpin
+
+Currently softpin suffers from assorted race conditions exposed by newer
+versions of mesa 22.2.y and 22.3.y . Those races are difficult to fix in
+older kernel versions due to massive amount of backports necessary to do
+so. Disable softpin by default until Linux 6.1.y is out, which contains
+the necessary fixes to make softpin work reliably.
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/513766/]
+Fixes: 088880ddc0b20 ("drm/etnaviv: implement softpin")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+index f3281d56b1d82..8ce32c814d86e 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+@@ -150,10 +150,7 @@ int etnaviv_gpu_get_param(struct etnaviv_gpu *gpu, u32 param, u64 *value)
+ 		break;
+ 
+ 	case ETNAVIV_PARAM_SOFTPIN_START_ADDR:
+-		if (priv->mmu_global->version == ETNAVIV_IOMMU_V2)
+-			*value = ETNAVIV_SOFTPIN_START_ADDRESS;
+-		else
+-			*value = ~0ULL;
++		*value = ~0ULL;
+ 		break;
+ 
+ 	default:
+-- 
+2.42.0
+

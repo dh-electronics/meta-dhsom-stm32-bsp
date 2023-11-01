@@ -1,7 +1,7 @@
-From 8faea67e686a0195291004729f0cc3eb2ea6f83b Mon Sep 17 00:00:00 2001
+From 316eb1071fef34d48b6b11b2c513178bbc475638 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 26 Mar 2020 15:14:11 +0100
-Subject: [PATCH 01/52] kbuild: Add support for building %.dts into %.dtbo
+Subject: [PATCH 01/88] kbuild: Add support for building %.dts into %.dtbo
 
 This patch adds minor addition to kbuild to permit building .dtbo
 targets from .dts files. This is useful for compiling DT overlays.
@@ -16,10 +16,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  4 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 076d4e6b9ccc..288aa5466376 100644
+index 5105828bf6dab..3d1b4980ddca5 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1333,6 +1333,9 @@ ifneq ($(dtstree),)
+@@ -1382,6 +1382,9 @@ ifneq ($(dtstree),)
  %.dtb: include/config/kernel.release scripts_dtc
  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
  
@@ -30,7 +30,7 @@ index 076d4e6b9ccc..288aa5466376 100644
  dtbs: include/config/kernel.release scripts_dtc
  	$(Q)$(MAKE) $(build)=$(dtstree)
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index ce66ffd5a1bb..fa898cdc198b 100644
+index d93f01dddc3f9..e75abfce33f54 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -1,4 +1,7 @@
@@ -42,7 +42,7 @@ index ce66ffd5a1bb..fa898cdc198b 100644
  	alpine-db.dtb
  dtb-$(CONFIG_MACH_ARTPEC6) += \
 diff --git a/scripts/Makefile.dtbinst b/scripts/Makefile.dtbinst
-index 50d580d77ae9..ba01f5ba2517 100644
+index 50d580d77ae92..ba01f5ba25172 100644
 --- a/scripts/Makefile.dtbinst
 +++ b/scripts/Makefile.dtbinst
 @@ -29,6 +29,9 @@ quiet_cmd_dtb_install = INSTALL $@
@@ -56,7 +56,7 @@ index 50d580d77ae9..ba01f5ba2517 100644
  $(subdirs):
  	$(Q)$(MAKE) $(dtbinst)=$@ dst=$(patsubst $(obj)/%,$(dst)/%,$@)
 diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 94133708889d..44862536c32d 100644
+index 94133708889d7..44862536c32d0 100644
 --- a/scripts/Makefile.lib
 +++ b/scripts/Makefile.lib
 @@ -317,7 +317,7 @@ $(obj)/%.dtb.S: $(obj)/%.dtb FORCE
@@ -79,5 +79,5 @@ index 94133708889d..44862536c32d 100644
  DT_BINDING_DIR := Documentation/devicetree/bindings
  # DT_TMP_SCHEMA may be overridden from Documentation/devicetree/bindings/Makefile
 -- 
-2.29.2
+2.42.0
 

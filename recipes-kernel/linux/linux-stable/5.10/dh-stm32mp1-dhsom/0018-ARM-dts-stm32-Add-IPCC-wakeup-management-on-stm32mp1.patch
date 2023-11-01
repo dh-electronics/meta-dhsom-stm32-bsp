@@ -1,0 +1,43 @@
+From c413e975dbef8d7072fc1caa26cbac7993ce9d7d Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@st.com>
+Date: Tue, 8 Oct 2019 09:41:58 +0200
+Subject: [PATCH 18/88] ARM: dts: stm32: Add IPCC wakeup management on
+ stm32mp157c
+
+This commit adds the EXTI line 61 to IPCC node which will be used for
+wakeup from CStop and adds IPCC device to "pd_core" power domain.
+
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [a2af75a5dba7839aab759ba02843d57dacbd4d20]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Change-Id: Idddeb1a255048227fc284e246f13ad9e4c25ff55
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/145705
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Fabien DESSENNE <fabien.dessenne@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/147420
+Tested-by: Fabien DESSENNE <fabien.dessenne@st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 42fe0cbf4ba8b..83782deeab8b7 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1082,10 +1082,9 @@ ipcc: mailbox@4c001000 {
+ 			reg = <0x4c001000 0x400>;
+ 			st,proc-id = <0>;
+ 			interrupts-extended =
+-				<&intc GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+-				<&intc GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+-				<&exti 61 1>;
+-			interrupt-names = "rx", "tx", "wakeup";
++				<&exti 61 1>,
++				<&intc GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "rx", "tx";
+ 			clocks = <&rcc IPCC>;
+ 			wakeup-source;
+ 			status = "disabled";
+-- 
+2.42.0
+

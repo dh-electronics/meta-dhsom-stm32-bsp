@@ -1,0 +1,34 @@
+From a07fdafa2c15c12a662e6c9bb3d09d7ca81ad190 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@st.com>
+Date: Thu, 26 Sep 2019 12:00:34 +0200
+Subject: [PATCH 43/88] cpufreq: dt-platdev: Add stm32mp157 SOC in the
+ blacklist
+
+A dedicated STM32 cpufreq driver is needed to read OTP data and select
+available OPPs for STM32 MPU SOCs. Those OPPs are then registered to OPP
+framework. At the end this driver register a cpufreq-dt device.
+This commit allows it.
+
+Upstream-Status: Denied Downstream stm32-gh v5.10-stm32mp [8bbf134ea43c0e86108fc30b974e18ee85435758]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@st.com>
+Change-Id: I043e4148ee68126154cb75d515aecdbdae9a83c4
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index aea285651fbaf..dcba9ed4e5633 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -142,6 +142,7 @@ static const struct of_device_id blacklist[] __initconst = {
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+ 	{ .compatible = "st,stih418", },
++	{ .compatible = "st,stm32mp157", },
+ 
+ 	{ .compatible = "sigma,tango4", },
+ 
+-- 
+2.42.0
+

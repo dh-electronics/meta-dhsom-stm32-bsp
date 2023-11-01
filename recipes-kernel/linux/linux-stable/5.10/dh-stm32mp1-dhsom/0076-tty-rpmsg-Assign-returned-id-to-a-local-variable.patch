@@ -1,0 +1,43 @@
+From 7e4a371769c31a1b857194b50470d17eb43452ca Mon Sep 17 00:00:00 2001
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 25 Oct 2021 16:51:44 +0300
+Subject: [PATCH 76/88] tty: rpmsg: Assign returned id to a local variable
+
+Instead of putting garbage in the data structure, assign allocated id
+or an error code to a temporary variable. This makes code cleaner.
+
+Upstream-Status: Backport [0572da285d694e945303e74b7f9084b41e02ecbd]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20211025135148.53944-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/tty/rpmsg_tty.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+index daacd4056eb24..58fdc567af0a8 100644
+--- a/drivers/tty/rpmsg_tty.c
++++ b/drivers/tty/rpmsg_tty.c
+@@ -121,15 +121,16 @@ static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	mutex_lock(&idr_lock);
+-	cport->id = idr_alloc(&tty_idr, cport, 0, MAX_TTY_RPMSG, GFP_KERNEL);
++	err = idr_alloc(&tty_idr, cport, 0, MAX_TTY_RPMSG, GFP_KERNEL);
+ 	mutex_unlock(&idr_lock);
+ 
+-	if (cport->id < 0) {
+-		err = cport->id;
++	if (err < 0) {
+ 		kfree(cport);
+ 		return ERR_PTR(err);
+ 	}
+ 
++	cport->id = err;
++
+ 	return cport;
+ }
+ 
+-- 
+2.42.0
+

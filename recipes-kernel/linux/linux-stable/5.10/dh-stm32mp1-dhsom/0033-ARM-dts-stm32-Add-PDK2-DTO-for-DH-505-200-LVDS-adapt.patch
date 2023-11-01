@@ -1,0 +1,147 @@
+From 4b1362b0b64ded89b721cdd16848a7aeb3cffad6 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 22 Aug 2020 10:41:01 +0200
+Subject: [PATCH 33/88] ARM: dts: stm32: Add PDK2 DTO for DH 505-200 LVDS
+ adapter with CH101OLHLWH display
+
+Add DT overlay for the PDK2 board for DH 505-200 adapter card with
+Chefree CH101OLHLWH-002 LVDS display attached to it.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                    |  1 +
+ ...x-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi | 75 +++++++++++++++++++
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 26 +++++++
+ 3 files changed, 102 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index dacd57850c698..cc973450917a3 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1082,6 +1082,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
+ 	stm32mp157c-dk2.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+new file mode 100644
+index 0000000000000..03c36e3154f2d
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	lvds-encoder {
++		compatible = "onsemi,fin3385", "lvds-encoder";
++		pclk-sample = <1>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lvds_bridge_in: endpoint {
++					remote-endpoint = <&ltdc_dpi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				lvds_bridge_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm2 3 5000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@41 {
++		compatible = "ilitek,ili251x";
++		reg = <0x41>;
++		interrupt-parent = <&gpioi>;
++		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <16384>;
++		touchscreen-size-y = <9600>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&lvds_bridge_in>;
++};
++
++&panel {
++	compatible = "chefree,ch101olhlwh-002";
++};
++
++&panel_in {
++	remote-endpoint = <&lvds_bridge_out>;
++};
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+new file mode 100644
+index 0000000000000..583368ed09f7f
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys-polled {
++		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	led {
++		/* LED7 GPIO-H conflicts with touchscreen IRQ */
++		led-2 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++};
+-- 
+2.42.0
+

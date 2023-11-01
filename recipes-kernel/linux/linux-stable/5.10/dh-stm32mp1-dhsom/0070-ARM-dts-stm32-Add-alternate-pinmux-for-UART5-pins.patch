@@ -1,0 +1,44 @@
+From 5f17e15df32f4dac0dcc3f5da66dab8c16750009 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 28 May 2022 21:59:02 +0200
+Subject: [PATCH 70/88] ARM: dts: stm32: Add alternate pinmux for UART5 pins
+
+Add another mux option for UART5 pins, this is used on DRC Compact board.
+
+Upstream-Status: Backport [35b2cb537c2147b61139e8ca226eb7c13fbe60b2]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index ac9cb1beb4f61..4c93038c4b5c9 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -1833,6 +1833,19 @@ pins {
+ 		};
+ 	};
+ 
++	uart5_pins_a: uart5-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 13, AF14)>; /* UART5_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 5, AF12)>; /* UART5_RX */
++			bias-disable;
++		};
++	};
++
+ 	uart7_pins_a: uart7-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 8, AF7)>; /* UART7_TX */
+-- 
+2.42.0
+

@@ -1,0 +1,110 @@
+From 1a663a088d1f163edc7acf2e8f4368ff1525d21f Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@st.com>
+Date: Thu, 29 Aug 2019 09:19:23 +0200
+Subject: [PATCH 02/88] rtc: stm32: remove dedicated wakeup management
+
+There is no more needs to use a dedicated wake up interrupt for RTC as
+EXTI block manage by himself now all interrupt lines.
+
+Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [47208677c27234c793ddfe73b6b7ef134a880855]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Change-Id: I84007c095feb08a1e02bbc46a3ba44e2f88f37ca
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/142475
+Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
+Reviewed-by: Benjamin GAIGNARD <benjamin.gaignard@st.com>
+---
+ drivers/rtc/rtc-stm32.c | 28 +++++-----------------------
+ 1 file changed, 5 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index d096b58cd06c1..ad41da11a528b 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -114,7 +114,6 @@ struct stm32_rtc_data {
+ 	void (*clear_events)(struct stm32_rtc *rtc, unsigned int flags);
+ 	bool has_pclk;
+ 	bool need_dbp;
+-	bool has_wakeirq;
+ };
+ 
+ struct stm32_rtc {
+@@ -127,7 +126,6 @@ struct stm32_rtc {
+ 	struct clk *rtc_ck;
+ 	const struct stm32_rtc_data *data;
+ 	int irq_alarm;
+-	int wakeirq_alarm;
+ };
+ 
+ static void stm32_rtc_wpr_unlock(struct stm32_rtc *rtc)
+@@ -547,7 +545,6 @@ static void stm32_rtc_clear_events(struct stm32_rtc *rtc,
+ static const struct stm32_rtc_data stm32_rtc_data = {
+ 	.has_pclk = false,
+ 	.need_dbp = true,
+-	.has_wakeirq = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -569,7 +566,6 @@ static const struct stm32_rtc_data stm32_rtc_data = {
+ static const struct stm32_rtc_data stm32h7_rtc_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = true,
+-	.has_wakeirq = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -600,7 +596,6 @@ static void stm32mp1_rtc_clear_events(struct stm32_rtc *rtc,
+ static const struct stm32_rtc_data stm32mp1_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = false,
+-	.has_wakeirq = true,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -779,19 +774,12 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = device_init_wakeup(&pdev->dev, true);
+-	if (rtc->data->has_wakeirq) {
+-		rtc->wakeirq_alarm = platform_get_irq(pdev, 1);
+-		if (rtc->wakeirq_alarm > 0) {
+-			ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
+-							    rtc->wakeirq_alarm);
+-		} else {
+-			ret = rtc->wakeirq_alarm;
+-			if (rtc->wakeirq_alarm == -EPROBE_DEFER)
+-				goto err;
+-		}
+-	}
+ 	if (ret)
+-		dev_warn(&pdev->dev, "alarm can't wake up the system: %d", ret);
++		goto err;
++
++	ret = dev_pm_set_wake_irq(&pdev->dev, rtc->irq_alarm);
++	if (ret)
++		goto err;
+ 
+ 	platform_set_drvdata(pdev, rtc);
+ 
+@@ -881,9 +869,6 @@ static int stm32_rtc_suspend(struct device *dev)
+ 	if (rtc->data->has_pclk)
+ 		clk_disable_unprepare(rtc->pclk);
+ 
+-	if (device_may_wakeup(dev))
+-		return enable_irq_wake(rtc->irq_alarm);
+-
+ 	return 0;
+ }
+ 
+@@ -905,9 +890,6 @@ static int stm32_rtc_resume(struct device *dev)
+ 		return ret;
+ 	}
+ 
+-	if (device_may_wakeup(dev))
+-		return disable_irq_wake(rtc->irq_alarm);
+-
+ 	return ret;
+ }
+ #endif
+-- 
+2.42.0
+

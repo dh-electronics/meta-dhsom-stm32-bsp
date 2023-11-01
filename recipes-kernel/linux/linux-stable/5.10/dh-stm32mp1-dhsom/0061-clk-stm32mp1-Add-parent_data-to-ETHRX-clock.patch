@@ -1,0 +1,163 @@
+From cf05be1b5320799424a35430309edd8bb03a3359 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 8 Apr 2021 18:15:38 +0200
+Subject: [PATCH 61/88] clk: stm32mp1: Add parent_data to ETHRX clock
+
+Pass parent_data to ETHRX clock with new fw_name = "ETH_RX_CLK/ETH_REF_CLK".
+By default, this change has no impact on the operation of the clock driver.
+However, due to the fw_name, it permits DT to override ETHRX clock parent,
+which might be needed in case the ETHRX clock are supplied by external clock
+source.
+
+Example of MCO2 supplying clock to ETH_RX_CLK via external pad-to-pad wire:
+&rcc {
+         clocks = <&rcc CK_MCO2>;
+         clock-names = "ETH_RX_CLK/ETH_REF_CLK";
+};
+
+Note that while this patch permits to implement this rare usecase, the issue
+with ethernet RX and TX input clock modeling on MP1 is far more complex and
+requires more core plumbing.
+
+[1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
+    Figure 83. Peripheral clock distribution for Ethernet
+    https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157-advanced-armbased-32bit-mpus-stmicroelectronics.pdf
+
+Upstream-Status: Backport [e9ed1ef18a37a97899dca8d5b2693d5c218bb774]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Link: https://lore.kernel.org/r/20220118202958.1840431-2-marex@denx.de
+Tested-by: Johann Neuhauser <jneuhauser@dh-electronics.com>
+Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/clk-stm32mp1.c | 36 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
+index a4838a9a8af92..92edf4d231bc8 100644
+--- a/drivers/clk/clk-stm32mp1.c
++++ b/drivers/clk/clk-stm32mp1.c
+@@ -155,6 +155,10 @@ static const char * const eth_src[] = {
+ 	"pll4_p", "pll3_q"
+ };
+ 
++const struct clk_parent_data ethrx_src[] = {
++	{ .name = "ethck_k", .fw_name = "ETH_RX_CLK/ETH_REF_CLK" },
++};
++
+ static const char * const rng_src[] = {
+ 	"ck_csi", "pll4_r", "ck_lse", "ck_lsi"
+ };
+@@ -317,6 +321,7 @@ struct clock_config {
+ 	const char *name;
+ 	const char *parent_name;
+ 	const char * const *parent_names;
++	const struct clk_parent_data *parent_data;
+ 	int num_parents;
+ 	unsigned long flags;
+ 	void *cfg;
+@@ -576,6 +581,7 @@ static struct clk_hw *
+ clk_stm32_register_gate_ops(struct device *dev,
+ 			    const char *name,
+ 			    const char *parent_name,
++			    const struct clk_parent_data *parent_data,
+ 			    unsigned long flags,
+ 			    void __iomem *base,
+ 			    const struct stm32_gate_cfg *cfg,
+@@ -586,7 +592,10 @@ clk_stm32_register_gate_ops(struct device *dev,
+ 	int ret;
+ 
+ 	init.name = name;
+-	init.parent_names = &parent_name;
++	if (parent_name)
++		init.parent_names = &parent_name;
++	if (parent_data)
++		init.parent_data = parent_data;
+ 	init.num_parents = 1;
+ 	init.flags = flags;
+ 
+@@ -611,6 +620,7 @@ clk_stm32_register_gate_ops(struct device *dev,
+ static struct clk_hw *
+ clk_stm32_register_composite(struct device *dev,
+ 			     const char *name, const char * const *parent_names,
++			     const struct clk_parent_data *parent_data,
+ 			     int num_parents, void __iomem *base,
+ 			     const struct stm32_composite_cfg *cfg,
+ 			     unsigned long flags, spinlock_t *lock)
+@@ -1071,6 +1081,7 @@ _clk_stm32_register_gate(struct device *dev,
+ 	return clk_stm32_register_gate_ops(dev,
+ 				    cfg->name,
+ 				    cfg->parent_name,
++				    cfg->parent_data,
+ 				    cfg->flags,
+ 				    base,
+ 				    cfg->cfg,
+@@ -1084,8 +1095,8 @@ _clk_stm32_register_composite(struct device *dev,
+ 			      const struct clock_config *cfg)
+ {
+ 	return clk_stm32_register_composite(dev, cfg->name, cfg->parent_names,
+-					    cfg->num_parents, base, cfg->cfg,
+-					    cfg->flags, lock);
++					    cfg->parent_data, cfg->num_parents,
++					    base, cfg->cfg, cfg->flags, lock);
+ }
+ 
+ #define GATE(_id, _name, _parent, _flags, _offset, _bit_idx, _gate_flags)\
+@@ -1192,6 +1203,16 @@ _clk_stm32_register_composite(struct device *dev,
+ 	.func		= _clk_stm32_register_gate,\
+ }
+ 
++#define STM32_GATE_PDATA(_id, _name, _parent, _flags, _gate)\
++{\
++	.id		= _id,\
++	.name		= _name,\
++	.parent_data	= _parent,\
++	.flags		= _flags,\
++	.cfg		= (struct stm32_gate_cfg *) {_gate},\
++	.func		= _clk_stm32_register_gate,\
++}
++
+ #define _STM32_GATE(_gate_offset, _gate_bit_idx, _gate_flags, _mgate, _ops)\
+ 	(&(struct stm32_gate_cfg) {\
+ 		&(struct gate_cfg) {\
+@@ -1225,6 +1246,10 @@ _clk_stm32_register_composite(struct device *dev,
+ 	STM32_GATE(_id, _name, _parent, _flags,\
+ 		   _STM32_MGATE(_mgate))
+ 
++#define MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)\
++	STM32_GATE_PDATA(_id, _name, _parent, _flags,\
++		   _STM32_MGATE(_mgate))
++
+ #define _STM32_DIV(_div_offset, _div_shift, _div_width,\
+ 		   _div_flags, _div_table, _ops)\
+ 	.div = &(struct stm32_div_cfg) {\
+@@ -1284,6 +1309,9 @@ _clk_stm32_register_composite(struct device *dev,
+ #define PCLK(_id, _name, _parent, _flags, _mgate)\
+ 	MGATE_MP1(_id, _name, _parent, _flags, _mgate)
+ 
++#define PCLK_PDATA(_id, _name, _parent, _flags, _mgate)\
++	MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)
++
+ #define KCLK(_id, _name, _parents, _flags, _mgate, _mmux)\
+ 	     COMPOSITE(_id, _name, _parents, CLK_OPS_PARENT_ENABLE |\
+ 		       CLK_SET_RATE_NO_REPARENT | _flags,\
+@@ -1891,7 +1919,7 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
+ 	PCLK(MDMA, "mdma", "ck_axi", 0, G_MDMA),
+ 	PCLK(GPU, "gpu", "ck_axi", 0, G_GPU),
+ 	PCLK(ETHTX, "ethtx", "ck_axi", 0, G_ETHTX),
+-	PCLK(ETHRX, "ethrx", "ck_axi", 0, G_ETHRX),
++	PCLK_PDATA(ETHRX, "ethrx", ethrx_src, 0, G_ETHRX),
+ 	PCLK(ETHMAC, "ethmac", "ck_axi", 0, G_ETHMAC),
+ 	PCLK(FMC, "fmc", "ck_axi", CLK_IGNORE_UNUSED, G_FMC),
+ 	PCLK(QSPI, "qspi", "ck_axi", CLK_IGNORE_UNUSED, G_QSPI),
+-- 
+2.42.0
+

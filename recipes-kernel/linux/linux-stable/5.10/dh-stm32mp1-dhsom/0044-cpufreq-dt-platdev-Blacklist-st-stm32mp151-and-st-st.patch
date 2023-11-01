@@ -1,0 +1,35 @@
+From 22f199e54d66d2a3d72b2bf0aa396f0143c17bb3 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Date: Tue, 2 Mar 2021 14:41:06 +0100
+Subject: [PATCH 44/88] cpufreq: dt-platdev: Blacklist "st,stm32mp151" and
+ "st,stm32mp153" SoCs
+
+Add  "st,stm32mp151" and "st,stm32mp153" SoC in the blacklist since
+a dedicated cpufreq driver exist for those platforms.
+
+Upstream-Status: Denied Downstream stm32-gh v5.10-stm32mp [3dce48fd40dad7de800da6a7b8bc8b042fd65991]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Change-Id: I7fd55f023620de8b1da0a31fcaa863d30966a188
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/196346
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Pascal PAILLET <p.paillet@st.com>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index dcba9ed4e5633..7bf8dab2280e0 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -142,6 +142,8 @@ static const struct of_device_id blacklist[] __initconst = {
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+ 	{ .compatible = "st,stih418", },
++	{ .compatible = "st,stm32mp151", },
++	{ .compatible = "st,stm32mp153", },
+ 	{ .compatible = "st,stm32mp157", },
+ 
+ 	{ .compatible = "sigma,tango4", },
+-- 
+2.42.0
+
