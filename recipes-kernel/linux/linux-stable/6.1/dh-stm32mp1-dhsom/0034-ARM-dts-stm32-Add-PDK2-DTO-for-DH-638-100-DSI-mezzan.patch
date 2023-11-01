@@ -1,7 +1,7 @@
-From 5cdaf69cc0864d22c2a5380e053ec422a962c10e Mon Sep 17 00:00:00 2001
+From 92e247547f39fe8e413529dd264550ca84cc6b5b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 3 Jul 2020 03:58:28 +0200
-Subject: [PATCH 34/49] ARM: dts: stm32: Add PDK2 DTO for DH 638-100 DSI
+Subject: [PATCH 34/44] ARM: dts: stm32: Add PDK2 DTO for DH 638-100 DSI
  mezzanine with RPi 7inch display
 
 Add DT overlay for the PDK2 board for DH 638-100 mezzanine card with
@@ -16,10 +16,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 8e579520d3170..8396e52668a1d 100644
+index 9a3c27569817f..92c081e5a1945 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1240,6 +1240,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1244,6 +1244,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
@@ -66,5 +66,5 @@ index 0000000000000..5eecb81504df3
 +	};
 +};
 -- 
-2.39.2
+2.42.0
 

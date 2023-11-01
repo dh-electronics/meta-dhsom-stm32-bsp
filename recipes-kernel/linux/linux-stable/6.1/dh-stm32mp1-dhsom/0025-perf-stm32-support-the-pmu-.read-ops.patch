@@ -1,7 +1,7 @@
-From 5fe0fcefef852b001cb19383673fb544c99cf132 Mon Sep 17 00:00:00 2001
+From e29ed53d2466eff4b35991ebc229d6bc120445c6 Mon Sep 17 00:00:00 2001
 From: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Date: Fri, 22 Oct 2021 14:24:20 +0200
-Subject: [PATCH 25/49] perf: stm32: support the pmu ".read" ops
+Subject: [PATCH 25/44] perf: stm32: support the pmu ".read" ops
 
 Implement the "event read" ops which is called, for example, when
 "perf stat" is called with the "-I" option.
@@ -70,5 +70,5 @@ index a6a2c547934b6..9191cbd492b48 100644
  		.attr_groups = stm32_ddr_pmu_attr_groups,
  	};
 -- 
-2.39.2
+2.42.0
 

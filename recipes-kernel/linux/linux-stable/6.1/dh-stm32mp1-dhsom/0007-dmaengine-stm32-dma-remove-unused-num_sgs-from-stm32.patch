@@ -1,7 +1,7 @@
-From ed87a5efc695347a3405e6e96c6491e8489b7658 Mon Sep 17 00:00:00 2001
+From 5b7d5069b26506d33044e97d8a1a94e52d791f49 Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Thu, 2 Dec 2021 18:02:59 +0100
-Subject: [PATCH 07/49] dmaengine: stm32-dma: remove unused num_sgs from
+Subject: [PATCH 07/44] dmaengine: stm32-dma: remove unused num_sgs from
  stm32_dma_mdma struct
 
 This patch fixes the following smatch warning:
@@ -44,5 +44,5 @@ index 7940bf7b10ed4..0b4fd7df1b87e 100644
  	return 0;
  
 -- 
-2.39.2
+2.42.0
 

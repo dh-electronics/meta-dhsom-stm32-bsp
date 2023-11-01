@@ -1,7 +1,7 @@
-From c3031bab7bda9dcbc25cb262f79d3ec94c8dcdf9 Mon Sep 17 00:00:00 2001
+From 83c57e56692a58528dea1003dc50dd9c539191fc Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Mon, 28 Feb 2022 18:24:46 +0100
-Subject: [PATCH 10/49] dmaengine: stm32-dma: synchronize also MDMA in case of
+Subject: [PATCH 10/44] dmaengine: stm32-dma: synchronize also MDMA in case of
  chaining
 
 Callbacks may be scheduled on MDMA side so, when synchronizing stm32-dma,
@@ -34,5 +34,5 @@ index cdd7b53f528f1..1d2af6e31d0ab 100644
  }
  
 -- 
-2.39.2
+2.42.0
 

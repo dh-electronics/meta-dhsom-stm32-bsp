@@ -1,7 +1,7 @@
-From 57805d350cbcd765c1ff4a429984389a713b063d Mon Sep 17 00:00:00 2001
+From f6cf10f2fcd02a306ba69470695635e8c660c8dc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 26 Mar 2020 15:14:11 +0100
-Subject: [PATCH 29/49] ARM: dts: stm32: Add DT overlays for STM32MP15xx DHCOM
+Subject: [PATCH 29/44] ARM: dts: stm32: Add DT overlays for STM32MP15xx DHCOM
  PDK2
 
 Add DT overlays to support:
@@ -28,10 +28,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc8..c4e7a9655bdd8 100644
+index df6d905eeb877..e0f166a99b2e0 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1228,6 +1228,10 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1232,6 +1232,10 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp157a-icore-stm32mp1-edimm2.2.dtb \
  	stm32mp157a-stinger96.dtb \
  	stm32mp157c-dhcom-pdk2.dtb \
@@ -305,7 +305,7 @@ index 0000000000000..ab6f196765caa
 +	remote-endpoint = <&ltdc_dpi_out>;
 +};
 diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
-index 5f586f024060f..ed76cd6b848f3 100644
+index 38f46c2c83aa6..c962f184c3aed 100644
 --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi
 @@ -23,16 +23,6 @@ clk_ext_audio_codec: clock-codec {
@@ -358,8 +358,8 @@ index 5f586f024060f..ed76cd6b848f3 100644
 -
  	sound {
  		compatible = "audio-graph-card";
- 		routing =
-@@ -202,26 +165,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
+ 		widgets = "Headphone", "Headphone Jack",
+@@ -205,26 +168,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
  		};
  
  	};
@@ -386,7 +386,7 @@ index 5f586f024060f..ed76cd6b848f3 100644
  };
  
  &sai2 {
-@@ -269,21 +212,6 @@ sai2b_endpoint: endpoint {
+@@ -272,21 +215,6 @@ sai2b_endpoint: endpoint {
  	};
  };
  
@@ -409,5 +409,5 @@ index 5f586f024060f..ed76cd6b848f3 100644
  	pinctrl-names = "default";
  	pinctrl-0 = <&usart3_pins_a>;
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 8d8ed15ed1e00b0410e91ca3aff99952ab52c8ca Mon Sep 17 00:00:00 2001
+From e0d9222452ffea5d1f5c11250211ad0617d7d567 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 5 Mar 2023 21:51:07 +0100
-Subject: [PATCH 17/49] media: stm32-dcmi: Enable incoherent buffer allocation
+Subject: [PATCH 17/44] media: stm32-dcmi: Enable incoherent buffer allocation
 
 Set allow_cache_hints to 1 for the vb2_queue capture queue in the
 STM32MP15xx DCMI V4L2 driver. This allows us to allocate buffers
@@ -36,5 +36,5 @@ index 1a62a02f10263..db684172042e2 100644
  
  	ret = vb2_queue_init(q);
 -- 
-2.39.2
+2.42.0
 

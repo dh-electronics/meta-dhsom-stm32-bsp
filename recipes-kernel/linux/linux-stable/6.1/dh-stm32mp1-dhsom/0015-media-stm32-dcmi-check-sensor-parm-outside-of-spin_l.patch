@@ -1,7 +1,7 @@
-From c56a9be09b35faf9321413ebd2e685e2803135c8 Mon Sep 17 00:00:00 2001
+From e23e318c1a6c1067795712978aeda6114aac4966 Mon Sep 17 00:00:00 2001
 From: Alain Volmat <alain.volmat@foss.st.com>
 Date: Wed, 19 Jan 2022 16:29:18 +0100
-Subject: [PATCH 15/49] media: stm32: dcmi: check sensor parm outside of
+Subject: [PATCH 15/44] media: stm32: dcmi: check sensor parm outside of
  spin_lock area
 
 Within the function dcmi_start_streaming, v4l2_g_parm_cap is called
@@ -97,5 +97,5 @@ index 098c0c25f12d4..9f9b840784416 100644
  	reg_set(dcmi->regs, DCMI_CR, CR_ENABLE);
  
 -- 
-2.39.2
+2.42.0
 

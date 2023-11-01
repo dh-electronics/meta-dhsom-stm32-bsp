@@ -1,7 +1,7 @@
-From a4e91bd8c951434907698207e4d382fa3675a28e Mon Sep 17 00:00:00 2001
+From 8dd2f55a2dd2d4dad5b342229178380b209b2fb9 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 29 Sep 2021 14:05:50 +0200
-Subject: [PATCH 38/49] ARM: dts: stm32: Add DRC02 DTO for SoM with populated
+Subject: [PATCH 38/44] ARM: dts: stm32: Add DRC02 DTO for SoM with populated
  RSI WiFi
 
 Add DT overlay for the DRC02 board to enable configuration where the
@@ -20,10 +20,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 20bda87d6dff7..34f619fd242ad 100644
+index 1cd92dccb97ec..411ed905c69a5 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1215,6 +1215,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1219,6 +1219,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp151a-prtt1c.dtb \
  	stm32mp151a-prtt1s.dtb \
  	stm32mp153c-dhcom-drc02.dtb \
@@ -49,5 +49,5 @@ index 0000000000000..ea60557a5aca2
 +	cd-gpios;
 +};
 -- 
-2.39.2
+2.42.0
 

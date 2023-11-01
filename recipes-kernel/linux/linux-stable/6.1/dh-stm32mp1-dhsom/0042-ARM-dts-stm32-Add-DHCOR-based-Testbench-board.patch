@@ -1,7 +1,7 @@
-From e5caac34a8e1ae28621c85fe12e4150bc3c85d56 Mon Sep 17 00:00:00 2001
+From 1a1b178c90c7f772007205669b7bbe2a53d06155 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 26 Sep 2022 23:29:58 +0200
-Subject: [PATCH 42/49] ARM: dts: stm32: Add DHCOR based Testbench board
+Subject: [PATCH 42/44] ARM: dts: stm32: Add DHCOR based Testbench board
 
 Add DT for DHCOR Testbench board, which is a testbench for testing of
 DHCOR SoM during manufacturing. This is effectively a trimmed down
@@ -22,10 +22,10 @@ Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7237de87a826b..9c213ab271657 100644
+index ec06374288194..f4fea3b8fb6f5 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1214,6 +1214,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1218,6 +1218,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp151a-prtt1a.dtb \
  	stm32mp151a-prtt1c.dtb \
  	stm32mp151a-prtt1s.dtb \
@@ -234,5 +234,5 @@ index 0000000000000..c7dcee4ee3d1d
 +	phy-supply = <&vdd_usb>;
 +};
 -- 
-2.39.2
+2.42.0
 

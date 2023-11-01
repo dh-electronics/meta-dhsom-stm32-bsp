@@ -1,7 +1,7 @@
-From 61ab7574e2cac860fd6c55ee38c1a7a376da9471 Mon Sep 17 00:00:00 2001
+From 4f03c6962a4c47aa576c6b1bdc21188d6c1b032e Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Tue, 28 Sep 2021 09:55:05 +0200
-Subject: [PATCH 06/49] dmaengine: stm32-dma: implement device_caps
+Subject: [PATCH 06/44] dmaengine: stm32-dma: implement device_caps
 
 It is useful to set max_sg_burst (max number of bytes sent per transfer),
 also in case of DMA/MDMA chaining is used.
@@ -45,5 +45,5 @@ index a232caa4b9027..7940bf7b10ed4 100644
  	dd->device_pause = stm32_dma_pause;
  	dd->device_resume = stm32_dma_resume;
 -- 
-2.39.2
+2.42.0
 

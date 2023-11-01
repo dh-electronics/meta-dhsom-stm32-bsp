@@ -1,7 +1,7 @@
-From 2b9d40743ac08e1088827c3896d2c8dbc5b1a911 Mon Sep 17 00:00:00 2001
+From 974cd597b9f63de04928d28aac94b265a2288535 Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@st.com>
 Date: Tue, 10 Nov 2020 15:46:11 +0100
-Subject: [PATCH 04/49] dmaengine: stm32-dma: Add DMA/MDMA chaining support
+Subject: [PATCH 04/44] dmaengine: stm32-dma: Add DMA/MDMA chaining support
 
 This patch adds support of DMA/MDMA chaining support.
 It introduces an intermediate transfer between peripherals and STM32 DMA.
@@ -45,7 +45,7 @@ Reviewed-on: https://gerrit.st.com/102846
  1 file changed, 729 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
-index 5dade7c0cfeda..a232caa4b9027 100644
+index 461eb4c98dbaf..a232caa4b9027 100644
 --- a/drivers/dma/stm32-dma.c
 +++ b/drivers/dma/stm32-dma.c
 @@ -15,12 +15,14 @@
@@ -1004,7 +1004,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  
  	if (!chan->mem_burst)
  		return residue;
-@@ -1382,11 +1990,22 @@ static enum dma_status stm32_dma_tx_status(struct dma_chan *c,
+@@ -1383,11 +1990,22 @@ static enum dma_status stm32_dma_tx_status(struct dma_chan *c,
  					   struct dma_tx_state *state)
  {
  	struct stm32_dma_chan *chan = to_stm32_dma_chan(c);
@@ -1027,7 +1027,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	status = dma_cookie_status(c, cookie, state);
  	if (status == DMA_COMPLETE)
  		return status;
-@@ -1450,18 +2069,39 @@ static void stm32_dma_free_chan_resources(struct dma_chan *c)
+@@ -1451,18 +2069,39 @@ static void stm32_dma_free_chan_resources(struct dma_chan *c)
  	vchan_free_chan_resources(to_virt_chan(c));
  	stm32_dma_clear_reg(&chan->chan_reg);
  	chan->threshold = 0;
@@ -1069,7 +1069,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	chan->chan_reg.dma_scr = cfg->stream_config & STM32_DMA_SCR_CFG_MASK;
  	chan->chan_reg.dma_scr |= FIELD_PREP(STM32_DMA_SCR_REQ_MASK, cfg->request_line);
  
-@@ -1473,6 +2113,8 @@ static void stm32_dma_set_config(struct stm32_dma_chan *chan,
+@@ -1474,6 +2113,8 @@ static void stm32_dma_set_config(struct stm32_dma_chan *chan,
  		chan->threshold = STM32_DMA_FIFO_THRESHOLD_NONE;
  	if (FIELD_GET(STM32_DMA_ALT_ACK_MODE_MASK, cfg->features))
  		chan->chan_reg.dma_scr |= STM32_DMA_SCR_TRBUFF;
@@ -1078,7 +1078,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  }
  
  static struct dma_chan *stm32_dma_of_xlate(struct of_phandle_args *dma_spec,
-@@ -1510,6 +2152,9 @@ static struct dma_chan *stm32_dma_of_xlate(struct of_phandle_args *dma_spec,
+@@ -1511,6 +2152,9 @@ static struct dma_chan *stm32_dma_of_xlate(struct of_phandle_args *dma_spec,
  
  	stm32_dma_set_config(chan, &cfg);
  
@@ -1088,7 +1088,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	return c;
  }
  
-@@ -1522,11 +2167,13 @@ MODULE_DEVICE_TABLE(of, stm32_dma_of_match);
+@@ -1523,11 +2167,13 @@ MODULE_DEVICE_TABLE(of, stm32_dma_of_match);
  static int stm32_dma_probe(struct platform_device *pdev)
  {
  	struct stm32_dma_chan *chan;
@@ -1102,7 +1102,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	int i, ret;
  
  	match = of_match_device(stm32_dma_of_match, &pdev->dev);
-@@ -1570,6 +2217,13 @@ static int stm32_dma_probe(struct platform_device *pdev)
+@@ -1571,6 +2217,13 @@ static int stm32_dma_probe(struct platform_device *pdev)
  		reset_control_deassert(rst);
  	}
  
@@ -1116,7 +1116,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  	dma_set_max_seg_size(&pdev->dev, STM32_DMA_ALIGNED_MAX_DATA_ITEMS);
  
  	dma_cap_set(DMA_SLAVE, dd->cap_mask);
-@@ -1612,11 +2266,25 @@ static int stm32_dma_probe(struct platform_device *pdev)
+@@ -1613,11 +2266,25 @@ static int stm32_dma_probe(struct platform_device *pdev)
  		chan->id = i;
  		chan->vchan.desc_free = stm32_dma_desc_free;
  		vchan_init(&chan->vchan, dd);
@@ -1143,7 +1143,7 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  
  	for (i = 0; i < STM32_DMA_MAX_CHANNELS; i++) {
  		chan = &dmadev->chan[i];
-@@ -1657,6 +2325,10 @@ static int stm32_dma_probe(struct platform_device *pdev)
+@@ -1658,6 +2325,10 @@ static int stm32_dma_probe(struct platform_device *pdev)
  
  err_unregister:
  	dma_async_device_unregister(dd);
@@ -1154,12 +1154,12 @@ index 5dade7c0cfeda..a232caa4b9027 100644
  clk_free:
  	clk_disable_unprepare(dmadev->clk);
  
-@@ -1738,4 +2410,4 @@ static int __init stm32_dma_init(void)
+@@ -1739,4 +2410,4 @@ static int __init stm32_dma_init(void)
  {
  	return platform_driver_register(&stm32_dma_driver);
  }
 -subsys_initcall(stm32_dma_init);
 +device_initcall(stm32_dma_init);
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 6007ce1a93a21d90d43d7a11d53f3fef014f4af1 Mon Sep 17 00:00:00 2001
+From 7a9176b751d5ace772d7c9f9f6cc1b0bc915b58a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 22 Aug 2020 22:51:03 +0200
-Subject: [PATCH 36/49] ARM: dts: stm32: Add PDK2 DTO for DH 497-200 with
+Subject: [PATCH 36/44] ARM: dts: stm32: Add PDK2 DTO for DH 497-200 with
  ETM0700G0EDH6 display
 
 Add DT overlay for the PDK2 board for DH 497-200 adapter card with
@@ -16,10 +16,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 4acecc3c9fa7f..e7ae77b6ae9ea 100644
+index 666eff5e3a944..5678f2f0cd750 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1237,6 +1237,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1241,6 +1241,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp157a-stinger96.dtb \
  	stm32mp157c-dhcom-pdk2.dtb \
  	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
@@ -58,5 +58,5 @@ index 0000000000000..fc81802831c0c
 +	remote-endpoint = <&ltdc_dpi_out>;
 +};
 -- 
-2.39.2
+2.42.0
 

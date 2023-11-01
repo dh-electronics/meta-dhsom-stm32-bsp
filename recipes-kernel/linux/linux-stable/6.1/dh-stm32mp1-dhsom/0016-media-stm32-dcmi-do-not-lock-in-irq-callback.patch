@@ -1,7 +1,7 @@
-From 83d30a281591bb85e7fca9b6e508610b70b3f39d Mon Sep 17 00:00:00 2001
+From 5133898b4c64d78010f28a50a5cd93f6a7f64a56 Mon Sep 17 00:00:00 2001
 From: Hugues Fruchet <hugues.fruchet@st.com>
 Date: Thu, 3 Mar 2022 17:53:20 +0100
-Subject: [PATCH 16/49] media: stm32-dcmi: do not lock in irq callback
+Subject: [PATCH 16/44] media: stm32-dcmi: do not lock in irq callback
 
 dcmi_irq_callback() doesn't need to hold the spinlock to protect
 dcmi->misr read access within dcmi_irq_thread() because IRQF_ONESHOT
@@ -43,5 +43,5 @@ index 9f9b840784416..1a62a02f10263 100644
  }
  
 -- 
-2.39.2
+2.42.0
 

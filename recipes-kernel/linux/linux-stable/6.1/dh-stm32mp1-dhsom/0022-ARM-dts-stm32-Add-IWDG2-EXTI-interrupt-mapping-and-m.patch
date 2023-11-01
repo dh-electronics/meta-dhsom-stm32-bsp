@@ -1,7 +1,7 @@
-From f7f08803788a748a2fecd5b731fbbcca26e68d98 Mon Sep 17 00:00:00 2001
+From 3d35463bf2926d0882c25d5e05422e06d2016e5a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 10 May 2023 00:35:56 +0200
-Subject: [PATCH 22/49] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and
+Subject: [PATCH 22/44] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and
  mark as wakeup source
 
 The IWDG2 is capable of generating pre-timeout interrupt, which can be used
@@ -10,24 +10,6 @@ and mark the IWDG2 as wake up source.
 
 Upstream-Status: Submitted [https://lore.kernel.org/all/20230517194349.105745-3-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: No change
 ---
  arch/arm/boot/dts/stm32mp151.dtsi | 2 ++
  1 file changed, 2 insertions(+)
@@ -46,5 +28,5 @@ index 527e82b3f941c..15f677c216d51 100644
  		};
  
 -- 
-2.39.2
+2.42.0
 

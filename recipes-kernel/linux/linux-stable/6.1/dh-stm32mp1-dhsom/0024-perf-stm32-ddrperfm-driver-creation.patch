@@ -1,7 +1,7 @@
-From 425479b6a7761b2527ea47efa2a1a86771befd54 Mon Sep 17 00:00:00 2001
+From 850a1adfe55e3703021d88ccdbf4425b53665c0b Mon Sep 17 00:00:00 2001
 From: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Date: Mon, 18 Oct 2021 16:51:16 +0200
-Subject: [PATCH 24/49] perf: stm32: ddrperfm driver creation
+Subject: [PATCH 24/44] perf: stm32: ddrperfm driver creation
 
 The DDRPERFM is the DDR Performance Monitor embedded in STM32MP1 SOC.
 
@@ -486,5 +486,5 @@ index 0000000000000..a6a2c547934b6
 +MODULE_AUTHOR("Gerald Baeza <gerald.baeza@st.com>");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.39.2
+2.42.0
 

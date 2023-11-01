@@ -1,7 +1,7 @@
-From 7eb97cdbc0a262083ba8e8a17bf339ee6f63f024 Mon Sep 17 00:00:00 2001
+From b3b4fb663d90d37979c1d78232ccbdf6bccacbc0 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 20 Feb 2023 21:15:02 +0100
-Subject: [PATCH 41/49] ARM: dts: stm32: Add PicoITX DTO for DH 553-100 DPI
+Subject: [PATCH 41/44] ARM: dts: stm32: Add PicoITX DTO for DH 553-100 DPI
  adapter with TST043015CMHX display
 
 Add DT overlay for the PicoITX board for DH 553-100 adapter card with
@@ -17,10 +17,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index c75305dabed29..7237de87a826b 100644
+index 7f290bd1c1226..ec06374288194 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1247,6 +1247,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1251,6 +1251,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtbo \
  	stm32mp157c-dhcom-picoitx.dtb \
  	stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtbo \
@@ -70,5 +70,5 @@ index 0000000000000..430ca483ebc83
 +	remote-endpoint = <&ltdc_dpi_out>;
 +};
 -- 
-2.39.2
+2.42.0
 

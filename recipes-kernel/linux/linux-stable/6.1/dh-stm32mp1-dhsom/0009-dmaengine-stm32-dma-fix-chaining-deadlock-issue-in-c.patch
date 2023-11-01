@@ -1,7 +1,7 @@
-From 98d7dead6f827d1d698c3cbb98a2e7ca8643a6a1 Mon Sep 17 00:00:00 2001
+From ebadec672715a6ef1f52035faa776b67632cb184 Mon Sep 17 00:00:00 2001
 From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 Date: Mon, 18 Oct 2021 19:05:01 +0200
-Subject: [PATCH 09/49] dmaengine: stm32-dma: fix chaining deadlock issue in
+Subject: [PATCH 09/44] dmaengine: stm32-dma: fix chaining deadlock issue in
  case of MDMA threaded IRQ
 
 For DMA/MDMA chaining mode, as soon as a transfer finishes, the MDMA GIC
@@ -158,5 +158,5 @@ index c55787ce049d3..cdd7b53f528f1 100644
  		}
  	}
 -- 
-2.39.2
+2.42.0
 

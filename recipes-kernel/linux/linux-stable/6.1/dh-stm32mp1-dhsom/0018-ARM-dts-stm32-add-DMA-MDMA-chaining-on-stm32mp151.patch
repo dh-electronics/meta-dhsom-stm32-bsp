@@ -1,7 +1,7 @@
-From c357e9e74544f00029cd6713bfd88f10a047aec8 Mon Sep 17 00:00:00 2001
+From 45728ba631152ac8042c746c5bdba7cfd67526c2 Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@st.com>
 Date: Fri, 6 Nov 2020 19:03:28 +0100
-Subject: [PATCH 18/49] ARM: dts: stm32: add DMA/MDMA chaining on stm32mp151
+Subject: [PATCH 18/44] ARM: dts: stm32: add DMA/MDMA chaining on stm32mp151
 
 - Append MDMA channels to DMA1 & DMA2 for chaining
 - Update MDMA clients accordingly (#dma-cells = <6> instead of <5>)
@@ -106,5 +106,5 @@ index e02b3f5d44cba..1d5523d8e06da 100644
  			status = "disabled";
  		};
 -- 
-2.39.2
+2.42.0
 

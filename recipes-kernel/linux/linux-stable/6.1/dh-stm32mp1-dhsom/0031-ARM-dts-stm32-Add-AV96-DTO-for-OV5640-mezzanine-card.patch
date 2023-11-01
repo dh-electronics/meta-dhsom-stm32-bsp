@@ -1,7 +1,7 @@
-From f745632101e948a46269d7a868aaed8cd313c63c Mon Sep 17 00:00:00 2001
+From f78c3b020123aa51cba20dd8383b5cb8589bcaab Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 30 Apr 2020 13:08:40 +0200
-Subject: [PATCH 31/49] ARM: dts: stm32: Add AV96 DTO for OV5640 mezzanine card
+Subject: [PATCH 31/44] ARM: dts: stm32: Add AV96 DTO for OV5640 mezzanine card
 
 Add DT overlay for the 96boards OV5640 mezzanine card. Note that only
 the camera connected to port J3 is supported by the current hardware.
@@ -15,10 +15,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-avenger96-overlay-ov5640-x7.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index a7f72708d715f..b940ea6fdf677 100644
+index dac149ebd2dc8..326ab328506ce 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1222,6 +1222,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1226,6 +1226,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-avenger96-overlay-fdcan2-x6.dtbo \
  	stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtbo \
  	stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtbo \
@@ -144,5 +144,5 @@ index 0000000000000..357ebe2d45d76
 +	remote-endpoint = <&ov5640_0>;
 +};
 -- 
-2.39.2
+2.42.0
 

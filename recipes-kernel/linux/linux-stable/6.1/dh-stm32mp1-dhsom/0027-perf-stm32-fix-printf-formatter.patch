@@ -1,7 +1,7 @@
-From 11be5dd7da4f2f79ec2fd68f85de6eea2ae85bbe Mon Sep 17 00:00:00 2001
+From 83f68d72abd3ea6c90be54083655bbfb62a98591 Mon Sep 17 00:00:00 2001
 From: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Date: Fri, 19 Nov 2021 11:46:13 +0100
-Subject: [PATCH 27/49] perf: stm32: fix printf formatter
+Subject: [PATCH 27/44] perf: stm32: fix printf formatter
 
 Printing pointer is discouraged because this might leak kernel memory.
 Fix this smatch warning:
@@ -39,5 +39,5 @@ index 9191cbd492b48..c0082109aa16a 100644
  
  #define STM32_DDR_PMU_ATTR(_name, _func, _config)			\
 -- 
-2.39.2
+2.42.0
 

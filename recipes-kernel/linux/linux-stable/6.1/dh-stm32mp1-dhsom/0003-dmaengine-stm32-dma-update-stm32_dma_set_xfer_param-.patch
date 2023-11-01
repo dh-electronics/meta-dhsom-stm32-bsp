@@ -1,7 +1,7 @@
-From 7b4463178ee670fdab31db35992c3dc0db34ff52 Mon Sep 17 00:00:00 2001
+From 2e06803393d29c3030523c3f031c0698c5ed7f6d Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@st.com>
 Date: Wed, 6 Jan 2021 17:01:44 +0100
-Subject: [PATCH 03/49] dmaengine: stm32-dma: update stm32_dma_set_xfer_param
+Subject: [PATCH 03/44] dmaengine: stm32-dma: update stm32_dma_set_xfer_param
  prototype
 
 buf_addr parameter of stm32_dma_set_xfer_param function is a dma_addr_t but
@@ -22,7 +22,7 @@ Reviewed-by: Fabien DESSENNE <fabien.dessenne@st.com>
  1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
-index 1cfac9850286f..5dade7c0cfeda 100644
+index ff2bc7b1679c7..461eb4c98dbaf 100644
 --- a/drivers/dma/stm32-dma.c
 +++ b/drivers/dma/stm32-dma.c
 @@ -902,7 +902,7 @@ static int stm32_dma_resume(struct dma_chan *c)
@@ -63,5 +63,5 @@ index 1cfac9850286f..5dade7c0cfeda 100644
  		return NULL;
  
 -- 
-2.39.2
+2.42.0
 

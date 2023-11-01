@@ -1,7 +1,7 @@
-From 3bf8fa75f4bd1186d9424a8007654ed65bf40950 Mon Sep 17 00:00:00 2001
+From 3916e66a1e3534f42f86d79712d27a8810035fdf Mon Sep 17 00:00:00 2001
 From: Hugues Fruchet <hugues.fruchet@st.com>
 Date: Mon, 15 Nov 2021 17:01:42 +0100
-Subject: [PATCH 19/49] ARM: dts: stm32: add DCMI DMA/MDMA chaining on
+Subject: [PATCH 19/44] ARM: dts: stm32: add DCMI DMA/MDMA chaining on
  stm32mp15 family
 
 This patch enables DMA/MDMA chaining for DCMI.
@@ -31,5 +31,5 @@ index 1d5523d8e06da..527e82b3f941c 100644
  			status = "disabled";
  		};
 -- 
-2.39.2
+2.42.0
 

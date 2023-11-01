@@ -1,7 +1,7 @@
-From 5564cc4e645a170a23372bf3b918e332023c7fde Mon Sep 17 00:00:00 2001
+From 30ec725781fc451f96667f0676cf5ec191d08385 Mon Sep 17 00:00:00 2001
 From: Gerald Baeza <gerald.baeza@st.com>
 Date: Tue, 15 Dec 2020 15:51:16 +0100
-Subject: [PATCH 28/49] ARM: dts: stm32: add ddrperfm on stm32mp151
+Subject: [PATCH 28/44] ARM: dts: stm32: add ddrperfm on stm32mp151
 
 The DDRPERFM is the DDR Performance Monitor embedded in STM32MP1 SOC.
 
@@ -34,5 +34,5 @@ index 15f677c216d51..44ac4d69d7282 100644
  			compatible = "st,stm32h7-uart";
  			reg = <0x5c000000 0x400>;
 -- 
-2.39.2
+2.42.0
 

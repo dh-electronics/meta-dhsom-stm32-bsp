@@ -1,7 +1,7 @@
-From 6709770f3f024715d2ffd59af7417ef56b228193 Mon Sep 17 00:00:00 2001
+From c229572ca3d7d9d5ca2255950da04bd8fd439500 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 24 Dec 2020 09:24:02 +0100
-Subject: [PATCH 37/49] ARM: dts: stm32: Add PDK2 DTO for DH 672-100 CAN/FD
+Subject: [PATCH 37/44] ARM: dts: stm32: Add PDK2 DTO for DH 672-100 CAN/FD
  board
 
 Add DT overlay for 672-100 expansion card, which contains CAN/FD transceiver
@@ -16,10 +16,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e7ae77b6ae9ea..20bda87d6dff7 100644
+index 5678f2f0cd750..1cd92dccb97ec 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1243,6 +1243,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1247,6 +1247,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
@@ -47,5 +47,5 @@ index 0000000000000..3f7e69ac308d6
 +	status = "okay";
 +};
 -- 
-2.39.2
+2.42.0
 

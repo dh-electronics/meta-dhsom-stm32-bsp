@@ -1,7 +1,7 @@
-From 1114773b80534b3d06deb8aa6d0233e664dbe85f Mon Sep 17 00:00:00 2001
+From eed89b5676887230e8e00230b5030594714baeba Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 18 May 2023 02:22:03 +0200
-Subject: [PATCH 44/49] rtc: stm32: Handle single EXTI IRQ as wake up source
+Subject: [PATCH 43/44] rtc: stm32: Handle single EXTI IRQ as wake up source
 
 The arch/arm/boot/dts/stm32mp151.dtsi specifies one interrupt for the
 RTC node, while the expectation of the RTC driver is two interrupts on
@@ -28,15 +28,6 @@ $ rtcwake -s 5 -m mem
 Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230518003311.415018-1-marex@denx.de/]
 Fixes: b72252b6580c ("rtc: stm32: add stm32mp1 rtc support")
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
 ---
  drivers/rtc/rtc-stm32.c | 9 +++++----
  1 file changed, 5 insertions(+), 4 deletions(-)
@@ -66,5 +57,5 @@ index ac9e228b56d0b..614eea876220c 100644
  	}
  	if (ret)
 -- 
-2.39.2
+2.42.0
 

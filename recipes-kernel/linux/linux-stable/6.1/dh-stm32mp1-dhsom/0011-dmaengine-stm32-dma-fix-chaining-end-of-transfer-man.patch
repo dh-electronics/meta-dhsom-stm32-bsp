@@ -1,7 +1,7 @@
-From 01fe90a34c6496088cedd16032e3aab7be4de0ff Mon Sep 17 00:00:00 2001
+From 563384142110ac46826ccf1a4b4cc25f3528b835 Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Tue, 8 Mar 2022 08:56:01 +0100
-Subject: [PATCH 11/49] dmaengine: stm32-dma: fix chaining end of transfer
+Subject: [PATCH 11/44] dmaengine: stm32-dma: fix chaining end of transfer
  management
 
 If chaining is used and the direction is MEM_TO_MEM or DEV_TO_MEM, the
@@ -39,5 +39,5 @@ index 1d2af6e31d0ab..f3c824917dc39 100644
  			vchan_cookie_complete(&chan->desc->vdesc);
  			chan->desc = NULL;
 -- 
-2.39.2
+2.42.0
 

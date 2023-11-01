@@ -1,7 +1,7 @@
-From 4d43d7484551c09f12030b564d97c5115c516e8f Mon Sep 17 00:00:00 2001
+From 56de400476d32599cd7261a80919b436e613bdb6 Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Tue, 9 Nov 2021 17:39:14 +0100
-Subject: [PATCH 08/49] dmaengine: stm32-dma: fix stm32_dma_is_current_sg() due
+Subject: [PATCH 08/44] dmaengine: stm32-dma: fix stm32_dma_is_current_sg() due
  to DBM pause/resume
 
 In case of Double Buffer Mode (DBM) and if the transfer has been paused,
@@ -39,5 +39,5 @@ index 0b4fd7df1b87e..c55787ce049d3 100644
  	/* DBM - take care of a previous pause/resume not yet post reconfigured */
  	if (dma_scr & STM32_DMA_SCR_CT) {
 -- 
-2.39.2
+2.42.0
 

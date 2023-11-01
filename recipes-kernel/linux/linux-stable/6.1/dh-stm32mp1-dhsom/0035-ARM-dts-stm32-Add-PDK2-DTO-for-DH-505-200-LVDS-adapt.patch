@@ -1,7 +1,7 @@
-From d1299d4b211f4788a72c3f555a77dcfa30ac0b0a Mon Sep 17 00:00:00 2001
+From 1dddcb393627addb424bd2220443f8fce9a508b7 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 22 Aug 2020 10:41:01 +0200
-Subject: [PATCH 35/49] ARM: dts: stm32: Add PDK2 DTO for DH 505-200 LVDS
+Subject: [PATCH 35/44] ARM: dts: stm32: Add PDK2 DTO for DH 505-200 LVDS
  adapter with CH101OLHLWH display
 
 Add DT overlay for the PDK2 board for DH 505-200 adapter card with
@@ -18,10 +18,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 8396e52668a1d..4acecc3c9fa7f 100644
+index 92c081e5a1945..666eff5e3a944 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1239,6 +1239,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1243,6 +1243,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
@@ -143,5 +143,5 @@ index 0000000000000..583368ed09f7f
 +	};
 +};
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 789b227f3c1c8f308cc6f9235dc00a4254002d17 Mon Sep 17 00:00:00 2001
+From 5d01a8d29d5d06eac5d28e7ea824bd6c57576140 Mon Sep 17 00:00:00 2001
 From: Hugues Fruchet <hugues.fruchet@st.com>
 Date: Mon, 2 Dec 2019 11:47:27 +0100
-Subject: [PATCH 13/49] media: stm32-dcmi: improve JPEG capture framerate
+Subject: [PATCH 13/44] media: stm32-dcmi: improve JPEG capture framerate
 
 Enable JPEG capture in continuous mode for capture
 rates sustainable by DMA engine, otherwise switch to
@@ -68,5 +68,5 @@ index 37458d4d9564b..f281974bd1c74 100644
  	/* Enable dcmi */
  	reg_set(dcmi->regs, DCMI_CR, CR_ENABLE);
 -- 
-2.39.2
+2.42.0
 

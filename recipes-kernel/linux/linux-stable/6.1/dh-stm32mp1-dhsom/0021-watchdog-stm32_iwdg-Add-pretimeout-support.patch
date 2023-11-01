@@ -1,7 +1,7 @@
-From ffd064dcba7ba4241884f62c628ccae0eca81db2 Mon Sep 17 00:00:00 2001
+From 8f07462be298195ff96976ddbcff39919702f555 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 10 May 2023 00:02:30 +0200
-Subject: [PATCH 21/49] watchdog: stm32_iwdg: Add pretimeout support
+Subject: [PATCH 21/44] watchdog: stm32_iwdg: Add pretimeout support
 
 The STM32MP15xx IWDG adds registers which permit this IP to generate
 pretimeout interrupt. This interrupt can also be used to wake the CPU
@@ -11,29 +11,6 @@ configured by user, set pretimeout to half of the WDT timeout cycle.
 
 Upstream-Status: Submitted [https://lore.kernel.org/all/20230517194349.105745-2-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: - Subtract the pretimeout value from timeout value before writing it
-      into the IWDG pretimeout register, because the watchdog counter
-      register is counting down, and the pretimeout interrupt triggers
-      when watchdog counter register matches the pretimeout register
-      content.
-    - Set default pretimeout to 3/4 of timeout .
 ---
  drivers/watchdog/stm32_iwdg.c | 94 ++++++++++++++++++++++++++++++++++-
  1 file changed, 93 insertions(+), 1 deletion(-)
@@ -234,5 +211,5 @@ index 570a71509d2a9..4c69d4026dd9c 100644
  	watchdog_set_nowayout(wdd, WATCHDOG_NOWAYOUT);
  	watchdog_init_timeout(wdd, 0, dev);
 -- 
-2.39.2
+2.42.0
 

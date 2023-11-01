@@ -1,7 +1,7 @@
-From fcfea8d385d995f1eb46fd5585dcba13967ce236 Mon Sep 17 00:00:00 2001
+From 78c7991113a1323b6ad7b7b79951b432dbbebf1c Mon Sep 17 00:00:00 2001
 From: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Date: Wed, 17 Nov 2021 14:47:47 +0100
-Subject: [PATCH 26/49] perf: stm32: update build dependency
+Subject: [PATCH 26/44] perf: stm32: update build dependency
 
 Build this driver, not only for STM32MP15, but for all STM32.
 
@@ -29,5 +29,5 @@ index e09335c1612d9..2c908b01428c0 100644
  	help
  	  Support for STM32 DDR performance monitor (DDRPERFM).
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From ded94c662b87bd22a3e76eaefbc9d4c7a810a78b Mon Sep 17 00:00:00 2001
+From 4dea25b97064780eb5ba5f99523d23fa7a79e61f Mon Sep 17 00:00:00 2001
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Date: Wed, 6 Apr 2022 12:24:47 +0200
-Subject: [PATCH 12/49] dmaengine: stm32-dma: fix
+Subject: [PATCH 12/44] dmaengine: stm32-dma: fix
  stm32_mdma_chan_complete_worker with nested lock
 
 As in stm32_dma_issue_pending, because stm32_dma_start_transfer triggers
@@ -38,5 +38,5 @@ index f3c824917dc39..dbd3e64ba1ce2 100644
  	if (chan->next_sg == chan->desc->num_sgs) {
  		vchan_cookie_complete(&chan->desc->vdesc);
 -- 
-2.39.2
+2.42.0
 

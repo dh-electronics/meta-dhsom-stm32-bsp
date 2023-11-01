@@ -1,7 +1,7 @@
-From 0a316aa96e45fdf6e023605230b0b62a98f79add Mon Sep 17 00:00:00 2001
+From 44b8c086d7bc12933da24196c2398254c9bed0d8 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 30 Oct 2020 09:50:53 +0100
-Subject: [PATCH 39/49] ARM: dts: stm32: Add PicoITX DTO for DH 626-100 LVDS
+Subject: [PATCH 39/44] ARM: dts: stm32: Add PicoITX DTO for DH 626-100 LVDS
  adapter with CH101OLHLWH display
 
 Add DT overlay for the PicoITX board for DH 626-100 adapter card with
@@ -17,10 +17,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 34f619fd242ad..d682f091f4b89 100644
+index 411ed905c69a5..90979782e9b81 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1246,6 +1246,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1250,6 +1250,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
  	stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtbo \
  	stm32mp157c-dhcom-picoitx.dtb \
@@ -43,5 +43,5 @@ index 0000000000000..32e75cabe0032
 +
 +#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
 -- 
-2.39.2
+2.42.0
 

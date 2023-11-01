@@ -1,7 +1,7 @@
-From 15932f8c3ab502ab6de520a2c80848a799299f3f Mon Sep 17 00:00:00 2001
+From 6e9e1cf52a58483df3a615f95dce8dab5de5c79e Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 10 May 2023 00:36:08 +0200
-Subject: [PATCH 20/49] irqchip/stm32-exti: Add STM32MP15xx IWDG2 EXTI to GIC
+Subject: [PATCH 20/44] irqchip/stm32-exti: Add STM32MP15xx IWDG2 EXTI to GIC
  map
 
 The EXTI interrupt 46 is mapped to GIC interrupt 151. Add the
@@ -12,32 +12,14 @@ Upstream-Status: Submitted [https://lore.kernel.org/all/20230517194349.105745-1-
 Reviewed-by: Antonio Borneo <antonio.borneo@foss.st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: Add RB from Antonio
----
  drivers/irqchip/irq-stm32-exti.c | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
-index 6a3f7498ea8ea..f684be77ba378 100644
+index 8bbb2b114636c..b5fa76ce5046a 100644
 --- a/drivers/irqchip/irq-stm32-exti.c
 +++ b/drivers/irqchip/irq-stm32-exti.c
-@@ -208,6 +208,7 @@ static const u8 stm32mp1_desc_irq[] = {
+@@ -218,6 +218,7 @@ static const u8 stm32mp1_desc_irq[] = {
  	[31] = 53,
  	[32] = 82,
  	[33] = 83,
@@ -46,5 +28,5 @@ index 6a3f7498ea8ea..f684be77ba378 100644
  	[48] = 138,
  	[50] = 139,
 -- 
-2.39.2
+2.42.0
 

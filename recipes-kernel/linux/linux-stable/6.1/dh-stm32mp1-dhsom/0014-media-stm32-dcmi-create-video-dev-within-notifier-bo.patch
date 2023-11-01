@@ -1,7 +1,7 @@
-From 1301e24b7fbad538c3f55a2f6eaf4671816f414b Mon Sep 17 00:00:00 2001
+From 08b050706bdcb90a5bb2be58acf4ec5a5f62d882 Mon Sep 17 00:00:00 2001
 From: Hugues Fruchet <hugues.fruchet@st.com>
 Date: Wed, 30 Sep 2020 11:44:29 +0200
-Subject: [PATCH 14/49] media: stm32-dcmi: create video dev within notifier
+Subject: [PATCH 14/44] media: stm32-dcmi: create video dev within notifier
  bound
 
 In case of an error during the initialization of the sensor,
@@ -82,5 +82,5 @@ index f281974bd1c74..098c0c25f12d4 100644
  	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
  	q->io_modes = VB2_MMAP | VB2_READ | VB2_DMABUF;
 -- 
-2.39.2
+2.42.0
 
