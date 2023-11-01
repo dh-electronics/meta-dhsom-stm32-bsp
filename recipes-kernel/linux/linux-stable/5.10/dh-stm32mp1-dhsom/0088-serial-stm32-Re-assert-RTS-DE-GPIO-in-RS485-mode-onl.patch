@@ -1,6 +1,6 @@
-From a68b63ec35f6c285b645fa7a756113289fcf124b Mon Sep 17 00:00:00 2001
+From c9cc540d2c97d175f3e5240711e7d6f3814c9bdb Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 23 Feb 2023 04:38:22 +0100
+Date: Thu, 23 Feb 2023 05:22:52 +0100
 Subject: [PATCH 88/88] serial: stm32: Re-assert RTS/DE GPIO in RS485 mode only
  if more data are transmitted
 
@@ -17,9 +17,11 @@ block the RS485 bus after the transmission.
 Only assert the RS485 RTS/DE GPIO if there is either pending XON/XOFF
 x_char, or at least one character in running transmit queue.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230223042252.95480-2-marex@denx.de/]
+Upstream-Status: Backport [c47527cbcc3c50800f34b8c684f29721f75de246]
 Fixes: d7c76716169d ("serial: stm32: Use TC interrupt to deassert GPIO RTS in RS485 mode")
 Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230223042252.95480-2-marex@denx.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
  drivers/tty/serial/stm32-usart.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)

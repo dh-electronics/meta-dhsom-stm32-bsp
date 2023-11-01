@@ -1,19 +1,16 @@
-From 244b9b09b4de60af3bbe06cdf53abe5b9a79280b Mon Sep 17 00:00:00 2001
+From 712f091765a729133ea44d229af7170be6c4004f Mon Sep 17 00:00:00 2001
 From: Alexandre Torgue <alexandre.torgue@st.com>
-Date: Thu, 29 Aug 2019 09:20:00 +0200
+Date: Thu, 3 Feb 2022 02:59:58 +0100
 Subject: [PATCH 17/88] ARM: dts: stm32: use exti 19 as main interrupt to
  support RTC wakeup on stm32mp157
 
 Link between GIC and exti line is now done inside EXTI driver. So in order
 to be wake up source exti irqchip has to be used.
 
-Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [93a67bfcf197ffad8d8962369b56b8b714d1447e]
+Upstream-Status: Backport [7a5faaee0d2e6f60897eed43366d8b541ea7882c]
 Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
-Change-Id: I70122aaaba01c7553a03f046df7a0d5a8b9b4277
-Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/142476
-Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
-(cherry picked from commit 29da5624cdcfd79da8ab3fce409e9b1b97066523)
-Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/146661
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

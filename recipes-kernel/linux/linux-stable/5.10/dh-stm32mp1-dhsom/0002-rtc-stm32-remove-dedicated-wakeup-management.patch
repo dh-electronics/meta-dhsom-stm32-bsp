@@ -1,17 +1,24 @@
-From 1a663a088d1f163edc7acf2e8f4368ff1525d21f Mon Sep 17 00:00:00 2001
-From: Alexandre Torgue <alexandre.torgue@st.com>
-Date: Thu, 29 Aug 2019 09:19:23 +0200
+From 8687699f755bfddec3f5e9177da3d70b65e0ef12 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Date: Wed, 31 May 2023 14:27:31 +0200
 Subject: [PATCH 02/88] rtc: stm32: remove dedicated wakeup management
 
 There is no more needs to use a dedicated wake up interrupt for RTC as
-EXTI block manage by himself now all interrupt lines.
+EXTI block manages by itself now all interrupt lines.
 
-Upstream-Status: Denied Downstream stm32-gh v5.4-stm32mp [47208677c27234c793ddfe73b6b7ef134a880855]
-Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
-Change-Id: I84007c095feb08a1e02bbc46a3ba44e2f88f37ca
-Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/142475
-Reviewed-by: CITOOLS <smet-aci-reviews@lists.codex.cro.st.com>
-Reviewed-by: Benjamin GAIGNARD <benjamin.gaignard@st.com>
+Dedicated wakeup interrupt has been introduced with STM32 MP1 support
+commit b72252b6580c ("rtc: stm32: add stm32mp1 rtc support") because GIC &
+EXTI interrupts were not yet linked in EXTI driver.
+
+Removing this interrupt won't break compatibility with device trees which
+do use two interrupts entries: it could only prevent wakeup from low power
+modes on STM32MP1x, but platform power management is not yet available.
+
+Upstream-Status: Backport [38e0689b27f8b9a0085815b2446b12f685d028aa]
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20230531122732.1515594-1-amelie.delaunay@foss.st.com
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
  drivers/rtc/rtc-stm32.c | 28 +++++-----------------------
  1 file changed, 5 insertions(+), 23 deletions(-)
