@@ -1,0 +1,61 @@
+From 3655e4bf998fefa756c5e746947d436149c15920 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 13 Jan 2024 18:24:07 +0100
+Subject: [PATCH] ARM: stm32: Set stdio to serial on DH STM32MP15xx DHSOM
+
+In case CONSOLE_MUX and SYS_CONSOLE_IS_IN_ENV are enabled, the console
+stdin, stdout, stderr must be defined in environment. Define the default
+settings to fix the following warning on boot:
+
+"
+In:    No input devices available!
+Out:   No output devices available!
+Err:   No error devices available!
+"
+
+Sort the default environment as well.
+
+Upstream-Status: Backport [82f5942e51b96ffdfd689ec8b4cbfab5c9b15f7d]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ include/configs/stm32mp15_dh_dhsom.h | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/stm32mp15_dh_dhsom.h b/include/configs/stm32mp15_dh_dhsom.h
+index 8ff882264f4..de39b19219d 100644
+--- a/include/configs/stm32mp15_dh_dhsom.h
++++ b/include/configs/stm32mp15_dh_dhsom.h
+@@ -12,14 +12,13 @@
+ #define PHY_ANEG_TIMEOUT		20000
+ 
+ #ifdef CONFIG_SPL_BUILD
+-#define CFG_EXTRA_ENV_SETTINGS					\
++#define CFG_EXTRA_ENV_SETTINGS						\
+ 	"dfu_alt_info_ram=u-boot.itb ram "				\
+ 			__stringify(CONFIG_SPL_LOAD_FIT_ADDRESS)	\
+ 			" 0x800000\0"
+ #endif
+ 
+-#define STM32MP_BOARD_EXTRA_ENV \
+-	"usb_pgood_delay=1000\0" \
++#define STM32MP_BOARD_EXTRA_ENV						\
+ 	"dh_update_sd_to_emmc=" /* Install U-Boot from SD to eMMC */	\
+ 		"setexpr loadaddr1 ${loadaddr} + 0x1000000 && "		\
+ 		"load mmc 0:4 ${loadaddr1} boot/u-boot-spl.stm32 && "	\
+@@ -49,7 +48,11 @@
+ 		"sf update ${loadaddr1} 0x40000 ${filesize1} && "	\
+ 		"sf update ${loadaddr} 0x80000 ${filesize} && "		\
+ 		"env set filesize1 && env set loadaddr1\0"		\
+-	"update_sf=run dh_update_sd_to_sf\0"
++	"stdin=serial\0"						\
++	"stdout=serial\0"						\
++	"stderr=serial\0"						\
++	"update_sf=run dh_update_sd_to_sf\0"				\
++	"usb_pgood_delay=1000\0"
+ 
+ 
+ #include <configs/stm32mp15_common.h>
+-- 
+2.43.0
+

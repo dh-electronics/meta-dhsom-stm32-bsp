@@ -1,0 +1,45 @@
+From b8071d9a67590d5fd77d64276546817735ee9f91 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 4 Mar 2024 19:20:39 +0100
+Subject: [PATCH] arm: stm32: Enable OHCI HCD support on STM32MP15xx DHSOM
+
+The OHCI HCD is mandatory for USB 1.1 FS/LS device support, enable it.
+This used to be enabled implicitly before, now that implicit dependency
+disappeared and this got disabled. Enable it manually.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240304182553.106321-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ configs/stm32mp15_dhcom_basic_defconfig | 2 ++
+ configs/stm32mp15_dhcor_basic_defconfig | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/configs/stm32mp15_dhcom_basic_defconfig b/configs/stm32mp15_dhcom_basic_defconfig
+index 1d241529be7..0bfd3b76d6a 100644
+--- a/configs/stm32mp15_dhcom_basic_defconfig
++++ b/configs/stm32mp15_dhcom_basic_defconfig
+@@ -164,6 +164,8 @@ CONFIG_DM_USB_GADGET=y
+ CONFIG_SPL_DM_USB_GADGET=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_GENERIC=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_GENERIC=y
+ CONFIG_USB_DWC2=y
+ CONFIG_USB_HOST_ETHER=y
+ CONFIG_USB_ETHER_ASIX=y
+diff --git a/configs/stm32mp15_dhcor_basic_defconfig b/configs/stm32mp15_dhcor_basic_defconfig
+index 6e0c4a8cf9f..1c1fbc5c7db 100644
+--- a/configs/stm32mp15_dhcor_basic_defconfig
++++ b/configs/stm32mp15_dhcor_basic_defconfig
+@@ -164,6 +164,8 @@ CONFIG_DM_USB_GADGET=y
+ CONFIG_SPL_DM_USB_GADGET=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_GENERIC=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_GENERIC=y
+ CONFIG_USB_DWC2=y
+ CONFIG_USB_HOST_ETHER=y
+ CONFIG_USB_ETHER_ASIX=y
+-- 
+2.43.0
+
