@@ -9,7 +9,7 @@ Fix this smatch warning:
  'drivers/perf/stm32_ddr_pmu.c:288 stm32_ddr_pmu_sysfs_show() warn:
   argument 3 to %lx specifier is cast from pointer'
 
-Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp e28c5624c06695dd7e67fd8f60624c9f427d7f5d]
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git v5.15-stm32mp e28c5624c06695dd7e67fd8f60624c9f427d7f5d]
 Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Change-Id: Idb76113c684daa4e3ae83069ceda6058dfc84a9e
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/228948

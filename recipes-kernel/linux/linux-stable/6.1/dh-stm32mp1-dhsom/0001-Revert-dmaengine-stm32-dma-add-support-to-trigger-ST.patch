@@ -9,6 +9,7 @@ the new DMA chaining API.
 
 Upstream-Status: Inappropriate [Old API backward compatibility]
 This reverts commit 723795173ce1113fb478c18dc57e788b3eba3524.
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  drivers/dma/stm32-dma.c | 49 +----------------------------------------
  1 file changed, 1 insertion(+), 48 deletions(-)

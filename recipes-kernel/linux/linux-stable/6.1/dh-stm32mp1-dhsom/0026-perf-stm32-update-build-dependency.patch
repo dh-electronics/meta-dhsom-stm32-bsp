@@ -5,7 +5,7 @@ Subject: [PATCH 26/44] perf: stm32: update build dependency
 
 Build this driver, not only for STM32MP15, but for all STM32.
 
-Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp 024f17f119f4d2600b4ef6ef92aab7a48180cf4f]
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git v5.15-stm32mp 024f17f119f4d2600b4ef6ef92aab7a48180cf4f]
 Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Change-Id: I840d2313b5b27bf45f639e89a3c339b7c731233e
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/228520

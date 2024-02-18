@@ -5,7 +5,7 @@ Subject: [PATCH 28/44] ARM: dts: stm32: add ddrperfm on stm32mp151
 
 The DDRPERFM is the DDR Performance Monitor embedded in STM32MP1 SOC.
 
-Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp 89e1218834b319a8be556f6487e1c108d74f201d]
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git v5.15-stm32mp 89e1218834b319a8be556f6487e1c108d74f201d]
 Signed-off-by: Gerald Baeza <gerald.baeza@st.com>
 Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Change-Id: I0773ed2a1ebe8ec00eabdd70c7c842e19339a20a

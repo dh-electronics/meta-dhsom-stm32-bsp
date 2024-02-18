@@ -6,7 +6,7 @@ Subject: [PATCH 25/44] perf: stm32: support the pmu ".read" ops
 Implement the "event read" ops which is called, for example, when
 "perf stat" is called with the "-I" option.
 
-Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp d8e67f50c2de9a894885d48a3b74d287a99f4e98]
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git v5.15-stm32mp d8e67f50c2de9a894885d48a3b74d287a99f4e98]
 Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Change-Id: Ia0a1e16a117b580103bd8f14c72c11471d753488
 ---

@@ -9,7 +9,7 @@ This perf drivers supports the read, write, activate, idle and total
 time counters, described in the reference manual RM0436 that is
 accessible from Documentation/arm/stm32/stm32mp157-overview.rst
 
-Upstream-Status: Downstream [https://github.com/STMicroelectronics/linux.git v5.15-stm32mp ad91309d937ad4504fd1171f6e0a61ef31403c30]
+Upstream-Status: Inappropriate [ST downstream https://github.com/STMicroelectronics/linux.git v5.15-stm32mp ad91309d937ad4504fd1171f6e0a61ef31403c30]
 Signed-off-by: Gerald Baeza <gerald.baeza@st.com>
 Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 Change-Id: Iffb2db4f1a141fb7452ad61423900154db4a1c2f
