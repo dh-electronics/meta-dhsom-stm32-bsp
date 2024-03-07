@@ -73,7 +73,7 @@ IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
 EXTRA_IMAGEDEPENDS += "virtual/bootloader"
-WKS_FILE = "sdimage-stm32mp1.wks"
+WKS_FILE ?= "sdimage-stm32mp1.wks"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
 IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage virtual/bootloader "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot virtual/bootloader:do_deploy"
