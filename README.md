@@ -80,6 +80,7 @@ Note that MACHINE must be either of:
 * dh-stm32mp1-dhcor-avenger96
 * dh-stm32mp1-dhcor-drc-compact
 * dh-stm32mp1-dhcor-testbench
+* dh-stm32mp13-dhcor-dhsbc
 
 Adapt the suffixes of all the files and names of directories further in
 this documentation according to MACHINE.
