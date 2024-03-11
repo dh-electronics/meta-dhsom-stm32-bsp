@@ -1,0 +1,120 @@
+From 7d815fbfa2a2a1bde02e08912f84df28c0adcc88 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@st.com>
+Date: Wed, 25 Jan 2023 17:27:03 +0100
+Subject: [PATCH 17/38] ARM: dts: stm32: add eth1 and eth2 support on stm32mp13
+
+Add both ethernet MACs based on GMAC SNPS IP on stm32mp13.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421230954.193773-1-marex@denx.de/]
+Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+---
+Cc: Christophe Roullier <christophe.roullier@st.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp131.dtsi | 37 ++++++++++++++++++++++++++++++++++++
+ arch/arm/dts/stm32mp133.dtsi | 30 +++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp131.dtsi b/arch/arm/dts/stm32mp131.dtsi
+index 215ad9298de..81d99a7582b 100644
+--- a/arch/arm/dts/stm32mp131.dtsi
++++ b/arch/arm/dts/stm32mp131.dtsi
+@@ -1304,6 +1304,37 @@
+ 			status = "disabled";
+ 		};
+ 
++		eth1: eth1@5800a000 {
++			compatible = "snps,dwmac-4.20a", "st,stm32mp13-dwmac";
++			reg = <0x5800a000 0x2000>;
++			reg-names = "stmmaceth";
++			interrupts-extended = <&intc GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 68 1>;
++			interrupt-names = "macirq", "eth_wake_irq";
++			clock-names = "stmmaceth",
++				      "mac-clk-tx",
++				      "mac-clk-rx",
++				      "ethstp",
++				      "eth-ck";
++			clocks = <&rcc ETH1MAC>,
++				 <&rcc ETH1TX>,
++				 <&rcc ETH1RX>,
++				 <&rcc ETH1STP>,
++				 <&rcc ETH1CK_K>;
++			st,syscon = <&syscfg 0x4 0xff0000>;
++			snps,mixed-burst;
++			snps,pbl = <2>;
++			snps,axi-config = <&stmmac_axi_config_1>;
++			snps,tso;
++			status = "disabled";
++
++			stmmac_axi_config_1: stmmac-axi-config {
++				snps,wr_osr_lmt = <0x7>;
++				snps,rd_osr_lmt = <0x7>;
++				snps,blen = <0 0 0 0 16 8 4>;
++			};
++		};
++
+ 		usbh_ohci: usb@5800c000 {
+ 			compatible = "generic-ohci";
+ 			reg = <0x5800c000 0x1000>;
+@@ -1380,6 +1411,12 @@
+ 			ts_cal2: calib@5e {
+ 				reg = <0x5e 0x2>;
+ 			};
++			ethernet_mac1_address: mac1@e4 {
++				reg = <0xe4 0x6>;
++			};
++			ethernet_mac2_address: mac2@ea {
++				reg = <0xea 0x6>;
++			};
+ 		};
+ 
+ 		/*
+diff --git a/arch/arm/dts/stm32mp133.dtsi b/arch/arm/dts/stm32mp133.dtsi
+index df451c3c2a2..5cd5bde9535 100644
+--- a/arch/arm/dts/stm32mp133.dtsi
++++ b/arch/arm/dts/stm32mp133.dtsi
+@@ -64,5 +64,35 @@
+ 				};
+ 			};
+ 		};
++
++		eth2: eth2@5800e000 {
++			compatible = "snps,dwmac-4.20a", "st,stm32mp13-dwmac";
++			reg = <0x5800e000 0x2000>;
++			reg-names = "stmmaceth";
++			interrupts-extended = <&intc GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "macirq";
++			clock-names = "stmmaceth",
++				      "mac-clk-tx",
++				      "mac-clk-rx",
++				      "ethstp",
++				      "eth-ck";
++			clocks = <&rcc ETH2MAC>,
++				 <&rcc ETH2TX>,
++				 <&rcc ETH2RX>,
++				 <&rcc ETH2STP>,
++				 <&rcc ETH2CK_K>;
++			st,syscon = <&syscfg 0x4 0xff000000>;
++			snps,mixed-burst;
++			snps,pbl = <2>;
++			snps,axi-config = <&stmmac_axi_config_2>;
++			snps,tso;
++			status = "disabled";
++
++			stmmac_axi_config_2: stmmac-axi-config {
++				snps,wr_osr_lmt = <0x7>;
++				snps,rd_osr_lmt = <0x7>;
++				snps,blen = <0 0 0 0 16 8 4>;
++			};
++		};
+ 	};
+ };
+-- 
+2.43.0
+

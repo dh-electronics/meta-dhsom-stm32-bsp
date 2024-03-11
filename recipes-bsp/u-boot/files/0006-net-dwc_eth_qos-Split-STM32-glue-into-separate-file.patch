@@ -1,0 +1,458 @@
+From 953556f46a493a5e1b07c914ed589f697ff2ff59 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 8 Mar 2024 03:33:53 +0100
+Subject: [PATCH 06/38] net: dwc_eth_qos: Split STM32 glue into separate file
+
+Move STM32 glue code into separate file to contain the STM32 specific
+code outside of the DWMAC core code. No functional change.
+
+Upstream-Status: Backport [343742661b0500b1873a6e4fcb7bff9d16f955a4]
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Christophe ROULLIER<christophe.roullier@foss.st.com>
+---
+ drivers/net/Makefile            |   1 +
+ drivers/net/dwc_eth_qos.c       | 165 ---------------------------
+ drivers/net/dwc_eth_qos.h       |   1 +
+ drivers/net/dwc_eth_qos_stm32.c | 196 ++++++++++++++++++++++++++++++++
+ 4 files changed, 198 insertions(+), 165 deletions(-)
+ create mode 100644 drivers/net/dwc_eth_qos_stm32.c
+
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 1ce6fea323c..dfe50154c11 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_DWC_ETH_QOS_IMX) += dwc_eth_qos_imx.o
+ obj-$(CONFIG_DWC_ETH_QOS_ROCKCHIP) += dwc_eth_qos_rockchip.o
+ obj-$(CONFIG_DWC_ETH_QOS_QCOM) += dwc_eth_qos_qcom.o
+ obj-$(CONFIG_DWC_ETH_QOS_STARFIVE) += dwc_eth_qos_starfive.o
++obj-$(CONFIG_DWC_ETH_QOS_STM32) += dwc_eth_qos_stm32.o
+ obj-$(CONFIG_E1000) += e1000.o
+ obj-$(CONFIG_E1000_SPI) += e1000_spi.o
+ obj-$(CONFIG_EEPRO100) += eepro100.o
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index 6d23b2856e0..3c1678d6091 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -295,58 +295,6 @@ err:
+ #endif
+ }
+ 
+-static int eqos_start_clks_stm32(struct udevice *dev)
+-{
+-#ifdef CONFIG_CLK
+-	struct eqos_priv *eqos = dev_get_priv(dev);
+-	int ret;
+-
+-	debug("%s(dev=%p):\n", __func__, dev);
+-
+-	ret = clk_enable(&eqos->clk_master_bus);
+-	if (ret < 0) {
+-		pr_err("clk_enable(clk_master_bus) failed: %d", ret);
+-		goto err;
+-	}
+-
+-	ret = clk_enable(&eqos->clk_rx);
+-	if (ret < 0) {
+-		pr_err("clk_enable(clk_rx) failed: %d", ret);
+-		goto err_disable_clk_master_bus;
+-	}
+-
+-	ret = clk_enable(&eqos->clk_tx);
+-	if (ret < 0) {
+-		pr_err("clk_enable(clk_tx) failed: %d", ret);
+-		goto err_disable_clk_rx;
+-	}
+-
+-	if (clk_valid(&eqos->clk_ck) && !eqos->clk_ck_enabled) {
+-		ret = clk_enable(&eqos->clk_ck);
+-		if (ret < 0) {
+-			pr_err("clk_enable(clk_ck) failed: %d", ret);
+-			goto err_disable_clk_tx;
+-		}
+-		eqos->clk_ck_enabled = true;
+-	}
+-#endif
+-
+-	debug("%s: OK\n", __func__);
+-	return 0;
+-
+-#ifdef CONFIG_CLK
+-err_disable_clk_tx:
+-	clk_disable(&eqos->clk_tx);
+-err_disable_clk_rx:
+-	clk_disable(&eqos->clk_rx);
+-err_disable_clk_master_bus:
+-	clk_disable(&eqos->clk_master_bus);
+-err:
+-	debug("%s: FAILED: %d\n", __func__, ret);
+-	return ret;
+-#endif
+-}
+-
+ static int eqos_stop_clks_tegra186(struct udevice *dev)
+ {
+ #ifdef CONFIG_CLK
+@@ -365,22 +313,6 @@ static int eqos_stop_clks_tegra186(struct udevice *dev)
+ 	return 0;
+ }
+ 
+-static int eqos_stop_clks_stm32(struct udevice *dev)
+-{
+-#ifdef CONFIG_CLK
+-	struct eqos_priv *eqos = dev_get_priv(dev);
+-
+-	debug("%s(dev=%p):\n", __func__, dev);
+-
+-	clk_disable(&eqos->clk_tx);
+-	clk_disable(&eqos->clk_rx);
+-	clk_disable(&eqos->clk_master_bus);
+-#endif
+-
+-	debug("%s: OK\n", __func__);
+-	return 0;
+-}
+-
+ static int eqos_start_resets_tegra186(struct udevice *dev)
+ {
+ 	struct eqos_priv *eqos = dev_get_priv(dev);
+@@ -493,17 +425,6 @@ static ulong eqos_get_tick_clk_rate_tegra186(struct udevice *dev)
+ #endif
+ }
+ 
+-static ulong eqos_get_tick_clk_rate_stm32(struct udevice *dev)
+-{
+-#ifdef CONFIG_CLK
+-	struct eqos_priv *eqos = dev_get_priv(dev);
+-
+-	return clk_get_rate(&eqos->clk_master_bus);
+-#else
+-	return 0;
+-#endif
+-}
+-
+ static int eqos_set_full_duplex(struct udevice *dev)
+ {
+ 	struct eqos_priv *eqos = dev_get_priv(dev);
+@@ -1415,57 +1336,6 @@ err_free_reset_eqos:
+ 	return ret;
+ }
+ 
+-static int eqos_probe_resources_stm32(struct udevice *dev)
+-{
+-	struct eqos_priv *eqos = dev_get_priv(dev);
+-	int ret;
+-	phy_interface_t interface;
+-
+-	debug("%s(dev=%p):\n", __func__, dev);
+-
+-	interface = eqos->config->interface(dev);
+-
+-	if (interface == PHY_INTERFACE_MODE_NA) {
+-		pr_err("Invalid PHY interface\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = board_interface_eth_init(dev, interface);
+-	if (ret)
+-		return -EINVAL;
+-
+-	ret = clk_get_by_name(dev, "stmmaceth", &eqos->clk_master_bus);
+-	if (ret) {
+-		pr_err("clk_get_by_name(master_bus) failed: %d", ret);
+-		goto err_probe;
+-	}
+-
+-	ret = clk_get_by_name(dev, "mac-clk-rx", &eqos->clk_rx);
+-	if (ret) {
+-		pr_err("clk_get_by_name(rx) failed: %d", ret);
+-		goto err_probe;
+-	}
+-
+-	ret = clk_get_by_name(dev, "mac-clk-tx", &eqos->clk_tx);
+-	if (ret) {
+-		pr_err("clk_get_by_name(tx) failed: %d", ret);
+-		goto err_probe;
+-	}
+-
+-	/*  Get ETH_CLK clocks (optional) */
+-	ret = clk_get_by_name(dev, "eth-ck", &eqos->clk_ck);
+-	if (ret)
+-		pr_warn("No phy clock provided %d", ret);
+-
+-	debug("%s: OK\n", __func__);
+-	return 0;
+-
+-err_probe:
+-
+-	debug("%s: returns %d\n", __func__, ret);
+-	return ret;
+-}
+-
+ static phy_interface_t eqos_get_interface_tegra186(const struct udevice *dev)
+ {
+ 	return PHY_INTERFACE_MODE_MII;
+@@ -1484,12 +1354,6 @@ static int eqos_remove_resources_tegra186(struct udevice *dev)
+ 	return 0;
+ }
+ 
+-static int eqos_remove_resources_stm32(struct udevice *dev)
+-{
+-	debug("%s(dev=%p):\n", __func__, dev);
+-	return 0;
+-}
+-
+ static int eqos_probe(struct udevice *dev)
+ {
+ 	struct eqos_priv *eqos = dev_get_priv(dev);
+@@ -1633,35 +1497,6 @@ static const struct eqos_config __maybe_unused eqos_tegra186_config = {
+ 	.ops = &eqos_tegra186_ops
+ };
+ 
+-static struct eqos_ops eqos_stm32_ops = {
+-	.eqos_inval_desc = eqos_inval_desc_generic,
+-	.eqos_flush_desc = eqos_flush_desc_generic,
+-	.eqos_inval_buffer = eqos_inval_buffer_generic,
+-	.eqos_flush_buffer = eqos_flush_buffer_generic,
+-	.eqos_probe_resources = eqos_probe_resources_stm32,
+-	.eqos_remove_resources = eqos_remove_resources_stm32,
+-	.eqos_stop_resets = eqos_null_ops,
+-	.eqos_start_resets = eqos_null_ops,
+-	.eqos_stop_clks = eqos_stop_clks_stm32,
+-	.eqos_start_clks = eqos_start_clks_stm32,
+-	.eqos_calibrate_pads = eqos_null_ops,
+-	.eqos_disable_calibration = eqos_null_ops,
+-	.eqos_set_tx_clk_speed = eqos_null_ops,
+-	.eqos_get_enetaddr = eqos_null_ops,
+-	.eqos_get_tick_clk_rate = eqos_get_tick_clk_rate_stm32
+-};
+-
+-static const struct eqos_config __maybe_unused eqos_stm32_config = {
+-	.reg_access_always_ok = false,
+-	.mdio_wait = 10000,
+-	.swr_wait = 50,
+-	.config_mac = EQOS_MAC_RXQ_CTRL0_RXQ0EN_ENABLED_AV,
+-	.config_mac_mdio = EQOS_MAC_MDIO_ADDRESS_CR_250_300,
+-	.axi_bus_width = EQOS_AXI_WIDTH_64,
+-	.interface = dev_read_phy_mode,
+-	.ops = &eqos_stm32_ops
+-};
+-
+ static const struct udevice_id eqos_ids[] = {
+ #if IS_ENABLED(CONFIG_DWC_ETH_QOS_TEGRA186)
+ 	{
+diff --git a/drivers/net/dwc_eth_qos.h b/drivers/net/dwc_eth_qos.h
+index e3222e1e17e..a6087f191ab 100644
+--- a/drivers/net/dwc_eth_qos.h
++++ b/drivers/net/dwc_eth_qos.h
+@@ -290,4 +290,5 @@ int eqos_null_ops(struct udevice *dev);
+ extern struct eqos_config eqos_imx_config;
+ extern struct eqos_config eqos_rockchip_config;
+ extern struct eqos_config eqos_qcom_config;
++extern struct eqos_config eqos_stm32_config;
+ extern struct eqos_config eqos_jh7110_config;
+diff --git a/drivers/net/dwc_eth_qos_stm32.c b/drivers/net/dwc_eth_qos_stm32.c
+new file mode 100644
+index 00000000000..cfda757133e
+--- /dev/null
++++ b/drivers/net/dwc_eth_qos_stm32.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2024, Marek Vasut <marex@denx.de>
++ *
++ * This is code moved from drivers/net/dwc_eth_qos.c , which is:
++ * Copyright (c) 2016, NVIDIA CORPORATION.
++ */
++
++#include <common.h>
++#include <asm/cache.h>
++#include <asm/gpio.h>
++#include <asm/io.h>
++#include <clk.h>
++#include <cpu_func.h>
++#include <dm.h>
++#include <dm/device_compat.h>
++#include <errno.h>
++#include <eth_phy.h>
++#include <log.h>
++#include <malloc.h>
++#include <memalign.h>
++#include <miiphy.h>
++#include <net.h>
++#include <netdev.h>
++#include <phy.h>
++#include <reset.h>
++#include <wait_bit.h>
++#include <linux/delay.h>
++
++#include "dwc_eth_qos.h"
++
++static ulong eqos_get_tick_clk_rate_stm32(struct udevice *dev)
++{
++#ifdef CONFIG_CLK
++	struct eqos_priv *eqos = dev_get_priv(dev);
++
++	return clk_get_rate(&eqos->clk_master_bus);
++#else
++	return 0;
++#endif
++}
++
++static int eqos_start_clks_stm32(struct udevice *dev)
++{
++#ifdef CONFIG_CLK
++	struct eqos_priv *eqos = dev_get_priv(dev);
++	int ret;
++
++	debug("%s(dev=%p):\n", __func__, dev);
++
++	ret = clk_enable(&eqos->clk_master_bus);
++	if (ret < 0) {
++		pr_err("clk_enable(clk_master_bus) failed: %d", ret);
++		goto err;
++	}
++
++	ret = clk_enable(&eqos->clk_rx);
++	if (ret < 0) {
++		pr_err("clk_enable(clk_rx) failed: %d", ret);
++		goto err_disable_clk_master_bus;
++	}
++
++	ret = clk_enable(&eqos->clk_tx);
++	if (ret < 0) {
++		pr_err("clk_enable(clk_tx) failed: %d", ret);
++		goto err_disable_clk_rx;
++	}
++
++	if (clk_valid(&eqos->clk_ck) && !eqos->clk_ck_enabled) {
++		ret = clk_enable(&eqos->clk_ck);
++		if (ret < 0) {
++			pr_err("clk_enable(clk_ck) failed: %d", ret);
++			goto err_disable_clk_tx;
++		}
++		eqos->clk_ck_enabled = true;
++	}
++#endif
++
++	debug("%s: OK\n", __func__);
++	return 0;
++
++#ifdef CONFIG_CLK
++err_disable_clk_tx:
++	clk_disable(&eqos->clk_tx);
++err_disable_clk_rx:
++	clk_disable(&eqos->clk_rx);
++err_disable_clk_master_bus:
++	clk_disable(&eqos->clk_master_bus);
++err:
++	debug("%s: FAILED: %d\n", __func__, ret);
++	return ret;
++#endif
++}
++
++static int eqos_stop_clks_stm32(struct udevice *dev)
++{
++#ifdef CONFIG_CLK
++	struct eqos_priv *eqos = dev_get_priv(dev);
++
++	debug("%s(dev=%p):\n", __func__, dev);
++
++	clk_disable(&eqos->clk_tx);
++	clk_disable(&eqos->clk_rx);
++	clk_disable(&eqos->clk_master_bus);
++#endif
++
++	debug("%s: OK\n", __func__);
++	return 0;
++}
++
++static int eqos_probe_resources_stm32(struct udevice *dev)
++{
++	struct eqos_priv *eqos = dev_get_priv(dev);
++	int ret;
++	phy_interface_t interface;
++
++	debug("%s(dev=%p):\n", __func__, dev);
++
++	interface = eqos->config->interface(dev);
++
++	if (interface == PHY_INTERFACE_MODE_NA) {
++		pr_err("Invalid PHY interface\n");
++		return -EINVAL;
++	}
++
++	ret = board_interface_eth_init(dev, interface);
++	if (ret)
++		return -EINVAL;
++
++	ret = clk_get_by_name(dev, "stmmaceth", &eqos->clk_master_bus);
++	if (ret) {
++		pr_err("clk_get_by_name(master_bus) failed: %d", ret);
++		goto err_probe;
++	}
++
++	ret = clk_get_by_name(dev, "mac-clk-rx", &eqos->clk_rx);
++	if (ret) {
++		pr_err("clk_get_by_name(rx) failed: %d", ret);
++		goto err_probe;
++	}
++
++	ret = clk_get_by_name(dev, "mac-clk-tx", &eqos->clk_tx);
++	if (ret) {
++		pr_err("clk_get_by_name(tx) failed: %d", ret);
++		goto err_probe;
++	}
++
++	/*  Get ETH_CLK clocks (optional) */
++	ret = clk_get_by_name(dev, "eth-ck", &eqos->clk_ck);
++	if (ret)
++		pr_warn("No phy clock provided %d", ret);
++
++	debug("%s: OK\n", __func__);
++	return 0;
++
++err_probe:
++
++	debug("%s: returns %d\n", __func__, ret);
++	return ret;
++}
++
++static int eqos_remove_resources_stm32(struct udevice *dev)
++{
++	debug("%s(dev=%p):\n", __func__, dev);
++
++	return 0;
++}
++
++static struct eqos_ops eqos_stm32_ops = {
++	.eqos_inval_desc = eqos_inval_desc_generic,
++	.eqos_flush_desc = eqos_flush_desc_generic,
++	.eqos_inval_buffer = eqos_inval_buffer_generic,
++	.eqos_flush_buffer = eqos_flush_buffer_generic,
++	.eqos_probe_resources = eqos_probe_resources_stm32,
++	.eqos_remove_resources = eqos_remove_resources_stm32,
++	.eqos_stop_resets = eqos_null_ops,
++	.eqos_start_resets = eqos_null_ops,
++	.eqos_stop_clks = eqos_stop_clks_stm32,
++	.eqos_start_clks = eqos_start_clks_stm32,
++	.eqos_calibrate_pads = eqos_null_ops,
++	.eqos_disable_calibration = eqos_null_ops,
++	.eqos_set_tx_clk_speed = eqos_null_ops,
++	.eqos_get_enetaddr = eqos_null_ops,
++	.eqos_get_tick_clk_rate = eqos_get_tick_clk_rate_stm32
++};
++
++struct eqos_config __maybe_unused eqos_stm32_config = {
++	.reg_access_always_ok = false,
++	.mdio_wait = 10000,
++	.swr_wait = 50,
++	.config_mac = EQOS_MAC_RXQ_CTRL0_RXQ0EN_ENABLED_AV,
++	.config_mac_mdio = EQOS_MAC_MDIO_ADDRESS_CR_250_300,
++	.axi_bus_width = EQOS_AXI_WIDTH_64,
++	.interface = dev_read_phy_mode,
++	.ops = &eqos_stm32_ops
++};
+-- 
+2.43.0
+

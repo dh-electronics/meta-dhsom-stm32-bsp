@@ -1,0 +1,91 @@
+From 6e75e965fb7b1fa6720edf93b2a0a045833794a5 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 26 Mar 2024 13:07:26 +0100
+Subject: [PATCH 10/38] net: dwc_eth_qos: Use FIELD_PREP for ETH_SEL bitfield
+
+Use FIELD_PREP to configure content of ETH_SEL bitfield in SYSCFG_PMCSETR
+register. No functional change.
+
+Upstream-Status: Backport [416592e26506f7ff44922b0547b297f5f7e52ad3]
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/net/dwc_eth_qos_stm32.c | 33 ++++++++++++++++-----------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/net/dwc_eth_qos_stm32.c b/drivers/net/dwc_eth_qos_stm32.c
+index d7ec0c9be36..7545026b158 100644
+--- a/drivers/net/dwc_eth_qos_stm32.c
++++ b/drivers/net/dwc_eth_qos_stm32.c
+@@ -26,6 +26,7 @@
+ #include <reset.h>
+ #include <syscon.h>
+ #include <wait_bit.h>
++#include <linux/bitfield.h>
+ #include <linux/delay.h>
+ 
+ #include "dwc_eth_qos.h"
+@@ -40,9 +41,9 @@
+ #define SYSCFG_PMCSETR_ETH_SELMII	BIT(20)
+ 
+ #define SYSCFG_PMCSETR_ETH_SEL_MASK	GENMASK(23, 21)
+-#define SYSCFG_PMCSETR_ETH_SEL_GMII_MII	0
+-#define SYSCFG_PMCSETR_ETH_SEL_RGMII	BIT(21)
+-#define SYSCFG_PMCSETR_ETH_SEL_RMII	BIT(23)
++#define SYSCFG_PMCSETR_ETH_SEL_GMII_MII	0x0
++#define SYSCFG_PMCSETR_ETH_SEL_RGMII	0x1
++#define SYSCFG_PMCSETR_ETH_SEL_RMII	0x4
+ 
+ static ulong eqos_get_tick_clk_rate_stm32(struct udevice *dev)
+ {
+@@ -142,35 +143,33 @@ static int eqos_probe_syscfg_stm32(struct udevice *dev,
+ 
+ 	switch (interface_type) {
+ 	case PHY_INTERFACE_MODE_MII:
+-		value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII |
+-			SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
++		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
++				   SYSCFG_PMCSETR_ETH_SEL_GMII_MII);
++		value |= SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
+ 		log_debug("PHY_INTERFACE_MODE_MII\n");
+ 		break;
+ 	case PHY_INTERFACE_MODE_GMII:
++		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
++				   SYSCFG_PMCSETR_ETH_SEL_GMII_MII);
+ 		if (eth_clk_sel_reg)
+-			value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII |
+-				SYSCFG_PMCSETR_ETH_CLK_SEL;
+-		else
+-			value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII;
++			value |= SYSCFG_PMCSETR_ETH_CLK_SEL;
+ 		log_debug("PHY_INTERFACE_MODE_GMII\n");
+ 		break;
+ 	case PHY_INTERFACE_MODE_RMII:
++		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
++				   SYSCFG_PMCSETR_ETH_SEL_RMII);
+ 		if (eth_ref_clk_sel_reg)
+-			value = SYSCFG_PMCSETR_ETH_SEL_RMII |
+-				SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
+-		else
+-			value = SYSCFG_PMCSETR_ETH_SEL_RMII;
++			value |= SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
+ 		log_debug("PHY_INTERFACE_MODE_RMII\n");
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII:
+ 	case PHY_INTERFACE_MODE_RGMII_ID:
+ 	case PHY_INTERFACE_MODE_RGMII_RXID:
+ 	case PHY_INTERFACE_MODE_RGMII_TXID:
++		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
++				   SYSCFG_PMCSETR_ETH_SEL_RGMII);
+ 		if (eth_clk_sel_reg)
+-			value = SYSCFG_PMCSETR_ETH_SEL_RGMII |
+-				SYSCFG_PMCSETR_ETH_CLK_SEL;
+-		else
+-			value = SYSCFG_PMCSETR_ETH_SEL_RGMII;
++			value |= SYSCFG_PMCSETR_ETH_CLK_SEL;
+ 		log_debug("PHY_INTERFACE_MODE_RGMII\n");
+ 		break;
+ 	default:
+-- 
+2.43.0
+

@@ -1,0 +1,75 @@
+From 542cf93eece654df33bf6e40496e8486e44ba5ad Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:44:27 +0100
+Subject: [PATCH 37/38] ARM: dts: stm32: Add alternate pinmux for MP13 UART7
+ pins
+
+Add another mux option for UART7 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-18-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp13-pinctrl.dtsi | 41 +++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+index 7014c7a6d23..c01d39f03ea 100644
+--- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+@@ -647,6 +647,47 @@
+ 		};
+ 	};
+ 
++	uart7_pins_a: uart7-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('H', 2, AF8)>, /* UART7_TX */
++				 <STM32_PINMUX('B', 12, AF7)>; /* UART7_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('E', 10, AF7)>, /* UART7_RX */
++				 <STM32_PINMUX('G', 7, AF8)>; /* UART7_CTS_NSS */
++			bias-disable;
++		};
++	};
++
++	uart7_idle_pins_a: uart7-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('H', 2, ANALOG)>, /* UART7_TX */
++				 <STM32_PINMUX('G', 7, ANALOG)>; /* UART7_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 12, AF7)>; /* UART7_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('E', 10, AF7)>; /* UART7_RX */
++			bias-disable;
++		};
++	};
++
++	uart7_sleep_pins_a: uart7-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 2, ANALOG)>, /* UART7_TX */
++				 <STM32_PINMUX('B', 12, ANALOG)>, /* UART7_RTS */
++				 <STM32_PINMUX('E', 10, ANALOG)>, /* UART7_RX */
++				 <STM32_PINMUX('G', 7, ANALOG)>; /* UART7_CTS_NSS */
++		};
++	};
++
+ 	uart8_pins_a: uart8-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
+-- 
+2.43.0
+

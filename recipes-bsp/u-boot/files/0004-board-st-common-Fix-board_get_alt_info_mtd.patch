@@ -1,0 +1,57 @@
+From 74eccfd5544ec6cd45073611b2605c60cc396704 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 17 Nov 2023 18:01:06 +0100
+Subject: [PATCH 04/38] board: st: common: Fix board_get_alt_info_mtd()
+
+Since MTD devices are partioned, we got the following
+error when command "dfu 0" is executed:
+
+DFU alt info setting: done
+ERROR: Too many arguments for nor0
+ERROR: DFU entities configuration failed!
+ERROR: (partition table does not match dfu_alt_info?)
+
+Fixes: 31325e1b8b9c ("stm32mp1: dynamically build DFU_ALT_INFO")
+
+Upstream-Status: Backport [b40f67a63586607ce2704ae5800790d35980f39d]
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
+ board/st/common/stm32mp_dfu.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/board/st/common/stm32mp_dfu.c b/board/st/common/stm32mp_dfu.c
+index a8eb8d5cae2..ded3bf81961 100644
+--- a/board/st/common/stm32mp_dfu.c
++++ b/board/st/common/stm32mp_dfu.c
+@@ -73,7 +73,6 @@ static void board_get_alt_info_mmc(struct udevice *dev, char *buf)
+ static void board_get_alt_info_mtd(struct mtd_info *mtd, char *buf)
+ {
+ 	struct mtd_info *part;
+-	bool first = true;
+ 	const char *name;
+ 	int len, partnum = 0;
+ 
+@@ -86,17 +85,13 @@ static void board_get_alt_info_mtd(struct mtd_info *mtd, char *buf)
+ 			"mtd %s=", name);
+ 
+ 	len += snprintf(buf + len, DFU_ALT_BUF_LEN - len,
+-			"%s raw 0x0 0x%llx ",
++			"%s raw 0x0 0x%llx",
+ 			name, mtd->size);
+ 
+ 	list_for_each_entry(part, &mtd->partitions, node) {
+ 		partnum++;
+-		if (!first)
+-			len += snprintf(buf + len, DFU_ALT_BUF_LEN - len, ";");
+-		first = false;
+-
+ 		len += snprintf(buf + len, DFU_ALT_BUF_LEN - len,
+-				"%s_%s part %d",
++				";%s_%s part %d",
+ 				name, part->name, partnum);
+ 	}
+ }
+-- 
+2.43.0
+

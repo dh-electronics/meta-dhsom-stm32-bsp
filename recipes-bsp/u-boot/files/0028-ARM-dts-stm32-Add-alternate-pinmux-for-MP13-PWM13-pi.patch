@@ -1,0 +1,49 @@
+From 54ff9c51ae8fd69089f43ed1175488933ff1ca16 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:13:20 +0100
+Subject: [PATCH 28/38] ARM: dts: stm32: Add alternate pinmux for MP13 PWM13
+ pins
+
+Add another mux option for PWM13 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-9-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp13-pinctrl.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+index d19408f19f9..cf070fbd7f7 100644
+--- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+@@ -275,6 +275,21 @@
+ 		};
+ 	};
+ 
++	pwm13_pins_a: pwm13-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 6, AF9)>; /* TIM13_CH1 */
++			bias-pull-down;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	pwm13_sleep_pins_a: pwm13-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 6, ANALOG)>; /* TIM13_CH1 */
++		};
++	};
++
+ 	pwm14_pins_a: pwm14-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('F', 9, AF9)>; /* TIM14_CH1 */
+-- 
+2.43.0
+

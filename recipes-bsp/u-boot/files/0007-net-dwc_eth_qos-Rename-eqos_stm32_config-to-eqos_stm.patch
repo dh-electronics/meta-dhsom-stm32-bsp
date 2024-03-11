@@ -1,0 +1,61 @@
+From 4e9f7d4fbae1ceb5754023c1d841e29d2ada158a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 26 Mar 2024 13:07:23 +0100
+Subject: [PATCH 07/38] net: dwc_eth_qos: Rename eqos_stm32_config to
+ eqos_stm32mp15_config
+
+The current glue code is specific to STM32MP15xx, the upcoming STM32MP13xx
+will introduce another entry specific to the STM32MP13xx. Rename the current
+entry to eqos_stm32mp15_config in preparation for STM32MP13xx addition. No
+functional change.
+
+Upstream-Status: Backport [85d1de9a1f39a0ff393cd90aec46ce47d40be60c]
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ drivers/net/dwc_eth_qos.c       | 2 +-
+ drivers/net/dwc_eth_qos.h       | 2 +-
+ drivers/net/dwc_eth_qos_stm32.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index 3c1678d6091..5074cd5e23a 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -1507,7 +1507,7 @@ static const struct udevice_id eqos_ids[] = {
+ #if IS_ENABLED(CONFIG_DWC_ETH_QOS_STM32)
+ 	{
+ 		.compatible = "st,stm32mp1-dwmac",
+-		.data = (ulong)&eqos_stm32_config
++		.data = (ulong)&eqos_stm32mp15_config
+ 	},
+ #endif
+ #if IS_ENABLED(CONFIG_DWC_ETH_QOS_IMX)
+diff --git a/drivers/net/dwc_eth_qos.h b/drivers/net/dwc_eth_qos.h
+index a6087f191ab..bafd0d339fb 100644
+--- a/drivers/net/dwc_eth_qos.h
++++ b/drivers/net/dwc_eth_qos.h
+@@ -290,5 +290,5 @@ int eqos_null_ops(struct udevice *dev);
+ extern struct eqos_config eqos_imx_config;
+ extern struct eqos_config eqos_rockchip_config;
+ extern struct eqos_config eqos_qcom_config;
+-extern struct eqos_config eqos_stm32_config;
++extern struct eqos_config eqos_stm32mp15_config;
+ extern struct eqos_config eqos_jh7110_config;
+diff --git a/drivers/net/dwc_eth_qos_stm32.c b/drivers/net/dwc_eth_qos_stm32.c
+index cfda757133e..fd29a604987 100644
+--- a/drivers/net/dwc_eth_qos_stm32.c
++++ b/drivers/net/dwc_eth_qos_stm32.c
+@@ -184,7 +184,7 @@ static struct eqos_ops eqos_stm32_ops = {
+ 	.eqos_get_tick_clk_rate = eqos_get_tick_clk_rate_stm32
+ };
+ 
+-struct eqos_config __maybe_unused eqos_stm32_config = {
++struct eqos_config __maybe_unused eqos_stm32mp15_config = {
+ 	.reg_access_always_ok = false,
+ 	.mdio_wait = 10000,
+ 	.swr_wait = 50,
+-- 
+2.43.0
+

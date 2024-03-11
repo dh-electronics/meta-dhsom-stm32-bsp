@@ -1,0 +1,92 @@
+From 3973f528b1ddfcb3751058c0705f83ea76fc1adb Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 26 Mar 2024 13:07:32 +0100
+Subject: [PATCH 16/38] net: dwc_eth_qos: Add support for st, ext-phyclk
+ property
+
+The "st,ext-phyclk" property is a unification of "st,eth-clk-sel"
+and "st,eth-ref-clk-sel" properties. All three properties define
+ETH CK clock direction, however:
+- "st,eth-clk-sel" selects clock direction for GMII/RGMII mode
+- "st,eth-ref-clk-sel" selects clock direction for RMII mode
+- "st,ext-phyclk" selects clock direction for all RMII/GMII/RGMII modes
+The "st,ext-phyclk" is the preferrable property to use.
+
+Upstream-Status: Backport [1ef28c58d2dbd8c7d65e28ef500bfd359c66c07f]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ drivers/net/dwc_eth_qos_stm32.c | 30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/dwc_eth_qos_stm32.c b/drivers/net/dwc_eth_qos_stm32.c
+index 435473f99a6..9ee82b54c62 100644
+--- a/drivers/net/dwc_eth_qos_stm32.c
++++ b/drivers/net/dwc_eth_qos_stm32.c
+@@ -140,6 +140,8 @@ static int eqos_probe_syscfg_stm32(struct udevice *dev,
+ 	const bool is_mp13 = device_is_compatible(dev, "st,stm32mp13-dwmac");
+ 	/* Gigabit Ethernet 125MHz clock selection. */
+ 	const bool eth_clk_sel = dev_read_bool(dev, "st,eth-clk-sel");
++	/* Ethernet clock source is RCC. */
++	const bool ext_phyclk = dev_read_bool(dev, "st,ext-phyclk");
+ 	struct regmap *regmap;
+ 	u32 regmap_mask;
+ 	u32 value;
+@@ -156,6 +158,12 @@ static int eqos_probe_syscfg_stm32(struct udevice *dev,
+ 		dev_dbg(dev, "PHY_INTERFACE_MODE_MII\n");
+ 		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
+ 				   SYSCFG_PMCSETR_ETH_SEL_GMII_MII);
++		/*
++		 * STM32MP15xx supports both MII and GMII, STM32MP13xx MII only.
++		 * SYSCFG_PMCSETR ETH_SELMII is present only on STM32MP15xx and
++		 * acts as a selector between 0:GMII and 1:MII. As STM32MP13xx
++		 * supports only MII, ETH_SELMII is not present.
++		 */
+ 		if (!is_mp13)	/* Select MII mode on STM32MP15xx */
+ 			value |= SYSCFG_PMCSETR_ETH_SELMII;
+ 		break;
+@@ -163,14 +171,25 @@ static int eqos_probe_syscfg_stm32(struct udevice *dev,
+ 		dev_dbg(dev, "PHY_INTERFACE_MODE_GMII\n");
+ 		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
+ 				   SYSCFG_PMCSETR_ETH_SEL_GMII_MII);
+-		if (eth_clk_sel)
++		/*
++		 * If eth_clk_sel is set, use internal ETH_CLKx clock from RCC,
++		 * otherwise use external clock from IO pin (requires matching
++		 * GPIO block AF setting of that pin).
++		 */
++		if (eth_clk_sel || ext_phyclk)
+ 			value |= SYSCFG_PMCSETR_ETH_CLK_SEL;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RMII:
+ 		dev_dbg(dev, "PHY_INTERFACE_MODE_RMII\n");
+ 		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
+ 				   SYSCFG_PMCSETR_ETH_SEL_RMII);
+-		if (eth_ref_clk_sel)
++		/*
++		 * If eth_ref_clk_sel is set, use internal clock from RCC,
++		 * otherwise use external clock from ETHn_RX_CLK/ETHn_REF_CLK
++		 * IO pin (requires matching GPIO block AF setting of that
++		 * pin).
++		 */
++		if (eth_ref_clk_sel || ext_phyclk)
+ 			value |= SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII:
+@@ -180,7 +199,12 @@ static int eqos_probe_syscfg_stm32(struct udevice *dev,
+ 		dev_dbg(dev, "PHY_INTERFACE_MODE_RGMII\n");
+ 		value = FIELD_PREP(SYSCFG_PMCSETR_ETH_SEL_MASK,
+ 				   SYSCFG_PMCSETR_ETH_SEL_RGMII);
+-		if (eth_clk_sel)
++		/*
++		 * If eth_clk_sel is set, use internal ETH_CLKx clock from RCC,
++		 * otherwise use external clock from ETHx_CLK125 pin (requires
++		 * matching GPIO block AF setting of that pin).
++		 */
++		if (eth_clk_sel || ext_phyclk)
+ 			value |= SYSCFG_PMCSETR_ETH_CLK_SEL;
+ 		break;
+ 	default:
+-- 
+2.43.0
+

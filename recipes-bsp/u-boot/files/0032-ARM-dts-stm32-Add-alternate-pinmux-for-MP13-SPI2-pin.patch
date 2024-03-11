@@ -1,0 +1,57 @@
+From a42b312ca12c1274115e004c7e5bd938ecaaa8f2 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:12:31 +0100
+Subject: [PATCH 32/38] ARM: dts: stm32: Add alternate pinmux for MP13 SPI2
+ pins
+
+Add another mux option for SPI2 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-13-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp13-pinctrl.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+index c6967e82b5d..17acd2850d3 100644
+--- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+@@ -511,6 +511,29 @@
+ 		};
+ 	};
+ 
++	spi2_pins_a: spi2-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 10, AF6)>, /* SPI2_SCK */
++				 <STM32_PINMUX('H', 10, AF6)>; /* SPI2_MOSI */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 5, AF5)>; /* SPI2_MISO */
++			bias-disable;
++		};
++	};
++
++	spi2_sleep_pins_a: spi2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 10, ANALOG)>, /* SPI2_SCK */
++				 <STM32_PINMUX('B', 5, ANALOG)>, /* SPI2_MISO */
++				 <STM32_PINMUX('H', 10, ANALOG)>; /* SPI2_MOSI */
++		};
++	};
++
+ 	spi5_pins_a: spi5-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('H', 7, AF6)>, /* SPI5_SCK */
+-- 
+2.43.0
+

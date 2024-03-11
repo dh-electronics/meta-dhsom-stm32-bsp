@@ -1,0 +1,226 @@
+From 15b3d56fc311f62717b654a24ae283441b3b987c Mon Sep 17 00:00:00 2001
+From: Sean Anderson <seanga2@gmail.com>
+Date: Sat, 16 Dec 2023 14:38:42 -0500
+Subject: [PATCH 03/38] treewide: Remove clk_free
+
+This function is a no-op. Remove it.
+
+Upstream-Status: Backport [Partial of c9309f40a6831b1ac5cd0a7227b5c3717d34c812]
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Link: https://lore.kernel.org/r/20231216193843.2463779-3-seanga2@gmail.com
+---
+ drivers/net/dwc_eth_qos.c          | 43 +++++-------------------------
+ drivers/net/dwc_eth_qos_imx.c      | 21 +++------------
+ drivers/net/dwc_eth_qos_qcom.c     |  1 -
+ drivers/net/dwc_eth_qos_rockchip.c |  6 +----
+ 4 files changed, 10 insertions(+), 61 deletions(-)
+
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index a4e3698c600..6d23b2856e0 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -1382,38 +1382,30 @@ static int eqos_probe_resources_tegra186(struct udevice *dev)
+ 	ret = clk_get_by_name(dev, "master_bus", &eqos->clk_master_bus);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(master_bus) failed: %d", ret);
+-		goto err_free_clk_slave_bus;
++		goto err_free_gpio_phy_reset;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "rx", &eqos->clk_rx);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(rx) failed: %d", ret);
+-		goto err_free_clk_master_bus;
++		goto err_free_gpio_phy_reset;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "ptp_ref", &eqos->clk_ptp_ref);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(ptp_ref) failed: %d", ret);
+-		goto err_free_clk_rx;
++		goto err_free_gpio_phy_reset;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "tx", &eqos->clk_tx);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(tx) failed: %d", ret);
+-		goto err_free_clk_ptp_ref;
++		goto err_free_gpio_phy_reset;
+ 	}
+ 
+ 	debug("%s: OK\n", __func__);
+ 	return 0;
+ 
+-err_free_clk_ptp_ref:
+-	clk_free(&eqos->clk_ptp_ref);
+-err_free_clk_rx:
+-	clk_free(&eqos->clk_rx);
+-err_free_clk_master_bus:
+-	clk_free(&eqos->clk_master_bus);
+-err_free_clk_slave_bus:
+-	clk_free(&eqos->clk_slave_bus);
+ err_free_gpio_phy_reset:
+ 	dm_gpio_free(dev, &eqos->phy_reset_gpio);
+ err_free_reset_eqos:
+@@ -1451,13 +1443,13 @@ static int eqos_probe_resources_stm32(struct udevice *dev)
+ 	ret = clk_get_by_name(dev, "mac-clk-rx", &eqos->clk_rx);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(rx) failed: %d", ret);
+-		goto err_free_clk_master_bus;
++		goto err_probe;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "mac-clk-tx", &eqos->clk_tx);
+ 	if (ret) {
+ 		pr_err("clk_get_by_name(tx) failed: %d", ret);
+-		goto err_free_clk_rx;
++		goto err_probe;
+ 	}
+ 
+ 	/*  Get ETH_CLK clocks (optional) */
+@@ -1468,10 +1460,6 @@ static int eqos_probe_resources_stm32(struct udevice *dev)
+ 	debug("%s: OK\n", __func__);
+ 	return 0;
+ 
+-err_free_clk_rx:
+-	clk_free(&eqos->clk_rx);
+-err_free_clk_master_bus:
+-	clk_free(&eqos->clk_master_bus);
+ err_probe:
+ 
+ 	debug("%s: returns %d\n", __func__, ret);
+@@ -1489,13 +1477,6 @@ static int eqos_remove_resources_tegra186(struct udevice *dev)
+ 
+ 	debug("%s(dev=%p):\n", __func__, dev);
+ 
+-#ifdef CONFIG_CLK
+-	clk_free(&eqos->clk_tx);
+-	clk_free(&eqos->clk_ptp_ref);
+-	clk_free(&eqos->clk_rx);
+-	clk_free(&eqos->clk_slave_bus);
+-	clk_free(&eqos->clk_master_bus);
+-#endif
+ 	dm_gpio_free(dev, &eqos->phy_reset_gpio);
+ 	reset_free(&eqos->reset_ctl);
+ 
+@@ -1505,19 +1486,7 @@ static int eqos_remove_resources_tegra186(struct udevice *dev)
+ 
+ static int eqos_remove_resources_stm32(struct udevice *dev)
+ {
+-	struct eqos_priv * __maybe_unused eqos = dev_get_priv(dev);
+-
+ 	debug("%s(dev=%p):\n", __func__, dev);
+-
+-#ifdef CONFIG_CLK
+-	clk_free(&eqos->clk_tx);
+-	clk_free(&eqos->clk_rx);
+-	clk_free(&eqos->clk_master_bus);
+-	if (clk_valid(&eqos->clk_ck))
+-		clk_free(&eqos->clk_ck);
+-#endif
+-
+-	debug("%s: OK\n", __func__);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/dwc_eth_qos_imx.c b/drivers/net/dwc_eth_qos_imx.c
+index 60f3f3f5a10..e852f3afa8e 100644
+--- a/drivers/net/dwc_eth_qos_imx.c
++++ b/drivers/net/dwc_eth_qos_imx.c
+@@ -70,30 +70,24 @@ static int eqos_probe_resources_imx(struct udevice *dev)
+ 	ret = clk_get_by_name(dev, "ptp_ref", &eqos->clk_ptp_ref);
+ 	if (ret) {
+ 		dev_dbg(dev, "clk_get_by_name(ptp_ref) failed: %d", ret);
+-		goto err_free_clk_master_bus;
++		goto err_probe;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "tx", &eqos->clk_tx);
+ 	if (ret) {
+ 		dev_dbg(dev, "clk_get_by_name(tx) failed: %d", ret);
+-		goto err_free_clk_ptp_ref;
++		goto err_probe;
+ 	}
+ 
+ 	ret = clk_get_by_name(dev, "pclk", &eqos->clk_ck);
+ 	if (ret) {
+ 		dev_dbg(dev, "clk_get_by_name(pclk) failed: %d", ret);
+-		goto err_free_clk_tx;
++		goto err_probe;
+ 	}
+ 
+ 	debug("%s: OK\n", __func__);
+ 	return 0;
+ 
+-err_free_clk_tx:
+-	clk_free(&eqos->clk_tx);
+-err_free_clk_ptp_ref:
+-	clk_free(&eqos->clk_ptp_ref);
+-err_free_clk_master_bus:
+-	clk_free(&eqos->clk_master_bus);
+ err_probe:
+ 
+ 	debug("%s: returns %d\n", __func__, ret);
+@@ -102,16 +96,7 @@ err_probe:
+ 
+ static int eqos_remove_resources_imx(struct udevice *dev)
+ {
+-	struct eqos_priv *eqos = dev_get_priv(dev);
+-
+ 	debug("%s(dev=%p):\n", __func__, dev);
+-
+-	clk_free(&eqos->clk_ck);
+-	clk_free(&eqos->clk_tx);
+-	clk_free(&eqos->clk_ptp_ref);
+-	clk_free(&eqos->clk_master_bus);
+-
+-	debug("%s: OK\n", __func__);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/dwc_eth_qos_qcom.c b/drivers/net/dwc_eth_qos_qcom.c
+index df83f1c5f9e..8178138fc65 100644
+--- a/drivers/net/dwc_eth_qos_qcom.c
++++ b/drivers/net/dwc_eth_qos_qcom.c
+@@ -575,7 +575,6 @@ static int eqos_remove_resources_qcom(struct udevice *dev)
+ 
+ 	debug("%s(dev=%p):\n", __func__, dev);
+ 
+-	clk_free(&eqos->clk_tx);
+ 	dm_gpio_free(dev, &eqos->phy_reset_gpio);
+ 	reset_free(&eqos->reset_ctl);
+ 
+diff --git a/drivers/net/dwc_eth_qos_rockchip.c b/drivers/net/dwc_eth_qos_rockchip.c
+index 834307a4477..fa9e513faea 100644
+--- a/drivers/net/dwc_eth_qos_rockchip.c
++++ b/drivers/net/dwc_eth_qos_rockchip.c
+@@ -372,7 +372,7 @@ static int eqos_probe_resources_rk(struct udevice *dev)
+ 		ret = clk_get_by_name(dev, "clk_mac_speed", &eqos->clk_tx);
+ 		if (ret) {
+ 			dev_dbg(dev, "clk_get_by_name(clk_mac_speed) failed: %d", ret);
+-			goto err_free_clk_master_bus;
++			goto err_release_resets;
+ 		}
+ 	}
+ 
+@@ -393,8 +393,6 @@ static int eqos_probe_resources_rk(struct udevice *dev)
+ 
+ 	return 0;
+ 
+-err_free_clk_master_bus:
+-	clk_free(&eqos->clk_master_bus);
+ err_release_resets:
+ 	reset_release_bulk(&data->resets);
+ err_free:
+@@ -412,8 +410,6 @@ static int eqos_remove_resources_rk(struct udevice *dev)
+ 	if (dm_gpio_is_valid(&eqos->phy_reset_gpio))
+ 		dm_gpio_free(dev, &eqos->phy_reset_gpio);
+ 
+-	clk_free(&eqos->clk_tx);
+-	clk_free(&eqos->clk_master_bus);
+ 	reset_release_bulk(&data->resets);
+ 	free(data);
+ 
+-- 
+2.43.0
+

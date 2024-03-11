@@ -1,0 +1,55 @@
+From 2c0861915e3042ab48664110edc19f079e7fe3ea Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:44:49 +0100
+Subject: [PATCH 31/38] ARM: dts: stm32: Add alternate pinmux for MP13 SDMMC2
+ D4..D7 pins
+
+Add another mux option for SDMMC2 D4..D7 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-12-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp13-pinctrl.dtsi | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+index f2b41104a58..c6967e82b5d 100644
+--- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+@@ -490,6 +490,27 @@
+ 		};
+ 	};
+ 
++	sdmmc2_d47_pins_a: sdmmc2-d47-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 0, AF10)>, /* SDMMC2_D4 */
++				 <STM32_PINMUX('B', 9, AF10)>, /* SDMMC2_D5 */
++				 <STM32_PINMUX('C', 6, AF10)>, /* SDMMC2_D6 */
++				 <STM32_PINMUX('C', 7, AF10)>; /* SDMMC2_D7 */
++			slew-rate = <1>;
++			drive-push-pull;
++			bias-pull-up;
++		};
++	};
++
++	sdmmc2_d47_sleep_pins_a: sdmmc2-d47-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 0, ANALOG)>, /* SDMMC2_D4 */
++				 <STM32_PINMUX('B', 9, ANALOG)>, /* SDMMC2_D5 */
++				 <STM32_PINMUX('C', 6, ANALOG)>, /* SDMMC2_D6 */
++				 <STM32_PINMUX('C', 7, ANALOG)>; /* SDMMC2_D7 */
++		};
++	};
++
+ 	spi5_pins_a: spi5-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('H', 7, AF6)>, /* SPI5_SCK */
+-- 
+2.43.0
+

@@ -1,0 +1,73 @@
+From ac2c17ddb95d4befbe6673395745cb6ac55054e7 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:14:03 +0100
+Subject: [PATCH 35/38] ARM: dts: stm32: Add alternate pinmux for MP13 USART2
+ pins
+
+Add another mux option for USART2 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-16-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/dts/stm32mp13-pinctrl.dtsi | 41 +++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+index dae015a0ddf..65f91265a4d 100644
+--- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
+@@ -758,4 +758,45 @@
+ 				 <STM32_PINMUX('E', 11, ANALOG)>; /* USART2_CTS_NSS */
+ 		};
+ 	};
++
++	usart2_pins_b: usart2-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 11, AF1)>, /* USART2_TX */
++				 <STM32_PINMUX('A', 1, AF7)>; /* USART2_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>, /* USART2_RX */
++				 <STM32_PINMUX('E', 15, AF3)>; /* USART2_CTS_NSS */
++			bias-disable;
++		};
++	};
++
++	usart2_idle_pins_b: usart2-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 11, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('E', 15, ANALOG)>; /* USART2_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('A', 1, AF7)>; /* USART2_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>; /* USART2_RX */
++			bias-disable;
++		};
++	};
++
++	usart2_sleep_pins_b: usart2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 11, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('A', 1, ANALOG)>, /* USART2_RTS */
++				 <STM32_PINMUX('D', 15, ANALOG)>, /* USART2_RX */
++				 <STM32_PINMUX('E', 15, ANALOG)>; /* USART2_CTS_NSS */
++		};
++	};
+ };
+-- 
+2.43.0
+

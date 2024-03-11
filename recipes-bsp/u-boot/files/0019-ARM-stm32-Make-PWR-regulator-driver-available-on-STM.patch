@@ -1,0 +1,80 @@
+From 5a7de573c7574d6455e6ecedcb07c1b0133bc6bc Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 23:11:28 +0100
+Subject: [PATCH 19/38] ARM: stm32: Make PWR regulator driver available on
+ STM32MP13xx
+
+This patch makes STM32 PWR regulators available on stm32mp13xx.
+This requires TFA to clear RCC_SECCFGR, is disabled by default
+on stm32mp13xx and can only be enabled on board config level.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240319024534.103299-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Tom Rini <trini@konsulko.com>
+Cc: u-boot@dh-electronics.com
+Cc: u-boot@lists.denx.de
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ arch/arm/mach-stm32mp/Kconfig     | 17 +++++++++++++++++
+ arch/arm/mach-stm32mp/Kconfig.15x | 16 ----------------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm/mach-stm32mp/Kconfig b/arch/arm/mach-stm32mp/Kconfig
+index db47baba6d1..4093585a558 100644
+--- a/arch/arm/mach-stm32mp/Kconfig
++++ b/arch/arm/mach-stm32mp/Kconfig
+@@ -130,4 +130,21 @@ source "arch/arm/mach-stm32mp/Kconfig.13x"
+ source "arch/arm/mach-stm32mp/Kconfig.15x"
+ 
+ source "arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig"
++
++config STM32MP15_PWR
++	bool "Enable driver for STM32MP15x PWR"
++	depends on DM_REGULATOR && DM_PMIC && (STM32MP13x || STM32MP15x)
++	default y if STM32MP15x
++	help
++		This config enables implementation of driver-model pmic and
++		regulator uclass features for access to STM32MP15x PWR.
++
++config SPL_STM32MP15_PWR
++	bool "Enable driver for STM32MP15x PWR in SPL"
++	depends on SPL && SPL_DM_REGULATOR && SPL_DM_PMIC && (STM32MP13x || STM32MP15x)
++	default y if STM32MP15x
++	help
++		This config enables implementation of driver-model pmic and
++		regulator uclass features for access to STM32MP15x PWR in SPL.
++
+ endif
+diff --git a/arch/arm/mach-stm32mp/Kconfig.15x b/arch/arm/mach-stm32mp/Kconfig.15x
+index 1d32f8bf339..bfd1046f525 100644
+--- a/arch/arm/mach-stm32mp/Kconfig.15x
++++ b/arch/arm/mach-stm32mp/Kconfig.15x
+@@ -77,22 +77,6 @@ config TARGET_ICORE_STM32MP1
+ 
+ endchoice
+ 
+-config STM32MP15_PWR
+-	bool "Enable driver for STM32MP15x PWR"
+-	depends on DM_REGULATOR && DM_PMIC
+-	default y
+-	help
+-		This config enables implementation of driver-model pmic and
+-		regulator uclass features for access to STM32MP15x PWR.
+-
+-config SPL_STM32MP15_PWR
+-	bool "Enable driver for STM32MP15x PWR in SPL"
+-	depends on SPL && SPL_DM_REGULATOR && SPL_DM_PMIC
+-	default y
+-	help
+-		This config enables implementation of driver-model pmic and
+-		regulator uclass features for access to STM32MP15x PWR in SPL.
+-
+ config TEXT_BASE
+ 	default 0xC0100000
+ 
+-- 
+2.43.0
+
