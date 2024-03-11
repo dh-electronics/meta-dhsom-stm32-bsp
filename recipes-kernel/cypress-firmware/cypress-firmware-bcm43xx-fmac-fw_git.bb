@@ -4,6 +4,7 @@ SECTION = "kernel"
 LICENSE = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-cypress-license = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-brcm43430-1dx-sdio = "Firmware-cypress-fmac-fw"
+LICENSE:${PN}-bcm43439-1yn-sdio = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-bcm4373-2ae-sdio = "Firmware-cypress-fmac-fw"
 
@@ -34,6 +35,8 @@ do_install() {
 	install -m 0644 LICENCE ${D}${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw
 	install -m 0644 cyfmac43430-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/
 	install -m 0644 cyfmac43430-sdio.1DX.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/
+	install -m 0644 cyfmac43439-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/
+	install -m 0644 cyfmac43439-sdio.1YN.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/
 	install -m 0644 cyfmac43455-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/
 	install -m 0644 cyfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/
 	install -m 0644 cyfmac4373-sdio.2AE.bin ${D}${nonarch_base_libdir}/firmware/brcm/
@@ -42,6 +45,8 @@ do_install() {
 	# Symlink the firmware names
 	ln -s cyfmac43430-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin
 	ln -s cyfmac43430-sdio.1DX.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.clm_blob
+	ln -s cyfmac43439-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.bin
+	ln -s cyfmac43439-sdio.1YN.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.clm_blob
 	ln -s cyfmac43455-sdio.bin ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
 	ln -s cyfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.1MW.clm_blob
 	ln -s brcmfmac43455-sdio.1MW.clm_blob ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.clm_blob
@@ -55,7 +60,7 @@ do_install() {
 
 ALLOW_EMPTY:${PN} = "1"
 
-PACKAGES = " ${PN}-cypress-license ${PN}-brcm43430-1dx-sdio ${PN}-bcm43455-1mw-sdio ${PN}-bcm4373-2ae-sdio "
+PACKAGES = " ${PN}-cypress-license ${PN}-brcm43430-1dx-sdio ${PN}-bcm43439-1yn-sdio ${PN}-bcm43455-1mw-sdio ${PN}-bcm4373-2ae-sdio "
 
 FILES:${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw"
 
@@ -64,6 +69,13 @@ FILES:${PN}-brcm43430-1dx-sdio:append = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.1DX.clm_blob \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.clm_blob \
+	"
+
+FILES:${PN}-bcm43439-1yn-sdio:append = " \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac43439-sdio.bin \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.bin \
+	${nonarch_base_libdir}/firmware/brcm/cyfmac43439-sdio.1YN.clm_blob \
+	${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.clm_blob \
 	"
 
 FILES:${PN}-bcm43455-1mw-sdio = " \
@@ -83,6 +95,7 @@ FILES:${PN}-bcm4373-2ae-sdio = " \
 	"
 
 RDEPENDS:${PN}-brcm43430-1dx-sdio += "${PN}-cypress-license"
+RDEPENDS:${PN}-bcm43439-1yn-sdio += "${PN}-cypress-license"
 RDEPENDS:${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
 RDEPENDS:${PN}-bcm4373-2ae-sdio += "${PN}-cypress-license"
 
