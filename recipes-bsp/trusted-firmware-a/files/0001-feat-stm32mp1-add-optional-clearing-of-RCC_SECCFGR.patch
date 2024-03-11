@@ -1,0 +1,68 @@
+From 303615e809179ca0ea2336ca1d63e37518897fe4 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 21:57:46 +0100
+Subject: [PATCH 1/2] feat(stm32mp1): add optional clearing of RCC_SECCFGR
+
+Add configuration option to disable RCC NS access lock on STM32MP13xx.
+This implements behavior simimlar to STM32MP15xx disable MCKPROT, which
+removes access restrictions from SoC components that were thus far only
+accessible from the secure world. The option is disabled by default, i.e.
+the lock is active. With this option enabled, e.g. U-Boot or Linux can
+access PMIC, clock controller registers and so on.
+
+Upstream-Status: Submitted [https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/27349]
+Change-Id: I9c84ea1ce76c05bffeb4b45e53248c9427ebae58
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ plat/st/stm32mp1/bl2_plat_setup.c | 4 ++++
+ plat/st/stm32mp1/platform.mk      | 5 +++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/plat/st/stm32mp1/bl2_plat_setup.c b/plat/st/stm32mp1/bl2_plat_setup.c
+index eeabd09d7..3e4bfdba6 100644
+--- a/plat/st/stm32mp1/bl2_plat_setup.c
++++ b/plat/st/stm32mp1/bl2_plat_setup.c
+@@ -259,6 +259,10 @@ void bl2_el3_plat_arch_setup(void)
+ 	/* Disable MCKPROT */
+ 	mmio_clrbits_32(rcc_base + RCC_TZCR, RCC_TZCR_MCKPROT);
+ #endif
++#if STM32MP_RCC_NS
++	/* Enable peripheral access from NS */
++	mmio_write_32(rcc_base + RCC_SECCFGR, 0);
++#endif
+ 
+ 	/*
+ 	 * Set minimum reset pulse duration to 31ms for discrete power
+diff --git a/plat/st/stm32mp1/platform.mk b/plat/st/stm32mp1/platform.mk
+index ddc528925..13a1ad216 100644
+--- a/plat/st/stm32mp1/platform.mk
++++ b/plat/st/stm32mp1/platform.mk
+@@ -50,6 +50,9 @@ endif
+ # STM32 image header version v2.0
+ STM32_HEADER_VERSION_MAJOR:=	2
+ STM32_HEADER_VERSION_MINOR:=	0
++
++# Clear SECCFGR register 0x00
++STM32MP_RCC_NS		?=	0
+ endif
+ 
+ ifeq ($(STM32MP15),1)
+@@ -164,6 +167,7 @@ $(eval $(call assert_booleans,\
+ 		STM32MP_CRYPTO_ROM_LIB \
+ 		STM32MP_DDR_32BIT_INTERFACE \
+ 		STM32MP_DDR_DUAL_AXI_PORT \
++		STM32MP_RCC_NS \
+ 		STM32MP_USE_EXTERNAL_HEAP \
+ 		STM32MP13 \
+ 		STM32MP15 \
+@@ -192,6 +196,7 @@ $(eval $(call add_defines,\
+ 		STM32MP_CRYPTO_ROM_LIB \
+ 		STM32MP_DDR_32BIT_INTERFACE \
+ 		STM32MP_DDR_DUAL_AXI_PORT \
++		STM32MP_RCC_NS \
+ 		STM32MP_USE_EXTERNAL_HEAP \
+ 		STM32MP13 \
+ 		STM32MP15 \
+-- 
+2.43.0
+
