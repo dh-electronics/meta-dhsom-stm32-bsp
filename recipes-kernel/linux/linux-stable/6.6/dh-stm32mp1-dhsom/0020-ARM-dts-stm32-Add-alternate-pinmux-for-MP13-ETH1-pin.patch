@@ -1,0 +1,75 @@
+From 3b68ed728f50a7783015d96e9cf6cd2f72eb056c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:09:02 +0100
+Subject: [PATCH 20/43] ARM: dts: stm32: Add alternate pinmux for MP13 ETH1
+ pins
+
+Add another mux option for ETH1 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-4-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 46 +++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 396fb6eee8412..c709d64edcc2d 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -26,6 +26,52 @@ pins {
+ 		};
+ 	};
+ 
++	eth1_rgmii_pins_a: eth1-rgmii-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('G', 13, AF11)>, /* ETH_RGMII_TXD0 */
++				 <STM32_PINMUX('G', 14, AF11)>, /* ETH_RGMII_TXD1 */
++				 <STM32_PINMUX('C', 2, AF11)>, /* ETH_RGMII_TXD2 */
++				 <STM32_PINMUX('E', 5, AF10)>, /* ETH_RGMII_TXD3 */
++				 <STM32_PINMUX('B', 11, AF11)>, /* ETH_RGMII_TX_CTL */
++				 <STM32_PINMUX('C', 1, AF11)>, /* ETH_RGMII_GTX_CLK */
++				 <STM32_PINMUX('A', 2, AF11)>, /* ETH_MDIO */
++				 <STM32_PINMUX('G', 2, AF11)>; /* ETH_MDC */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++
++		pins2 {
++			pinmux = <STM32_PINMUX('C', 4, AF11)>, /* ETH_RGMII_RXD0 */
++				 <STM32_PINMUX('C', 5, AF11)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('B', 0, AF11)>, /* ETH_RGMII_RXD2 */
++				 <STM32_PINMUX('B', 1, AF11)>, /* ETH_RGMII_RXD3 */
++				 <STM32_PINMUX('A', 7, AF11)>, /* ETH_RGMII_RX_CTL */
++				 <STM32_PINMUX('D', 7, AF10)>; /* ETH_RGMII_RX_CLK */
++			bias-disable;
++		};
++
++	};
++
++	eth1_rgmii_sleep_pins_a: eth1-rgmii-sleep-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('G', 13, ANALOG)>, /* ETH_RGMII_TXD0 */
++				 <STM32_PINMUX('G', 14, ANALOG)>, /* ETH_RGMII_TXD1 */
++				 <STM32_PINMUX('C', 2, ANALOG)>, /* ETH_RGMII_TXD2 */
++				 <STM32_PINMUX('E', 5, ANALOG)>, /* ETH_RGMII_TXD3 */
++				 <STM32_PINMUX('B', 11, ANALOG)>, /* ETH_RGMII_TX_CTL */
++				 <STM32_PINMUX('C', 1, ANALOG)>, /* ETH_RGMII_GTX_CLK */
++				 <STM32_PINMUX('A', 2, ANALOG)>, /* ETH_MDIO */
++				 <STM32_PINMUX('G', 2, ANALOG)>, /* ETH_MDC */
++				 <STM32_PINMUX('C', 4, ANALOG)>, /* ETH_RGMII_RXD0 */
++				 <STM32_PINMUX('C', 5, ANALOG)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('B', 0, ANALOG)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('B', 1, ANALOG)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('A', 7, ANALOG)>, /* ETH_RGMII_RX_CTL */
++				 <STM32_PINMUX('D', 7, ANALOG)>; /* ETH_RGMII_RX_CLK */
++		};
++	};
++
+ 	i2c1_pins_a: i2c1-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
+-- 
+2.43.0
+

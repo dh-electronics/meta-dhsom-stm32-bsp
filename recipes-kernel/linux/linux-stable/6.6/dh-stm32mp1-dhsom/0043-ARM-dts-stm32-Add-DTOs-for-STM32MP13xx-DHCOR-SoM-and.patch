@@ -1,0 +1,125 @@
+From d43913ec8714161685b49ae17f82797f3c4f62e4 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 10 Mar 2024 17:51:12 +0100
+Subject: [PATCH 43/43] ARM: dts: stm32: Add DTOs for STM32MP13xx DHCOR SoM and
+ DHSBC board
+
+Add DT overlays for STM32MP13xx DHCOR SoM and DHSBC carrier board.
+The following DTOs are currently supported:
+- stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2
+  - joy-IT RB-TFT3.2-V2 240x320 SPI LCD and XPT2046 resistive touch controller
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/Makefile                 |  1 +
+ ...p13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso | 85 +++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+
+diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
+index 4711873798616..e73199e4f1368 100644
+--- a/arch/arm/boot/dts/st/Makefile
++++ b/arch/arm/boot/dts/st/Makefile
+@@ -29,6 +29,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32h743i-disco.dtb \
+ 	stm32h750i-art-pi.dtb \
+ 	stm32mp135f-dhsom-dhsbc.dtb \
++	stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtbo \
+ 	stm32mp135f-dk.dtb \
+ 	stm32mp151a-prtt1a.dtb \
+ 	stm32mp151a-prtt1c.dtb \
+diff --git a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+new file mode 100644
+index 0000000000000..3892c51b4fbdc
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2024 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/input/linux-event-codes.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-1 {
++			label = "KEY2";
++			linux,code = <KEY_2>;
++			gpios = <&gpiog 10 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++	};
++
++	gpio-keys-polled {
++		compatible = "gpio-keys-polled";
++		poll-interval = <20>;
++
++		button-0 {
++			label = "KEY1";
++			linux,code = <KEY_1>;
++			/* IRQ bank A shared with PA1 touch controller */
++			gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
++		};
++
++		button-2 {
++			label = "KEY3";
++			linux,code = <KEY_3>;
++			/* IRQ line 0 taken by PI0 / SoM RTC IRQ */
++			gpios = <&gpiod 0 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
++
++&m_can1 {
++	/* Collides with KEY2/PG10 KEY3/PD0 */
++	status = "disabled";
++};
++
++&m_can2 {
++	/* Collides with TP_CS/PE6 */
++	status = "disabled";
++};
++
++&usart2 {
++	/* Collides with TP_IRQ/PA1 */
++	status = "disabled";
++};
++
++&spi3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&gpiof 3 0>, <&gpioe 0 0>;
++	status = "okay";
++
++	lcd@0 {
++		compatible = "adafruit,yx240qv29", "ilitek,ili9341";
++		reg = <0>;
++		spi-max-frequency = <16000000>;
++		dc-gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
++		rotation = <90>;
++	};
++
++	tp@1 {
++		compatible = "ti,tsc2046";
++		reg = <1>;
++		interrupt-parent = <&gpioa>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		pendown-gpio = <&gpioa 1 GPIO_ACTIVE_LOW>;
++		spi-max-frequency = <500000>;
++		ti,pressure-max = /bits/ 16 <255>;
++		ti,x-plate-ohms = /bits/ 16 <60>;
++	};
++};
+-- 
+2.43.0
+

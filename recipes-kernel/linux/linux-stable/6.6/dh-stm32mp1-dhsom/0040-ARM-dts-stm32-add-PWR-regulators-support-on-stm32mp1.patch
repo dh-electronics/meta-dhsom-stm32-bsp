@@ -1,0 +1,54 @@
+From 72fcddde6a375f88308ffeb0f1ce900c0751254a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 22:06:49 +0100
+Subject: [PATCH 40/43] ARM: dts: stm32: add PWR regulators support on
+ stm32mp131
+
+This patch adds support of STM32 PWR regulators on stm32mp131.
+This requires TFA to clear RCC_SECCFGR, is disabled by default
+and can only be enabled on board DT level.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240319040528.104932-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 179aa3a17c381..7a9d8b97a12d1 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1092,6 +1092,30 @@ rcc: rcc@50000000 {
+ 				 <&scmi_clk CK_SCMI_LSI>;
+ 		};
+ 
++		pwr_regulators: pwr@50001000 {
++			compatible = "st,stm32mp1,pwr-reg";
++			reg = <0x50001000 0x10>;
++			status = "disabled";
++
++			reg11: reg11 {
++				regulator-name = "reg11";
++				regulator-min-microvolt = <1100000>;
++				regulator-max-microvolt = <1100000>;
++			};
++
++			reg18: reg18 {
++				regulator-name = "reg18";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++			};
++
++			usb33: usb33 {
++				regulator-name = "usb33";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++			};
++		};
++
+ 		exti: interrupt-controller@5000d000 {
+ 			compatible = "st,stm32mp13-exti", "syscon";
+ 			interrupt-controller;
+-- 
+2.43.0
+

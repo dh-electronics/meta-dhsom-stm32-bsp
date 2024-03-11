@@ -1,0 +1,34 @@
+From 140d1c55f9e7610ae8db155f0337ae16a10e7c85 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:08:58 +0100
+Subject: [PATCH 18/43] ARM: dts: stm32: Add alternate pinmux for MP13 ADC pins
+
+Add another mux option for ADC pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+SUpstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-2-marex@denx.de/]
+igned-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 27e0c3826789d..03ded41539062 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -6,6 +6,12 @@
+ #include <dt-bindings/pinctrl/stm32-pinfunc.h>
+ 
+ &pinctrl {
++	adc1_pins_a: adc1-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 3, ANALOG)>; /* ADC1 in12 */
++		};
++	};
++
+ 	adc1_usb_cc_pins_a: adc1-usb-cc-pins-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('F', 12, ANALOG)>, /* ADC1 in6 */
+-- 
+2.43.0
+

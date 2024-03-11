@@ -1,0 +1,46 @@
+From 19203a09adcce9a53854c04bf885b35cfe0201ef Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:10:30 +0100
+Subject: [PATCH 22/43] ARM: dts: stm32: Add alternate pinmux for MP13 I2C5
+ pins
+
+Add another mux option for I2C5 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-6-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 899f0f98e1a65..cfbae71efc729 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -151,6 +151,23 @@ pins {
+ 		};
+ 	};
+ 
++	i2c5_pins_b: i2c5-1 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 1, AF4)>, /* I2C5_SCL */
++				 <STM32_PINMUX('E', 13, AF4)>; /* I2C5_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
++
++	i2c5_sleep_pins_b: i2c5-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* I2C5_SCL */
++				 <STM32_PINMUX('E', 13, ANALOG)>; /* I2C5_SDA */
++		};
++	};
++
+ 	mcp23017_pins_a: mcp23017-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('G', 12, GPIO)>;
+-- 
+2.43.0
+

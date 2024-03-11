@@ -1,0 +1,80 @@
+From 32863d9f1bbb6fd595aac2e34c0237c8b5add129 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:37:30 +0100
+Subject: [PATCH 27/43] ARM: dts: stm32: Add alternate pinmux for MP13 QSPI
+ pins
+
+Add another mux option for QSPI pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-11-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 51 +++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index cf070fbd7f708..77a222903de84 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -305,6 +305,57 @@ pins {
+ 		};
+ 	};
+ 
++	qspi_clk_pins_a: qspi-clk-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 10, AF9)>; /* QSPI_CLK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <3>;
++		};
++	};
++
++	qspi_clk_sleep_pins_a: qspi-clk-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 10, ANALOG)>; /* QSPI_CLK */
++		};
++	};
++
++	qspi_bk1_pins_a: qspi-bk1-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 8, AF10)>, /* QSPI_BK1_IO0 */
++				 <STM32_PINMUX('F', 9, AF10)>, /* QSPI_BK1_IO1 */
++				 <STM32_PINMUX('D', 11, AF9)>, /* QSPI_BK1_IO2 */
++				 <STM32_PINMUX('H', 7, AF13)>; /* QSPI_BK1_IO3 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
++
++	qspi_bk1_sleep_pins_a: qspi-bk1-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 8, ANALOG)>, /* QSPI_BK1_IO0 */
++				 <STM32_PINMUX('F', 9, ANALOG)>, /* QSPI_BK1_IO1 */
++				 <STM32_PINMUX('D', 11, ANALOG)>, /* QSPI_BK1_IO2 */
++				 <STM32_PINMUX('H', 7, ANALOG)>; /* QSPI_BK1_IO3 */
++		};
++	};
++
++	qspi_cs1_pins_a: qspi-cs1-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 2, AF9)>; /* QSPI_BK1_NCS */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
++
++	qspi_cs1_sleep_pins_a: qspi-cs1-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 2, ANALOG)>; /* QSPI_BK1_NCS */
++		};
++	};
++
+ 	sdmmc1_b4_pins_a: sdmmc1-b4-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+-- 
+2.43.0
+

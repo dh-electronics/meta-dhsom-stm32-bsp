@@ -1,0 +1,59 @@
+From 7fcb25048008a0c43ee39ffb010212cd6fc173b1 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:44:09 +0100
+Subject: [PATCH 34/43] ARM: dts: stm32: Add alternate pinmux for MP13 UART4
+ pins
+
+Add another mux option for UART4 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-18-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 30 +++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 65f91265a4d4a..7014c7a6d23e6 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -617,6 +617,36 @@ pins {
+ 		};
+ 	};
+ 
++	uart4_pins_b: uart4-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 9, AF8)>; /* UART4_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 8, AF8)>; /* UART4_RX */
++			bias-pull-up;
++		};
++	};
++
++	uart4_idle_pins_b: uart4-idle-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 9, ANALOG)>; /* UART4_TX */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 8, AF8)>; /* UART4_RX */
++			bias-pull-up;
++		};
++	};
++
++	uart4_sleep_pins_b: uart4-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 9, ANALOG)>, /* UART4_TX */
++				 <STM32_PINMUX('D', 8, ANALOG)>; /* UART4_RX */
++		};
++	};
++
+ 	uart8_pins_a: uart8-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
+-- 
+2.43.0
+

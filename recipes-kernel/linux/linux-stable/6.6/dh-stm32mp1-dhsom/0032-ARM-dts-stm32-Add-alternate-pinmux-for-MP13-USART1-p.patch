@@ -1,0 +1,59 @@
+From 82962012e575eff4f4a6fc13fa00fc9a1adf7dc1 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 9 Mar 2024 01:13:47 +0100
+Subject: [PATCH 32/43] ARM: dts: stm32: Add alternate pinmux for MP13 USART1
+ pins
+
+Add another mux option for USART1 pins, this is used on
+DH electronics STM32MP13xx DHCOR DHSBC board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-16-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 30 +++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 7abd227e69f4b..dae015a0ddf86 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -688,6 +688,36 @@ pins {
+ 		};
+ 	};
+ 
++	usart1_pins_b: usart1-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('C', 0, AF7)>; /* USART1_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 14, AF7)>; /* USART1_RX */
++			bias-pull-up;
++		};
++	};
++
++	usart1_idle_pins_b: usart1-idle-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('C', 0, ANALOG)>; /* USART1_TX */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 14, AF7)>; /* USART1_RX */
++			bias-pull-up;
++		};
++	};
++
++	usart1_sleep_pins_b: usart1-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 0, ANALOG)>, /* USART1_TX */
++				 <STM32_PINMUX('D', 14, ANALOG)>; /* USART1_RX */
++		};
++	};
++
+ 	usart2_pins_a: usart2-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('H', 12, AF1)>, /* USART2_TX */
+-- 
+2.43.0
+
