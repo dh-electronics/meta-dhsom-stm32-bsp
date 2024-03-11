@@ -3,7 +3,7 @@ SECTION = "kernel"
 
 LICENSE = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-cypress-license = "Firmware-cypress-fmac-fw"
-LICENSE:${PN}-brcm43430-1dx-sdio = "Firmware-cypress-fmac-fw"
+LICENSE:${PN}-bcm43430-1dx-sdio = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-bcm43439-1yn-sdio = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-bcm43455-1mw-sdio = "Firmware-cypress-fmac-fw"
 LICENSE:${PN}-bcm4373-2ae-sdio = "Firmware-cypress-fmac-fw"
@@ -60,11 +60,11 @@ do_install() {
 
 ALLOW_EMPTY:${PN} = "1"
 
-PACKAGES = " ${PN}-cypress-license ${PN}-brcm43430-1dx-sdio ${PN}-bcm43439-1yn-sdio ${PN}-bcm43455-1mw-sdio ${PN}-bcm4373-2ae-sdio "
+PACKAGES = " ${PN}-cypress-license ${PN}-bcm43430-1dx-sdio ${PN}-bcm43439-1yn-sdio ${PN}-bcm43455-1mw-sdio ${PN}-bcm4373-2ae-sdio "
 
 FILES:${PN}-cypress-license = "${nonarch_base_libdir}/firmware/brcm/LICENSE.cypress-fmac-fw"
 
-FILES:${PN}-brcm43430-1dx-sdio:append = " \
+FILES:${PN}-bcm43430-1dx-sdio:append = " \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin \
 	${nonarch_base_libdir}/firmware/brcm/cyfmac43430-sdio.1DX.clm_blob \
@@ -94,7 +94,7 @@ FILES:${PN}-bcm4373-2ae-sdio = " \
 	${nonarch_base_libdir}/firmware/brcm/brcmfmac4373-sdio.clm_blob \
 	"
 
-RDEPENDS:${PN}-brcm43430-1dx-sdio += "${PN}-cypress-license"
+RDEPENDS:${PN}-bcm43430-1dx-sdio += "${PN}-cypress-license"
 RDEPENDS:${PN}-bcm43439-1yn-sdio += "${PN}-cypress-license"
 RDEPENDS:${PN}-bcm43455-1mw-sdio += "${PN}-cypress-license"
 RDEPENDS:${PN}-bcm4373-2ae-sdio += "${PN}-cypress-license"
