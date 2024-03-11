@@ -1,0 +1,372 @@
+From 2ee3e6368b9cbc4a9d284fbbf8d6d7006fb37bbb Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 5 Mar 2024 21:31:45 +0100
+Subject: [PATCH] dts: stm32: add support for STM32MP13xx DHCOR SoM and DHSBC
+ board
+
+This stm32mp135f-dhcor-dhsbc board is a stack of DHCOR SoM based on
+STM32MP135F SoC (900MHz / crypto capabilities) populated on DHSBC
+carrier board.
+
+The SoM contains the following peripherals:
+- STPMIC (power delivery)
+- 512MB DDR3L memory
+- eMMC and SDIO WiFi module
+
+The DHSBC carrier board contains the following peripherals:
+- Two RGMII Ethernet ports
+- USB-A Host port, USB-C peripheral port, USB-C power supply plug
+- Expansion connector
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts |  51 ++++
+ core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi  | 249 ++++++++++++++++++
+ core/arch/arm/plat-stm32mp1/conf.mk           |   5 +-
+ 3 files changed, 304 insertions(+), 1 deletion(-)
+ create mode 100644 core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts
+ create mode 100644 core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
+
+diff --git a/core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts b/core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts
+new file mode 100644
+index 000000000..dd172faaa
+--- /dev/null
++++ b/core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2024 Marek Vasut <marex@denx.de>
++ *
++ * DHCOR STM32MP13 variant:
++ * DHCR-STM32MP135F-C100-R051-EE-F0409-SPI4-RTC-WBT-I-01LG
++ * DHCOR PCB number: 718-100 or newer
++ * DHSBC PCB number: 719-100 or newer
++ */
++
++/dts-v1/;
++
++#include "stm32mp135.dtsi"
++#include "stm32mp13xf.dtsi"
++#include "stm32mp13xx-dhcor-som.dtsi"
++
++/ {
++	model = "DH electronics STM32MP135F DHCOR DHSBC";
++	compatible = "dh,stm32mp135f-dhcor-dhsbc",
++		     "dh,stm32mp135f-dhcor-som",
++		     "st,stm32mp135";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &uart4;
++	};
++};
++
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins_b>;
++	status = "okay";
++};
++
++&pinctrl {
++	uart4_pins_b: uart4-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 9, AF8)>; /* UART4_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 8, AF8)>; /* UART4_RX */
++			bias-pull-up;
++		};
++	};
++};
+diff --git a/core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi b/core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
+new file mode 100644
+index 000000000..e79a6eff2
+--- /dev/null
++++ b/core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
+@@ -0,0 +1,249 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2024 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/clock/stm32mp13-clksrc.h>
++#include <dt-bindings/pinctrl/stm32-pinfunc.h>
++#include <dt-bindings/regulator/st,stm32mp13-regulator.h>
++
++/ {
++	model = "DH electronics STM32MP13xx DHCOR SoM";
++	compatible = "dh,stm32mp131a-dhcor-som",
++		     "st,stm32mp131";
++
++	memory@c0000000 {
++		device_type = "memory";
++		reg = <0xc0000000 0x20000000>;
++	};
++
++	vin: vin {
++		compatible = "regulator-fixed";
++		regulator-name = "vin";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++	};
++
++	sdmmc_io: sdmmc_io {
++		compatible = "regulator-fixed";
++		regulator-name = "vin";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++};
++
++&bsec {
++	board_id: board_id@f0 {
++		reg = <0xf0 0x4>;
++		st,non-secure-otp;
++	};
++};
++
++&iwdg1 {
++	timeout-sec = <32>;
++	status = "okay";
++};
++
++&oem_enc_key {
++	st,non-secure-otp-provisioning;
++};
++
++&pwr_regulators {
++	status = "disabled";
++};
++
++&rcc {
++	compatible = "st,stm32mp13-rcc", "syscon";
++
++	st,clksrc = <
++		CLK_MPU_PLL1P
++		CLK_AXI_PLL2P
++		CLK_MLAHBS_PLL3
++		CLK_RTC_LSE
++		CLK_MCO1_HSE
++		CLK_MCO2_DISABLED
++		CLK_ADC1_PLL4R
++		CLK_ADC2_PLL4R
++		CLK_CKPER_HSE
++		CLK_DCMIPP_PLL2Q
++		CLK_ETH1_PLL4P
++		CLK_ETH2_PLL4P
++		CLK_FDCAN_PLL4R
++		CLK_I2C12_HSI
++		CLK_I2C3_HSI
++		CLK_I2C5_HSI
++		CLK_LPTIM3_PCLK3
++		CLK_QSPI_PLL3R
++		CLK_RNG1_PLL4R
++		CLK_SAES_AXI
++		CLK_SAI1_CKPER
++		CLK_SAI2_CKPER
++		CLK_SDMMC1_PLL3R	/* WiFi */
++		CLK_SDMMC2_PLL3R	/* eMMC */
++		CLK_SPI23_PLL3Q		/* TPM + Exp. SPI */
++		CLK_SPI4_HSI
++		CLK_STGEN_HSE
++		CLK_UART1_HSI
++		CLK_UART2_HSI
++		CLK_UART35_HSI
++		CLK_UART4_HSI
++		CLK_UART6_HSI
++		CLK_UART78_HSI
++		CLK_USBO_USBPHY
++		CLK_USBPHY_HSE
++	>;
++
++	st,clkdiv = <
++		DIV(DIV_MPU, 1)
++		DIV(DIV_AXI, 0)
++		DIV(DIV_MLAHB, 0)
++		DIV(DIV_APB1, 1)
++		DIV(DIV_APB2, 1)
++		DIV(DIV_APB3, 1)
++		DIV(DIV_APB4, 1)
++		DIV(DIV_APB5, 2)
++		DIV(DIV_APB6, 1)
++		DIV(DIV_RTC, 0)
++		DIV(DIV_MCO1, 0)
++		DIV(DIV_MCO2, 0)
++	>;
++
++	st,pll_vco {
++		pll1_vco_2000MHz: pll1-vco-2000MHz {
++			src = <CLK_PLL12_HSE>;
++			divmn = <1 82>;
++			frac = <0xAAA>;
++		};
++
++		pll1_vco_1300MHz: pll1-vco-1300MHz {
++			src = <CLK_PLL12_HSE>;
++			divmn = <2 80>;
++			frac = <0x800>;
++		};
++
++		pll2_vco_1066MHz: pll2-vco-1066MHz {
++			src = <CLK_PLL12_HSE>;
++			divmn = <2 65>;
++			frac = <0x1400>;
++		};
++
++		pll3_vco_600MHz: pll3-vco-600MHz {
++			src = <CLK_PLL3_HSE>;
++			divmn = <2 74>;
++		};
++
++		pll4_vco_750MHz: pll4-vco-750MHz {
++			src = <CLK_PLL4_HSE>;
++			divmn = <3 124>;
++		};
++	};
++
++	/* VCO = 1300.0 MHz => P = 650 (CPU) */
++	pll1: st,pll@0 {
++		compatible = "st,stm32mp1-pll";
++		reg = <0>;
++
++		st,pll = <&pll1_cfg1>;
++
++		pll1_cfg1: pll1_cfg1 {
++			st,pll_vco = <&pll1_vco_1300MHz>;
++			st,pll_div_pqr = <0 1 1>;
++		};
++
++		pll1_cfg2: pll1_cfg2 {
++			st,pll_vco = <&pll1_vco_2000MHz>;
++			st,pll_div_pqr = <0 1 1>;
++		};
++	};
++
++	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 266, R = 533 (DDR) */
++	pll2: st,pll@1 {
++		compatible = "st,stm32mp1-pll";
++		reg = <1>;
++
++		st,pll = <&pll2_cfg1>;
++
++		pll2_cfg1: pll2_cfg1 {
++			st,pll_vco = <&pll2_vco_1066MHz>;
++			st,pll_div_pqr = <1 1 0>;
++		};
++	};
++
++	/* VCO = 600 MHz => P = 200, Q = 150, R = 200 */
++	pll3: st,pll@2 {
++		compatible = "st,stm32mp1-pll";
++		reg = <2>;
++
++		st,pll = <&pll3_cfg1>;
++
++		pll3_cfg1: pll3_cfg1 {
++			st,pll_vco = <&pll3_vco_600MHz>;
++			st,pll_div_pqr = <2 3 2>;
++		};
++	};
++
++	/* VCO = 750.0 MHz => P = 125, Q = 83, R = 75 */
++	pll4: st,pll@3 {
++		compatible = "st,stm32mp1-pll";
++		reg = <3>;
++		st,pll = <&pll4_cfg1>;
++
++		pll4_cfg1: pll4_cfg1 {
++			st,pll_vco = <&pll4_vco_750MHz>;
++			st,pll_div_pqr = <5 8 9>;
++		};
++	};
++
++	st,clk_opp {
++		/* CK_MPU clock config for MP13 */
++		st,ck_mpu {
++
++			cfg_1 {
++				hz = <650000000>;
++				st,clksrc = <CLK_MPU_PLL1P>;
++				st,pll = <&pll1_cfg1>;
++			};
++
++			cfg_2 {
++				hz = <1000000000>;
++				st,clksrc = <CLK_MPU_PLL1P>;
++				st,pll = <&pll1_cfg2>;
++			};
++		};
++	};
++};
++
++&rng {
++	status = "okay";
++	clock-error-detect;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&saes {
++	status = "okay";
++};
++
++&sdmmc1_io {
++	vddsd1-supply = <&sdmmc_io>;
++};
++
++&sdmmc2_io {
++	vddsd2-supply = <&sdmmc_io>;
++};
++
++&pinctrl {
++	i2c3_pins_a: i2c3-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 8, AF5)>, /* I2C3_SCL */
++				 <STM32_PINMUX('H', 14, AF4)>; /* I2C3_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
++};
+diff --git a/core/arch/arm/plat-stm32mp1/conf.mk b/core/arch/arm/plat-stm32mp1/conf.mk
+index a629c0803..7e3bb9341 100644
+--- a/core/arch/arm/plat-stm32mp1/conf.mk
++++ b/core/arch/arm/plat-stm32mp1/conf.mk
+@@ -10,10 +10,12 @@ flavor_dts_file-157C_DK2_SCMI = stm32mp157c-dk2-scmi.dts
+ flavor_dts_file-157C_ED1_SCMI = stm32mp157c-ed1-scmi.dts
+ flavor_dts_file-157C_EV1_SCMI = stm32mp157c-ev1-scmi.dts
+ 
++flavor_dts_file-135F_DHCOR_DHSBC = stm32mp135f-dhcor-dhsbc.dts
+ flavor_dts_file-135F_DK = stm32mp135f-dk.dts
+ 
+ flavorlist-cryp-512M = $(flavor_dts_file-157C_DK2) \
+ 		       $(flavor_dts_file-157C_DK2_SCMI) \
++		       $(flavor_dts_file-135F_DHCOR_DHSBC) \
+ 		       $(flavor_dts_file-135F_DK)
+ 
+ flavorlist-no_cryp-512M = $(flavor_dts_file-157A_DK1) \
+@@ -56,7 +58,8 @@ flavorlist-MP15 = $(flavor_dts_file-157A_DHCOR_AVENGER96) \
+ 		  $(flavor_dts_file-157C_ED1_SCMI) \
+ 		  $(flavor_dts_file-157C_EV1_SCMI)
+ 
+-flavorlist-MP13 = $(flavor_dts_file-135F_DK)
++flavorlist-MP13 = $(flavor_dts_file-135F_DHCOR_DHSBC) \
++		  $(flavor_dts_file-135F_DK)
+ 
+ ifneq ($(PLATFORM_FLAVOR),)
+ ifeq ($(flavor_dts_file-$(PLATFORM_FLAVOR)),)
+-- 
+2.43.0
+
