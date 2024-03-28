@@ -13,7 +13,7 @@ This layer depends on:
   - layers: meta
 
 * URI: https://source.denx.de/denx/meta-mainline-common.git
-  - branch: dunfell or kirkstone
+  - branch: main
 
 # Building image
 ----------------
@@ -46,8 +46,8 @@ be cloned into a location accessible to the build system and a branch listed
 below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
-* https://source.denx.de/denx/meta-mainline-common.git			(branch: dunfell or kirkstone)
-* https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git    	(branch: dunfell or kirkstone)
+* https://source.denx.de/denx/meta-mainline-common.git			(branch: main)
+* https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git    	(branch: main)
 * git://git.yoctoproject.org/poky					(branch: dunfell or kirkstone)
 
 With all the source artifacts in place, proceed with setting up the build
