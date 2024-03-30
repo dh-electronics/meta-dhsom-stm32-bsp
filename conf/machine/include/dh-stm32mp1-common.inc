@@ -72,11 +72,11 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree u-boot-de
 IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
-EXTRA_IMAGEDEPENDS += "virtual/bootloader"
+EXTRA_IMAGEDEPENDS += "u-boot-mainline"
 WKS_FILE = "sdimage-stm32mp1.wks"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
-IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage virtual/bootloader "
-do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot virtual/bootloader:do_deploy"
+IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage u-boot-mainline "
+do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot u-boot-mainline:do_deploy"
 
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/include/dh-stm32mp1-common-extra.inc
