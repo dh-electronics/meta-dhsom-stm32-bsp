@@ -45,7 +45,9 @@ KERNEL_CLASSES += " kernel-fitimage "
 KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
-PREFERRED_VERSION_linux-stable ?= "6.1%"
+PREFERRED_VERSION_linux-stable ?= "6.6%"
+KERNEL_DEVICETREE_PATH_PREFIX = "${@'st/' if (d.getVar('PREFERRED_VERSION_linux-stable') in ["6.6%"]) else ''}"
+KERNEL_DTBVENDORED = "0"
 KERNEL_DTC_FLAGS += "-@"
 
 # Mesa
