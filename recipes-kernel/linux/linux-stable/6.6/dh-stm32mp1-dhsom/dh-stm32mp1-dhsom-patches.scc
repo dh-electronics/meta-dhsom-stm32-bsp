@@ -1,0 +1,16 @@
+patch 0001-media-stm32-dcmi-only-create-dma-descriptor-once-at-.patch
+patch 0002-media-stm32-dcmi-perform-dmaengine_slave_config-at-p.patch
+patch 0003-media-stm32-dcmi-create-video-dev-within-notifier-bo.patch
+patch 0004-media-stm32-dcmi-fix-only-create-dma-descriptor-once.patch
+patch 0005-media-stm32-dcmi-rework-spin_lock-calls.patch
+patch 0006-media-stm32-dcmi-perform-all-dma-handling-within-irq.patch
+patch 0007-media-stm32-dcmi-addition-of-DMA-MDMA-chaining-suppo.patch
+patch 0008-media-stm32-dcmi-continuous-mode-capture-in-JPEG.patch
+patch 0009-perf-stm32-ddrperfm-driver-creation.patch
+patch 0010-perf-stm32-support-the-pmu-.read-ops.patch
+patch 0011-perf-stm32-fix-printf-formatter.patch
+patch 0012-drm-bridge-dw-mipi-dsi-Call-modeset-in-modeset-callb.patch
+patch 0013-watchdog-stm32_iwdg-Add-pretimeout-support.patch
+patch 0014-ARM-dts-stm32-Add-IWDG2-EXTI-interrupt-mapping-and-m.patch
+patch 0015-ARM-dts-stm32-add-ddrperfm-on-stm32mp151.patch
+patch 0016-ARM-dts-stm32-Add-DT-overlays-for-STM32MP15xx-DHSOM.patch
