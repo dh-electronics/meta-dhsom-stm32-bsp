@@ -20,7 +20,6 @@ patch 0019-ARM-dts-stm32-add-DCMI-DMA-MDMA-chaining-on-stm32mp1.patch
 patch 0020-irqchip-stm32-exti-Add-STM32MP15xx-IWDG2-EXTI-to-GIC.patch
 patch 0021-watchdog-stm32_iwdg-Add-pretimeout-support.patch
 patch 0022-ARM-dts-stm32-Add-IWDG2-EXTI-interrupt-mapping-and-m.patch
-patch 0023-net-ks8851-Drop-IRQ-threading.patch
 patch 0024-perf-stm32-ddrperfm-driver-creation.patch
 patch 0025-perf-stm32-support-the-pmu-.read-ops.patch
 patch 0026-perf-stm32-update-build-dependency.patch
