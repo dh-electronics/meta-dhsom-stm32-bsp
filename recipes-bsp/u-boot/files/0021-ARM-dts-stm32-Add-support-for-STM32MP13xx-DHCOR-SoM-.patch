@@ -1,7 +1,7 @@
-From a036342f72fe52714e9bd5e5416240733f4f55e6 Mon Sep 17 00:00:00 2001
+From 16a013c2d8e4e60965e3a000ae4e4ce9bb26eaa2 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 6 Mar 2024 00:07:50 +0100
-Subject: [PATCH 38/38] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
+Subject: [PATCH 21/21] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
  and DHSBC board
 
 This stm32mp135f-dhcor-dhsbc board is a stack of DHCOR SoM based on
@@ -18,8 +18,16 @@ The DHSBC carrier board contains the following peripherals:
 - USB-A Host port, USB-C peripheral port, USB-C power supply plug
 - Expansion connector
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240421231849.194648-19-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240427222130.66693-2-marex@denx.de/]
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: u-boot@dh-electronics.com
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+V2: Add RB from Patrice
 ---
  arch/arm/dts/Makefile                         |   1 +
  .../dts/stm32mp135f-dhcor-dhsbc-u-boot.dtsi   |  25 ++

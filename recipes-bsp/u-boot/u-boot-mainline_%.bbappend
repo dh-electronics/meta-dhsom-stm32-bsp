@@ -29,25 +29,8 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0017-ARM-dts-stm32-add-eth1-and-eth2-support-on-stm32mp13.patch \
 	file://0018-ARM-dts-stm32-add-PWR-regulators-support-on-stm32mp1.patch \
 	file://0019-ARM-stm32-Make-PWR-regulator-driver-available-on-STM.patch \
-	file://0020-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-ADC-pins.patch \
-	file://0021-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-ADC-CC-p.patch \
-	file://0022-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-ETH1-pin.patch \
-	file://0023-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-ETH2-pin.patch \
-	file://0024-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-I2C5-pin.patch \
-	file://0025-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-MCAN1-pi.patch \
-	file://0026-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-MCAN2-pi.patch \
-	file://0027-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-PWM5-pin.patch \
-	file://0028-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-PWM13-pi.patch \
-	file://0029-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-QSPI-pin.patch \
-	file://0030-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-SAI1-pin.patch \
-	file://0031-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-SDMMC2-D.patch \
-	file://0032-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-SPI2-pin.patch \
-	file://0033-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-SPI3-pin.patch \
-	file://0034-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-USART1-p.patch \
-	file://0035-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-USART2-p.patch \
-	file://0036-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-UART4-pi.patch \
-	file://0037-ARM-dts-stm32-Add-alternate-pinmux-for-MP13-UART7-pi.patch \
-	file://0038-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch \
+	file://0020-ARM-dts-stm32-Add-pinmux-nodes-for-DH-electronics-ST.patch \
+	file://0021-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch \
 	"
 
 
@@ -60,4 +43,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240422.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240429.01"
