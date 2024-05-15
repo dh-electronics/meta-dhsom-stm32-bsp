@@ -31,6 +31,10 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0019-ARM-stm32-Make-PWR-regulator-driver-available-on-STM.patch \
 	file://0020-ARM-dts-stm32-Add-pinmux-nodes-for-DH-electronics-ST.patch \
 	file://0021-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch \
+	file://0022-ARM-stm32-Jump-to-ep-on-successful-resume-in-PSCI-su.patch \
+	file://0023-ARM-stm32-Report-OTP-CLOSED-instead-of-rev.-on-close.patch \
+	file://0024-ARM-stm32-Initialize-TAMP_SMCR-BKP.PROT-fields-on-ST.patch \
+	file://0025-ARM-stm32-Ping-IWDG-on-exit-from-PSCI-suspend-code.patch \
 	"
 
 
@@ -43,4 +47,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240429.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240516.01"
