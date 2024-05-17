@@ -35,6 +35,8 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0023-ARM-stm32-Report-OTP-CLOSED-instead-of-rev.-on-close.patch \
 	file://0024-ARM-stm32-Initialize-TAMP_SMCR-BKP.PROT-fields-on-ST.patch \
 	file://0025-ARM-stm32-Ping-IWDG-on-exit-from-PSCI-suspend-code.patch \
+	file://0026-ARM-dts-stm32-Add-generic-SoM-compatible-to-STM32MP1.patch \
+	file://0027-ARM-dts-stm32-Auto-detect-second-MAC-on-STM32MP15xx-.patch \
 	"
 
 
@@ -47,4 +49,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240516.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20240606.02"
