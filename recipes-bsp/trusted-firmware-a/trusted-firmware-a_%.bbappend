@@ -4,7 +4,7 @@ TFA_PLATFORM:dh-stm32mp13-dhcor-dhsbc = "stm32mp1"
 TFA_BUILD_TARGET:dh-stm32mp13-dhcor-dhsbc = "all fip"
 TFA_INSTALL_TARGET:dh-stm32mp13-dhcor-dhsbc = "tf-a-stm32mp135f-dhcor-dhsbc.stm32 fip.bin"
 
-DEPENDS:append:dh-stm32mp13-dhcor-dhsbc = " optee-os:do_deploy u-boot-mainline:do_deploy"
+do_compile[depends] += "${@'optee-os:do_deploy u-boot-mainline:do_deploy' if 'dh-stm32mp13-dhcor-dhsbc' in d.getVar('MACHINEOVERRIDES', True).split(':') else ' '}"
 
 EXTRA_OEMAKE:append:dh-stm32mp13-dhcor-dhsbc = " \
 	AARCH32_SP=optee \
