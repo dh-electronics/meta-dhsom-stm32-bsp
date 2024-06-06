@@ -1,0 +1,67 @@
+From 0275dea3f73e193cae388497e6fa9960dfa71cbc Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 6 Jun 2024 03:41:02 +0200
+Subject: [PATCH] ARM: stm32: Fix livetree conversion on STM32MP15xx DHSOM
+
+Unlike fdt_node_check_compatible() which returns 0 if node is compatible,
+ofnode_device_is_compatible() return true which is non-zero if node is
+compatible. The intention of the code is to exit from the function in
+case the node is not compatible with "micrel,ks8851-mll". Add the missing
+invert into the conditional to reinstate original behavior.
+
+This exposes a follow up problem caused by conversion to DM based FMC2 EBI
+driver, where the FMC2 EBI is not configured when accessed by this code.
+Probe the KS8851 MAC, which also configures the FMC2 EBI as a dependency,
+so that the KS8851 MAC CCR register can be accessed over the FMC2 EBI bus
+and checked for EEPROM present bit.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240606130305.24563-1-marex@denx.de/]
+Fixes: 5a605b7c8615 ("board: dhelectronics: stm32mp1: convert to livetree")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc: Simon Glass <sjg@chromium.org>
+Cc: Tom Rini <trini@konsulko.com>
+Cc: u-boot@dh-electronics.com
+Cc: u-boot@lists.denx.de
+Cc: uboot-stm32@st-md-mailman.stormreply.com
+---
+ board/dhelectronics/dh_stm32mp1/board.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index 15c423c174e..7cdf4cb248d 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -77,14 +77,25 @@
+ 
+ static bool dh_stm32_mac_is_in_ks8851(void)
+ {
+-	ofnode node;
++	struct udevice *udev;
+ 	u32 reg, cider, ccr;
++	char path[256];
++	ofnode node;
++	int ret;
+ 
+ 	node = ofnode_path("ethernet1");
+ 	if (!ofnode_valid(node))
+ 		return false;
+ 
+-	if (ofnode_device_is_compatible(node, "micrel,ks8851-mll"))
++	ret = ofnode_get_path(node, path, sizeof(path));
++	if (ret)
++		return false;
++
++	ret = uclass_get_device_by_of_path(UCLASS_ETH, path, &udev);
++	if (ret)
++		return false;
++
++	if (!ofnode_device_is_compatible(node, "micrel,ks8851-mll"))
+ 		return false;
+ 
+ 	/*
+-- 
+2.43.0
+
