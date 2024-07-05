@@ -1,7 +1,7 @@
-From d43913ec8714161685b49ae17f82797f3c4f62e4 Mon Sep 17 00:00:00 2001
+From daea003a19897958cffa80713d82e98abde4a8f6 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 10 Mar 2024 17:51:12 +0100
-Subject: [PATCH 43/43] ARM: dts: stm32: Add DTOs for STM32MP13xx DHCOR SoM and
+Subject: [PATCH 41/41] ARM: dts: stm32: Add DTOs for STM32MP13xx DHCOR SoM and
  DHSBC board
 
 Add DT overlays for STM32MP13xx DHCOR SoM and DHSBC carrier board.
@@ -18,13 +18,13 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
 
 diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
-index 4711873798616..e73199e4f1368 100644
+index 72d6524b7826c..17321cd062bae 100644
 --- a/arch/arm/boot/dts/st/Makefile
 +++ b/arch/arm/boot/dts/st/Makefile
 @@ -29,6 +29,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32h743i-disco.dtb \
  	stm32h750i-art-pi.dtb \
- 	stm32mp135f-dhsom-dhsbc.dtb \
+ 	stm32mp135f-dhcor-dhsbc.dtb \
 +	stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtbo \
  	stm32mp135f-dk.dtb \
  	stm32mp151a-prtt1a.dtb \

@@ -1,0 +1,38 @@
+From fff2b6745f88d7c147ab0b97797889dd8de1452a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 5 Jul 2024 07:55:56 +0200
+Subject: [PATCH 39/41] ARM: dts: stm32: Disable PHY clock output on DH
+ STM32MP13xx DHCOR DHSBC board
+
+The RTL8211F PHY clock output is not used on DH STM32MP13xx DHCOR DHSBC
+board, disable it to improve EMI characteristics.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240705080118.75899-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+index 3cc9ad88d61bc..425deb5641c17 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+@@ -96,6 +96,7 @@ ethphy1: ethernet-phy@1 {
+ 			interrupt-parent = <&gpiog>;
+ 			interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
+ 			reg = <1>;
++			realtek,clkout-disable;
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>;
+@@ -125,6 +126,7 @@ ethphy2: ethernet-phy@1 {
+ 			interrupt-parent = <&gpiog>;
+ 			interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
+ 			reg = <1>;
++			realtek,clkout-disable;
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
+-- 
+2.43.0
+

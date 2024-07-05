@@ -1,54 +1,54 @@
-From 67acfdb25a2f74d47d6bd276caa3316a3973f74c Mon Sep 17 00:00:00 2001
+From 574bfdb4b429d8b80336a0749e41840f34b4e2fc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sun, 24 Mar 2024 00:12:55 +0100
-Subject: [PATCH 42/43] ARM: dts: stm32: Add ethernet support for STM32MP13xx
- DHSBC board
+Date: Sun, 23 Jun 2024 21:51:56 +0200
+Subject: [PATCH 36/41] ARM: dts: stm32: Add ethernet support for DH
+ STM32MP13xx DHCOR DHSBC board
 
-Add ethernet support for th STM32MP13xx DHSBC carrier board.
+Add ethernet support for the DH STM32MP13xx DHCOR DHSBC carrier board.
+This carrier board is populated with two gigabit ethernet ports and two
+Realtek RTL8211F PHYs, both are described in this DT patch.
 
-Upstream-Status: Pending
+Upstream-Status: Backport [1b02383c385b16b4b275e30a3dd5860c0fd95c4a]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
- .../boot/dts/st/stm32mp135f-dhcor-dhsbc.dts   | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ .../boot/dts/st/stm32mp135f-dhcor-dhsbc.dts   | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
 diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
-index 5f4f6b6e427a5..fc1c48ad56d24 100644
+index 5f4f6b6e427a5..bacb70b4256bc 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
 @@ -22,6 +22,8 @@ / {
  		     "st,stm32mp135";
  
  	aliases {
-+		ethernet0 = &eth1;
-+		ethernet1 = &eth2;
++		ethernet0 = &ethernet1;
++		ethernet1 = &ethernet2;
  		serial2 = &usart1;
  		serial3 = &usart2;
  	};
-@@ -72,6 +74,66 @@ channel@12 {
+@@ -72,6 +74,60 @@ channel@12 {
  	};
  };
  
-+&eth1 {
-+	status = "okay";
++&ethernet1 {
++	phy-handle = <&ethphy1>;
++	phy-mode = "rgmii-id";
 +	pinctrl-0 = <&eth1_rgmii_pins_a>;
 +	pinctrl-1 = <&eth1_rgmii_sleep_pins_a>;
 +	pinctrl-names = "default", "sleep";
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ethphy1>;
 +	st,ext-phyclk;
-+	nvmem-cells = <&ethernet_mac1_address>;
-+	nvmem-cell-names = "mac-address";
++	status = "okay";
 +
-+	mdio1 {
++	mdio {
 +		#address-cells = <1>;
 +		#size-cells = <0>;
 +		compatible = "snps,dwmac-mdio";
 +
 +		ethphy1: ethernet-phy@1 {
 +			/* RTL8211F */
-+			compatible = "ethernet-phy-id001c.c916",
-+				     "ethernet-phy-ieee802.3-c22";
++			compatible = "ethernet-phy-id001c.c916";
 +			interrupt-parent = <&gpiog>;
 +			interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
 +			reg = <1>;
@@ -59,26 +59,23 @@ index 5f4f6b6e427a5..fc1c48ad56d24 100644
 +	};
 +};
 +
-+&eth2 {
-+	status = "okay";
++&ethernet2 {
++	phy-handle = <&ethphy2>;
++	phy-mode = "rgmii-id";
 +	pinctrl-0 = <&eth2_rgmii_pins_a>;
 +	pinctrl-1 = <&eth2_rgmii_sleep_pins_a>;
 +	pinctrl-names = "default", "sleep";
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ethphy2>;
 +	st,ext-phyclk;
-+	nvmem-cells = <&ethernet_mac2_address>;
-+	nvmem-cell-names = "mac-address";
++	status = "okay";
 +
-+	mdio1 {
++	mdio {
 +		#address-cells = <1>;
 +		#size-cells = <0>;
 +		compatible = "snps,dwmac-mdio";
 +
 +		ethphy2: ethernet-phy@1 {
 +			/* RTL8211F */
-+			compatible = "ethernet-phy-id001c.c916",
-+				     "ethernet-phy-ieee802.3-c22";
++			compatible = "ethernet-phy-id001c.c916";
 +			interrupt-parent = <&gpiog>;
 +			interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
 +			reg = <1>;

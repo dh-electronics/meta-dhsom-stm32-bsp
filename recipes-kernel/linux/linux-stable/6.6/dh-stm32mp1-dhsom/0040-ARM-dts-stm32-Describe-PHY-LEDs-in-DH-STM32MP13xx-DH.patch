@@ -1,0 +1,77 @@
+From 723ab21c6acefb560eb156542e3d97f548873a0a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 24 Jun 2024 00:52:15 +0200
+Subject: [PATCH 40/41] ARM: dts: stm32: Describe PHY LEDs in DH STM32MP13xx
+ DHCOR DHSBC board DT
+
+The RTL8211 PHY on DH STM32MP13xx DHCOR DHSBC carrier board supports HW
+LED offload, the LEDs can be configured on link at 10/100/1000 line rate
+and on RXTX activity. There are two PHYs on this board, each only has two
+out of three LEDs connected to the PHY LED outputs. Describe this hardware
+configuration in DT.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240705215402.257070-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ .../boot/dts/st/stm32mp135f-dhcor-dhsbc.dts   | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+index 425deb5641c17..853dc21449d99 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+@@ -100,6 +100,25 @@ ethphy1: ethernet-phy@1 {
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>;
++
++			leds {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				led@0 {
++					reg = <0>;
++					color = <LED_COLOR_ID_GREEN>;
++					function = LED_FUNCTION_WAN;
++					linux,default-trigger = "netdev";
++				};
++
++				led@1 {
++					reg = <1>;
++					color = <LED_COLOR_ID_YELLOW>;
++					function = LED_FUNCTION_WAN;
++					linux,default-trigger = "netdev";
++				};
++			};
+ 		};
+ 	};
+ };
+@@ -130,6 +149,25 @@ ethphy2: ethernet-phy@1 {
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
++
++			leds {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				led@0 {
++					reg = <0>;
++					color = <LED_COLOR_ID_GREEN>;
++					function = LED_FUNCTION_LAN;
++					linux,default-trigger = "netdev";
++				};
++
++				led@1 {
++					reg = <1>;
++					color = <LED_COLOR_ID_YELLOW>;
++					function = LED_FUNCTION_LAN;
++					linux,default-trigger = "netdev";
++				};
++			};
+ 		};
+ 	};
+ };
+-- 
+2.43.0
+

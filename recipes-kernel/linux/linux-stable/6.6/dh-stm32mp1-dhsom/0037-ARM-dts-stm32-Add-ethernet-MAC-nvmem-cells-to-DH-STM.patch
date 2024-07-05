@@ -1,0 +1,41 @@
+From 806397a960758326c870063ae2bfbfa335b83354 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 24 Mar 2024 00:12:55 +0100
+Subject: [PATCH 37/41] ARM: dts: stm32: Add ethernet MAC nvmem cells to DH
+ STM32MP13xx DHCOR DHSBC board
+
+Describe ethernet MAC address nvmem cells in DH STM32MP13xx DHCOR DHSBC
+board DT. The MAC address can be fused in BSEC OTP fuses and used to set
+up MAC address for both ethernet MACs on this board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240629171100.20285-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+index bacb70b4256bc..3cc9ad88d61bc 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+@@ -75,6 +75,8 @@ channel@12 {
+ };
+ 
+ &ethernet1 {
++	nvmem-cell-names = "mac-address";
++	nvmem-cells = <&ethernet_mac1_address>;
+ 	phy-handle = <&ethphy1>;
+ 	phy-mode = "rgmii-id";
+ 	pinctrl-0 = <&eth1_rgmii_pins_a>;
+@@ -102,6 +104,8 @@ ethphy1: ethernet-phy@1 {
+ };
+ 
+ &ethernet2 {
++	nvmem-cell-names = "mac-address";
++	nvmem-cells = <&ethernet_mac2_address>;
+ 	phy-handle = <&ethphy2>;
+ 	phy-mode = "rgmii-id";
+ 	pinctrl-0 = <&eth2_rgmii_pins_a>;
+-- 
+2.43.0
+

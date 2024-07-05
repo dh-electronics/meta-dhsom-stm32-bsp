@@ -1,24 +1,25 @@
-From 72fcddde6a375f88308ffeb0f1ce900c0751254a Mon Sep 17 00:00:00 2001
+From b639d9d97e6b109772ef9dcf609ec65b0193cb37 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sat, 9 Mar 2024 22:06:49 +0100
-Subject: [PATCH 40/43] ARM: dts: stm32: add PWR regulators support on
+Date: Tue, 19 Mar 2024 05:05:06 +0100
+Subject: [PATCH 32/41] ARM: dts: stm32: add PWR regulators support on
  stm32mp131
 
-This patch adds support of STM32 PWR regulators on stm32mp131.
+This patch adds STM32 PWR regulators DT support on stm32mp131.
 This requires TFA to clear RCC_SECCFGR, is disabled by default
 and can only be enabled on board DT level.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240319040528.104932-1-marex@denx.de/]
+Upstream-Status: Backport [162e813a27437c9ba45e3052c09beb7283f520ea]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/st/stm32mp131.dtsi | 24 ++++++++++++++++++++++++
  1 file changed, 24 insertions(+)
 
 diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 179aa3a17c381..7a9d8b97a12d1 100644
+index c9f8a52d2033f..a7bae02f0ca01 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1092,6 +1092,30 @@ rcc: rcc@50000000 {
+@@ -758,6 +758,30 @@ rcc: rcc@50000000 {
  				 <&scmi_clk CK_SCMI_LSI>;
  		};
  

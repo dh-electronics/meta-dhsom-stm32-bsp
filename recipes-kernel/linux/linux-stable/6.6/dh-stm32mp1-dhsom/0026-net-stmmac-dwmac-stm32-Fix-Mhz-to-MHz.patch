@@ -1,0 +1,41 @@
+From 73115f48617456bbc07d558b2c2c57acd53d83fb Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 11 Jun 2024 10:36:04 +0200
+Subject: [PATCH 26/41] net: stmmac: dwmac-stm32: Fix Mhz to MHz
+
+Trivial, fix up the comments using 'Mhz' to 'MHz'.
+No functional change.
+
+Upstream-Status: Backport [cbfad55322ceee283ff1dd053725b93c86018b88]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 75981ac2cbb56..bed2be129b2d2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -58,7 +58,7 @@
+  * Below table summarizes the clock requirement and clock sources for
+  * supported phy interface modes.
+  * __________________________________________________________________________
+- *|PHY_MODE | Normal | PHY wo crystal|   PHY wo crystal   |No 125Mhz from PHY|
++ *|PHY_MODE | Normal | PHY wo crystal|   PHY wo crystal   |No 125MHz from PHY|
+  *|         |        |      25MHz    |        50MHz       |                  |
+  * ---------------------------------------------------------------------------
+  *|  MII    |	 -   |     eth-ck    |	      n/a	  |	  n/a        |
+@@ -367,7 +367,7 @@ static int stm32mp1_parse_data(struct stm32_dwmac *dwmac,
+ 	/* Gigabit Ethernet 125MHz clock selection. */
+ 	dwmac->eth_clk_sel_reg = of_property_read_bool(np, "st,eth-clk-sel");
+ 
+-	/* Ethernet 50Mhz RMII clock selection */
++	/* Ethernet 50MHz RMII clock selection */
+ 	dwmac->eth_ref_clk_sel_reg =
+ 		of_property_read_bool(np, "st,eth-ref-clk-sel");
+ 
+-- 
+2.43.0
+

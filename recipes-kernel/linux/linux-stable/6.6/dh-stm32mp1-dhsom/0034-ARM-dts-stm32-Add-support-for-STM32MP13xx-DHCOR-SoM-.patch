@@ -1,7 +1,7 @@
-From 0f065a8b5320bdc32fe4322a18e94897c25ebc82 Mon Sep 17 00:00:00 2001
+From 73f50616073fa54f9d42abac3705f2d6838504b2 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 6 Mar 2024 02:42:52 +0100
-Subject: [PATCH 41/43] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
+Date: Sun, 28 Apr 2024 00:10:12 +0200
+Subject: [PATCH 34/41] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
  and DHSBC board
 
 This stm32mp135f-dhcor-dhsbc board is a stack of DHCOR SoM based on
@@ -18,8 +18,9 @@ The DHSBC carrier board contains the following peripherals:
 - USB-A Host port, USB-C peripheral port, USB-C power supply plug
 - Expansion connector
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240422002006.243687-20-marex@denx.de/]
+Upstream-Status: Backport [6331bddce649829afb2c2e462df812f8e8657a61]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/st/Makefile                 |   1 +
  .../boot/dts/st/stm32mp135f-dhcor-dhsbc.dts   | 321 ++++++++++++++++++
@@ -29,14 +30,14 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
 
 diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
-index e463ee048cc08..4711873798616 100644
+index e463ee048cc08..72d6524b7826c 100644
 --- a/arch/arm/boot/dts/st/Makefile
 +++ b/arch/arm/boot/dts/st/Makefile
 @@ -28,6 +28,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32h743i-eval.dtb \
  	stm32h743i-disco.dtb \
  	stm32h750i-art-pi.dtb \
-+	stm32mp135f-dhsom-dhsbc.dtb \
++	stm32mp135f-dhcor-dhsbc.dtb \
  	stm32mp135f-dk.dtb \
  	stm32mp151a-prtt1a.dtb \
  	stm32mp151a-prtt1c.dtb \

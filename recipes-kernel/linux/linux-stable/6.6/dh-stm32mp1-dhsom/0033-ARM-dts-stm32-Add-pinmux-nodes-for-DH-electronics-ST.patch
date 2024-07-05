@@ -1,11 +1,8 @@
-From 64b1710a86d99ccf37bf083f1e3f2038f9d8ac06 Mon Sep 17 00:00:00 2001
+From 4515d8525468bb819c2e6d23c4b81c9b7fab03c6 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sat, 9 Mar 2024 01:08:58 +0100
-Subject: [PATCH] ARM: dts: stm32: Add pinmux nodes for DH electronics
+Date: Sun, 28 Apr 2024 00:10:11 +0200
+Subject: [PATCH 33/41] ARM: dts: stm32: Add pinmux nodes for DH electronics
  STM32MP13xx DHCOR SoM and DHSBC board
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
 Add new pinmux nodes for DH electronics STM32MP13xx DHCOR SoM and DHSBC board.
 The following pinmux nodes are added:
@@ -28,33 +25,15 @@ The following pinmux nodes are added:
 - USART1 pins
 - USART2 pins
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240427221048.65392-2-marex@denx.de/]
+Upstream-Status: Backport [690c66656e99ebc962451afbc1f15d074646773a]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: "Leonard Göhrs" <l.goehrs@pengutronix.de>
-Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Andre Przywara <andre.przywara@arm.com>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Sean Nyekjaer <sean@geanix.com>
-Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc: devicetree@vger.kernel.org
-Cc: kernel@dh-electronics.com
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
----
-V2: Squash the pinmux patches into one megapatch
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
  arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 483 ++++++++++++++++++++
  1 file changed, 483 insertions(+)
 
 diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-index 27e0c3826789d..c01d39f03ea41 100644
+index 27e0c3826789d..ce21479843d5d 100644
 --- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
 @@ -6,6 +6,12 @@
@@ -157,16 +136,16 @@ index 27e0c3826789d..c01d39f03ea41 100644
 +		pins1 {
 +			pinmux = <STM32_PINMUX('F', 7, ANALOG)>, /* ETH_RGMII_TXD0 */
 +				 <STM32_PINMUX('G', 11, ANALOG)>, /* ETH_RGMII_TXD1 */
-+				 <STM32_PINMUX('G', 11, ANALOG)>, /* ETH_RGMII_TXD2 */
-+				 <STM32_PINMUX('G', 11, ANALOG)>, /* ETH_RGMII_TXD3 */
-+				 <STM32_PINMUX('G', 8, ANALOG)>, /* ETH_RGMII_TX_CTL */
-+				 <STM32_PINMUX('F', 6, ANALOG)>, /* ETH_RGMII_GTX_CLK */
-+				 <STM32_PINMUX('B', 2, ANALOG)>, /* ETH_MDIO */
++				 <STM32_PINMUX('G', 1, ANALOG)>, /* ETH_RGMII_TXD2 */
++				 <STM32_PINMUX('E', 6, ANALOG)>, /* ETH_RGMII_TXD3 */
++				 <STM32_PINMUX('F', 6, ANALOG)>, /* ETH_RGMII_TX_CTL */
++				 <STM32_PINMUX('G', 3, ANALOG)>, /* ETH_RGMII_GTX_CLK */
++				 <STM32_PINMUX('B', 6, ANALOG)>, /* ETH_MDIO */
 +				 <STM32_PINMUX('G', 5, ANALOG)>, /* ETH_MDC */
 +				 <STM32_PINMUX('F', 4, ANALOG)>, /* ETH_RGMII_RXD0 */
 +				 <STM32_PINMUX('E', 2, ANALOG)>, /* ETH_RGMII_RXD1 */
-+				 <STM32_PINMUX('E', 2, ANALOG)>, /* ETH_RGMII_RXD2 */
-+				 <STM32_PINMUX('E', 2, ANALOG)>, /* ETH_RGMII_RXD3 */
++				 <STM32_PINMUX('H', 6, ANALOG)>, /* ETH_RGMII_RXD2 */
++				 <STM32_PINMUX('A', 8, ANALOG)>, /* ETH_RGMII_RXD3 */
 +				 <STM32_PINMUX('A', 12, ANALOG)>, /* ETH_RGMII_RX_CTL */
 +				 <STM32_PINMUX('H', 11, ANALOG)>; /* ETH_RGMII_RX_CLK */
 +		};
@@ -567,7 +546,7 @@ index 27e0c3826789d..c01d39f03ea41 100644
  		};
  	};
 +
-+	usart2_pins_b: usart2-0 {
++	usart2_pins_b: usart2-1 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('F', 11, AF1)>, /* USART2_TX */
 +				 <STM32_PINMUX('A', 1, AF7)>; /* USART2_RTS */
@@ -582,7 +561,7 @@ index 27e0c3826789d..c01d39f03ea41 100644
 +		};
 +	};
 +
-+	usart2_idle_pins_b: usart2-idle-0 {
++	usart2_idle_pins_b: usart2-idle-1 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('F', 11, ANALOG)>, /* USART2_TX */
 +				 <STM32_PINMUX('E', 15, ANALOG)>; /* USART2_CTS_NSS */
@@ -599,7 +578,7 @@ index 27e0c3826789d..c01d39f03ea41 100644
 +		};
 +	};
 +
-+	usart2_sleep_pins_b: usart2-sleep-0 {
++	usart2_sleep_pins_b: usart2-sleep-1 {
 +		pins {
 +			pinmux = <STM32_PINMUX('F', 11, ANALOG)>, /* USART2_TX */
 +				 <STM32_PINMUX('A', 1, ANALOG)>, /* USART2_RTS */
