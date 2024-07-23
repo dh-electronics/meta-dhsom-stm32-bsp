@@ -10,7 +10,7 @@ require conf/machine/include/soc-family.inc
 
 MACHINE_FEATURES ?= "apm alsa ext2 keyboard mainline screen serial touchscreen usbgadget usbhost"
 
-SERIAL_CONSOLE = "115200 ttySTM0"
+SERIAL_CONSOLES = "115200;ttySTM0"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0xc4000000"
