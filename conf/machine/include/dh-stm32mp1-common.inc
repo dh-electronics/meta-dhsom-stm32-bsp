@@ -70,8 +70,8 @@ PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " kernel-modules kernel-devicetree u-boot-default-env "
 
 # List of images to be built
-IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
-INITRAMFS_FSTYPES ?= "cpio.xz"
+IMAGE_FSTYPES ?= "tar.zst wic.zst wic.gz wic.bmap"
+INITRAMFS_FSTYPES ?= "cpio.zst"
 
 EXTRA_IMAGEDEPENDS += "u-boot-mainline"
 WKS_FILE = "sdimage-stm32mp1.wks"
