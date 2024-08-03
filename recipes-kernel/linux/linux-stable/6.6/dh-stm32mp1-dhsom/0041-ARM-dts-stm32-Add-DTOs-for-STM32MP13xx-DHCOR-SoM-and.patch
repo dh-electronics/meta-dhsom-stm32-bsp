@@ -13,8 +13,8 @@ Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/boot/dts/st/Makefile                 |  1 +
- ...p13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso | 85 +++++++++++++++++++
- 2 files changed, 86 insertions(+)
+ ...p13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso | 91 +++++++++++++++++++
+ 2 files changed, 92 insertions(+)
  create mode 100644 arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
 
 diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
@@ -34,7 +34,7 @@ new file mode 100644
 index 0000000000000..3892c51b4fbdc
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
-@@ -0,0 +1,85 @@
+@@ -0,0 +1,91 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2024 Marek Vasut <marex@denx.de>
@@ -118,6 +118,12 @@ index 0000000000000..3892c51b4fbdc
 +		spi-max-frequency = <1000000>;
 +		ti,pressure-max = /bits/ 16 <255>;
 +		ti,x-plate-ohms = /bits/ 16 <60>;
++		touchscreen-inverted-x;
++		touchscreen-swapped-x-y;
++		touchscreen-min-x = <177>;
++		touchscreen-min-y = <262>;
++		touchscreen-size-x = <3775>;
++		touchscreen-size-y = <3775>;
 +	};
 +};
 -- 
