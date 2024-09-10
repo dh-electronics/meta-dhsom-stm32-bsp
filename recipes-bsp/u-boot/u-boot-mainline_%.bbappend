@@ -40,7 +40,6 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0028-ARM-stm32-Fix-livetree-conversion-on-STM32MP15xx-DHS.patch \
 	"
 
-
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
         install -D -m 644 ${B}/u-boot.dtb ${DEPLOYDIR}/u-boot.dtb
 }
