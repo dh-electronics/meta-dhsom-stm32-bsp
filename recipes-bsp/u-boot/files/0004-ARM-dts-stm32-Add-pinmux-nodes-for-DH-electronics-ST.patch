@@ -1,7 +1,7 @@
-From 905ca33c6e944ad7c97154672280f940ded1f3cb Mon Sep 17 00:00:00 2001
+From 6b470e4be2a21acb90016ed1fb20c6cb372bf0b0 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sat, 9 Mar 2024 01:08:58 +0100
-Subject: [PATCH 20/21] ARM: dts: stm32: Add pinmux nodes for DH electronics
+Date: Sun, 28 Apr 2024 00:20:37 +0200
+Subject: [PATCH 4/9] ARM: dts: stm32: Add pinmux nodes for DH electronics
  STM32MP13xx DHCOR SoM and DHSBC board
 
 Add new pinmux nodes for DH electronics STM32MP13xx DHCOR SoM and DHSBC board.
@@ -25,15 +25,9 @@ The following pinmux nodes are added:
 - USART1 pins
 - USART2 pins
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240427222130.66693-1-marex@denx.de/]
+Upstream-Status: Backport [c52e59ec6831bf7c35f6af7cfceb1f1e6abff55e]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: u-boot@dh-electronics.com
-Cc: uboot-stm32@st-md-mailman.stormreply.com
----
-V2: Squash the pinmux patches into one megapatch
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
  arch/arm/dts/stm32mp13-pinctrl.dtsi | 483 ++++++++++++++++++++++++++++
  1 file changed, 483 insertions(+)
@@ -594,5 +588,5 @@ index 27e0c382678..c01d39f03ea 100644
 +	};
  };
 -- 
-2.43.0
+2.45.2
 

@@ -1,7 +1,7 @@
-From 16a013c2d8e4e60965e3a000ae4e4ce9bb26eaa2 Mon Sep 17 00:00:00 2001
+From e6e97849a7e4e7667b8365fd9f65f9af0f967b79 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 6 Mar 2024 00:07:50 +0100
-Subject: [PATCH 21/21] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
+Date: Sun, 28 Apr 2024 00:20:38 +0200
+Subject: [PATCH 5/9] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM
  and DHSBC board
 
 This stm32mp135f-dhcor-dhsbc board is a stack of DHCOR SoM based on
@@ -18,16 +18,9 @@ The DHSBC carrier board contains the following peripherals:
 - USB-A Host port, USB-C peripheral port, USB-C power supply plug
 - Expansion connector
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240427222130.66693-2-marex@denx.de/]
+Upstream-Status: Backport [69374aa86aa2fd6e301f7e4acfd2f3fb4441c68a]
 Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: u-boot@dh-electronics.com
-Cc: uboot-stm32@st-md-mailman.stormreply.com
----
-V2: Add RB from Patrice
 ---
  arch/arm/dts/Makefile                         |   1 +
  .../dts/stm32mp135f-dhcor-dhsbc-u-boot.dtsi   |  25 ++
@@ -43,17 +36,17 @@ V2: Add RB from Patrice
  create mode 100644 configs/stm32mp13_dhcor_defconfig
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 9d28a485bec..f50d05dd8ab 100644
+index 8fb6a8a1f17..208767fbdb8 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -1359,6 +1359,7 @@ dtb-$(CONFIG_ASPEED_AST2600) += ast2600-evb.dtb
+@@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ASPEED_AST2600) += \
  dtb-$(CONFIG_ARCH_STI) += stih410-b2260.dtb
  
- dtb-$(CONFIG_STM32MP13x) += \
+ dtb-$(CONFIG_STM32MP13X) += \
 +	stm32mp135f-dhcor-dhsbc.dtb \
  	stm32mp135f-dk.dtb
  
- dtb-$(CONFIG_STM32MP15x) += \
+ dtb-$(CONFIG_STM32MP15X) += \
 diff --git a/arch/arm/dts/stm32mp135f-dhcor-dhsbc-u-boot.dtsi b/arch/arm/dts/stm32mp135f-dhcor-dhsbc-u-boot.dtsi
 new file mode 100644
 index 00000000000..d718aae16ca
@@ -851,7 +844,7 @@ index 00000000000..30e3b91bccc
 +};
 diff --git a/configs/stm32mp13_dhcor_defconfig b/configs/stm32mp13_dhcor_defconfig
 new file mode 100644
-index 00000000000..71eca306a34
+index 00000000000..fb3d86deb64
 --- /dev/null
 +++ b/configs/stm32mp13_dhcor_defconfig
 @@ -0,0 +1,148 @@
@@ -864,10 +857,10 @@ index 00000000000..71eca306a34
 +CONFIG_ENV_OFFSET=0x3E0000
 +CONFIG_ENV_SECT_SIZE=0x1000
 +CONFIG_DEFAULT_DEVICE_TREE="stm32mp135f-dhcor-dhsbc"
-+CONFIG_STM32MP13x=y
++CONFIG_STM32MP13X=y
 +CONFIG_DDR_CACHEABLE_SIZE=0x8000000
 +CONFIG_CMD_STM32KEY=y
-+CONFIG_TARGET_ST_STM32MP13x=y
++CONFIG_TARGET_ST_STM32MP13X=y
 +CONFIG_ENV_OFFSET_REDUND=0x3F0000
 +CONFIG_CMD_STM32PROG=y
 +CONFIG_STM32MP15_PWR=y
@@ -1004,5 +997,5 @@ index 00000000000..71eca306a34
 +CONFIG_ERRNO_STR=y
 +# CONFIG_EFI_LOADER is not set
 -- 
-2.43.0
+2.45.2
 

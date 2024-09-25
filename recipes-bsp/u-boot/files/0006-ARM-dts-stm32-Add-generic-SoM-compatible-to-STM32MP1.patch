@@ -1,15 +1,16 @@
-From 4eb1df7e374772c88e58f94cc80058a38160da41 Mon Sep 17 00:00:00 2001
+From e43f5984b99e36833fe79853b826233086ff701d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Wed, 15 May 2024 23:02:28 +0200
-Subject: [PATCH 26/27] ARM: dts: stm32: Add generic SoM compatible to
+Date: Fri, 17 May 2024 01:47:04 +0200
+Subject: [PATCH 6/9] ARM: dts: stm32: Add generic SoM compatible to
  STM32MP15xx DH electronics DHSOM
 
 Add generic SoM compatible string into machine compatible string
 for all STM32MP15xx based DH electronics DHSOM. This way, common
 board code can match on this compatible. No functional change.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240516234737.201250-1-marex@denx.de/]
+Upstream-Status: Backport [ff51ef85d66467a6b89d28f7ec3f9b418d2cf5d7]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
  arch/arm/dts/stm32mp15xx-dhcom-drc02.dts       | 4 +++-
  arch/arm/dts/stm32mp15xx-dhcom-pdk2.dts        | 4 +++-
@@ -100,5 +101,5 @@ index c9163e1c028..5fdd762ddbf 100644
  	aliases {
  		ethernet0 = &ethernet0;
 -- 
-2.43.0
+2.45.2
 
