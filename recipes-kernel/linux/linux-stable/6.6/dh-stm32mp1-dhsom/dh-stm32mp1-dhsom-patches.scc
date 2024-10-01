@@ -40,3 +40,4 @@ patch 0039-ARM-dts-stm32-Disable-PHY-clock-output-on-DH-STM32MP.patch
 patch 0040-ARM-dts-stm32-Describe-PHY-LEDs-in-DH-STM32MP13xx-DH.patch
 patch 0041-ARM-dts-stm32-Add-DTOs-for-STM32MP13xx-DHCOR-SoM-and.patch
 patch 0042-net-phy-realtek-Fix-setting-of-PHY-LEDs-Mode-B-bit-o.patch
+patch 0043-leds-trigger-netdev-Check-offload-ability-on-interfa.patch
