@@ -233,12 +233,12 @@ index 000000000..e79a6eff2
 +		};
 +	};
 +
-+	/* VCO = 1300.0 MHz => P = 650 (CPU) */
++	/* VCO = 2000.0 MHz => P = 1000 (CPU) */
 +	pll1: st,pll@0 {
 +		compatible = "st,stm32mp1-pll";
 +		reg = <0>;
 +
-+		st,pll = <&pll1_cfg1>;
++		st,pll = <&pll1_cfg2>;
 +
 +		pll1_cfg1: pll1_cfg1 {
 +			st,pll_vco = <&pll1_vco_1300MHz>;
