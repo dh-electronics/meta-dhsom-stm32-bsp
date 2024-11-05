@@ -178,8 +178,8 @@ index 000000000..6bd62e0ea
 +
 +			vddcpu: buck1 { /* VDD_CPU_1V2 */
 +				regulator-name = "vddcpu";
-+				regulator-min-microvolt = <1250000>;
-+				regulator-max-microvolt = <1250000>;
++				regulator-min-microvolt = <1350000>;
++				regulator-max-microvolt = <1350000>;
 +				regulator-always-on;
 +				regulator-over-current-protection;
 +			};
@@ -310,10 +310,10 @@ index 000000000..6bd62e0ea
 +	>;
 +
 +	st,pll_vco {
-+		pll1_vco_1300MHz: pll1-vco-1300MHz {
++		pll1_vco_2000MHz: pll1-vco-2000MHz {
 +			src = < CLK_PLL12_HSE >;
-+			divmn = < 2 80 >;
-+			frac = < 0x800 >;
++			divmn = < 1 82 >;
++			frac = < 0xAAA >;
 +		};
 +
 +		pll2_vco_1066MHz: pll2-vco-1066MHz {
@@ -333,7 +333,7 @@ index 000000000..6bd62e0ea
 +		};
 +	};
 +
-+	/* VCO = 1300.0 MHz => P = 650 (CPU) */
++	/* VCO = 2000.0 MHz => P = 1000 (CPU) */
 +	pll1:st,pll@0 {
 +		compatible = "st,stm32mp1-pll";
 +		reg = <0>;
@@ -341,7 +341,7 @@ index 000000000..6bd62e0ea
 +		st,pll = < &pll1_cfg1 >;
 +
 +		pll1_cfg1: pll1_cfg1 {
-+			st,pll_vco = < &pll1_vco_1300MHz >;
++			st,pll_vco = < &pll1_vco_2000MHz >;
 +			st,pll_div_pqr = < 0 1 1 >;
 +		};
 +	};
