@@ -15,27 +15,11 @@ TFA_BUILD_DIR ?= "build-${TFA_PLATFORM}"
 # set BUILD_PLAT depending on configured BUILD_DIR
 EXTRA_OEMAKE += "BUILD_PLAT=${TFA_BUILD_DIR}"
 
-# mbed TLS support (set TFA_MBEDTLS to 1 to activate)
-TFA_MBEDTLS ?= "0"
-# sub-directory in which mbedtls will be downloaded
-TFA_MBEDTLS_DIR ?= "mbedtls"
-# This should be set to MBEDTLS download URL if MBEDTLS is needed
-SRC_URI_MBEDTLS ??= ""
-# This should be set to MBEDTLS LIC FILES checksum
-LIC_FILES_CHKSUM_MBEDTLS ??= ""
-# add mbed TLS chksum
-LIC_FILES_CHKSUM:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '${LIC_FILES_CHKSUM_MBEDTLS}', '', d)}"
-# add mbed TLS to version
-SRCREV_FORMAT:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '_mbedtls', '', d)}"
-
 # We need dtc for dtbs compilation
 # We need openssl for fiptool
 DEPENDS:append = " dtc-native openssl-native"
 
 PROVIDES = "virtual/trusted-firmware-a"
-
-# add MBEDTLS to our sources if activated
-SRC_URI:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '${SRC_URI_MBEDTLS}', '', d)}"
 
 inherit deploy nopackages
 
@@ -68,9 +52,6 @@ EXTRA_OEMAKE += "PLAT=${TFA_PLATFORM}"
 
 # Handle TFA_DEBUG parameter
 EXTRA_OEMAKE:append = " ${@bb.utils.contains('TFA_DEBUG', '1', ' DEBUG=${TFA_DEBUG}', '', d)}"
-
-# Handle MBEDTLS
-EXTRA_OEMAKE:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', ' MBEDTLS_DIR=${TFA_MBEDTLS_DIR}', '', d)}"
 
 do_compile() {
     oe_runmake ${TFA_BUILD_TARGET}
