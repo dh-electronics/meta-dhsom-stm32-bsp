@@ -27,3 +27,10 @@ SRC_URI:append:dh-stm32mp13-dhcor-dhsbc = " \
 	file://0001-feat-stm32mp1-add-optional-clearing-of-RCC_SECCFGR.patch \
 	file://0002-feat-stm32mp1-fdts-add-support-for-STM32MP13xx-DHCOR.patch \
 	"
+
+do_compile:prepend:dh-stm32mp13-dhcor-dhsbc() {
+	# The -no-pie flag makes the TFA binary grow to 805 MiB,
+	# use -static instead and add -Wl,--build-id=none to
+	# prevent compiler from adding undesired sections .
+	sed -i 's@-no-pie@-static -Wl,--build-id=none@' ${S}/plat/st/common/common_rules.mk
+}

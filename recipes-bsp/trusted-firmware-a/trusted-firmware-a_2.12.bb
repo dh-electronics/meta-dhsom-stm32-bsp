@@ -15,7 +15,7 @@ SRC_URI = "git://github.com/ARM-software/arm-trusted-firmware.git;protocol=https
 SRC_URI[tfa.md5sum] = "75c8f4958fb493d9bd7a8e5a9636ec18"
 SRC_URI[tfa.sha256sum] = "7c4c00a4f28d3cfbb235fd1a1fb28c4d2fc1d657c9301686e7d8824ef575d059"
 
-SRCREV_tfa = "b6c0948400594e3cc4dbb5a4ef04b815d2675808"
+SRCREV_tfa = "4ec2948fe3f65dba2f19e691e702f7de2949179c"
 
 S = "${WORKDIR}/git"
 
