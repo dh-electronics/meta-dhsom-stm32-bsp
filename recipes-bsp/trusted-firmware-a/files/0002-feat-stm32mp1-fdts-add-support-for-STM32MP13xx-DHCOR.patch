@@ -134,7 +134,7 @@ index 000000000..6bd62e0ea
 +};
 +
 +&bsec {
-+	board_id: board_id@f0 {
++	board_id: board-id@f0 {
 +		reg = <0xf0 0x4>;
 +		st,non-secure-otp;
 +	};
