@@ -1,7 +1,7 @@
-From a2bb3e4852fefef46f166ccbf70e5ea1d823ff83 Mon Sep 17 00:00:00 2001
+From 5ec5c1ec1377874887ff16bdc698f94265d2ca60 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 6 Nov 2024 00:08:48 +0100
-Subject: [PATCH] ARM: dts: stm32: Increase CPU core voltage on STM32MP13xx
+Subject: [PATCH 2/7] ARM: dts: stm32: Increase CPU core voltage on STM32MP13xx
  DHCOR SoM
 
 The STM32MP13xx DHCOR DHSBC is populated with STM32MP13xx part capable
@@ -13,21 +13,17 @@ It is not possible to make use of CPUfreq on the STM32MP13xx because
 the SCMI protocol 0x13 is not implemented by upstream OpTee-OS which
 is the SCMI provider.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20241105224728.147384-1-marex@denx.de/]
+Upstream-Status: Backport [Linux a4422a9183278162093d4524fdf4b6bbd7dd8a28]
 Fixes: 6331bddce649 ("ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM and DHSBC board")
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
-NOTE: The Upstream-Status does match the kernel patch, because there
-      is no matching U-Boot patch anymore due to OF_UPSTREAM use in
-      mainline U-Boot.
----
- arch/arm/dts/stm32mp13xx-dhcor-som.dtsi | 4 ++--
+ dts/upstream/src/arm/st/stm32mp13xx-dhcor-som.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi b/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
+diff --git a/dts/upstream/src/arm/st/stm32mp13xx-dhcor-som.dtsi b/dts/upstream/src/arm/st/stm32mp13xx-dhcor-som.dtsi
 index ddad6497775..ffb7233b063 100644
---- a/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
-+++ b/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
+--- a/dts/upstream/src/arm/st/stm32mp13xx-dhcor-som.dtsi
++++ b/dts/upstream/src/arm/st/stm32mp13xx-dhcor-som.dtsi
 @@ -85,8 +85,8 @@
  
  			vddcpu: buck1 { /* VDD_CPU_1V2 */
@@ -40,5 +36,5 @@ index ddad6497775..ffb7233b063 100644
  				regulator-initial-mode = <0>;
  				regulator-over-current-protection;
 -- 
-2.45.2
+2.47.2
 

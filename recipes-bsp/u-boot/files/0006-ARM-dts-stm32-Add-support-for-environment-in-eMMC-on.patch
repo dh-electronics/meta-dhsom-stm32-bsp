@@ -1,7 +1,7 @@
-From 067e86ae862434f9401d9bb5208b84e14ae600fc Mon Sep 17 00:00:00 2001
+From ee35eccabce9758d3661c6284981610adaf64833 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 10 Feb 2025 02:13:45 +0100
-Subject: [PATCH 14/14] ARM: dts: stm32: Add support for environment in eMMC on
+Subject: [PATCH 6/7] ARM: dts: stm32: Add support for environment in eMMC on
  STM32MP13xx DHCOR SoM
 
 Enable support for environment in eMMC on STM32MP13xx DHCOR SoM,
@@ -31,22 +31,24 @@ index 30e3b91bccc..9ff42ab8248 100644
  };
  
 diff --git a/configs/stm32mp13_dhcor_defconfig b/configs/stm32mp13_dhcor_defconfig
-index fb3d86deb64..9c9e2cf302f 100644
+index ff948b904be..2da9287ea7b 100644
 --- a/configs/stm32mp13_dhcor_defconfig
 +++ b/configs/stm32mp13_dhcor_defconfig
-@@ -65,8 +65,12 @@ CONFIG_CMD_UBI=y
- # CONFIG_ISO_PARTITION is not set
- CONFIG_OF_LIVE=y
+@@ -28,10 +28,14 @@ CONFIG_CMD_RNG=y
+ CONFIG_CMD_LOG=y
+ CONFIG_CMD_UBI=y
  CONFIG_ENV_IS_NOWHERE=y
 +CONFIG_ENV_IS_IN_MMC=y
- CONFIG_ENV_IS_IN_SPI_FLASH=y
- CONFIG_ENV_SPI_MAX_HZ=50000000
 +CONFIG_ENV_MMC_USE_DT=y
+ CONFIG_ENV_SPI_MAX_HZ=50000000
+ CONFIG_CLK_SCMI=y
+ CONFIG_SET_DFU_ALT_INFO=y
+ CONFIG_SYS_I2C_EEPROM_ADDR=0x50
 +CONFIG_SYS_MMC_ENV_DEV=0
 +CONFIG_SYS_MMC_ENV_PART=1
- CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
- CONFIG_SYS_RELOC_GD_ENV_ADDR=y
- CONFIG_VERSION_VARIABLE=y
+ CONFIG_PHY_REALTEK=y
+ CONFIG_DM_REGULATOR_SCMI=y
+ CONFIG_RESET_SCMI=y
 -- 
 2.47.2
 

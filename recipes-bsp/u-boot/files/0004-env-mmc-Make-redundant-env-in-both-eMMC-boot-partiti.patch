@@ -1,13 +1,13 @@
-From 03faaba2c697cdb1c3d943212d42ac715b78de2b Mon Sep 17 00:00:00 2001
+From ae0440cda45594377e78b5e861589f7e3b263cc5 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 10 Feb 2025 01:59:16 +0100
-Subject: [PATCH 13/14] env: mmc: Make redundant env in both eMMC boot
- partitions consider DT properties
+Date: Fri, 21 Feb 2025 19:47:23 +0100
+Subject: [PATCH 4/7] env: mmc: Make redundant env in both eMMC boot partitions
+ consider DT properties
 
-Introduce a new function mmc_env_hwpart_redund() which replaces
-IS_ENABLED(ENV_MMC_HWPART_REDUND) and internally does almost the
-same check as the macro which assigned ENV_MMC_HWPART_REDUND did,
-and call it in place of IS_ENABLED(ENV_MMC_HWPART_REDUND).
+Introduce a new function mmc_env_is_redundant_in_both_boot_hwparts()
+which replaces IS_ENABLED(ENV_MMC_HWPART_REDUND) and internally does
+almost the same check as the macro which assigned ENV_MMC_HWPART_REDUND
+did, and call it in place of IS_ENABLED(ENV_MMC_HWPART_REDUND).
 
 The difference compared to IS_ENABLED(ENV_MMC_HWPART_REDUND) is
 in the last conditional, which does not do plain macro compare
@@ -17,17 +17,19 @@ in use, this gets optimized back to original macro compare, but
 if OF_CONTROL is in use, this also takes into account the DT
 properties u-boot,mmc-env-offset and u-boot,mmc-env-offset-redundant.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20250210013159.350443-1-marex@denx.de/]
+Upstream-Status: Backport [5ce1d026b10e9cba8a22c83e826234cd8d48044b]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
  env/mmc.c | 37 +++++++++++++++++++++----------------
  1 file changed, 21 insertions(+), 16 deletions(-)
 
 diff --git a/env/mmc.c b/env/mmc.c
-index 7afb733e890..ae926efb35c 100644
+index 379f5ec9be7..353a7ce72fb 100644
 --- a/env/mmc.c
 +++ b/env/mmc.c
-@@ -41,18 +41,6 @@
+@@ -40,18 +40,6 @@
  
  DECLARE_GLOBAL_DATA_PTR;
  
@@ -44,13 +46,13 @@ index 7afb733e890..ae926efb35c 100644
 -#endif
 -
  #if CONFIG_IS_ENABLED(OF_CONTROL)
- static inline int mmc_offset_try_partition(const char *str, int copy, s64 *val)
- {
-@@ -158,6 +146,23 @@ static inline s64 mmc_offset(struct mmc *mmc, int copy)
+ 
+ static int mmc_env_partition_by_name(struct blk_desc *desc, const char *str,
+@@ -217,6 +205,23 @@ static inline s64 mmc_offset(struct mmc *mmc, int copy)
  }
  #endif
  
-+static int mmc_env_hwpart_redund(struct mmc *mmc)
++static bool __maybe_unused mmc_env_is_redundant_in_both_boot_hwparts(struct mmc *mmc)
 +{
 +	/*
 +	 * In case the environment is redundant, stored in eMMC hardware boot
@@ -59,10 +61,10 @@ index 7afb733e890..ae926efb35c 100644
 +	 * eMMC boot partitions, one copy in each.
 +	 */
 +	if (!IS_ENABLED(CONFIG_SYS_REDUNDAND_ENVIRONMENT))
-+		return 0;
++		return false;
 +
 +	if (CONFIG_SYS_MMC_ENV_PART != 1)
-+		return 0;
++		return false;
 +
 +	return mmc_offset(mmc, 0) == mmc_offset(mmc, 1);
 +}
@@ -70,39 +72,39 @@ index 7afb733e890..ae926efb35c 100644
  __weak int mmc_get_env_addr(struct mmc *mmc, int copy, u32 *env_addr)
  {
  	s64 offset = mmc_offset(mmc, copy);
-@@ -277,7 +282,7 @@ static int env_mmc_save(void)
+@@ -336,7 +341,7 @@ static int env_mmc_save(void)
  		if (gd->env_valid == ENV_VALID)
  			copy = 1;
  
 -		if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
-+		if (mmc_env_hwpart_redund(mmc)) {
++		if (mmc_env_is_redundant_in_both_boot_hwparts(mmc)) {
  			ret = mmc_set_env_part(mmc, copy + 1);
  			if (ret)
  				goto fini;
-@@ -350,7 +355,7 @@ static int env_mmc_erase(void)
+@@ -409,7 +414,7 @@ static int env_mmc_erase(void)
  	if (IS_ENABLED(CONFIG_SYS_REDUNDAND_ENVIRONMENT)) {
  		copy = 1;
  
 -		if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
-+		if (mmc_env_hwpart_redund(mmc)) {
++		if (mmc_env_is_redundant_in_both_boot_hwparts(mmc)) {
  			ret = mmc_set_env_part(mmc, copy + 1);
  			if (ret)
  				goto fini;
-@@ -418,7 +423,7 @@ static int env_mmc_load(void)
+@@ -477,7 +482,7 @@ static int env_mmc_load(void)
  		goto fini;
  	}
  
 -	if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
-+	if (mmc_env_hwpart_redund(mmc)) {
++	if (mmc_env_is_redundant_in_both_boot_hwparts(mmc)) {
  		ret = mmc_set_env_part(mmc, 1);
  		if (ret)
  			goto fini;
-@@ -426,7 +431,7 @@ static int env_mmc_load(void)
+@@ -485,7 +490,7 @@ static int env_mmc_load(void)
  
  	read1_fail = read_env(mmc, CONFIG_ENV_SIZE, offset1, tmp_env1);
  
 -	if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
-+	if (mmc_env_hwpart_redund(mmc)) {
++	if (mmc_env_is_redundant_in_both_boot_hwparts(mmc)) {
  		ret = mmc_set_env_part(mmc, 2);
  		if (ret)
  			goto fini;

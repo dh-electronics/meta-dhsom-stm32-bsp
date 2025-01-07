@@ -1,0 +1,36 @@
+From 0d20ab39151688b43bb75aae399f25b3a46e5416 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 9 Mar 2025 03:01:41 +0100
+Subject: [PATCH 7/7] ARM: stm32mp: Fix dram_bank_mmu_setup() for ram_top=0
+
+On STM32MP15xx with 1 GiB of DRAM, the gd->ram_top becomes 0,
+because DRAM base 0xc0000000 + DRAM size 0x40000000 leads to
+gd->ram_top overflow which resets it to 0. Handle this special
+case simply by checking for gd->ram_top being zero, and if it
+is, assume there is no addr >= gd->ram_top .
+
+This fixes boot hang on STM32MP15xx with 1 GiB of DRAM.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20250309020623.1605623-1-marex@denx.de/]
+Fixes: 25fb58e88aba ("ARM: stm32mp: Fix dram_bank_mmu_setup() for LMB located above ram_top")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/mach-stm32mp/stm32mp1/cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-stm32mp/stm32mp1/cpu.c b/arch/arm/mach-stm32mp/stm32mp1/cpu.c
+index cb1b84c9af9..d5eaf6711b6 100644
+--- a/arch/arm/mach-stm32mp/stm32mp1/cpu.c
++++ b/arch/arm/mach-stm32mp/stm32mp1/cpu.c
+@@ -82,7 +82,7 @@ void dram_bank_mmu_setup(int bank)
+ 		option = DCACHE_DEFAULT_OPTION;
+ 		if (use_lmb &&
+ 		    (lmb_is_reserved_flags(i << MMU_SECTION_SHIFT, LMB_NOMAP) ||
+-		    addr >= gd->ram_top)
++		     (gd->ram_top && addr >= gd->ram_top))
+ 		   )
+ 			option = 0; /* INVALID ENTRY in TLB */
+ 		set_section_dcache(i, option);
+-- 
+2.47.2
+

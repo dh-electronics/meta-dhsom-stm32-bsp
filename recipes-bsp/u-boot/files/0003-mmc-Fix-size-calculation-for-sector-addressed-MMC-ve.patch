@@ -1,7 +1,8 @@
-From 6b3cd4821faad862a103527f7f1777c72dce5f54 Mon Sep 17 00:00:00 2001
+From a7b084f06eb6da7095ff4b29b6cbcb7d96c27e69 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 28 Jan 2025 17:56:36 +0100
-Subject: [PATCH] mmc: Fix size calculation for sector addressed MMC version 4
+Date: Wed, 29 Jan 2025 12:15:54 +0100
+Subject: [PATCH 3/7] mmc: Fix size calculation for sector addressed MMC
+ version 4
 
 For eMMC v4 and newer that is smaller than 2 GiB, the JEDEC JESD84-B51
 section 6.2.4 Configure partitions indicates that EXT_CSD SEC_COUNT
@@ -22,7 +23,7 @@ use EXT_CSD SEC_COUNT . Use mmc->high_capacity flag to discern the
 devices instead of arbitrary 2 GiB limit. The mmc->high_capacity flag
 reflects the OCR HCS bit state.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20250129111613.11106-1-marex@denx.de/]
+Upstream-Status: Backport [dbb9e136b8c01de581a08113ae6124f484b29362]
 Fixes: 639b7827d1ca ("mmc: fix the condition for MMC version 4")
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
@@ -30,10 +31,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/mmc/mmc.c b/drivers/mmc/mmc.c
-index 7b068c71ff3..3a5631bb79f 100644
+index 799586891af..31a72366206 100644
 --- a/drivers/mmc/mmc.c
 +++ b/drivers/mmc/mmc.c
-@@ -2341,7 +2341,7 @@ static int mmc_startup_v4(struct mmc *mmc)
+@@ -2376,7 +2376,7 @@ static int mmc_startup_v4(struct mmc *mmc)
  				| ext_csd[EXT_CSD_SEC_CNT + 2] << 16
  				| ext_csd[EXT_CSD_SEC_CNT + 3] << 24;
  		capacity *= MMC_MAX_BLOCK_LEN;
@@ -43,5 +44,5 @@ index 7b068c71ff3..3a5631bb79f 100644
  	}
  
 -- 
-2.45.2
+2.47.2
 
