@@ -5,3 +5,5 @@ patch 0004-leds-trigger-netdev-Check-offload-ability-on-interfa.patch
 patch 0005-ARM-dts-stm32-Add-IWDG2-EXTI-interrupt-mapping-and-m.patch
 patch 0006-ARM-dts-stm32-Add-DT-overlays-for-STM32MP13xx-STM32M.patch
 patch 0007-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch
+patch 0008-net-phy-realtek-Add-property-to-enable-SSC.patch
+patch 0009-ARM-dts-stm32-Enable-PHY-SSC-on-DH-STM32MP13xx-DHCOR.patch

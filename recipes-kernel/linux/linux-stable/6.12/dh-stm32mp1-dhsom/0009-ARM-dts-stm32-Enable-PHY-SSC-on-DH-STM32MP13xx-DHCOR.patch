@@ -1,0 +1,38 @@
+From e5f20b7c3ed65a263d096e01646dc9efd7a2a1a3 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Fri, 18 Apr 2025 21:26:20 +0200
+Subject: [PATCH 9/9] ARM: dts: stm32: Enable PHY SSC on DH STM32MP13xx DHCOR
+ DHSBC board
+
+Add realtek,ssc-enable to both PHY DT nodes to enable PHY Spread Spectrum
+on RXC, SYSCLK and CLKOUT.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+index 9902849ed0406..40943ae514351 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+@@ -97,6 +97,7 @@ ethphy1: ethernet-phy@1 {
+ 			interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
+ 			reg = <1>;
+ 			realtek,clkout-disable;
++			realtek,ssc-enable;
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>;
+@@ -146,6 +147,7 @@ ethphy2: ethernet-phy@1 {
+ 			interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
+ 			reg = <1>;
+ 			realtek,clkout-disable;
++			realtek,ssc-enable;
+ 			reset-assert-us = <15000>;
+ 			reset-deassert-us = <55000>;
+ 			reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
+-- 
+2.47.2
+

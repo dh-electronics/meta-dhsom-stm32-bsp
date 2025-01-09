@@ -1,0 +1,87 @@
+From 6117cf948f9534fcd494146583f817e3aed0d79a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Fri, 18 Apr 2025 21:18:00 +0200
+Subject: [PATCH 8/9] net: phy: realtek: Add property to enable SSC
+
+Add the 'realtek,ssc-enable' property to enable Spread Spectrum
+Clocking (SSC) on Realtek PHYs that support it.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ drivers/net/phy/realtek.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index 166f6a7283731..b494cb2120586 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@ -30,6 +30,8 @@
+ 
+ #define RTL8211F_PHYCR1				0x18
+ #define RTL8211F_PHYCR2				0x19
++#define RTL8211F_SYSCLK_SSC_EN			BIT(3)
++
+ #define RTL8211F_INSR				0x1d
+ 
+ #define RTL8211F_LEDCR				0x10
+@@ -41,6 +43,10 @@
+ #define RTL8211F_LEDCR_MASK			GENMASK(4, 0)
+ #define RTL8211F_LEDCR_SHIFT			5
+ 
++#define RTL8211F_SSC_CLKOUT			0x10
++#define RTL8211F_SSC_RXC			0x13
++#define RTL8211F_SSC_SYSCLK			0x17
++
+ #define RTL8211F_TX_DELAY			BIT(8)
+ #define RTL8211F_RX_DELAY			BIT(3)
+ 
+@@ -106,6 +112,7 @@ struct rtl821x_priv {
+ 	u16 phycr1;
+ 	u16 phycr2;
+ 	bool has_phycr2;
++	bool ssc;
+ 	struct clk *clk;
+ };
+ 
+@@ -154,6 +161,10 @@ static int rtl821x_probe(struct phy_device *phydev)
+ 			priv->phycr2 &= ~RTL8211F_CLKOUT_EN;
+ 	}
+ 
++	priv->ssc = of_property_read_bool(dev->of_node, "realtek,ssc-enable");
++	if (priv->ssc)
++		priv->phycr2 |= RTL8211F_SYSCLK_SSC_EN;
++
+ 	phydev->priv = priv;
+ 
+ 	return 0;
+@@ -438,6 +449,26 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 			val_rxdly ? "enabled" : "disabled");
+ 	}
+ 
++	if (priv->ssc) {
++		ret = phy_modify_paged(phydev, 0x0c44, RTL8211F_SSC_RXC, 0xff00, 0x5f00);
++		if (ret < 0) {
++			dev_err(dev, "RXC SCC configuration failed: %pe\n", ERR_PTR(ret));
++			return ret;
++		}
++
++		ret = phy_modify_paged(phydev, 0x0c44, RTL8211F_SSC_SYSCLK, 0xff00, 0x5f00);
++		if (ret < 0) {
++			dev_err(dev, "SYSCLK SCC configuration failed: %pe\n", ERR_PTR(ret));
++			return ret;
++		}
++
++		ret = phy_modify_paged(phydev, 0x0d09, RTL8211F_SSC_CLKOUT, 0xff00, 0xcf00);
++		if (ret < 0) {
++			dev_err(dev, "CLKOUT SCC configuration failed: %pe\n", ERR_PTR(ret));
++			return ret;
++		}
++	}
++
+ 	if (priv->has_phycr2) {
+ 		ret = phy_modify_paged(phydev, 0xa43, RTL8211F_PHYCR2,
+ 				       RTL8211F_CLKOUT_EN, priv->phycr2);
+-- 
+2.47.2
+
