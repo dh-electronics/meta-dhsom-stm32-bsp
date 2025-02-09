@@ -2,6 +2,7 @@
 # long-description: Creates a partitioned eMMC card image. Boot files
 # are located in the first ext4 partition.
 
+part fip --source rawcopy --part-name=fip --sourceparams="file=${DEPLOY_DIR_IMAGE}/fip.bin-stm32mp1" --ondisk mmcblk --align 1 --size 4M
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --part-name "rootfs" --align 4096 --use-uuid --active
 
 bootloader --ptable gpt
