@@ -1,0 +1,111 @@
+From 03faaba2c697cdb1c3d943212d42ac715b78de2b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 10 Feb 2025 01:59:16 +0100
+Subject: [PATCH 13/14] env: mmc: Make redundant env in both eMMC boot
+ partitions consider DT properties
+
+Introduce a new function mmc_env_hwpart_redund() which replaces
+IS_ENABLED(ENV_MMC_HWPART_REDUND) and internally does almost the
+same check as the macro which assigned ENV_MMC_HWPART_REDUND did,
+and call it in place of IS_ENABLED(ENV_MMC_HWPART_REDUND).
+
+The difference compared to IS_ENABLED(ENV_MMC_HWPART_REDUND) is
+in the last conditional, which does not do plain macro compare
+(CONFIG_ENV_OFFSET == CONFIG_ENV_OFFSET_REDUND), but instead does
+mmc_offset(mmc, 0) == mmc_offset(mmc, 1). If OF_CONTROL is not
+in use, this gets optimized back to original macro compare, but
+if OF_CONTROL is in use, this also takes into account the DT
+properties u-boot,mmc-env-offset and u-boot,mmc-env-offset-redundant.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20250210013159.350443-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ env/mmc.c | 37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
+
+diff --git a/env/mmc.c b/env/mmc.c
+index 7afb733e890..ae926efb35c 100644
+--- a/env/mmc.c
++++ b/env/mmc.c
+@@ -41,18 +41,6 @@
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+-/*
+- * In case the environment is redundant, stored in eMMC hardware boot
+- * partition and the environment and redundant environment offsets are
+- * identical, store the environment and redundant environment in both
+- * eMMC boot partitions, one copy in each.
+- * */
+-#if (defined(CONFIG_SYS_REDUNDAND_ENVIRONMENT) && \
+-     (CONFIG_SYS_MMC_ENV_PART == 1) && \
+-     (CONFIG_ENV_OFFSET == CONFIG_ENV_OFFSET_REDUND))
+-#define ENV_MMC_HWPART_REDUND	1
+-#endif
+-
+ #if CONFIG_IS_ENABLED(OF_CONTROL)
+ static inline int mmc_offset_try_partition(const char *str, int copy, s64 *val)
+ {
+@@ -158,6 +146,23 @@ static inline s64 mmc_offset(struct mmc *mmc, int copy)
+ }
+ #endif
+ 
++static int mmc_env_hwpart_redund(struct mmc *mmc)
++{
++	/*
++	 * In case the environment is redundant, stored in eMMC hardware boot
++	 * partition and the environment and redundant environment offsets are
++	 * identical, store the environment and redundant environment in both
++	 * eMMC boot partitions, one copy in each.
++	 */
++	if (!IS_ENABLED(CONFIG_SYS_REDUNDAND_ENVIRONMENT))
++		return 0;
++
++	if (CONFIG_SYS_MMC_ENV_PART != 1)
++		return 0;
++
++	return mmc_offset(mmc, 0) == mmc_offset(mmc, 1);
++}
++
+ __weak int mmc_get_env_addr(struct mmc *mmc, int copy, u32 *env_addr)
+ {
+ 	s64 offset = mmc_offset(mmc, copy);
+@@ -277,7 +282,7 @@ static int env_mmc_save(void)
+ 		if (gd->env_valid == ENV_VALID)
+ 			copy = 1;
+ 
+-		if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
++		if (mmc_env_hwpart_redund(mmc)) {
+ 			ret = mmc_set_env_part(mmc, copy + 1);
+ 			if (ret)
+ 				goto fini;
+@@ -350,7 +355,7 @@ static int env_mmc_erase(void)
+ 	if (IS_ENABLED(CONFIG_SYS_REDUNDAND_ENVIRONMENT)) {
+ 		copy = 1;
+ 
+-		if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
++		if (mmc_env_hwpart_redund(mmc)) {
+ 			ret = mmc_set_env_part(mmc, copy + 1);
+ 			if (ret)
+ 				goto fini;
+@@ -418,7 +423,7 @@ static int env_mmc_load(void)
+ 		goto fini;
+ 	}
+ 
+-	if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
++	if (mmc_env_hwpart_redund(mmc)) {
+ 		ret = mmc_set_env_part(mmc, 1);
+ 		if (ret)
+ 			goto fini;
+@@ -426,7 +431,7 @@ static int env_mmc_load(void)
+ 
+ 	read1_fail = read_env(mmc, CONFIG_ENV_SIZE, offset1, tmp_env1);
+ 
+-	if (IS_ENABLED(ENV_MMC_HWPART_REDUND)) {
++	if (mmc_env_hwpart_redund(mmc)) {
+ 		ret = mmc_set_env_part(mmc, 2);
+ 		if (ret)
+ 			goto fini;
+-- 
+2.47.2
+

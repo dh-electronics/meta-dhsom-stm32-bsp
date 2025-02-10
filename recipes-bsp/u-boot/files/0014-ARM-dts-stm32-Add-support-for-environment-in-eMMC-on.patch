@@ -1,0 +1,52 @@
+From 067e86ae862434f9401d9bb5208b84e14ae600fc Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 10 Feb 2025 02:13:45 +0100
+Subject: [PATCH 14/14] ARM: dts: stm32: Add support for environment in eMMC on
+ STM32MP13xx DHCOR SoM
+
+Enable support for environment in eMMC on STM32MP13xx DHCOR SoM,
+in addition to existing support for environment in SPI NOR. The
+environment size is the same, except in case the environment is
+placed in eMMC, it is stored at the end of eMMC BOOT partitions
+in the last 32 sectors of each eMMC HW BOOT partition.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20250210013322.350477-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi | 2 ++
+ configs/stm32mp13_dhcor_defconfig          | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
+index 30e3b91bccc..9ff42ab8248 100644
+--- a/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
+@@ -13,6 +13,8 @@
+ 	config {
+ 		dh,ddr3-coding-gpios = <&gpiod 5 0>, <&gpiod 9 0>;
+ 		dh,som-coding-gpios = <&gpioa 13 0>, <&gpioi 1 0>;
++		u-boot,mmc-env-offset = <0x3fc000>;
++		u-boot,mmc-env-offset-redundant = <0x3fc000>;
+ 	};
+ };
+ 
+diff --git a/configs/stm32mp13_dhcor_defconfig b/configs/stm32mp13_dhcor_defconfig
+index fb3d86deb64..9c9e2cf302f 100644
+--- a/configs/stm32mp13_dhcor_defconfig
++++ b/configs/stm32mp13_dhcor_defconfig
+@@ -65,8 +65,12 @@ CONFIG_CMD_UBI=y
+ # CONFIG_ISO_PARTITION is not set
+ CONFIG_OF_LIVE=y
+ CONFIG_ENV_IS_NOWHERE=y
++CONFIG_ENV_IS_IN_MMC=y
+ CONFIG_ENV_IS_IN_SPI_FLASH=y
+ CONFIG_ENV_SPI_MAX_HZ=50000000
++CONFIG_ENV_MMC_USE_DT=y
++CONFIG_SYS_MMC_ENV_DEV=0
++CONFIG_SYS_MMC_ENV_PART=1
+ CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_VERSION_VARIABLE=y
+-- 
+2.47.2
+
