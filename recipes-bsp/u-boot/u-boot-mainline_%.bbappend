@@ -17,6 +17,7 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0005-env-mmc-Clean-up-env_mmc_load-ifdeffery.patch \
 	file://0006-ARM-dts-stm32-Add-support-for-environment-in-eMMC-on.patch \
 	file://0007-ARM-stm32mp-Fix-dram_bank_mmu_setup-for-ram_top-0.patch \
+	file://0008-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch \
 	"
 
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
@@ -28,4 +29,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20250309.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20250309.02"
