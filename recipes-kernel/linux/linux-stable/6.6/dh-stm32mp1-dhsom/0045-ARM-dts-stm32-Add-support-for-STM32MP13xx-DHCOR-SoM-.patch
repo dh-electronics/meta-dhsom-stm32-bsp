@@ -1,0 +1,89 @@
+From 622e4069c1bc35158202bc1e80966b3df08fe85b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 6 Dec 2024 00:06:34 +0100
+Subject: [PATCH] ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM and
+ DHSBC rev.200 board
+
+LDO2 is expansion connector supply on STM32MP13xx DHCOR DHSBC rev.200.
+LDO5 is carrier board supply on STM32MP13xx DHCOR DHSBC rev.200. Keep
+both regulators always enabled to make sure both the carrier board and
+the expansion connector is always powered on and supplied with correct
+voltage.
+
+Describe ST33TPHF2XSPI TPM 2.0 chip interrupt and reset lines.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20250302152605.54792-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ .../boot/dts/st/stm32mp135f-dhcor-dhsbc.dts   | 30 +++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+index 853dc21449d99..9902849ed0406 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
+@@ -176,7 +176,7 @@ &gpioa {
+ 	gpio-line-names = "", "", "", "",
+ 			  "", "DHSBC_USB_PWR_CC1", "", "",
+ 			  "", "", "", "DHSBC_nETH1_RST",
+-			  "", "DHCOR_HW-CODING_0", "", "";
++			  "", "DHCOR_HW-CODING_0", "", "DHSBC_HW-CODE_2";
+ };
+ 
+ &gpiob {
+@@ -197,7 +197,7 @@ &gpiod {
+ 	gpio-line-names = "", "", "", "",
+ 			  "", "DHCOR_RAM-CODING_0", "", "",
+ 			  "", "DHCOR_RAM-CODING_1", "", "",
+-			  "", "", "", "";
++			  "", "DHSBC_HW-CODE_1", "", "";
+ };
+ 
+ &gpioe {
+@@ -221,6 +221,13 @@ &gpiog {
+ 			  "DHSBC_ETH1_INTB", "", "", "DHSBC_ETH2_INTB";
+ };
+ 
++&gpioh {
++	gpio-line-names = "", "", "", "DHSBC_HW-CODE_0",
++			  "", "", "", "",
++			  "", "", "", "",
++			  "", "", "", "";
++};
++
+ &gpioi {
+ 	gpio-line-names = "DHCOR_RTC_nINT", "DHCOR_HW-CODING_1",
+ 			  "DHCOR_BT_REG_ON", "DHCOR_PMIC_nINT",
+@@ -296,6 +303,9 @@ &spi2 {
+ 	st33htph: tpm@0 {
+ 		compatible = "st,st33htpm-spi", "tcg,tpm_tis-spi";
+ 		reg = <0>;
++		interrupt-parent = <&gpioe>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++		reset-gpios = <&gpioe 12 GPIO_ACTIVE_LOW>;
+ 		spi-max-frequency = <24000000>;
+ 	};
+ };
+@@ -419,3 +429,19 @@ connector {
+ 		type = "micro";
+ 	};
+ };
++
++/* LDO2 is expansion connector 3V3 supply on STM32MP13xx DHCOR DHSBC rev.200 */
++&vdd_ldo2 {
++	regulator-always-on;
++	regulator-boot-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++};
++
++/* LDO5 is carrier board 3V3 supply on STM32MP13xx DHCOR DHSBC rev.200 */
++&vdd_sd {
++	regulator-always-on;
++	regulator-boot-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++};
+-- 
+2.47.2
+
