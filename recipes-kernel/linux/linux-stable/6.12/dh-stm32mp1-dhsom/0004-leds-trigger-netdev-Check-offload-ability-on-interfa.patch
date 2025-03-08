@@ -1,0 +1,66 @@
+From 6d01daf1f142a8c5b7e56116eb6e56bf16b92e4d Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 16 Dec 2024 11:48:22 +0100
+Subject: [PATCH 4/7] leds: trigger: netdev: Check offload ability on interface
+ up
+
+The trigger_data->hw_control indicates whether the LED is controlled by HW
+offload, i.e. the PHY. The trigger_data->hw_control = can_hw_control() is
+currently called only from netdev_led_attr_store(), i.e. when writing any
+sysfs attribute of the netdev trigger instance associated with a PHY LED.
+
+The can_hw_control() calls validate_net_dev() which internally calls
+led_cdev->hw_control_get_device(), which is phy_led_hw_control_get_device()
+for PHY LEDs. The phy_led_hw_control_get_device() returns NULL if the PHY
+is not attached.
+
+At least in case of DWMAC (STM32MP, iMX8M, ...), the PHY device is attached
+only when the interface is brought up and is detached again when the
+interface is brought down. In case e.g. udev rules configure the netdev
+LED trigger sysfs attributes before the interface is brought up, then when
+the interface is brought up, the LEDs are not blinking.
+
+This is because trigger_data->hw_control = can_hw_control() was called
+when udev wrote the sysfs attribute files, before the interface was up,
+so can_hw_control() resp. validate_net_dev() returned false, and the
+trigger_data->hw_control = can_hw_control() was never called again to
+update the trigger_data->hw_control content and let the offload take
+over the LED blinking.
+
+Call data->hw_control = can_hw_control() from netdev_trig_notify() to
+update the offload capability of the LED when the UP notification arrives.
+This makes the LEDs blink after the interface is brought up.
+
+On STM32MP13xx with RTL8211F, it is enough to have the following udev rule
+in place, boot the machine with cable plugged in, and the LEDs won't work
+without this patch once the interface is brought up, even if they should:
+"
+ACTION=="add", SUBSYSTEM=="leds", KERNEL=="stmmac-0:01:green:wan", ATTR{trigger}="netdev", ATTR{link_10}="1", ATTR{link_100}="1", ATTR{link_1000}="1", ATTR{device_name}="end0"
+ACTION=="add", SUBSYSTEM=="leds", KERNEL=="stmmac-0:01:yellow:wan", ATTR{trigger}="netdev", ATTR{rx}="1", ATTR{tx}="1", ATTR{device_name}="end0"
+"
+
+Upstream-Status: Backport [0dfda50988c6805e8ab432e99866a021ea6ec46d]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20241216104826.6946-1-marex@denx.de
+Signed-off-by: Lee Jones <lee@kernel.org>
+---
+ drivers/leds/trigger/ledtrig-netdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
+index 4b0863db901a9..c15efe3e50780 100644
+--- a/drivers/leds/trigger/ledtrig-netdev.c
++++ b/drivers/leds/trigger/ledtrig-netdev.c
+@@ -605,6 +605,8 @@ static int netdev_trig_notify(struct notifier_block *nb,
+ 		trigger_data->net_dev = NULL;
+ 		break;
+ 	case NETDEV_UP:
++		trigger_data->hw_control = can_hw_control(trigger_data);
++		fallthrough;
+ 	case NETDEV_CHANGE:
+ 		get_device_state(trigger_data);
+ 		/* Refresh link_speed visibility */
+-- 
+2.47.2
+

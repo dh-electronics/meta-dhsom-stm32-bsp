@@ -1,0 +1,33 @@
+From f4aad26179646ac94675983ff81e0ac3d696d578 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 23 Jun 2024 21:51:08 +0200
+Subject: [PATCH 5/7] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and
+ mark as wakeup source
+
+The IWDG2 is capable of generating pre-timeout interrupt, which can be used
+to wake the system up from suspend to mem. Add the EXTI interrupt mapping
+and mark the IWDG2 as wake up source.
+
+Upstream-Status: Backport [cc971f091f23b42453bb7a2e184bbf02f747d7eb]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index fdc42a89bd37d..e7e3ce8066ece 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -355,6 +355,8 @@ iwdg2: watchdog@5a002000 {
+ 			reg = <0x5a002000 0x400>;
+ 			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
+ 			clock-names = "pclk", "lsi";
++			interrupts-extended = <&exti 46 IRQ_TYPE_LEVEL_HIGH>;
++			wakeup-source;
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.47.2
+

@@ -1,0 +1,77 @@
+From bb29db43578ac4e95171b0289647d8795ad12686 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 20 Mar 2024 07:21:18 +0100
+Subject: [PATCH 3/7] Input: ads7846 - add dummy command register clearing
+ cycle
+
+On STM32MP135F with XPT2046 touch controller attached to SPI bus, it has
+been observed that the touch controller locks up after Linux kernel has
+finished booting. Adding a dummy cycle on the SPI bus seems to mitigate
+the lock up.
+
+The XPTEK XPT2046 controller seems to be an identical clone of TI TSC2046,
+the datasheet seems to be a clone of the TI part as well, text seem to be
+word to word identical, except all the pictures have been drawn again.
+
+This touch controller is present e.g. on WaveShare 3.2inch RPi LCD (B)
+panel, the DTO provided by WaveShare uses 50 kHz SPI clock for this
+touch controller, which is unusually low and possibly might have been
+used as some sort of workaround for an issue. The SPI LCD on the same
+bus uses 16 MHz clock.
+
+SPI bus DT properties spi-cs-setup-delay-ns, spi-cs-hold-delay-ns,
+spi-cs-inactive-delay-ns, spi-rx-delay-us, spi-tx-delay-us set to
+range of 500ns..5us seem to have no impact on the behavior of the
+touch controller, the lock up always occurs. The STM32MP13xx SPI
+controller users GPIO control for the nCS pins.
+
+Since the dummy cycle happens after the controller has been put into
+power down mode and both ADC and REF regulators have been disabled,
+the cycle should have no impact on the configuration of the controller,
+i.e. it should be a NOP.
+
+It is unclear whether this problem is specific to this cloned XPT2046
+controller, or whether this is also present on TSC2046. A test on
+either TSC2046 or ADS7846 would be very welcome.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-input/patch/20240320072533.170029-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: kernel@dh-electronics.com
+Cc: linux-input@vger.kernel.org
+---
+ drivers/input/touchscreen/ads7846.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index 607f18af70104..75e5b2e4368d8 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -405,9 +405,19 @@ static int ads7846_read12_ser(struct device *dev, unsigned command)
+ 
+ 	req->xfer[5].rx_buf = &req->scratch;
+ 	req->xfer[5].len = 2;
+-	CS_CHANGE(req->xfer[5]);
+ 	spi_message_add_tail(&req->xfer[5], &req->msg);
+ 
++	/* clear the command register */
++	req->scratch = 0;
++	req->xfer[6].tx_buf = &req->scratch;
++	req->xfer[6].len = 1;
++	spi_message_add_tail(&req->xfer[6], &req->msg);
++
++	req->xfer[7].rx_buf = &req->scratch;
++	req->xfer[7].len = 2;
++	CS_CHANGE(req->xfer[7]);
++	spi_message_add_tail(&req->xfer[7], &req->msg);
++
+ 	mutex_lock(&ts->lock);
+ 	ads7846_stop(ts);
+ 	status = spi_sync(spi, &req->msg);
+-- 
+2.47.2
+

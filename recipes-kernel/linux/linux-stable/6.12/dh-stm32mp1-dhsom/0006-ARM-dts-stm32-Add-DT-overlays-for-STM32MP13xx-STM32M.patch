@@ -1,0 +1,1356 @@
+From c6e06b15aaedce9bb69f4664cedc0d09dd3bc68e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 26 Mar 2020 15:14:11 +0100
+Subject: [PATCH 6/7] ARM: dts: stm32: Add DT overlays for
+ STM32MP13xx/STM32MP15xx DHSOM
+
+The following DTOs are supported on STM32MP15xx DHCOM PDK2:
+ - DH 460-200 SRAM board in header X11
+ - DH 497-200 adapter card with EDT ETM0700G0EDH6 Parallel RGB display attached to it
+ - DH 505-200 adapter card with Chefree CH101OLHLWH-002 LVDS display attached to it
+ - DH 531-100 SPI/I2C board in header X21
+ - DH 531-200 SPI/I2C board in header X22
+ - DH 560-200 7" LCD board in header X12
+ - DH 638-100 mezzanine card with RPi 7" DSI display attached on top
+ - DH 672-100 expansion card, which contains CAN/FD transceiver and enables PDK2 to use one more CAN/FD interface
+
+The following DTOs are supported on STM32MP15xx DHCOM DRC02:
+ - Enable configuration where the DHSOM inserted into the DRC02 has RSI 9116 WiFi
+   populated on the SoM and where the microSD slot on the bottom of DRC02 must not
+   be used.
+   This permits a non-default configuration of the SoM and DRC02 board
+   used for custom device setup with on-SoM WiFi.
+
+The following DTOs are supported on STM32MP15xx DHCOM PicoITX:
+ - DH 548-200 adapter card with Multi-Inno MI0700D4T-6 7" DPI display attached to it.
+ - DH 553-100 adapter card with Team Source Display TST043015CMHX 4.3" DPI display attached to it.
+ - DH 626-100 adapter card with Chefree CH101OLHLWH-002 LVDS display attached to it.
+
+The following DTOs are supported on STM32MP15xx DHCOR Avenger96:
+ - FDCAN1 on low-speed expansion X6
+ - FDCAN2 on low-speed expansion X6
+ - AT24C04 I2C EEPROM on low-speed expansion X6 I2C1
+ - AT24C04 I2C EEPROM on low-speed expansion X6 I2C2
+ - AT25AA010A SPI EEPROM on low-speed expansion X6 SPI2
+ - 96boards OV5640 mezzanine card with sensor connected to port J3.
+ - DH 644-100 mezzanine card with Orisetech OTM8009A DSI display attached on top
+ - DH 644-100 mezzanine card with RPi 7" DSI display attached on top
+
+The following DTOs are supported on STM32MP13xx DHCOR DHSBC:
+- stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2
+  - joy-IT RB-TFT3.2-V2 240x320 SPI LCD and XPT2046 resistive touch controller
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/st/Makefile                 |  21 ++++
+ ...p13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso |  85 ++++++++++++++
+ ...avenger96-overlay-644-100-x6-otm8009a.dtso |  61 ++++++++++
+ ...avenger96-overlay-644-100-x6-rpi7inch.dtso |  31 +++++
+ ...m32mp15xx-avenger96-overlay-fdcan1-x6.dtso |  10 ++
+ ...m32mp15xx-avenger96-overlay-fdcan2-x6.dtso |  10 ++
+ ...15xx-avenger96-overlay-i2c1-eeprom-x6.dtso |  17 +++
+ ...15xx-avenger96-overlay-i2c2-eeprom-x6.dtso |  17 +++
+ ...m32mp15xx-avenger96-overlay-ov5640-x7.dtso | 106 ++++++++++++++++++
+ ...15xx-avenger96-overlay-spi2-eeprom-x6.dtso |  28 +++++
+ ...32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso |  11 ++
+ ...x-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi |  75 +++++++++++++
+ .../stm32mp15xx-dhcom-overlay-panel-dpi.dtsi  |  81 +++++++++++++
+ ...mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso |  27 +++++
+ ...mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso |  24 ++++
+ ...-pdk2-overlay-505-200-x12-ch101olhlwh.dtso |  26 +++++
+ ...mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso |  39 +++++++
+ ...mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso |  19 ++++
+ ...mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso |  66 +++++++++++
+ ...com-pdk2-overlay-638-100-x12-rpi7inch.dtso |  32 ++++++
+ ...mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso |  13 +++
+ .../boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi   |  73 ------------
+ ...icoitx-overlay-548-200-x2-mi0700s4t-6.dtso |  35 ++++++
+ ...oitx-overlay-553-100-x2-tst043015cmhx.dtso |  35 ++++++
+ ...icoitx-overlay-626-100-x2-ch101olhlwh.dtso |   8 ++
+ ...15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi |  94 ++++++++++++++++
+ 26 files changed, 971 insertions(+), 73 deletions(-)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi
+
+diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
+index eab3a9bd435f5..bb9de375fd2a6 100644
+--- a/arch/arm/boot/dts/st/Makefile
++++ b/arch/arm/boot/dts/st/Makefile
+@@ -30,6 +30,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32h743i-disco.dtb \
+ 	stm32h750i-art-pi.dtb \
+ 	stm32mp135f-dhcor-dhsbc.dtb \
++	stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtbo \
+ 	stm32mp135f-dk.dtb \
+ 	stm32mp151a-prtt1a.dtb \
+ 	stm32mp151a-prtt1c.dtb \
+@@ -38,9 +39,18 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp151c-mecio1r0.dtb \
+ 	stm32mp151c-mect1s.dtb \
+ 	stm32mp153c-dhcom-drc02.dtb \
++	stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtbo \
+ 	stm32mp153c-dhcor-drc-compact.dtb \
+ 	stm32mp153c-mecio1r1.dtb \
+ 	stm32mp157a-avenger96.dtb \
++	stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtbo \
++	stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtbo \
++	stm32mp15xx-avenger96-overlay-fdcan1-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-fdcan2-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtbo \
++	stm32mp15xx-avenger96-overlay-ov5640-x7.dtbo \
++	stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtbo \
+ 	stm32mp157a-dhcor-avenger96.dtb \
+ 	stm32mp157a-dk1.dtb \
+ 	stm32mp157a-dk1-scmi.dtb \
+@@ -52,7 +62,18 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157a-icore-stm32mp1-edimm2.2.dtb \
+ 	stm32mp157a-stinger96.dtb \
+ 	stm32mp157c-dhcom-pdk2.dtb \
++	stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtbo \
++	stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtbo \
+ 	stm32mp157c-dhcom-picoitx.dtb \
++	stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtbo \
++	stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtbo \
++	stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtbo \
+ 	stm32mp157c-dk2.dtb \
+ 	stm32mp157c-dk2-scmi.dtb \
+ 	stm32mp157c-ed1.dtb \
+diff --git a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+new file mode 100644
+index 0000000000000..3892c51b4fbdc
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2024 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/input/linux-event-codes.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-1 {
++			label = "KEY2";
++			linux,code = <KEY_2>;
++			gpios = <&gpiog 10 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++	};
++
++	gpio-keys-polled {
++		compatible = "gpio-keys-polled";
++		poll-interval = <20>;
++
++		button-0 {
++			label = "KEY1";
++			linux,code = <KEY_1>;
++			/* IRQ bank A shared with PA1 touch controller */
++			gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
++		};
++
++		button-2 {
++			label = "KEY3";
++			linux,code = <KEY_3>;
++			/* IRQ line 0 taken by PI0 / SoM RTC IRQ */
++			gpios = <&gpiod 0 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
++
++&m_can1 {
++	/* Collides with KEY2/PG10 KEY3/PD0 */
++	status = "disabled";
++};
++
++&m_can2 {
++	/* Collides with TP_CS/PE6 */
++	status = "disabled";
++};
++
++&usart2 {
++	/* Collides with TP_IRQ/PA1 */
++	status = "disabled";
++};
++
++&spi3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&gpiof 3 0>, <&gpioe 0 0>;
++	status = "okay";
++
++	lcd@0 {
++		compatible = "adafruit,yx240qv29", "ilitek,ili9341";
++		reg = <0>;
++		spi-max-frequency = <16000000>;
++		dc-gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
++		rotation = <90>;
++	};
++
++	tp@1 {
++		compatible = "ti,tsc2046";
++		reg = <1>;
++		interrupt-parent = <&gpioa>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		pendown-gpio = <&gpioa 1 GPIO_ACTIVE_LOW>;
++		spi-max-frequency = <500000>;
++		ti,pressure-max = /bits/ 16 <255>;
++		ti,x-plate-ohms = /bits/ 16 <60>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso
+new file mode 100644
+index 0000000000000..87666788bda04
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++
++/dts-v1/;
++/plugin/;
++
++&dsi {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	phy-dsi-supply = <&reg18>;
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			dsi_in: endpoint {
++				remote-endpoint = <&ltdc_ep1_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++			dsi_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++
++	panel@0 {
++		compatible = "orisetech,otm8009a";
++		reg = <0>;
++		reset-gpios = <&gpiod 8 GPIO_ACTIVE_LOW>;
++		power-supply = <&v3v3>;
++		status = "okay";
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++};
++
++&ltdc {
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ltdc_ep1_out: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dsi_in>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso
+new file mode 100644
+index 0000000000000..9e0125084cfe1
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen: touchscreen@38 {
++	};
++
++	attiny: regulator@45 {
++	};
++};
++
++#include "stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi"
++
++&ltdc {
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ltdc_ep_out: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dsi_in>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso
+new file mode 100644
+index 0000000000000..d4f565d9e73c9
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&m_can1 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso
+new file mode 100644
+index 0000000000000..12f51f75f264a
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&m_can2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso
+new file mode 100644
+index 0000000000000..bf9c3cbcdace3
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso
+new file mode 100644
+index 0000000000000..a94b813255503
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso
+new file mode 100644
+index 0000000000000..9d5639630072b
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso
+@@ -0,0 +1,106 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/clock/stm32mp1-clks.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	camera0_pwr: regulator-camera0 {
++		compatible = "regulator-fixed";
++		regulator-name = "camera0-reg";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	sram@10050000 {
++		compatible = "mmio-sram";
++		reg = <0x10050000 0x10000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x10050000 0x10000>;
++
++		dma_pool: dma_pool@0 {
++			reg = <0x0 0x10000>;
++			pool;
++		};
++	};
++};
++
++&dcmi {
++	sram = <&dma_pool>;
++	dmas = <&dmamux1 75 0x400 0x01>, <&mdma1 0 0x3 0x1200000a 0 0>;
++	dma-names = "tx", "mdma_tx";
++	status = "okay";
++};
++
++&dcmi_0 {
++	hsync-active = <0>;
++	vsync-active = <0>;
++	pclk-sample = <0>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	camera@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		clocks = <&rcc CK_MCO1>;
++		clock-names = "xclk";
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&mco1_pins_a>;
++		pinctrl-1 = <&mco1_sleep_pins_a>;
++		assigned-clocks = <&rcc CK_MCO1>;
++		assigned-clock-parents = <&rcc CK_HSE>;
++		assigned-clock-rates = <24000000>;
++		DOVDD-supply = <&camera0_pwr>;
++		/* GPIO-J on the Dragonboard Dual-Leopard OV5640 board */
++		powerdown-gpios = <&gpiob 5 GPIO_ACTIVE_HIGH>;
++		/* GPIO-I on the Dragonboard Dual-Leopard OV5640 board */
++		reset-gpios = <&gpioa 12 GPIO_ACTIVE_LOW>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			ov5640_0: endpoint {
++				remote-endpoint = <&stmipi_0>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
++
++&stmipi {
++	/*
++	 * Inhibit any pin and clock configuration described by the node
++	 * representing STMIPID02. The OV5640 sensor on I2C2 is probed
++	 * first and must configure MCO1 pinmux and activate MCO1 clock
++	 * as those clock supply the sensor internal state machine, and
++	 * without the clock the sensor cannot operate. The STMIPID02 is
++	 * probed second, and should not attempt to adjust MCO1 pinmux
++	 * nor clock configuration. Since DTO does not allow deletion of
++	 * base DT properties, set the base DT properties to empty ones.
++	 */
++	pinctrl-names;
++	pinctrl-0;
++	pinctrl-1;
++	assigned-clocks;
++	assigned-clock-parents;
++	assigned-clock-rates;
++	status = "okay";
++};
++
++&stmipi_0 {
++	data-lanes = <1 2>;
++	remote-endpoint = <&ov5640_0>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso
+new file mode 100644
+index 0000000000000..8f8395de36485
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&spi2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi2_pins_a>;
++	status = "okay";
++	cs-gpios = <&gpioi 0 0>;
++	/* Use PIO for the 128 Byte SPI EEPROM */
++	dmas;
++	dma-names;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso
+new file mode 100644
+index 0000000000000..ea60557a5aca2
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&sdmmc3 {
++	broken-cd;
++	cd-gpios;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+new file mode 100644
+index 0000000000000..ee6d3afb0a29e
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	lvds-encoder {
++		compatible = "onsemi,fin3385", "lvds-encoder";
++		pclk-sample = <1>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lvds_bridge_in: endpoint {
++					remote-endpoint = <&ltdc_dpi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				lvds_bridge_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm2 3 5000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	ili251x@41 {
++		compatible = "ilitek,ili251x";
++		reg = <0x41>;
++		interrupt-parent = <&gpioi>;
++		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <16384>;
++		touchscreen-size-y = <9600>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&lvds_bridge_in>;
++};
++
++&panel {
++	compatible = "chefree,ch101olhlwh-002";
++};
++
++&panel_in {
++	remote-endpoint = <&lvds_bridge_out>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi
+new file mode 100644
+index 0000000000000..3527c0afb6267
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
++		power-supply = <&reg_panel_bl>;
++		status = "okay";
++	};
++
++	panel: panel {
++		backlight = <&display_bl>;
++		power-supply = <&reg_panel_bl>;
++
++		port {
++			panel_in: endpoint {
++			};
++		};
++	};
++
++	reg_panel_bl: regulator-panel-bl {
++		compatible = "regulator-fixed";
++		regulator-name = "panel_backlight";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&reg_panel_supply>;
++	};
++
++	reg_panel_supply: regulator-panel-supply {
++		compatible = "regulator-fixed";
++		regulator-name = "panel_supply";
++		regulator-min-microvolt = <24000000>;
++		regulator-max-microvolt = <24000000>;
++	};
++};
++
++&timers2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	/* spare dmas for other usage (un-delete to enable pwm capture) */
++	dmas;
++	dma-names;
++	status = "okay";
++
++	pwm2: pwm {
++		#pwm-cells = <3>;
++		pinctrl-0 = <&pwm2_pins_a>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++
++	timer@1 {
++		status = "okay";
++	};
++};
++
++&ltdc {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&ltdc_pins_b>;
++	pinctrl-1 = <&ltdc_sleep_pins_b>;
++	status = "okay";
++
++	port {
++		ltdc_dpi_out: endpoint@0 {
++			reg = <0>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso
+new file mode 100644
+index 0000000000000..32f37e0723d95
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&fmc {
++	#address-cells = <2>;
++	#size-cells = <1>;
++
++	sram@3,0 {
++		compatible = "mtd-ram";
++		reg = <3 0x0 0x80000>;
++		bank-width = <2>;
++
++		/* Timing values are in nS */
++		st,fmc2-ebi-cs-mux-enable;
++		st,fmc2-ebi-cs-transaction-type = <4>;
++		st,fmc2-ebi-cs-buswidth = <16>;
++		st,fmc2-ebi-cs-address-setup-ns = <6>;
++		st,fmc2-ebi-cs-address-hold-ns = <6>;
++		st,fmc2-ebi-cs-data-setup-ns = <127>;
++		st,fmc2-ebi-cs-bus-turnaround-ns = <9>;
++		st,fmc2-ebi-cs-data-hold-ns = <9>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso
+new file mode 100644
+index 0000000000000..fc81802831c0c
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm2 3 500000 PWM_POLARITY_INVERTED>;
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "dataimage,scf0700c48ggu18";
++};
++
++&panel_in {
++	remote-endpoint = <&ltdc_dpi_out>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+new file mode 100644
+index 0000000000000..583368ed09f7f
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys-polled {
++		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	led {
++		/* LED7 GPIO-H conflicts with touchscreen IRQ */
++		led-2 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso
+new file mode 100644
+index 0000000000000..8c8159078a13c
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&spi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi1_pins_a>;
++	status = "okay";
++	cs-gpios = <&gpioz 3 0>;
++	/* Use PIO for the 128 Byte SPI EEPROM */
++	dmas;
++	dma-names;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso
+new file mode 100644
+index 0000000000000..c19b43dab7009
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++/* SPI2 is not connected on STM32MP1 DHCOM SoM */
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso
+new file mode 100644
+index 0000000000000..ab6f196765caa
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso
+@@ -0,0 +1,66 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	gpio-keys {
++		/*
++		 * The EXTi IRQ line 6 is shared with touchscreen IRQ,
++		 * so operate button-1 as polled GPIO key.
++		 */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	gpio-keys-polled {
++		button-1 {
++			label = "TA2-GPIO-B";
++			linux,code = <KEY_B>;
++			gpios = <&gpiod 6 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	led {
++		/* LED5 GPIO-E conflicts with touchscreen IRQ */
++		led-0 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm2 3 500000 PWM_POLARITY_INVERTED>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
++		reg = <0x38>;
++		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
++		interrupt-parent = <&gpioc>;
++		interrupts = <6 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "edt,etm0700g0edh6";
++};
++
++&panel_in {
++	remote-endpoint = <&ltdc_dpi_out>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso
+new file mode 100644
+index 0000000000000..5eecb81504df3
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen: touchscreen@38 {
++	};
++
++	attiny: regulator@45 {
++	};
++};
++
++#include "stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi"
++
++&ltdc {
++	status = "okay";
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ltdc_ep_out: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&dsi_in>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso
+new file mode 100644
+index 0000000000000..3f7e69ac308d6
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&m_can2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can2_pins_a>;
++	pinctrl-1 = <&m_can2_sleep_pins_a>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
+index 0fb4e55843b9d..4b50e8a911327 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
+@@ -13,16 +13,6 @@ clk_ext_audio_codec: clock-codec {
+ 		clock-frequency = <24000000>;
+ 	};
+ 
+-	display_bl: display-bl {
+-		compatible = "pwm-backlight";
+-		pwms = <&pwm2 3 500000 PWM_POLARITY_INVERTED>;
+-		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
+-		default-brightness-level = <8>;
+-		enable-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
+-		power-supply = <&reg_panel_bl>;
+-		status = "okay";
+-	};
+-
+ 	gpio-keys-polled {
+ 		compatible = "gpio-keys-polled";
+ 		poll-interval = <20>;
+@@ -76,7 +66,6 @@ led-0 {
+ 			label = "green:led5";
+ 			gpios = <&gpioc 6 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+-			status = "disabled";
+ 		};
+ 
+ 		led-1 {
+@@ -98,33 +87,6 @@ led-3 {
+ 		};
+ 	};
+ 
+-	panel {
+-		compatible = "edt,etm0700g0edh6";
+-		backlight = <&display_bl>;
+-		power-supply = <&reg_panel_bl>;
+-
+-		port {
+-			lcd_panel_in: endpoint {
+-				remote-endpoint = <&lcd_display_out>;
+-			};
+-		};
+-	};
+-
+-	reg_panel_bl: regulator-panel-bl {
+-		compatible = "regulator-fixed";
+-		regulator-name = "panel_backlight";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		vin-supply = <&reg_panel_supply>;
+-	};
+-
+-	reg_panel_supply: regulator-panel-supply {
+-		compatible = "regulator-fixed";
+-		regulator-name = "panel_supply";
+-		regulator-min-microvolt = <24000000>;
+-		regulator-max-microvolt = <24000000>;
+-	};
+-
+ 	sound {
+ 		compatible = "audio-graph-card";
+ 		widgets = "Headphone", "Headphone Jack",
+@@ -191,26 +153,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
+ 		};
+ 
+ 	};
+-
+-	touchscreen@38 {
+-		compatible = "edt,edt-ft5406";
+-		reg = <0x38>;
+-		interrupt-parent = <&gpioc>;
+-		interrupts = <6 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
+-	};
+-};
+-
+-&ltdc {
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&ltdc_pins_b>;
+-	pinctrl-1 = <&ltdc_sleep_pins_b>;
+-	status = "okay";
+-
+-	port {
+-		lcd_display_out: endpoint {
+-			remote-endpoint = <&lcd_panel_in>;
+-		};
+-	};
+ };
+ 
+ &sai2 {
+@@ -262,21 +204,6 @@ sai2b_endpoint: endpoint {
+ 	};
+ };
+ 
+-&timers2 {
+-	/* spare dmas for other usage (un-delete to enable pwm capture) */
+-	/delete-property/dmas;
+-	/delete-property/dma-names;
+-	status = "okay";
+-	pwm2: pwm {
+-		pinctrl-0 = <&pwm2_pins_a>;
+-		pinctrl-names = "default";
+-		status = "okay";
+-	};
+-	timer@1 {
+-		status = "okay";
+-	};
+-};
+-
+ &usart3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&usart3_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso
+new file mode 100644
+index 0000000000000..c462c6a08833d
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Andreas Geisreiter <ageisreiter@dh-electronics.com>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm2 3 10000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "multi-inno,mi0700s4t-6";
++};
++
++&panel_in {
++	remote-endpoint = <&ltdc_dpi_out>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso
+new file mode 100644
+index 0000000000000..430ca483ebc83
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm2 3 10000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&ltdc_dpi_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "team-source-display,tst043015cmhx";
++};
++
++&panel_in {
++	remote-endpoint = <&ltdc_dpi_out>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+new file mode 100644
+index 0000000000000..32e75cabe0032
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi
+new file mode 100644
+index 0000000000000..e34e9bcf12bca
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++
++&{/} {
++	panel {
++		compatible = "powertip,ph800480t013-idf02";
++		backlight = <&attiny>;
++		enable-gpio = <&attiny 0 GPIO_ACTIVE_HIGH>;
++		power-supply = <&attiny>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&bridge_out>;
++			};
++		};
++	};
++};
++
++&attiny {
++	compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
++	gpio-controller;
++	#gpio-cells = <2>;
++	reg = <0x45>;
++};
++
++&dsi {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	phy-dsi-supply = <&reg18>;
++	status = "okay";
++
++	bridge@0 {
++		compatible = "toshiba,tc358762";
++		reg = <0>;
++		vddc-supply = <&attiny>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "okay";
++
++		port@0 {
++			reg = <0>;
++			bridge_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++			bridge_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			dsi_in: endpoint {
++				remote-endpoint = <&ltdc_ep_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++			dsi_out: endpoint {
++				remote-endpoint = <&bridge_in>;
++			};
++		};
++	};
++};
++
++&touchscreen {
++	compatible = "edt,edt-ft5406";
++	reg = <0x38>;
++	reset-gpios = <&attiny 1 GPIO_ACTIVE_LOW>;
++	/*
++	 * Disabled, since the IRQ line is not on
++	 * the FPC cable, so we cannot get touch
++	 * IRQs unless its connected otherwise. In
++	 * that case, add entry like this one and
++	 * enable below.
++	 *
++	 * interrupt-parent = <&gpiog>;
++	 * interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
++	 */
++	status = "disabled";
++};
+-- 
+2.47.2
+
