@@ -7,3 +7,4 @@ patch 0006-ARM-dts-stm32-Add-DT-overlays-for-STM32MP13xx-STM32M.patch
 patch 0007-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch
 patch 0008-net-phy-realtek-Add-property-to-enable-SSC.patch
 patch 0009-ARM-dts-stm32-Enable-PHY-SSC-on-DH-STM32MP13xx-DHCOR.patch
+patch 0010-mfd-stpmic1-Attempt-system-shutdown-twice-in-case-PM.patch

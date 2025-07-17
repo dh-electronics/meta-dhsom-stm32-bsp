@@ -1,0 +1,52 @@
+From 14a8429a6a1b821a77bf0e8cbaaa32aafd6a9535 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Thu, 17 Jul 2025 04:19:21 +0200
+Subject: [PATCH] mfd: stpmic1: Attempt system shutdown twice in case PMIC is
+ confused
+
+Attempt to shut down again, in case the first attempt failed.
+The STPMIC1 might get confused and the first regmap_update_bits()
+returns with -ETIMEDOUT / -110 . If that or similar transient
+failure occurs, try to shut down again. If the second attempt
+fails, there is some bigger problem, report it to user.
+
+Upstream-Status: Pending
+Fixes: 6e9df38f359a ("mfd: stpmic1: Add PMIC poweroff via sys-off handler")
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ drivers/mfd/stpmic1.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
+index d8a603d95aa66..338dd6d7af77c 100644
+--- a/drivers/mfd/stpmic1.c
++++ b/drivers/mfd/stpmic1.c
+@@ -121,9 +121,23 @@ static const struct regmap_irq_chip stpmic1_regmap_irq_chip = {
+ static int stpmic1_power_off(struct sys_off_data *data)
+ {
+ 	struct stpmic1 *ddata = data->cb_data;
++	int ret;
++
++	ret = regmap_update_bits(ddata->regmap, MAIN_CR, SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
++	if (!ret)
++		return NOTIFY_DONE;
++
++	/*
++	 * Attempt to shut down again, in case the first attempt failed.
++	 * The STPMIC1 might get confused and the first regmap_update_bits()
++	 * returns with -ETIMEDOUT / -110 . If that or similar transient
++	 * failure occurs, try to shut down again. If the second attempt
++	 * fails, there is some bigger problem, report it to user.
++	 */
++	ret = regmap_update_bits(ddata->regmap, MAIN_CR, SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
++	if (ret)
++		dev_err(ddata->dev, "Failed to access PMIC I2C bus (%d)\n", ret);
+ 
+-	regmap_update_bits(ddata->regmap, MAIN_CR,
+-			   SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
+ 
+ 	return NOTIFY_DONE;
+ }
+-- 
+2.47.2
+
