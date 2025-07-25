@@ -14,6 +14,12 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0002-phy-Reset-init-count-on-phy-exit-failure.patch \
 	file://0003-ARM-dts-stm32-Keep-the-reg11-and-reg18-regulators-al.patch \
 	file://0004-ARM-dts-stm32-Introduce-DH-STM32MP13x-target.patch \
+	file://0005-board-dhelectronics-Move-dh_add_item_number_and_seri.patch \
+	file://0006-ARM-stm32-Read-values-from-M24256-write-lockable-pag.patch \
+	file://0007-ARM-stm32-Add-MAC-address-readout-from-fuses-on-DH-S.patch \
+	file://0008-board-dhelectronics-Check-pointer-before-access-in-d.patch \
+	file://0009-board-dhelectronics-Use-isascii-before-isprint-in-dh.patch \
+	file://0010-ARM-stm32-Perform-node-compatible-check-for-KS8851-e.patch \
 	"
 
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
@@ -25,4 +31,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20250823.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20250909.01"

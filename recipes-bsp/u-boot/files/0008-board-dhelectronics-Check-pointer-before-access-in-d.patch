@@ -1,0 +1,47 @@
+From f2a82ac5a5f39fc3bda8494d7c0fe949cb2717ac Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marek.vasut@mailbox.org>
+Date: Sun, 7 Sep 2025 03:00:46 +0200
+Subject: [PATCH 08/10] board: dhelectronics: Check pointer before access in
+ dh_get_value_from_eeprom_buffer()
+
+The eip pointer in dh_get_value_from_eeprom_buffer() might be NULL.
+The current NULL pointer check happens too late, after the eip was
+accessed in variable assignment. Reorder the two, so the NULL pointer
+check happens first, and any access second, otherwise the access may
+trigger a hang or other undefined behavior.
+
+Upstream-Status: Backport [1c735620e19e2ae07705cc38da1552ee6a696ff0]
+Signed-off-by: Marek Vasut <marek.vasut@mailbox.org>
+Reviewed-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+---
+ board/dhelectronics/common/dh_common.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/board/dhelectronics/common/dh_common.c b/board/dhelectronics/common/dh_common.c
+index a4a788faa45..9b705d7780c 100644
+--- a/board/dhelectronics/common/dh_common.c
++++ b/board/dhelectronics/common/dh_common.c
+@@ -130,14 +130,17 @@ int dh_read_eeprom_id_page(u8 *eeprom_buffer, const char *alias)
+ int dh_get_value_from_eeprom_buffer(enum eip_request_values request, u8 *data, int data_len,
+ 				    struct eeprom_id_page *eip)
+ {
+-	const char fin_chr = (eip->pl.item_prefix & DH_ITEM_PREFIX_FIN_BIT) ?
+-			     DH_ITEM_PREFIX_FIN_FLASHED_CHR : DH_ITEM_PREFIX_FIN_HALF_CHR;
+-	const u8 soc_coded = eip->pl.item_prefix & 0xf;
++	char fin_chr;
++	u8 soc_coded;
+ 	char soc_chr;
+ 
+ 	if (!eip)
+ 		return -EINVAL;
+ 
++	fin_chr = (eip->pl.item_prefix & DH_ITEM_PREFIX_FIN_BIT) ?
++		  DH_ITEM_PREFIX_FIN_FLASHED_CHR : DH_ITEM_PREFIX_FIN_HALF_CHR;
++	soc_coded = eip->pl.item_prefix & 0xf;
++
+ 	/* Copy requested data */
+ 	switch (request) {
+ 	case DH_MAC0:
+-- 
+2.50.1
+

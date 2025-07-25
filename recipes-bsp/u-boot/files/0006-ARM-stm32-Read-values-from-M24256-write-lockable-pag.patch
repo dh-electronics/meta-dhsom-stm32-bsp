@@ -1,0 +1,126 @@
+From 0f90c7812d20a697e81f8200d0d83a386b8a8f5a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Tue, 28 Jan 2025 23:10:26 +0100
+Subject: [PATCH 06/10] ARM: stm32: Read values from M24256 write-lockable page
+ on STM32MP13xx DHCOR
+
+The STM32MP13xx DHCOR SoM is populated with M24256 EEPROM that contains
+an additional write-lockable page called ID page, which is populated with
+a structure containing ethernet MAC addresses, DH item number and DH serial
+number.
+
+Read out the MAC address from the WL page between higher priority SoC fuses
+and lower priority plain EEPROM storage area. Read out the DH item and serial
+numbers and set environment variables accordingly.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251023214855.181410-2-marek.vasut@mailbox.org/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi |  1 +
+ board/dhelectronics/dh_stm32mp1/board.c    | 51 ++++++++++++++++++----
+ 2 files changed, 43 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
+index 7c8b9927b20..278a26e164b 100644
+--- a/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp13xx-dhcor-u-boot.dtsi
+@@ -8,6 +8,7 @@
+ / {
+ 	aliases {
+ 		eeprom0 = &eeprom0;
++		eeprom0wl = &eeprom0wl;
+ 	};
+ 
+ 	config {
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index d30171f1fbe..47ac1f0024d 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -120,7 +120,7 @@ static bool dh_stm32_mac_is_in_ks8851(void)
+ 	return false;
+ }
+ 
+-static int dh_stm32_setup_ethaddr(void)
++static int dh_stm32_setup_ethaddr(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -130,13 +130,19 @@ static int dh_stm32_setup_ethaddr(void)
+ 	if (dh_get_mac_is_enabled("ethernet0"))
+ 		return 0;
+ 
++	if (!dh_get_value_from_eeprom_buffer(DH_MAC0, enetaddr, sizeof(enetaddr), eip))
++		goto out;
++
+ 	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0"))
+-		return eth_env_set_enetaddr("ethaddr", enetaddr);
++		goto out;
+ 
+ 	return -ENXIO;
++
++out:
++	return eth_env_set_enetaddr("ethaddr", enetaddr);
+ }
+ 
+-static int dh_stm32_setup_eth1addr(void)
++static int dh_stm32_setup_eth1addr(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -149,20 +155,47 @@ static int dh_stm32_setup_eth1addr(void)
+ 	if (dh_stm32_mac_is_in_ks8851())
+ 		return 0;
+ 
+-	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0")) {
+-		enetaddr[5]++;
+-		return eth_env_set_enetaddr("eth1addr", enetaddr);
+-	}
++	if (!dh_get_value_from_eeprom_buffer(DH_MAC1, enetaddr, sizeof(enetaddr), eip))
++		goto out;
++
++	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0"))
++		goto increment_out;
+ 
+ 	return -ENXIO;
++
++increment_out:
++	enetaddr[5]++;
++
++out:
++	return eth_env_set_enetaddr("eth1addr", enetaddr);
+ }
+ 
+ int setup_mac_address(void)
+ {
+-	if (dh_stm32_setup_ethaddr())
++	u8 eeprom_buffer[DH_EEPROM_ID_PAGE_MAX_SIZE] = { 0 };
++	struct eeprom_id_page *eip = (struct eeprom_id_page *)eeprom_buffer;
++	int ret;
++
++	ret = dh_read_eeprom_id_page(eeprom_buffer, "eeprom0wl");
++	if (ret) {
++		/*
++		 * The EEPROM ID page is available on SoM rev. 200 and greater.
++		 * For SoM rev. 100 the return value will be -ENODEV. Suppress
++		 * the error message for that, because the absence cannot be
++		 * treated as an error.
++		 */
++		if (ret != -ENODEV)
++			printf("%s: Cannot read valid data from EEPROM ID page! ret = %d\n",
++			       __func__, ret);
++		eip = NULL;
++	} else {
++		dh_add_item_number_and_serial_to_env(eip);
++	}
++
++	if (dh_stm32_setup_ethaddr(eip))
+ 		log_err("%s: Unable to setup ethaddr!\n", __func__);
+ 
+-	if (dh_stm32_setup_eth1addr())
++	if (dh_stm32_setup_eth1addr(eip))
+ 		log_err("%s: Unable to setup eth1addr!\n", __func__);
+ 
+ 	return 0;
+-- 
+2.50.1
+

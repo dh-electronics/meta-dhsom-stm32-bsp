@@ -1,0 +1,75 @@
+From 7d693fe7da1437b1b042f3ab4e47be73a802150b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Sun, 7 Sep 2025 02:07:48 +0200
+Subject: [PATCH 07/10] ARM: stm32: Add MAC address readout from fuses on DH
+ STM32MP1 DHSOM
+
+Add support for reading out the MAC address from SoC fuses on DH STM32MP1 DHSOM.
+The DH STM32MP1 DHSOM may contain external ethernet MACs, which benefit from the
+MAC address stored in SoC fuses as well, handle those consistently. This however
+means the architecture setup_mac_address() cannot be used and instead a simpler
+local fuse read out is implemented in the board file.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251023214855.181410-3-marek.vasut@mailbox.org/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ board/dhelectronics/dh_stm32mp1/board.c | 29 +++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index f4b425e9a76..504acf47559 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -120,6 +120,29 @@ static bool dh_stm32_mac_is_in_ks8851(void)
+ 	return false;
+ }
+ 
++static int dh_stm32_get_mac_from_fuse(unsigned char *enetaddr, int index)
++{
++	struct udevice *dev;
++	u8 otp[12];
++	int ret;
++
++	ret = uclass_get_device_by_driver(UCLASS_MISC,
++					  DM_DRIVER_GET(stm32mp_bsec),
++					  &dev);
++	if (ret)
++		return ret;
++
++	ret = misc_read(dev, STM32_BSEC_SHADOW(BSEC_OTP_MAC), otp, sizeof(otp));
++	if (ret < 0)
++		return ret;
++
++	memcpy(enetaddr, otp + ARP_HLEN * index, ARP_HLEN);
++	if (!is_valid_ethaddr(enetaddr))
++		return -EINVAL;
++
++	return 0;
++}
++
+ static int dh_stm32_setup_ethaddr(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+@@ -130,6 +153,9 @@ static int dh_stm32_setup_ethaddr(struct eeprom_id_page *eip)
+ 	if (dh_get_mac_is_enabled("ethernet0"))
+ 		return 0;
+ 
++	if (!dh_stm32_get_mac_from_fuse(enetaddr, 0))
++		goto out;
++
+ 	if (!dh_get_value_from_eeprom_buffer(DH_MAC0, enetaddr, sizeof(enetaddr), eip))
+ 		goto out;
+ 
+@@ -155,6 +181,9 @@ static int dh_stm32_setup_eth1addr(struct eeprom_id_page *eip)
+ 	if (dh_stm32_mac_is_in_ks8851())
+ 		return 0;
+ 
++	if (!dh_stm32_get_mac_from_fuse(enetaddr, 1))
++		goto out;
++
+ 	if (!dh_get_value_from_eeprom_buffer(DH_MAC1, enetaddr, sizeof(enetaddr), eip))
+ 		goto out;
+ 
+-- 
+2.50.1
+
