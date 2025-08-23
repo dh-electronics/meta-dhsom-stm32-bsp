@@ -1,0 +1,148 @@
+From 9bb2c259dc6a418b4fb6bab37f39bd4127ef3505 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Sat, 23 Aug 2025 20:05:07 +0200
+Subject: [PATCH 4/4] ARM: dts: stm32: Introduce DH STM32MP13x target
+
+Split the DH STM32MP13x based boards from ST STM32MP13x target,
+this way the DH board specific code can be reused for STM32MP13x
+DHSOM.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251023214811.181389-1-marek.vasut@mailbox.org/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/mach-stm32mp/Kconfig.13x        | 12 ++++++++++
+ board/dhelectronics/dh_stm32mp1/Kconfig  | 23 +++++++++++++++++++
+ board/dhelectronics/dh_stm32mp1/Makefile |  3 ++-
+ board/dhelectronics/dh_stm32mp1/board.c  | 28 ++++++++++++++++++++++++
+ configs/stm32mp13_dhcor_defconfig        |  2 +-
+ 5 files changed, 66 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-stm32mp/Kconfig.13x b/arch/arm/mach-stm32mp/Kconfig.13x
+index bc8b3f8cf77..e27ccd41d3e 100644
+--- a/arch/arm/mach-stm32mp/Kconfig.13x
++++ b/arch/arm/mach-stm32mp/Kconfig.13x
+@@ -17,6 +17,17 @@ config TARGET_ST_STM32MP13X
+ 		managed by board/st/stm32mp1.
+ 		The difference between board are managed with devicetree
+ 
++config TARGET_DH_STM32MP13X
++	bool "DH electronics STM32MP13x boards"
++	imply BOOTSTAGE
++	imply CMD_BOOTSTAGE
++	imply CMD_CLS if CMD_BMP
++	imply DISABLE_CONSOLE
++	imply PRE_CONSOLE_BUFFER
++	imply SILENT_CONSOLE
++	help
++		Target the DH DHSBC development kit with STM32MP13x SoM.
++
+ endchoice
+ 
+ config TEXT_BASE
+@@ -49,6 +60,7 @@ config DEBUG_UART_CLOCK
+ 	default 64000000
+ endif
+ 
++source "board/dhelectronics/dh_stm32mp1/Kconfig"
+ source "board/st/stm32mp1/Kconfig"
+ 
+ endif
+diff --git a/board/dhelectronics/dh_stm32mp1/Kconfig b/board/dhelectronics/dh_stm32mp1/Kconfig
+index dc707c2753f..05cb97b61e6 100644
+--- a/board/dhelectronics/dh_stm32mp1/Kconfig
++++ b/board/dhelectronics/dh_stm32mp1/Kconfig
+@@ -20,3 +20,26 @@ config ENV_OFFSET_REDUND
+ 
+ source "board/st/common/Kconfig"
+ endif
++
++if TARGET_DH_STM32MP13X
++
++config SYS_BOARD
++	default "dh_stm32mp1"
++
++config SYS_VENDOR
++	default "dhelectronics"
++
++config SYS_CONFIG_NAME
++	default "stm32mp13_st_common"
++
++config ENV_SECT_SIZE
++	default 0x10000 if ENV_IS_IN_SPI_FLASH
++
++config ENV_OFFSET
++	default 0x3E0000 if ENV_IS_IN_SPI_FLASH
++
++config ENV_OFFSET_REDUND
++	default 0x3F0000 if ENV_IS_IN_SPI_FLASH
++
++source "board/st/common/Kconfig"
++endif
+diff --git a/board/dhelectronics/dh_stm32mp1/Makefile b/board/dhelectronics/dh_stm32mp1/Makefile
+index 30db1dee807..ffd221ac224 100644
+--- a/board/dhelectronics/dh_stm32mp1/Makefile
++++ b/board/dhelectronics/dh_stm32mp1/Makefile
+@@ -3,6 +3,7 @@
+ # Copyright (C) 2018, STMicroelectronics - All Rights Reserved
+ #
+ 
+-obj-y += ../../st/common/stpmic1.o board.o
++obj-$(CONFIG_PMIC_STPMIC1) += ../../st/common/stpmic1.o
++obj-y += board.o
+ 
+ obj-$(CONFIG_SET_DFU_ALT_INFO) += ../../st/common/stm32mp_dfu.o
+diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
+index d30171f1fbe..cd0f2c2fb66 100644
+--- a/board/dhelectronics/dh_stm32mp1/board.c
++++ b/board/dhelectronics/dh_stm32mp1/board.c
+@@ -693,6 +693,34 @@ void board_quiesce_devices(void)
+ #endif
+ }
+ 
++#ifdef CONFIG_TARGET_DH_STM32MP13X
++enum env_location env_get_location(enum env_operation op, int prio)
++{
++	u32 bootmode = get_bootmode();
++
++	if (prio)
++		return ENVL_UNKNOWN;
++
++	switch (bootmode & TAMP_BOOT_DEVICE_MASK) {
++	case BOOT_FLASH_SD:
++	case BOOT_FLASH_EMMC:
++		if (CONFIG_IS_ENABLED(ENV_IS_IN_MMC))
++			return ENVL_MMC;
++		else
++			return ENVL_NOWHERE;
++
++	case BOOT_FLASH_NOR:
++		if (CONFIG_IS_ENABLED(ENV_IS_IN_SPI_FLASH))
++			return ENVL_SPI_FLASH;
++		else
++			return ENVL_NOWHERE;
++
++	default:
++		return ENVL_NOWHERE;
++	}
++}
++#endif
++
+ static void dh_stm32_ks8851_fixup(void *blob)
+ {
+ 	struct gpio_desc ks8851intrn;
+diff --git a/configs/stm32mp13_dhcor_defconfig b/configs/stm32mp13_dhcor_defconfig
+index 2da9287ea7b..94d3b1327e4 100644
+--- a/configs/stm32mp13_dhcor_defconfig
++++ b/configs/stm32mp13_dhcor_defconfig
+@@ -9,7 +9,7 @@ CONFIG_ENV_OFFSET=0x3E0000
+ CONFIG_DEFAULT_DEVICE_TREE="st/stm32mp135f-dhcor-dhsbc"
+ CONFIG_STM32MP13X=y
+ CONFIG_DDR_CACHEABLE_SIZE=0x8000000
+-CONFIG_TARGET_ST_STM32MP13X=y
++CONFIG_TARGET_DH_STM32MP13X=y
+ CONFIG_ENV_OFFSET_REDUND=0x3F0000
+ CONFIG_STM32MP15_PWR=y
+ # CONFIG_ARMV7_NONSEC is not set
+-- 
+2.50.1
+
