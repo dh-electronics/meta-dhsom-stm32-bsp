@@ -1,0 +1,31 @@
+From 6a8b41f4c631852ec3daf51516a49b89efa6ac62 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Thu, 23 Oct 2025 23:20:59 +0200
+Subject: [PATCH 11/11] ARM: dts: stm32: Fix STM32MP15xx DHSOM boot breakage
+ due to ETZPC
+
+Switch etzpc bus to simple-bus to prevent breakage on non-TFA systems.
+This fixes boot of every STM32MP15xx DHSOM device.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251023214614.181165-1-marek.vasut@mailbox.org/]
+Fixes: ad3cdc677dda ("ARM: stm32mp: add ETZPC system bus driver for STM32MP1")
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/dts/stm32mp15xx-dhsom-u-boot.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/dts/stm32mp15xx-dhsom-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhsom-u-boot.dtsi
+index 386c605c07f..ed2629f379a 100644
+--- a/arch/arm/dts/stm32mp15xx-dhsom-u-boot.dtsi
++++ b/arch/arm/dts/stm32mp15xx-dhsom-u-boot.dtsi
+@@ -51,3 +51,7 @@
+ 		};
+ 	};
+ };
++
++&etzpc {
++	compatible = "simple-bus";
++};
+-- 
+2.51.0
+
