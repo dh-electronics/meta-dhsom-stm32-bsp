@@ -21,7 +21,7 @@ DEPENDS:append = " dtc-native openssl-native"
 
 PROVIDES = "virtual/trusted-firmware-a"
 
-inherit deploy nopackages
+inherit deploy
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -95,3 +95,5 @@ do_deploy() {
     cp -rf ${D}/boot/* ${DEPLOYDIR}/
 }
 addtask deploy after do_install
+
+FILES:${PN}:append = " boot"
