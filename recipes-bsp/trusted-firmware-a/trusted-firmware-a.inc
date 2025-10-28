@@ -58,7 +58,7 @@ do_compile() {
 }
 
 do_install() {
-    install -d -m 755 ${D}/firmware
+    install -d -m 755 ${D}/boot
     for atfbin in ${TFA_INSTALL_TARGET}; do
         if [ "$atfbin" = "all" ]; then
             # Target all is not handled by default
@@ -69,15 +69,15 @@ do_install() {
         elif [ -f ${S}/${TFA_BUILD_DIR}/$atfbin.bin ]; then
             echo "Install $atfbin.bin"
             install -m 0644 ${S}/${TFA_BUILD_DIR}/$atfbin.bin \
-                ${D}/firmware/$atfbin-${TFA_PLATFORM}.bin
+                ${D}/boot/$atfbin-${TFA_PLATFORM}.bin
         elif [ -f ${S}/${TFA_BUILD_DIR}/$atfbin.elf ]; then
             echo "Install $atfbin.elf"
             install -m 0644 ${S}/${TFA_BUILD_DIR}/$atfbin.elf \
-                ${D}/firmware/$atfbin-${TFA_PLATFORM}.elf
+                ${D}/boot/$atfbin-${TFA_PLATFORM}.elf
         elif [ -f ${S}/${TFA_BUILD_DIR}/$atfbin ]; then
             echo "Install $atfbin"
             install -m 0644 ${S}/${TFA_BUILD_DIR}/$atfbin \
-                ${D}/firmware/$atfbin-${TFA_PLATFORM}
+                ${D}/boot/$atfbin-${TFA_PLATFORM}
         elif [ "$atfbin" = "dtbs" ]; then
             echo "dtbs install, skipped"
         elif [ -f ${S}/tools/$atfbin/$atfbin ]; then
@@ -89,9 +89,9 @@ do_install() {
     done
 }
 
-SYSROOT_DIRS += "/firmware"
+SYSROOT_DIRS += "/boot"
 
 do_deploy() {
-    cp -rf ${D}/firmware/* ${DEPLOYDIR}/
+    cp -rf ${D}/boot/* ${DEPLOYDIR}/
 }
 addtask deploy after do_install
