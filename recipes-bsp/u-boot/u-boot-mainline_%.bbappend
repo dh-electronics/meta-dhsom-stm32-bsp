@@ -21,6 +21,7 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://0009-board-dhelectronics-Use-isascii-before-isprint-in-dh.patch \
 	file://0010-ARM-stm32-Perform-node-compatible-check-for-KS8851-e.patch \
 	file://0011-ARM-dts-stm32-Fix-STM32MP15xx-DHSOM-boot-breakage-du.patch \
+	file://0012-ARM-stm32-Add-missing-build-of-ST-DFU-virt-code-on-D.patch \
 	"
 
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
@@ -32,4 +33,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20251024.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20251031.01"
