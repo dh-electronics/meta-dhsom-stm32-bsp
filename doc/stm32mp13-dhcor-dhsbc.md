@@ -504,7 +504,8 @@ STM32MP> setenv dh_update_iface mmc && \
               /boot/tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 && \
          env set filesize1 ${filesize} && \
          load ${dh_update_iface} ${dh_update_dev} ${loadaddr} \
-              /boot/fip.bin-stm32mp1 && sf probe && \
+              /boot/fip.bin-stm32mp1 && \
+         sf probe && \
          sf erase 0 0x200000 && \
          sf update ${loadaddr1} 0 ${filesize1} && \
          sf update ${loadaddr1} 0x40000 ${filesize1} && \
@@ -551,7 +552,7 @@ the OpTee-OS U-Boot fitImage is located in `fip.bin-stm32mp1` file.
 root@dh-stm32mp13-dhcor-dhsbc:~# tr '\0' "$(printf '\377')" < /dev/zero | dd bs=1024 count=1920 of=flash.bin
 root@dh-stm32mp13-dhcor-dhsbc:~# dd if=tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=flash.bin conv=notrunc
 root@dh-stm32mp13-dhcor-dhsbc:~# dd if=tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=flash.bin conv=notrunc bs=262144 seek=1
-root@dh-stm32mp13-dhcor-dhsbc:~# dd if=fip.bin-stm32mp1       of=flash.bin conv=notrunc bs=524288 seek=1
+root@dh-stm32mp13-dhcor-dhsbc:~# dd if=fip.bin-stm32mp1 of=flash.bin conv=notrunc bs=524288 seek=1
 ```
 
 To determine the MTD block device which represents the boot SPI NOR, iterate
