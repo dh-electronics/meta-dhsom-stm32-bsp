@@ -1,5 +1,5 @@
-STM32MP13xx DHCOR SoM on DH Avenger96 carrier board
-===================================================
+STM32MP13xx DHCOR SoM on DHSBC carrier board
+============================================
 
 # Initial board setup
 
