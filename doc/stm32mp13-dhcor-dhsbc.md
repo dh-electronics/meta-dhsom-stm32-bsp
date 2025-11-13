@@ -278,17 +278,15 @@ boot from the eMMC.
 
 ## U-Boot bootloader installation
 
-### U-Boot bootloader installation into SPI NOR
-
 This section explains how to perform bootloader installation, update and
 recovery. This section is only applicable in case it is desireable to
 replace bootloader on the system.
 
-The U-Boot bootloader is installed into SPI NOR. Installation into SPI NOR
-is recommended to prevent accidental overwrite of the bootloader while the
-system software in eMMC is being replaced or updated. U-Boot bootloader
-installation into SPI NOR can be performed from within U-Boot itself,
-using USB OTG DFU upload or from running Linux userspace.
+The U-Boot bootloader is installed into SPI NOR or eMMC. Installation into
+SPI NOR is recommended to prevent accidental overwrite of the bootloader
+while the system software in eMMC is being replaced or updated. U-Boot
+bootloader installation can be performed from within U-Boot itself, using
+USB OTG DFU upload or from running Linux userspace.
 
 The SPI NOR layout on this platform is as follows:
 ```
@@ -298,6 +296,14 @@ The SPI NOR layout on this platform is as follows:
 0x3e_0000..0x1e_ffff ... U-Boot environment (copy 1)
 0x3f_0000..0x1f_ffff ... U-Boot environment (copy 2)
 ```
+
+The boot media is selected using `BOOT_CONFIG` DIP switches located near
+the POWER and RESET buttons, close to the board edge. The following boot
+modes are supported in this documentation:
+
+- `BOOT[1:3]=ON-off-off` ... SPI NOR boot
+- `BOOT[1:3]=off-ON-off` ... eMMC boot
+- `BOOT[1:3]=ON-ON-ON` ..... USB DFU boot
 
 ### U-Boot bootloader installation into SPI NOR (from U-Boot using USB OTG DFU upload)
 
@@ -589,6 +595,257 @@ Linux kernel, use the following command:
 root@dh-stm32mp13-dhcor-dhsbc:~# reboot
 ```
 
+### U-Boot bootloader installation into eMMC (from U-Boot using USB UMS)
+
+Power on the system. Enter U-Boot console by pressing any key at prompt:
+```
+Hit any key to stop autoboot:
+```
+
+The system drops into U-Boot shell instantly. U-Boot shell on this system
+looks as follows:
+```
+STM32MP>
+```
+
+Install bootloader into eMMC using UMS as follows. The bootloader consists
+of two components, TFA `tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1` and
+OpTee-OS and U-Boot `fip.bin-stm32mp1`, and each must be written into the
+correct location in eMMC. The TFA file is written into two locations, the
+eMMC HW partitions BOOT0 and BOOT1. The OpTee-OS and U-Boot is written into
+one location, eMMC HW partition USER SW partition `fip`. The bootloader
+installation consists of three UMS invocations in total:
+
+Use the following command to start UMS on USB OTG port and export eMMC HW
+BOOT0 partition as USB Mass Storage device.
+```
+STM32MP> ums 0 mmc 0.1
+```
+
+The USB mass storage device will now enumerate on the host PC as follows:
+```
+host$ dmesg -w
+usb 5-2.2.2.7: new high-speed USB device number 37 using xhci_hcd
+usb 5-2.2.2.7: New USB device found, idVendor=0483, idProduct=5720, bcdDevice= 2.00
+usb 5-2.2.2.7: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 5-2.2.2.7: Product: USB download gadget
+usb 5-2.2.2.7: Manufacturer: dh
+usb 5-2.2.2.7: SerialNumber: 002F00203331510134323331
+usb-storage 5-2.2.2.7:1.0: USB Mass Storage device detected
+scsi host3: usb-storage 5-2.2.2.7:1.0
+scsi 3:0:0:0: Direct-Access     Linux    UMS disk 0       ffff PQ: 0 ANSI: 2
+sd 3:0:0:0: Attached scsi generic sg4 type 0
+sd 3:0:0:0: [sdx] 8192 512-byte logical blocks: (4.19 MB/4.00 MiB)
+sd 3:0:0:0: [sdx] Write Protect is off
+sd 3:0:0:0: [sdx] Mode Sense: 0f 00 00 00
+sd 3:0:0:0: [sdx] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 3:0:0:0: [sdx] Attached SCSI removable disk
+```
+
+Notice that in the aforementioned case, the device is enumerated as block
+device `/dev/sdx` on the host PC. This may differ on other host PCs, make
+sure the correct block device is used for image installation below. Using
+incorrect block device may lead to data loss on the host PC.
+
+Write the TFA file into eMMC HW BOOT0 partition:
+```
+host$ dd if=tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=/dev/sdx
+```
+
+Once the write completed, terminate UMS from U-Boot console by
+pressing `Ctrl + C`. It is also possible to terminate UMS from
+the host side using the `eject` command.
+
+Use the following command to start UMS on USB OTG port and export eMMC HW
+BOOT1 partition as USB Mass Storage device.
+```
+STM32MP> ums 0 mmc 0.2
+```
+
+The USB mass storage device will now enumerate on the host PC as follows:
+```
+host$ dmesg -w
+usb 5-2.2.2.7: new high-speed USB device number 37 using xhci_hcd
+usb 5-2.2.2.7: New USB device found, idVendor=0483, idProduct=5720, bcdDevice= 2.00
+usb 5-2.2.2.7: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 5-2.2.2.7: Product: USB download gadget
+usb 5-2.2.2.7: Manufacturer: dh
+usb 5-2.2.2.7: SerialNumber: 002F00203331510134323331
+usb-storage 5-2.2.2.7:1.0: USB Mass Storage device detected
+scsi host3: usb-storage 5-2.2.2.7:1.0
+scsi 3:0:0:0: Direct-Access     Linux    UMS disk 0       ffff PQ: 0 ANSI: 2
+sd 3:0:0:0: Attached scsi generic sg4 type 0
+sd 3:0:0:0: [sdx] 8192 512-byte logical blocks: (4.19 MB/4.00 MiB)
+sd 3:0:0:0: [sdx] Write Protect is off
+sd 3:0:0:0: [sdx] Mode Sense: 0f 00 00 00
+sd 3:0:0:0: [sdx] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 3:0:0:0: [sdx] Attached SCSI removable disk
+```
+
+Notice that in the aforementioned case, the device is enumerated as block
+device `/dev/sdx` on the host PC. This may differ on other host PCs, make
+sure the correct block device is used for image installation below. Using
+incorrect block device may lead to data loss on the host PC.
+
+Write the TFA file into eMMC HW BOOT1 partition:
+```
+host$ dd if=tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=/dev/sdx
+```
+
+Once the write completed, terminate UMS from U-Boot console by
+pressing `Ctrl + C`. It is also possible to terminate UMS from
+the host side using the `eject` command.
+
+Use the following command to start UMS on USB OTG port and export eMMC HW
+USER partition as USB Mass Storage device.
+```
+STM32MP> ums 0 mmc 0
+```
+
+The USB mass storage device will now enumerate on the host PC as follows:
+```
+host$ dmesg -w
+usb 5-2.2.2.7: new high-speed USB device number 38 using xhci_hcd
+usb 5-2.2.2.7: New USB device found, idVendor=0483, idProduct=5720, bcdDevice= 2.00
+usb 5-2.2.2.7: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 5-2.2.2.7: Product: USB download gadget
+usb 5-2.2.2.7: Manufacturer: dh
+usb 5-2.2.2.7: SerialNumber: 002F00203331510134323331
+usb-storage 5-2.2.2.7:1.0: USB Mass Storage device detected
+scsi host3: usb-storage 5-2.2.2.7:1.0
+scsi 3:0:0:0: Direct-Access     Linux    UMS disk 0       ffff PQ: 0 ANSI: 2
+sd 3:0:0:0: Attached scsi generic sg4 type 0
+sd 3:0:0:0: [sdx] 7634944 512-byte logical blocks: (3.91 GB/3.64 GiB)
+sd 3:0:0:0: [sdx] Write Protect is off
+sd 3:0:0:0: [sdx] Mode Sense: 0f 00 00 00
+sd 3:0:0:0: [sdx] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+GPT:Primary header thinks Alt. header is not at the end of the disk.
+GPT:4540601 != 7634943
+GPT:Alternate GPT header not at the end of the disk.
+GPT:4540601 != 7634943
+GPT: Use GNU Parted to correct GPT errors.
+ sdx: sdx1 sdx2
+sd 3:0:0:0: [sdx] Attached SCSI removable disk
+```
+
+Notice that in the aforementioned case, the device is enumerated as block
+device `/dev/sdx` on the host PC. This may differ on other host PCs, make
+sure the correct block device is used for image installation below. Using
+incorrect block device may lead to data loss on the host PC.
+
+Write the OpTee-OS and U-Boot file into eMMC HW USER partition SW partition `fip`:
+```
+host$ dd if=fip.bin-stm32mp1 of=/dev/sdx1
+```
+
+Once the write completed, terminate UMS from U-Boot console by
+pressing `Ctrl + C`. It is also possible to terminate UMS from
+the host side using the `eject` command.
+
+To reset the board, either press the `RESET` button on the board,
+or perform reset from U-Boot shell as follows:
+
+```
+STM32MP> reset
+```
+
+Once the board resets, new U-Boot bootloader version will start.
+
+### U-Boot bootloader installation into eMMC (from U-Boot from eMMC card)
+
+Power on the system. Enter U-Boot console by pressing any key at prompt:
+```
+Hit any key to stop autoboot:
+```
+
+The system drops into U-Boot shell instantly. U-Boot shell on this system
+looks as follows:
+```
+STM32MP>
+```
+
+Use either of the following U-Boot scripts from update U-Boot in eMMC
+from bootloader binaries located on eMMC card.
+
+Read bootloader update from eMMC and write to eMMC:
+```
+STM32MP> setenv dh_update_iface mmc && \
+         setenv dh_update_dev 0:2 && \
+         setexpr loadaddr1 ${loadaddr} + 0x1000000 && \
+         load ${dh_update_iface} ${dh_update_dev} ${loadaddr1} \
+              /boot/tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 && \
+         setexpr filesize1 ${filesize} + 0x1ff && \
+         setexpr filesize1 ${filesize1} / 0x200 && \
+         load ${dh_update_iface} ${dh_update_dev} ${loadaddr} \
+              /boot/fip.bin-stm32mp1 && \
+         setexpr filesize ${filesize} + 0x1ff && \
+         setexpr filesize ${filesize} / 0x200 && \
+         mmc dev 0 1 && \
+         mmc write ${loadaddr1} 0 ${filesize1} && \
+         mmc dev 0 2 && \
+         mmc write ${loadaddr1} 0 ${filesize1} && \
+         mmc dev 0 && \
+         part start mmc 0 fip partoff && \
+         mmc write ${loadaddr} ${partoff} ${filesize} && \
+         env set filesize1 && env set loadaddr1 && env set partoff
+80382 bytes read in 3 ms (25.6 MiB/s)
+1396110 bytes read in 30 ms (44.4 MiB/s)
+switch to partitions #1, OK
+mmc0(part 1) is current device
+MMC write: dev # 0, block # 0, count 157 ... 157 blocks written: OK
+switch to partitions #2, OK
+mmc0(part 2) is current device
+MMC write: dev # 0, block # 0, count 157 ... 157 blocks written: OK
+switch to partitions #0, OK
+mmc0(part 0) is current device
+MMC write: dev # 0, block # 34, count 2727 ... 2727 blocks written: OK
+```
+
+Note that the bootloader update may remove old U-Boot environment. In case
+the old environment contains any useful content, it is recommended to back
+up that content at this point.
+
+Once the installation completed, reset the board. To reset the board, either
+press the `RESET` button on the board, or perform reset from U-Boot shell as
+follows:
+
+```
+STM32MP> reset
+```
+
+### U-Boot bootloader installation into eMMC (from Linux)
+
+It is possible to update the bootloader from a running Linux userspace.
+The eMMC is exposed as a block device by the Linux kernel, both eMMC HW
+partitions and SW partitions are exposed as block devices too, therefore
+it is necessary to write bootloader components into separate block devices.
+
+The TFA is located in `tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1` file
+and has to be written into eMMC HW BOOT0 and BOOT1 partitions, the OpTee-OS
+and U-Boot is located in `fip.bin-stm32mp1` file and has to be written into
+eMMC HW USER partition SW partition `fip`. The eMMC HW BOOT0 and BOOT1
+partition access have to be unlocked before write, and should be re-locked
+after write:
+
+```
+root@dh-stm32mp13-dhcor-dhsbc:~# echo 0 > /sys/devices/platform/soc/5c007000.bus/58007000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0/mmcblk0boot0/force_ro
+root@dh-stm32mp13-dhcor-dhsbc:~# echo 0 > /sys/devices/platform/soc/5c007000.bus/58007000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0/mmcblk0boot1/force_ro
+
+root@dh-stm32mp13-dhcor-dhsbc:~# dd if=/boot/tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=/dev/disk/by-path/platform-5c007000.bus-amba-58007000.mmc-boot0
+root@dh-stm32mp13-dhcor-dhsbc:~# dd if=/boot/tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1 of=/dev/disk/by-path/platform-5c007000.bus-amba-58007000.mmc-boot1
+root@dh-stm32mp13-dhcor-dhsbc:~# dd if=/boot/fip.bin-stm32mp1 of=/dev/disk/by-path/platform-5c007000.bus-amba-58007000.mmc-part1
+
+root@dh-stm32mp13-dhcor-dhsbc:~# echo 1 > /sys/devices/platform/soc/5c007000.bus/58007000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0/mmcblk0boot0/force_ro
+root@dh-stm32mp13-dhcor-dhsbc:~# echo 1 > /sys/devices/platform/soc/5c007000.bus/58007000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0/mmcblk0boot1/force_ro
+```
+
+Once the installation completed, reset the board. To perform reset from
+Linux kernel, use the following command:
+
+```
+root@dh-stm32mp13-dhcor-dhsbc:~# reboot
+```
+
 ### U-Boot bootloader recovery (using USB OTG DFU upload)
 
 This section depends on [dfu-util](https://dfu-util.sourceforge.net/) tool.
@@ -692,8 +949,9 @@ become accessible via serial console. Perform regular U-Boot bootloader
 installation into SPI NOR procedure as documented above to recover the
 system.
 
-Once the procedure is complete, Switch `BOOT_CONFIG` DIP switches to
-`BOOT[1:3]=ON-off-off` for SPI NOR boot.
+Once the procedure is complete, switch `BOOT_CONFIG` DIP switches to
+`BOOT[1:3]=ON-off-off` for SPI NOR boot or `BOOT[1:3]=off-ON-off` for
+eMMC boot.
 
 # Expansion module handling using Device Tree Overlays (DTO)
 
