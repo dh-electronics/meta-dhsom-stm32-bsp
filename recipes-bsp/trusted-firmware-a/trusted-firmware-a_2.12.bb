@@ -21,17 +21,10 @@ S = "${WORKDIR}/git"
 
 require trusted-firmware-a.inc
 
-# The following hack is needed to fit properly in yocto build environment
-# TFA is forcing the host compiler and its flags in the Makefile using :=
-# assignment for GCC and CFLAGS.
-# To properly use the native toolchain of yocto and the right libraries we need
-# to pass the proper flags to gcc. This is achieved here by creating a gcc
-# script to force passing to gcc the right CFLAGS and LDFLAGS
 do_compile:prepend() {
-    #Create an host gcc build parser to ensure the proper include path is used
-    mkdir -p bin
-    echo "#!/usr/bin/env bash" > bin/gcc
-    echo "$(which ${BUILD_CC}) ${BUILD_CFLAGS} ${BUILD_LDFLAGS} \$@" >> bin/gcc
-    chmod a+x bin/gcc
-    export PATH="$PWD/bin:$PATH"
+    # This is still needed to have the native tools executing properly by
+    # setting the RPATH
+    sed -i '/^LDOPTS/ s,$, \$\{BUILD_LDFLAGS},' ${S}/tools/fiptool/Makefile
+    sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
+    sed -i '/^LIB/ s,$, \$\{BUILD_LDFLAGS},' ${S}/tools/cert_create/Makefile
 }
