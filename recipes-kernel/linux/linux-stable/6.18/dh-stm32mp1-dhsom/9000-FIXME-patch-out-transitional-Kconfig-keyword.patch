@@ -1,0 +1,28 @@
+From 426253f91ab98fe3249c470f757170565752e214 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Wed, 8 Oct 2025 15:18:42 +0200
+Subject: [PATCH] FIXME: patch out transitional Kconfig keyword
+
+Avoid confusing OE kernel configcheck.
+
+Upstream-Status: Inappropriate [OE specific workaround]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 61130b88964b9..5504918f3b0f1 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -942,7 +942,6 @@ config CFI
+ 
+ config CFI_CLANG
+ 	bool
+-	transitional
+ 	help
+ 	  Transitional config for CFI_CLANG to CFI migration.
+ 
+-- 
+2.51.0
+
