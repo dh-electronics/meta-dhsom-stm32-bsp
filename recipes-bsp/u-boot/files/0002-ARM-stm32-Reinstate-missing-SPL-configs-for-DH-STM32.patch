@@ -1,0 +1,38 @@
+From d4261cb8f8ac4ddc54e6b5518da1ca99db84cb58 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Wed, 7 Jan 2026 17:28:25 +0100
+Subject: [PATCH 2/2] ARM: stm32: Reinstate missing SPL configs for DH
+ STM32MP15xx DHSOM
+
+Re-enable missing configs for DH STM32MP15xx DHSOM, to allow those
+devices to successfully boot again.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ configs/stm32mp15_dhsom.config | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/configs/stm32mp15_dhsom.config b/configs/stm32mp15_dhsom.config
+index d5ecbac29e0..24420372e3f 100644
+--- a/configs/stm32mp15_dhsom.config
++++ b/configs/stm32mp15_dhsom.config
+@@ -38,7 +38,13 @@ CONFIG_WATCHDOG_AUTOSTART=y
+ CONFIG_SPI_FLASH_MACRONIX=y
+ CONFIG_SPI_FLASH_SPANSION=y
+ CONFIG_SPI_FLASH_STMICRO=y
+-CONFIG_SPL_LEGACY_IMAGE_FORMAT=y
+-CONFIG_SPL_TEXT_BASE=0x2FFC2500
+ CONFIG_SPL_BLOCK_CACHE=y
++CONFIG_SPL_DM_REGULATOR=y
++CONFIG_SPL_DM_REGULATOR_STPMIC1=y
++CONFIG_SPL_DM_USB_GADGET=y
++CONFIG_SPL_HAVE_INIT_STACK=y
++CONFIG_SPL_LEGACY_IMAGE_FORMAT=y
+ CONFIG_SPL_MMC=y
++CONFIG_SPL_SYS_MMCSD_RAW_MODE=y
++CONFIG_SPL_TEXT_BASE=0x2FFC2500
++CONFIG_SPL_USB_GADGET=y
+-- 
+2.51.0
+

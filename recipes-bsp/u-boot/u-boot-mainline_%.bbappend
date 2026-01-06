@@ -10,18 +10,13 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://default-device-tree.cfg \
-	file://0001-clk-stm32-Pass-udevice-pointer-to-clk_register_compo.patch \
-	file://0002-phy-Reset-init-count-on-phy-exit-failure.patch \
-	file://0003-ARM-dts-stm32-Keep-the-reg11-and-reg18-regulators-al.patch \
-	file://0004-ARM-dts-stm32-Introduce-DH-STM32MP13x-target.patch \
-	file://0005-board-dhelectronics-Move-dh_add_item_number_and_seri.patch \
-	file://0006-ARM-stm32-Read-values-from-M24256-write-lockable-pag.patch \
-	file://0007-ARM-stm32-Add-MAC-address-readout-from-fuses-on-DH-S.patch \
-	file://0008-board-dhelectronics-Check-pointer-before-access-in-d.patch \
-	file://0009-board-dhelectronics-Use-isascii-before-isprint-in-dh.patch \
-	file://0010-ARM-stm32-Perform-node-compatible-check-for-KS8851-e.patch \
-	file://0011-ARM-dts-stm32-Fix-STM32MP15xx-DHSOM-boot-breakage-du.patch \
-	file://0012-ARM-stm32-Add-missing-build-of-ST-DFU-virt-code-on-D.patch \
+	file://0001-ARM-stm32-Use-CONFIG_STM32MP15X-to-discern-STM32MP15.patch \
+	file://0002-ARM-stm32-Reinstate-missing-SPL-configs-for-DH-STM32.patch \
+	"
+
+SRC_URI:append:dh-stm32mp13-dhsom = " \
+	file://9001-ARM-dts-stm32-Add-SCMI-clocks-in-rcc-node-for-stm32m.patch \
+	file://9002-clk-stm32-Update-clock-management-for-STM32MP13-25.patch \
 	"
 
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
@@ -33,4 +28,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20251031.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20260111.01"
