@@ -5,8 +5,8 @@ MACHINEOVERRIDES =. "dh-dhsom:dh-stm32mp-dhsom:dh-stm32mp1-dhsom:"
 
 ARM_INSTRUCTION_SET = "thumb"
 
-require conf/machine/include/arm/armv7a/tune-cortexa7.inc
 require conf/machine/include/soc-family.inc
+require conf/machine/include/arm/armv7a/tune-cortexa7.inc
 
 MACHINE_FEATURES ?= "apm alsa ext2 keyboard mainline screen serial touchscreen usbgadget usbhost"
 
