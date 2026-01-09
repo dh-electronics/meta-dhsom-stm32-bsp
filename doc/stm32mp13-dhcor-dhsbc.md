@@ -1082,7 +1082,7 @@ follows:
                      .--------------------------------.----- '#' Separator
                      |                                |
                      v                                v
-=> env set loaddtos '#conf-stm32mp135f-dhcor-dhsbc.dtb#conf-stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtbo
+=> env set loaddtos '#conf-stm32mp135f-dhcor-dhsbc.dtb#conf-stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtbo'
                        ^                                ^
                        |                                |
                        |                                '--- SPI display DTO

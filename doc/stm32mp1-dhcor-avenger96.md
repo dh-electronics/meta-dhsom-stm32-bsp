@@ -1077,7 +1077,7 @@ follows:
                      .------------------------------.----- '#' Separator
                      |                              |
                      v                              v
-=> env set loaddtos '#conf-stm32mp157a-avenger96.dtb#conf-stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtbo
+=> env set loaddtos '#conf-stm32mp157a-avenger96.dtb#conf-stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtbo'
                        ^                              ^
                        |                              |
                        |                              '--- 644-100 display DTO
