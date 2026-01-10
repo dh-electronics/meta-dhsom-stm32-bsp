@@ -86,3 +86,4 @@ patch 0085-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-553-100-DPI-ada.patch
 patch 0086-serial-stm32-Factor-out-GPIO-RTS-toggling-into-separ.patch
 patch 0087-serial-stm32-Use-TC-interrupt-to-deassert-GPIO-RTS-i.patch
 patch 0088-serial-stm32-Re-assert-RTS-DE-GPIO-in-RS485-mode-onl.patch
+patch 0089-wifi-rsi-Fix-memory-corruption-due-to-not-set-vif-dr.patch
