@@ -22,9 +22,9 @@ Upstream-Status: Pending
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts |  51 ++++
- core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi  | 249 ++++++++++++++++++
+ core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi  | 304 ++++++++++++++++++
  core/arch/arm/plat-stm32mp1/conf.mk           |   5 +-
- 3 files changed, 304 insertions(+), 1 deletion(-)
+ 3 files changed, 358 insertions(+), 1 deletion(-)
  create mode 100644 core/arch/arm/dts/stm32mp135f-dhcor-dhsbc.dts
  create mode 100644 core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
 
@@ -90,15 +90,19 @@ new file mode 100644
 index 000000000..e79a6eff2
 --- /dev/null
 +++ b/core/arch/arm/dts/stm32mp13xx-dhcor-som.dtsi
-@@ -0,0 +1,249 @@
+@@ -0,0 +1,304 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2024 Marek Vasut <marex@denx.de>
 + */
 +
 +#include <dt-bindings/clock/stm32mp13-clksrc.h>
-+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
++#include <dt-bindings/firewall/stm32mp13-tzc400.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/gpio/stm32mp_gpio.h>
 +#include <dt-bindings/regulator/st,stm32mp13-regulator.h>
++#include <dt-bindings/tamper/st,stm32mp13-tamp.h>
++#include <dt-bindings/pinctrl/stm32-pinfunc.h>
 +
 +/ {
 +	model = "DH electronics STM32MP13xx DHCOR SoM";
@@ -132,6 +136,57 @@ index 000000000..e79a6eff2
 +		reg = <0xf0 0x4>;
 +		st,non-secure-otp;
 +	};
++};
++
++&cpu0 {
++	/delete-property/ operating-points-v2;
++};
++
++/delete-node/ &cpu0_opp_table;
++
++&etzpc {
++	st,decprot =
++		<DECPROT(STM32MP1_ETZPC_ADC1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_ADC2_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_BKPSRAM_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_CRYP_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_DCMIPP_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_DDRCTRLPHY_ID, DECPROT_NS_R_S_W, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_ETH1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_ETH2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_FMC_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_HASH_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_I2C3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_I2C5_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_IWDG1_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_LPTIM2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_LPTIM3_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_LTDC_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_MCE_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_OTG_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_PKA_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_QSPI_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_RNG_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SAES_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SDMMC1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SDMMC2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SPI4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SPI5_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SRAM1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SRAM2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_SRAM3_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM12_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM13_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM14_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM15_ID, DECPROT_S_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM16_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_TIM17_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_USART1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_USART2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_USBPHYCTRL_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>,
++		<DECPROT(STM32MP1_ETZPC_VREFBUF_ID, DECPROT_NS_RW, DECPROT_UNLOCK)>;
 +};
 +
 +&iwdg1 {
@@ -365,8 +420,8 @@ index a629c0803..7e3bb9341 100644
 +flavorlist-MP13 = $(flavor_dts_file-135F_DHCOR_DHSBC) \
 +		  $(flavor_dts_file-135F_DK)
  
- ifneq ($(PLATFORM_FLAVOR),)
- ifeq ($(flavor_dts_file-$(PLATFORM_FLAVOR)),)
+ flavorlist-dh-platforms = $(flavor_dts_file-157A_DHCOR_AVENGER96) \
+ 			  $(flavor_dts_file-157C_DHCOM_PDK2)
 -- 
 2.43.0
 
