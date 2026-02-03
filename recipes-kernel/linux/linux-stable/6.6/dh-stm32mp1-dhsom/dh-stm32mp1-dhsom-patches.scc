@@ -43,4 +43,3 @@ patch 0042-net-phy-realtek-Fix-setting-of-PHY-LEDs-Mode-B-bit-o.patch
 patch 0043-leds-trigger-netdev-Check-offload-ability-on-interfa.patch
 patch 0044-ARM-dts-stm32-Increase-CPU-core-voltage-on-STM32MP13.patch
 patch 0045-ARM-dts-stm32-Add-support-for-STM32MP13xx-DHCOR-SoM-.patch
-patch 0046-wifi-rsi-Fix-memory-corruption-due-to-not-set-vif-dr.patch
