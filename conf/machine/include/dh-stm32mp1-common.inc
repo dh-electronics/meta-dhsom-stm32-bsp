@@ -59,8 +59,10 @@ PREFERRED_PROVIDER_virtual/libgles3 ?= "mesa-mainline"
 PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
 PREFERRED_PROVIDER_drm ?= "libdrm-mainline"
 PREFERRED_PROVIDER_libdrm ?= "libdrm-mainline"
+PREFERRED_PROVIDER_libdrm-native ?= "libdrm-native"
 PREFERRED_PROVIDER_nativesdk-libdrm ?= "nativesdk-libdrm-mainline"
 PREFERRED_PROVIDER_wayland-protocols ?= "wayland-protocols-mainline"
+PREFERRED_PROVIDER_wayland-protocols-native ?= "wayland-protocols-native"
 PREFERRED_PROVIDER_nativesdk-wayland-protocols ?= "nativesdk-wayland-protocols-mainline"
 
 # WPE (from meta-webkit)
