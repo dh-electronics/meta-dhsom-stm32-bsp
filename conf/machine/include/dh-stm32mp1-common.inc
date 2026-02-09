@@ -42,7 +42,6 @@ PREFERRED_VERSION_u-boot-mainline-tools-native ?= "2026.01%"
 # Linux kernel
 KERNEL_IMAGETYPE = "fitImage"
 KERNEL_CLASSES += " kernel-fitimage "
-KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
 PREFERRED_VERSION_linux-stable ?= "6.18%"
