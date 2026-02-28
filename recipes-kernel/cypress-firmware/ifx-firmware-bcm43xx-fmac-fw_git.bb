@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = "file://LICENCE;md5=cbc5f665d04f741f1e006d2096236ba7"
 NO_GENERIC_LICENSE[Firmware-infineon-fmac-fw] = "LICENCE"
 
 SRC_URI = "git://github.com/Infineon/ifx-linux-firmware;protocol=https;branch=master"
-SRCREV = "ded7e50fed4ab0c3fdfd7c42d1747da628cfd447"
+SRCREV = "bfb2aecc0cbd76555706ff19c32371be7a3d1256"
 
 UPSTREAM_CHECK_COMMITS = "1"
 
