@@ -1,6 +1,6 @@
 From f8cf5ff582e0389611ce77f845e020141ac50f7e Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marek.vasut@mailbox.org>
-Date: Fri, 18 Apr 2025 21:18:00 +0200
+Date: Mon, 6 Apr 2026 01:29:58 +0200
 Subject: [PATCH 2/4] net: phy: realtek: Add property to enable SSC
 
 Add support for spread spectrum clocking (SSC) on RTL8211F(D)(I)-CG,
@@ -8,14 +8,18 @@ RTL8211FS(I)(-VS)-CG, RTL8211FG(I)(-VS)-CG PHYs. The implementation
 follows EMI improvement application note Rev. 1.2 for these PHYs.
 
 The current implementation enables SSC for both RXC and SYSCLK clock
-signals. Introduce new DT property 'realtek,ssc-enable' to enable the
-SSC mode.
+signals. Introduce DT properties 'realtek,clkout-ssc-enable',
+'realtek,rxc-ssc-enable' and 'realtek,sysclk-ssc-enable' which control
+CLKOUT, RXC and SYSCLK SSC spread spectrum clocking enablement on these
+signals.
 
-Upstream-Status: Submitted [https://lore.kernel.org/all/20251218173718.12878-3-marek.vasut@mailbox.org/]
+Upstream-Status: Backport [84c5a3f00084ffd741a4c3261a58dd10cd5aceaf]
 Signed-off-by: Marek Vasut <marek.vasut@mailbox.org>
+Link: https://patch.msgid.link/20260405233008.148974-3-marek.vasut@mailbox.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- drivers/net/phy/realtek/realtek_main.c | 124 +++++++++++++++++++++++++
- 1 file changed, 124 insertions(+)
+ drivers/net/phy/realtek/realtek_main.c | 127 +++++++++++++++++++++++++
+ 1 file changed, 127 insertions(+)
 
 diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
 index 7c3d277efaf07..770ee1dfea754 100644
@@ -28,6 +32,7 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +#define RTL8211F_SYSCLK_SSC_EN			BIT(3)
  #define RTL8211F_PHYCR2_PHY_EEE_ENABLE		BIT(5)
 +#define RTL8211F_CLKOUT_SSC_EN			BIT(7)
++#define RTL8211F_CLKOUT_SSC_CAP			GENMASK(13, 12)
  
  #define RTL8211F_INSR_PAGE			0xa43
  #define RTL8211F_INSR				0x1d
@@ -36,7 +41,6 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +#define RTL8211F_SSC_PAGE			0xc44
 +#define RTL8211F_SSC_RXC			0x13
 +#define RTL8211F_SSC_SYSCLK			0x17
-+#define RTL8211F_SSC_CLKOUT			0x19
 +
  /* RTL8211F LED configuration */
  #define RTL8211F_LEDCR_PAGE			0xd04
@@ -64,7 +68,7 @@ index 7c3d277efaf07..770ee1dfea754 100644
  
  	phydev->priv = priv;
  
-@@ -669,6 +686,101 @@ static int rtl8211f_config_phy_eee(struct phy_device *phydev)
+@@ -669,6 +686,104 @@ static int rtl8211f_config_phy_eee(struct phy_device *phydev)
  				RTL8211F_PHYCR2_PHY_EEE_ENABLE, 0);
  }
  
@@ -78,31 +82,29 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +	if (!priv->enable_clkout_ssc)
 +		return 0;
 +
-+	/* RTL8211FVD has no PHYCR2 register */
++	/* RTL8211FVD has PHYCR2 register, but configuration of CLKOUT SSC
++	 * is not currently supported by this driver due to different bit
++	 * layout.
++	 */
 +	if (phydev->drv->phy_id == RTL_8211FVD_PHYID)
 +		return 0;
 +
 +	/* Unnamed registers from EMI improvement parameters application note 1.2 */
 +	ret = phy_write_paged(phydev, 0xd09, 0x10, 0xcf00);
 +	if (ret < 0) {
-+		dev_err(dev, "CLKOUT SCC initialization failed: %pe\n", ERR_PTR(ret));
++		dev_err(dev, "CLKOUT SSC initialization failed: %pe\n", ERR_PTR(ret));
 +		return ret;
 +	}
 +
-+	ret = phy_write_paged(phydev, RTL8211F_SSC_PAGE, RTL8211F_SSC_CLKOUT, 0x38c3);
-+	if (ret < 0) {
-+		dev_err(dev, "CLKOUT SCC configuration failed: %pe\n", ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable CLKOUT SSC using PHYCR2 bit 7 , this step is missing from the
-+	 * EMI improvement parameters application note 1.2 section 2.3
++	/* Enable CLKOUT SSC and CLKOUT SSC Capability using PHYCR2
++	 * bits 7, 12, 13. This matches the register 25 write 0x38C3
++	 * from the EMI improvement parameters application note 1.2
++	 * section 2.3, without affecting unrelated bits.
 +	 */
-+	ret = phy_modify_paged(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR2,
-+			       RTL8211F_CLKOUT_SSC_EN, RTL8211F_CLKOUT_SSC_EN);
++	ret = phy_set_bits(phydev, RTL8211F_PHYCR2,
++			   RTL8211F_CLKOUT_SSC_CAP | RTL8211F_CLKOUT_SSC_EN);
 +	if (ret < 0) {
-+		dev_err(dev, "CLKOUT SCC enable failed: %pe\n", ERR_PTR(ret));
++		dev_err(dev, "CLKOUT SSC enable failed: %pe\n", ERR_PTR(ret));
 +		return ret;
 +	}
 +
@@ -119,13 +121,16 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +	if (!priv->enable_rxc_ssc)
 +		return 0;
 +
-+	/* RTL8211FVD has no PHYCR2 register */
++	/* RTL8211FVD has PHYCR2 register, but configuration of RXC SSC
++	 * is not currently supported by this driver due to different bit
++	 * layout.
++	 */
 +	if (phydev->drv->phy_id == RTL_8211FVD_PHYID)
 +		return 0;
 +
 +	ret = phy_write_paged(phydev, RTL8211F_SSC_PAGE, RTL8211F_SSC_RXC, 0x5f00);
 +	if (ret < 0) {
-+		dev_err(dev, "RXC SCC configuration failed: %pe\n", ERR_PTR(ret));
++		dev_err(dev, "RXC SSC configuration failed: %pe\n", ERR_PTR(ret));
 +		return ret;
 +	}
 +
@@ -142,21 +147,23 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +	if (!priv->enable_sysclk_ssc)
 +		return 0;
 +
-+	/* RTL8211FVD has no PHYCR2 register */
++	/* RTL8211FVD has PHYCR2 register, but configuration of SYSCLK SSC
++	 * is not currently supported by this driver due to different bit
++	 * layout.
++	 */
 +	if (phydev->drv->phy_id == RTL_8211FVD_PHYID)
 +		return 0;
 +
 +	ret = phy_write_paged(phydev, RTL8211F_SSC_PAGE, RTL8211F_SSC_SYSCLK, 0x4f00);
 +	if (ret < 0) {
-+		dev_err(dev, "SYSCLK SCC configuration failed: %pe\n", ERR_PTR(ret));
++		dev_err(dev, "SYSCLK SSC configuration failed: %pe\n", ERR_PTR(ret));
 +		return ret;
 +	}
 +
 +	/* Enable SSC */
-+	ret = phy_modify_paged(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR2,
-+				RTL8211F_SYSCLK_SSC_EN, RTL8211F_SYSCLK_SSC_EN);
++	ret = phy_set_bits(phydev, RTL8211F_PHYCR2, RTL8211F_SYSCLK_SSC_EN);
 +	if (ret < 0) {
-+		dev_err(dev, "SYSCLK SCC enable failed: %pe\n", ERR_PTR(ret));
++		dev_err(dev, "SYSCLK SSC enable failed: %pe\n", ERR_PTR(ret));
 +		return ret;
 +	}
 +
@@ -166,14 +173,10 @@ index 7c3d277efaf07..770ee1dfea754 100644
  static int rtl8211f_config_init(struct phy_device *phydev)
  {
  	struct device *dev = &phydev->mdio.dev;
-@@ -692,6 +804,18 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+@@ -685,6 +800,18 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 	if (ret)
  		return ret;
- 	}
  
-+	ret = rtl8211f_config_clkout_ssc(phydev);
-+	if (ret)
-+		return ret;
-+
 +	ret = rtl8211f_config_rxc_ssc(phydev);
 +	if (ret)
 +		return ret;
@@ -182,9 +185,13 @@ index 7c3d277efaf07..770ee1dfea754 100644
 +	if (ret)
 +		return ret;
 +
- 	return rtl8211f_config_phy_eee(phydev);
- }
- 
++	ret = rtl8211f_config_clkout_ssc(phydev);
++	if (ret)
++		return ret;
++
+ 	ret = rtl8211f_config_clk_out(phydev);
+ 	if (ret) {
+ 		dev_err(dev, "clkout configuration failed: %pe\n",
 -- 
 2.51.0
 
