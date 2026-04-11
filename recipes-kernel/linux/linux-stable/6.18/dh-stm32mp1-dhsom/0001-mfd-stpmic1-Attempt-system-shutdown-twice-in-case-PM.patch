@@ -1,6 +1,6 @@
 From 80205556d19acede4196864eeb7ec0b99e59b00f Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@nabladev.com>
-Date: Thu, 17 Jul 2025 04:19:21 +0200
+Date: Thu, 22 Jan 2026 12:13:21 +0100
 Subject: [PATCH 1/4] mfd: stpmic1: Attempt system shutdown twice in case PMIC
  is confused
 
@@ -10,26 +10,34 @@ returns with -ETIMEDOUT / -110 . If that or similar transient
 failure occurs, try to shut down again. If the second attempt
 fails, there is some bigger problem, report it to user.
 
-Upstream-Status: Pending
+Upstream-Status: Backport [ffdc5c51f8bcd0e5e8255ca275a0a3b958475d99]
+Cc: stable@vger.kernel.org
 Fixes: 6e9df38f359a ("mfd: stpmic1: Add PMIC poweroff via sys-off handler")
 Signed-off-by: Marek Vasut <marex@nabladev.com>
+Link: https://patch.msgid.link/20260122111423.62591-1-marex@nabladev.com
+Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- drivers/mfd/stpmic1.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/mfd/stpmic1.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
 index 081827bc05961..9ef4049d7db10 100644
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -121,9 +121,23 @@ static const struct regmap_irq_chip stpmic1_regmap_irq_chip = {
+@@ -16,6 +16,8 @@
+ 
+ #include <dt-bindings/mfd/st,stpmic1.h>
+ 
++#define STPMIC1_MAX_RETRIES 2
++
+ #define STPMIC1_MAIN_IRQ 0
+ 
+ static const struct regmap_range stpmic1_readable_ranges[] = {
+@@ -121,9 +123,23 @@ static const struct regmap_irq_chip stpmic1_regmap_irq_chip = {
  static int stpmic1_power_off(struct sys_off_data *data)
  {
  	struct stpmic1 *ddata = data->cb_data;
 +	int ret;
-+
-+	ret = regmap_update_bits(ddata->regmap, MAIN_CR, SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
-+	if (!ret)
-+		return NOTIFY_DONE;
 +
 +	/*
 +	 * Attempt to shut down again, in case the first attempt failed.
@@ -38,12 +46,16 @@ index 081827bc05961..9ef4049d7db10 100644
 +	 * failure occurs, try to shut down again. If the second attempt
 +	 * fails, there is some bigger problem, report it to user.
 +	 */
-+	ret = regmap_update_bits(ddata->regmap, MAIN_CR, SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
-+	if (ret)
-+		dev_err(ddata->dev, "Failed to access PMIC I2C bus (%d)\n", ret);
++	for (int retries = 0; retries < STPMIC1_MAX_RETRIES; retries++) {
++		ret = regmap_update_bits(ddata->regmap, MAIN_CR, SOFTWARE_SWITCH_OFF,
++					 SOFTWARE_SWITCH_OFF);
++		if (!ret)
++			return NOTIFY_DONE;
++	}
  
 -	regmap_update_bits(ddata->regmap, MAIN_CR,
 -			   SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
++	dev_err(ddata->dev, "Failed to access PMIC I2C bus (%d)\n", ret);
  
  	return NOTIFY_DONE;
  }
