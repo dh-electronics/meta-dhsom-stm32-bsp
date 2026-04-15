@@ -39,9 +39,9 @@ index 000000000..6ce386691
 +/*
 + * Copyright (C) 2024 Marek Vasut <marex@denx.de>
 + */
-+
 +#define DDR_SIZE	0x20000000 /* 512MB */
 +#include "stm32mp13-fw-config.dtsi"
++#include "stm32mp13-fw-config-mem-encrypt.dtsi"
 diff --git a/fdts/stm32mp135f-dhcor-dhsbc.dts b/fdts/stm32mp135f-dhcor-dhsbc.dts
 new file mode 100644
 index 000000000..dd172faaa

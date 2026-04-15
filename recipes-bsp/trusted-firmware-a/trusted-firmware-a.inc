@@ -19,6 +19,9 @@ EXTRA_OEMAKE += "BUILD_PLAT=${TFA_BUILD_DIR}"
 # We need openssl for fiptool
 DEPENDS:append = " dtc-native openssl-native"
 
+# Tell the tools where the native OpenSSL is located
+EXTRA_OEMAKE += "OPENSSL_DIR=${STAGING_DIR_NATIVE}/${prefix_native}"
+
 PROVIDES = "virtual/trusted-firmware-a"
 
 inherit deploy
