@@ -75,6 +75,7 @@ IMAGE_FSTYPES ?= "tar.zst wic.zst wic.gz wic.bmap"
 INITRAMFS_FSTYPES ?= "cpio.zst"
 
 EXTRA_IMAGEDEPENDS += "u-boot-mainline"
+WKS_SEARCH_PATH .= "${@':'.join('%s/files/wic' % p for p in '${BBPATH}'.split(':'))}"
 WKS_FILE = "sdimage-stm32mp1.wks"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
 IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage u-boot-mainline "
