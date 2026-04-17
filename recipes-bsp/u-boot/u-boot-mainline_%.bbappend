@@ -3,7 +3,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:
 do_compile:prepend:dh-stm32mp1-dhsom () {
 	sed -i -e "s/%UBOOT_DTB_LOADADDRESS%/${UBOOT_DTB_LOADADDRESS}/g" \
 		-e "s/%UBOOT_DTBO_LOADADDRESS%/${UBOOT_DTBO_LOADADDRESS}/g" \
-		${WORKDIR}/${UBOOT_ENV_SRC}
+		${UNPACKDIR}/${UBOOT_ENV_SRC}
 }
 
 SRC_URI:append:dh-stm32mp1-dhsom = " \
