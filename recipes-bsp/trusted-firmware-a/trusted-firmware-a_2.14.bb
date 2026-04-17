@@ -14,7 +14,7 @@ SRC_URI = "git://github.com/ARM-software/arm-trusted-firmware.git;protocol=https
 
 SRCREV_tfa = "e82c7ced9e76aea35b176e608d67dfe5ebe1c569"
 
-S = "${WORKDIR}/git"
+S = "${@d.getVar('WORKDIR') + "/git" if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else d.getVar('UNPACKDIR') + "/" + d.getVar('BP')}"
 
 require trusted-firmware-a.inc
 

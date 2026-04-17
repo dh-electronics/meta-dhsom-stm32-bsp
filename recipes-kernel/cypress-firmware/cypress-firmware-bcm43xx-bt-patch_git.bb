@@ -28,7 +28,7 @@ SRCREV = "64ac86708253e12d7089cf75ef8dcc9b30594958"
 
 UPSTREAM_CHECK_COMMITS = "1"
 
-S = "${WORKDIR}/git"
+S = "${@d.getVar('WORKDIR') + "/git" if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else d.getVar('UNPACKDIR') + "/" + d.getVar('BP')}"
 
 inherit allarch
 

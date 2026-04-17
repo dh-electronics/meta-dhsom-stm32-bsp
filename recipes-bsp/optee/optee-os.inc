@@ -16,7 +16,7 @@ DEPENDS:append:toolchain-clang = " compiler-rt"
 
 SRC_URI = "git://github.com/OP-TEE/optee_os.git;branch=master;protocol=https"
 
-S = "${WORKDIR}/git"
+S = "${@d.getVar('WORKDIR') + "/git" if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else d.getVar('UNPACKDIR') + "/" + d.getVar('BP')}"
 B = "${WORKDIR}/build"
 
 EXTRA_OEMAKE:append = " \

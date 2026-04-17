@@ -25,7 +25,7 @@ NO_GENERIC_LICENSE[Firmware-cypress-fmac-nvram] = "LICENCE.cypress"
 SRC_URI = "git://github.com/murata-wireless/cyw-fmac-nvram;protocol=https;branch=master"
 SRCREV = "22189fb5173dd0de796cf520ca6f5a6496af74e0"
 
-S = "${WORKDIR}/git"
+S = "${@d.getVar('WORKDIR') + "/git" if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else d.getVar('UNPACKDIR') + "/" + d.getVar('BP')}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 EXCLUDE_FROM_SHLIBS = "1"
