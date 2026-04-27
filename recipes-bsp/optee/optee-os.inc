@@ -25,6 +25,7 @@ EXTRA_OEMAKE:append = " \
     CROSS_COMPILE_core=${HOST_PREFIX} \
     CROSS_COMPILE_ta_${OPTEE_ARCH}=${HOST_PREFIX} \
     NOWERROR=1 \
+    AFLAGS="${CFLAGS}" \
     ta-targets=ta_${OPTEE_ARCH} \
     O=${B} \
 "
