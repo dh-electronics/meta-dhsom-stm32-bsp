@@ -1,0 +1,161 @@
+From 5f08fcdde8df9ce273ad557d7f307434072e3d0c Mon Sep 17 00:00:00 2001
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 9 Nov 2022 10:49:09 -0800
+Subject: [PATCH 46/47] tool lib symbol: Add Makefile/Build
+
+Add sufficient Makefile for libsymbol to be built as a dependency and
+header files installed.
+
+Upstream-Status: Backport [160be157eaba2a37233ff2d27093e5915b6b084e]
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: bpf@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20221109184914.1357295-10-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/lib/symbol/Build    |   1 +
+ tools/lib/symbol/Makefile | 115 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
+ create mode 100644 tools/lib/symbol/Build
+ create mode 100644 tools/lib/symbol/Makefile
+
+diff --git a/tools/lib/symbol/Build b/tools/lib/symbol/Build
+new file mode 100644
+index 0000000000000..9b9a9c78d3c98
+--- /dev/null
++++ b/tools/lib/symbol/Build
+@@ -0,0 +1 @@
++libsymbol-y += kallsyms.o
+diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
+new file mode 100644
+index 0000000000000..4c1d6b53032d2
+--- /dev/null
++++ b/tools/lib/symbol/Makefile
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: GPL-2.0
++include ../../scripts/Makefile.include
++include ../../scripts/utilities.mak		# QUIET_CLEAN
++
++ifeq ($(srctree),)
++srctree := $(patsubst %/,%,$(dir $(CURDIR)))
++srctree := $(patsubst %/,%,$(dir $(srctree)))
++srctree := $(patsubst %/,%,$(dir $(srctree)))
++#$(info Determined 'srctree' to be $(srctree))
++endif
++
++CC ?= $(CROSS_COMPILE)gcc
++AR ?= $(CROSS_COMPILE)ar
++LD ?= $(CROSS_COMPILE)ld
++
++MAKEFLAGS += --no-print-directory
++
++INSTALL = install
++
++
++# Use DESTDIR for installing into a different root directory.
++# This is useful for building a package. The program will be
++# installed in this directory as if it was the root directory.
++# Then the build tool can move it later.
++DESTDIR ?=
++DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
++
++LIBFILE = $(OUTPUT)libsymbol.a
++
++CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
++CFLAGS += -ggdb3 -Wall -Wextra -std=gnu11 -U_FORTIFY_SOURCE -fPIC
++
++ifeq ($(DEBUG),0)
++ifeq ($(CC_NO_CLANG), 0)
++  CFLAGS += -O3
++else
++  CFLAGS += -O6
++endif
++endif
++
++ifeq ($(DEBUG),0)
++  CFLAGS += -D_FORTIFY_SOURCE
++endif
++
++# Treat warnings as errors unless directed not to
++ifneq ($(WERROR),0)
++  CFLAGS += -Werror
++endif
++
++CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++
++CFLAGS += -I$(srctree)/tools/lib
++CFLAGS += -I$(srctree)/tools/include
++
++RM = rm -f
++
++SYMBOL_IN := $(OUTPUT)libsymbol-in.o
++
++ifeq ($(LP64), 1)
++  libdir_relative = lib64
++else
++  libdir_relative = lib
++endif
++
++prefix ?=
++libdir = $(prefix)/$(libdir_relative)
++
++# Shell quotes
++libdir_SQ = $(subst ','\'',$(libdir))
++
++all:
++
++export srctree OUTPUT CC LD CFLAGS V
++include $(srctree)/tools/build/Makefile.include
++include $(srctree)/tools/scripts/Makefile.include
++
++all: fixdep $(LIBFILE)
++
++$(SYMBOL_IN): FORCE
++	$(MAKE) $(build)=libsymbol V=1
++
++$(LIBFILE): $(SYMBOL_IN)
++	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(SYMBOL_IN)
++
++define do_install_mkdir
++	if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$1'; \
++	fi
++endef
++
++define do_install
++	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
++	fi;                                             \
++	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
++endef
++
++install_lib: $(LIBFILE)
++	$(call QUIET_INSTALL, $(LIBFILE)) \
++		$(call do_install_mkdir,$(libdir_SQ)); \
++		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
++
++install_headers:
++	$(call QUIET_INSTALL, headers) \
++		$(call do_install,kallsyms.h,$(prefix)/include/symbol,644);
++
++install: install_lib install_headers
++
++clean:
++	$(call QUIET_CLEAN, libsymbol) $(RM) $(LIBFILE); \
++	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
++
++FORCE:
++
++.PHONY: clean FORCE
+-- 
+2.53.0
+

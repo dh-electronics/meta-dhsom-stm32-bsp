@@ -41,3 +41,6 @@ patch 0041-ARM-dts-stm32-Add-PicoITX-DTO-for-DH-553-100-DPI-ada.patch
 patch 0042-ARM-dts-stm32-Add-DHCOR-based-Testbench-board.patch
 patch 0043-rtc-stm32-Handle-single-EXTI-IRQ-as-wake-up-source.patch
 patch 0044-ARM-dts-stm32-Add-missing-detach-mailbox-for-DHCOR-S.patch
+patch 0045-tools-lib-api-Add-install-target.patch
+patch 0046-tool-lib-symbol-Add-Makefile-Build.patch
+patch 0047-libbpf-Fix-Wdiscarded-qualifiers-under-C23.patch
