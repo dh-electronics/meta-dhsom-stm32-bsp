@@ -1,4 +1,3 @@
-patch 0001-mfd-stpmic1-Attempt-system-shutdown-twice-in-case-PM.patch
 patch 0002-net-phy-realtek-Add-property-to-enable-SSC.patch
 patch 0003-ARM-dts-stm32-Enable-PHY-SSC-on-DH-STM32MP13xx-DHCOR.patch
 patch 0004-ARM-dts-stm32-Add-DT-overlays-for-STM32MP13xx-STM32M.patch
