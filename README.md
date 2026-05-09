@@ -8,8 +8,11 @@ This layer provides BSP for DH electronics STM32MP1 platforms.
 
 This layer depends on:
 
-* URI: https://git.yoctoproject.org/poky
-  - branch: scarthgap
+* URI: https://git.openembedded.org/bitbake
+  - branch: 2.8 or 2.18
+
+* URI: https://git.openembedded.org/openembedded-core
+  - branch: scarthgap or wrynose
   - layers: meta
 
 * URI: https://source.denx.de/denx/meta-mainline-common.git
@@ -39,6 +42,7 @@ A good starting point for setting up the build environment is is the official
 Yocto Project wiki.
 
 * https://docs.yoctoproject.org/scarthgap/
+* https://docs.yoctoproject.org/wrynose/
 
 Before attempting the build, the following metalayer git repositories shall
 be cloned into a location accessible to the build system and a branch listed
@@ -47,7 +51,8 @@ location of the metalayers.
 
 * https://source.denx.de/denx/meta-mainline-common.git			(branch: main)
 * https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		(branch: main)
-* https://git.yoctoproject.org/poky					(branch: scarthgap)
+* https://git.openembedded.org/bitbake					(branch: 2.8 or 2.18)
+* https://git.openembedded.org/openembedded-core			(branch: scarthgap or wrynose)
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
@@ -57,7 +62,7 @@ be referenced in bblayers.conf in this order:
 
 ```
 BBLAYERS ?= " \
-  /path/to/OE/poky/meta \
+  /path/to/OE/openembedded-core/meta \
   /path/to/OE/meta-mainline-common \
   /path/to/OE/meta-dhsom-stm32-bsp \
   "
