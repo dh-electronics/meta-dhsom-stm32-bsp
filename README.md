@@ -9,7 +9,7 @@ This layer provides BSP for DH electronics STM32MP1 platforms.
 This layer depends on:
 
 * URI: https://git.yoctoproject.org/poky
-  - branch: kirkstone or scarthgap
+  - branch: scarthgap
   - layers: meta
 
 * URI: https://source.denx.de/denx/meta-mainline-common.git
@@ -38,7 +38,6 @@ build instructions and YAML files.
 A good starting point for setting up the build environment is is the official
 Yocto Project wiki.
 
-* https://docs.yoctoproject.org/kirkstone/
 * https://docs.yoctoproject.org/scarthgap/
 
 Before attempting the build, the following metalayer git repositories shall
@@ -48,7 +47,7 @@ location of the metalayers.
 
 * https://source.denx.de/denx/meta-mainline-common.git			(branch: main)
 * https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		(branch: main)
-* https://git.yoctoproject.org/poky					(branch: kirkstone or scarthgap)
+* https://git.yoctoproject.org/poky					(branch: scarthgap)
 
 With all the source artifacts in place, proceed with setting up the build
 using oe-init-build-env as specified in the Yocto Project wiki.
