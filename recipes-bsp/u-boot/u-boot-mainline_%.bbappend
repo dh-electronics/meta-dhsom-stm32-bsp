@@ -10,14 +10,6 @@ SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://default-device-tree.cfg \
-	file://0001-ARM-stm32-Use-CONFIG_STM32MP15X-to-discern-STM32MP15.patch \
-	file://0002-ARM-stm32-Reinstate-missing-SPL-configs-for-DH-STM32.patch \
-	file://0003-cmd-ums-Switch-HW-partition-before-block-access.patch \
-	"
-
-SRC_URI:append:dh-stm32mp13-dhsom = " \
-	file://9001-ARM-dts-stm32-Add-SCMI-clocks-in-rcc-node-for-stm32m.patch \
-	file://9002-clk-stm32-Update-clock-management-for-STM32MP13-25.patch \
 	"
 
 do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
@@ -29,4 +21,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20260430.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20260728.01"
