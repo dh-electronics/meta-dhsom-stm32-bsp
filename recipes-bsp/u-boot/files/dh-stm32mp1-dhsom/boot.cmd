@@ -41,13 +41,6 @@ if test $? != 0 ; then
   exit 2
 fi
 
-# Assure that initrd relocation to the end of DRAM will not interfere
-# with application of relocated DT and DTOs at %UBOOT_DTB_LOADADDRESS% , clamp the
-# initrd relocation address below UBOOT_DTB_LOADADDRESS = %UBOOT_DTB_LOADADDRESS%.
-if test -z "${initrd_high}" ; then
-  setenv initrd_high %UBOOT_DTB_LOADADDRESS%
-fi
-
 # Check whether PLL4P supplies 100 MHz to MCO2, MCO2 divides these 100 MHz
 # by 2 and supplies DHCOM LAN8710Ai PHY. This is so since U-Boot 2021.04
 # 69ea30e688c4 ("ARM: dts: stm32: Switch to MCO2 for PHY 50 MHz clock")
@@ -75,6 +68,13 @@ if test "${somname}" = "match" ; then
 fi
 
 bootm start ${loadaddr}${loaddtos}
+
+# Assure that initrd relocation to the end of DRAM will not interfere
+# with application of relocated DT and DTOs at ${fdtaddr} , clamp the
+# initrd relocation address below ${fdtaddr} .
+if test -z "${initrd_high}" ; then
+  setexpr initrd_high ${fdtaddr} \& 0xffffffffffff0000
+fi
 
 # Run the custom DTO loader script
 #
