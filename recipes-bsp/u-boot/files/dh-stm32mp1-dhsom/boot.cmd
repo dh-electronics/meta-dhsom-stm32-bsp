@@ -74,22 +74,20 @@ if test "${somname}" = "match" ; then
 	fi
 fi
 
-# A custom script exists to load DTOs
-if test -n "${loaddtoscustom}" ; then
-  bootm start ${loadaddr}${loaddtos}
+bootm start ${loadaddr}${loaddtos}
 
-  # Run the custom DTO loader script
-  #
-  # The 'fdt' command is already configured to point to a DT, on top
-  # of which all the DTOs present in the fitImage and selected by the
-  # 'loaddtos' are applied. Hence, the user is now free to apply any
-  # additional custom DTOs loaded from any other source.
+# Run the custom DTO loader script
+#
+# The 'fdt' command is already configured to point to a DT, on top
+# of which all the DTOs present in the fitImage and selected by the
+# 'loaddtos' are applied. Hence, the user is now free to apply any
+# additional custom DTOs loaded from any other source.
+if test -n "${loaddtoscustom}" ; then
   run loaddtoscustom
-  if test -z "${bootm_args}" ; then
-    setenv bootm_args "${loadaddr} - ${fdtaddr}"
-  fi
-else
-  setenv bootm_args "${loadaddr}${loaddtos}"
+fi
+
+if test -z "${bootm_args}" ; then
+  setenv bootm_args "${loadaddr} - ${fdtaddr}"
 fi
 
 echo "Booting the Linux kernel..." \
