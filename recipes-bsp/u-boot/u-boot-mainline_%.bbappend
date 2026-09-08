@@ -1,11 +1,5 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
-do_compile:prepend:dh-stm32mp1-dhsom () {
-	sed -i -e "s/%UBOOT_DTB_LOADADDRESS%/${UBOOT_DTB_LOADADDRESS}/g" \
-		-e "s/%UBOOT_DTBO_LOADADDRESS%/${UBOOT_DTBO_LOADADDRESS}/g" \
-		${UNPACKDIR}/${UBOOT_ENV_SRC}
-}
-
 SRC_URI:append:dh-stm32mp1-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
@@ -21,4 +15,4 @@ do_deploy:append:dh-stm32mp13-dhcor-dhsbc() {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20260728.01"
+UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20260908.01"
