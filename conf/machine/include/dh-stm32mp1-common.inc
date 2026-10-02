@@ -37,12 +37,13 @@ PREFERRED_VERSION_u-boot-mainline-tools ?= "2026.07%"
 PREFERRED_VERSION_u-boot-mainline-tools-native ?= "2026.07%"
 
 # Linux kernel
-KERNEL_IMAGETYPE ?= "${@'fitImage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'zImage'}"
+DH_KERNEL_IMAGETYPE ?= "fitImage"
+KERNEL_IMAGETYPE ?= "${@d.getVar('DH_KERNEL_IMAGETYPE') if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'zImage'}"
 DH_KERNEL_FITIMAGE_CLASSES += "${@'kernel-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'kernel-fit-extra-artifacts'}"
-DH_KERNEL_IMAGE_CLASSES ?= "${@d.getVar('DH_KERNEL_FITIMAGE_CLASSES') if (d.getVar('KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
+DH_KERNEL_IMAGE_CLASSES ?= "${@d.getVar('DH_KERNEL_FITIMAGE_CLASSES') if (d.getVar('DH_KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
 KERNEL_CLASSES += "${DH_KERNEL_IMAGE_CLASSES}"
 DH_KERNEL_FITIMAGE_RECIPE ?= "${@'kernel-image-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'linux-yocto-fitimage'}"
-DH_KERNEL_IMAGE_RECIPE ?= "${@d.getVar('DH_KERNEL_FITIMAGE_RECIPE') if (d.getVar('KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
+DH_KERNEL_IMAGE_RECIPE ?= "${@d.getVar('DH_KERNEL_FITIMAGE_RECIPE') if (d.getVar('DH_KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
 PREFERRED_VERSION_linux-stable ?= "6.18%"
