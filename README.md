@@ -15,7 +15,7 @@ This layer depends on:
   - branch: scarthgap or wrynose
   - layers: meta
 
-* URI: https://source.denx.de/denx/meta-mainline-common.git
+* URI: https://codeberg.org/marekv/meta-mainline-common.git
   - branch: main
 
 # Building image
@@ -49,7 +49,7 @@ be cloned into a location accessible to the build system and a branch listed
 below shall be checked out. The examples below will use /path/to/OE/ as a
 location of the metalayers.
 
-* https://source.denx.de/denx/meta-mainline-common.git			(branch: main)
+* https://codeberg.org/marekv/meta-mainline-common.git			(branch: main)
 * https://github.com/dh-electronics/meta-dhsom-stm32-bsp.git		(branch: main)
 * https://git.openembedded.org/bitbake					(branch: 2.8 or 2.18)
 * https://git.openembedded.org/openembedded-core			(branch: scarthgap or wrynose)
