@@ -11,7 +11,15 @@ do_install:append:dh-stm32mp13-dhcor-dhsbc () {
 	# looks like this in second column of /proc/interrupts:
 	# 89:     670547  stm32gpio  14 Level     brcmf_oob_intr
 	#         ^^^^^^
-	sed '/^muxenab=/ s@.*@muxenab=0x11@' ${S}/cyfmac43439-sdio.1YN.txt > \
+	#
+	# Force btc_mode=1 which means WLAN and Bluetooth share the
+	# available bandwidth using Time-Division Multiplexing (TDM).
+	# This mode is primarily intended for designs where WLAN and
+	# Bluetooth share the RF front end or antenna. Simultaneous
+	# reception is supported to a limited extent, while transmission
+	# is managed through TDM.
+	sed '/^muxenab=/ s@.*@muxenab=0x11@' ${S}/cyfmac43439-sdio.1YN.txt | \
+	sed '/^btc_mode=/ s@.*@btc_mode=1@' > \
 	      ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43439-sdio.dh,stm32mp135f-dhcor-dhsbc.txt
 }
 
