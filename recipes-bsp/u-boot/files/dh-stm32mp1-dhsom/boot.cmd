@@ -67,7 +67,44 @@ if test "${somname}" = "match" ; then
 	fi
 fi
 
-bootm start ${loadaddr}${loaddtos}
+if bootm start ${loadaddr}${loaddtos} ; then ;
+  # New enough U-Boot supports safe DTO application, all done.
+else
+  # Workaround for obsolete U-Boot versions which do not support
+  # booting fitImages without hard-coded DT load addresses.
+  echo "Manually applying DTOs from fitImage without hard-coded DT load address."
+  echo "Please update your U-Boot to a newer version to avoid this workaround."
+
+  # Place DTO load area at 1 MiB aligned offset past the fitImage
+  setexpr loadaddrdtbo ${loadaddr} + ${filesize}
+  setexpr loadaddrdtbo ${loadaddrdtbo} - 1
+  setexpr loadaddrdtbo ${loadaddrdtbo} \| 0xfffff
+  setexpr loadaddrdtbo ${loadaddrdtbo} + 1
+  # Place DTB apply scratch area at 1 MiB offset past the DTO load area
+  setexpr loadaddrdtb ${loadaddrdtbo} + 0x100000
+
+  setexpr loaddtossep gsub '#conf' ' fdt' "${loaddtos}"
+  setexpr loaddtb 1
+
+  for i in ${loaddtossep} ; do
+    if test ${loaddtb} = 1 ; then
+      echo "Using base DT ${i}"
+      imxtract ${loadaddr} ${i} ${loadaddrdtb} ;
+      fdt addr ${loadaddrdtb}
+      fdt resize 0x40000
+      setenv loaddtb 0
+    else
+      echo "Applying DTO ${i}"
+      imxtract ${loadaddr} ${i} ${loadaddrdtbo} ;
+      fdt apply ${loadaddrdtbo}
+    fi
+  done
+
+  setenv loaddtb
+  setenv loaddtossep
+  setenv loadaddrdtbo
+  setenv loadaddrdtb
+fi
 
 # Assure that initrd relocation to the end of DRAM will not interfere
 # with application of relocated DT and DTOs at ${fdtaddr} , clamp the
