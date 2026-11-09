@@ -65,7 +65,7 @@ index 4ec7bb58c195f..e65561e4687fe 100644
   * @mask:	capabilities that the channel must satisfy
 @@ -927,6 +955,13 @@ void dma_release_channel(struct dma_chan *chan)
  }
- EXPORT_SYMBOL_GPL(dma_release_channel);
+ EXPORT_SYMBOL_GPL(devm_dma_request_chan);
  
 +void dma_release_chan_linked(struct device *dev, struct dma_chan *chan)
 +{
@@ -81,12 +81,13 @@ diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
 index dd357a747780f..42745f58412c0 100644
 --- a/include/linux/dmaengine.h
 +++ b/include/linux/dmaengine.h
-@@ -1474,9 +1474,11 @@ struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
+@@ -1475,10 +1475,12 @@ struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
  				       struct device_node *np);
  
  struct dma_chan *dma_request_chan(struct device *dev, const char *name);
 +struct dma_chan *dma_request_chan_linked(struct device *dev, const char *name);
  struct dma_chan *dma_request_chan_by_mask(const dma_cap_mask_t *mask);
+ struct dma_chan *devm_dma_request_chan(struct device *dev, const char *name);
  
  void dma_release_channel(struct dma_chan *chan);
 +void dma_release_chan_linked(struct device *dev, struct dma_chan *chan);
