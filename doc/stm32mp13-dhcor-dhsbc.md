@@ -371,7 +371,7 @@ correct location in SPI NOR. The TFA file is written into two locations,
 is written into one location `nor0_u-boot` . The bootloader installation
 consists of three `dfu-util` invocations in total:
 ```
-hostpc$ dfu-util -w -a 'nor_fsbl1' -D tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1
+hostpc$ dfu-util -w -a 'nor0_fsbl1' -D tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1
 dfu-util 0.11
 
 Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
@@ -400,7 +400,7 @@ Done!
 ```
 
 ```
-hostpc$ dfu-util -w -a 'nor_fsbl2' -D tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1
+hostpc$ dfu-util -w -a 'nor0_fsbl2' -D tf-a-stm32mp135f-dhcor-dhsbc.stm32-stm32mp1
 dfu-util 0.11
 
 Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
